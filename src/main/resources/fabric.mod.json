@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "wynntrans",
+  "version": "${version}",
+  "name": "WynnTrans",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/green/WynnTrans"
+  },
+  "license": "MIT",
+  "icon": "assets/WynnTrans/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.hexagreen.wynntrans.client.WynnTransClient"
+    ],
+    "main": [
+      "net.hexagreen.wynntrans.WynnTrans"
+    ]
+  },
+  "mixins": [
+    "WynnTrans.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
