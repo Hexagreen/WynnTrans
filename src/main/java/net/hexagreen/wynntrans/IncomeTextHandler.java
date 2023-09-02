@@ -72,8 +72,8 @@ public class IncomeTextHandler {
             this.printFocusedText(text);
             return true;
         }
-        if(this.concatingSelection && ChatType.SELECTION_END.match(text)) {
-            this.concatSelectionDialog(text, true);
+        if(this.concatingSelection && (ChatType.SELECTION_END.match(text) || ChatType.SELECTION_OPTION.match(text))) {
+            this.concatSelectionDialog(text, ChatType.SELECTION_END.match(text));
             return true;
         }
         List<Text> sibling = text.getSiblings();
@@ -110,7 +110,7 @@ public class IncomeTextHandler {
 
             }
             else {
-                out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildGrayNarration(text.getSiblings().get(2)));
+                out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)));
             }
             out.setSiblingByIndex(6, WynnTrans.translationBuilder.buildPressShiftContinue(text.getSiblings().get(6)));
             this.printFocusedText(out);
@@ -138,7 +138,12 @@ public class IncomeTextHandler {
 
     private boolean processConfirmlessDialog(Text text) {
         WynnTransText out = WynnTransText.of(text);
-        out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)));
+        if(ChatType.DIALOG_NORMAL.match(text, 2)) {
+            out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)));
+        }
+        else {
+            out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)));
+        }
         this.printFocusedText(out);
         return true;
     }
@@ -151,9 +156,7 @@ public class IncomeTextHandler {
             if(isLastDialog) {
                 this.concatingSelection = false;
                 this.selectionDialogReady = false;
-                WynnTransText out = WynnTransText.of(this.gluedDialog);
-                out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)));
-                out.setSiblingByIndex(this.gluedDialog.getSiblings().size() - 3, WynnTrans.translationBuilder.buildSelectOptionContinue(text.getSiblings().get(2)));
+                WynnTransText out = WynnTrans.translationBuilder.buildNPCSelectionTranslation(this.gluedDialog);
                 this.printFocusedText(out);
                 this.gluedDialog = MutableText.of(TextContent.EMPTY);
             }
