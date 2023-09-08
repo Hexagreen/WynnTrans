@@ -51,46 +51,47 @@ public class TranslationBuilder {
         m.find();
         String dialogIdx = m.group(1) + ".";
         String dialogLen = m.group(2) + ".";
-        String valName = ((LiteralTextContent)text.getSiblings().get(0).getContent()).string().replace(": ","");
+        String valName = getContentLiteral(text, 0).replace(": ","");
         String npcName = valName.replace(" ", "").replace(".", "");
         String keyName = rootKey + dirNpcName + npcName;
         String keyDialogBase = rootKey + dirDialog + npcName + "." + dialogLen + dialogIdx;
-        String tDialog = text.getString().replace(playername, "%s");
+        String tDialog = text.getString().replace(playername, "%1$s");
         String hash = DigestUtils.sha1Hex(tDialog).substring(0, 8);
         WynnTransText colon = WynnTransText.of(Text.literal(": ").setStyle(text.getSiblings().get(0).getStyle()));
 
 
         if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyName, valName)) {
-            wText.getSiblingByIndex(0).setContent(keyName);
-            wText.getSiblingByIndex(0).addSiblings(colon);
+            wText.getSiblingByIndex(0).setTranslateContent(keyName);
+            wText.getSiblingByIndex(0).addSibling(colon);
         }
 
         if(text.getSiblings().size() == 2){
             String keyDialog = keyDialogBase + hash;
-            String valueDialog = ((LiteralTextContent) text.getSiblings().get(1).getContent()).string().replace(playername, "%s");
+            String valueDialog = getContentLiteral(text, 1).replace(playername, "%1$s");
             if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyDialog, valueDialog)) {
-                if(((LiteralTextContent) text.getSiblings().get(1).getContent()).string().contains(playername)) {
-                    wText.getSiblingByIndex(1).setContent(keyDialog, playername);
+                if(getContentLiteral(text, 1).contains(playername)) {
+                    wText.getSiblingByIndex(1).setTranslateContent(keyDialog, playername);
                 }
                 else {
-                    wText.getSiblingByIndex(1).setContent(keyDialog);
+                    wText.getSiblingByIndex(1).setTranslateContent(keyDialog);
                 }
             }
         }
         else {
             for(int index = 1; text.getSiblings().size() > index; index++) {
                 String keyDialog = keyDialogBase + hash + "_" + index;
-                String valueDialog = ((LiteralTextContent) text.getSiblings().get(index).getContent()).string().replace(playername, "%s");
+                String valueDialog = getContentLiteral(text, index).replace(playername, "%1$s");
                 if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyDialog, valueDialog)) {
-                    if(((LiteralTextContent) text.getSiblings().get(index).getContent()).string().contains(playername)) {
-                        wText.getSiblingByIndex(index).setContent(keyDialog, playername);
+                    if(getContentLiteral(text, index).contains(playername)) {
+                        wText.getSiblingByIndex(index).setTranslateContent(keyDialog, playername);
                     }
                     else {
-                        wText.getSiblingByIndex(index).setContent(keyDialog);
+                        wText.getSiblingByIndex(index).setTranslateContent(keyDialog);
                     }
                 }
             }
         }
+
         return wText;
     }
 
@@ -104,12 +105,14 @@ public class TranslationBuilder {
         WynnTransText wText = WynnTransText.of(text);
         int firstSelectionIdx = 6;
         int tooltipIndex = 10;
+
         for(int i = text.getSiblings().size() - 1; i > 0; i--) {
             if(ChatType.SELECTION_END.match(text, i)) {
                 tooltipIndex = i;
                 break;
             }
         }
+
         int lastSelectionIdx = tooltipIndex - 4;
 
         Text parantText = text.getSiblings().get(2);
@@ -117,10 +120,10 @@ public class TranslationBuilder {
         m.find();
         String dialogIdx = m.group(1) + ".";
         String dialogLen = m.group(2) + ".";
-        String valName = ((LiteralTextContent)parantText.getSiblings().get(0).getContent()).string().replace(": ","");
+        String valName = getContentLiteral(text, 0).replace(": ","");
         String npcName = valName.replace(" ", "").replace(".", "");
         String keyDialogBase = rootKey + dirDialog + npcName + "." + dialogLen + dialogIdx;
-        String parantDialog = parantText.getString().replace(playername, "%s");
+        String parantDialog = parantText.getString().replace(playername, "%1$s");
         String parantHash = DigestUtils.sha1Hex(parantDialog).substring(0, 8);
         String keySelOptBase = keyDialogBase + parantHash + "." + dirSelection;
 
@@ -131,6 +134,7 @@ public class TranslationBuilder {
             Text origin = text.getSiblings().get(i).getSiblings().get(2);
             wText.getSiblingByIndex(i).setSiblingByIndex(2, buildNPCSelectionSibling(origin, keySelOptBase));
         }
+
         return wText;
     }
 
@@ -141,7 +145,7 @@ public class TranslationBuilder {
         String valOption = ((LiteralTextContent) text.getContent()).string();
 
         if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keyOption, valOption)) {
-            wText.setContent(keyOption);
+            wText.setTranslateContent(keyOption);
         }
 
         return wText;
@@ -157,23 +161,24 @@ public class TranslationBuilder {
             String keyNarration = keyNarrationBase + hash;
             String valNarration = ((LiteralTextContent) text.getContent()).string();
             if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyNarration, valNarration)) {
-                wText.setContent(keyNarration);
+                wText.setTranslateContent(keyNarration);
             }
         }
         else {
             String keyNarrContent = keyNarrationBase + hash + "_1";
             String valNarrContent = ((LiteralTextContent) text.getContent()).string();
             if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyNarrContent, valNarrContent)) {
-                wText.setContent(keyNarrContent);
+                wText.setTranslateContent(keyNarrContent);
             }
             for(int index = 0; text.getSiblings().size() > index; index++) {
                 String keyNarrSibling = keyNarrationBase + hash + "_" + (index + 2);
-                String valNarrSibling = ((LiteralTextContent) text.getSiblings().get(index).getContent()).string();
+                String valNarrSibling = getContentLiteral(text, index);
                 if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyNarrSibling, valNarrSibling)) {
-                    wText.getSiblingByIndex(index).setContent(keyNarrSibling);
+                    wText.getSiblingByIndex(index).setTranslateContent(keyNarrSibling);
                 }
             }
         }
+
         return wText;
     }
 
@@ -181,17 +186,18 @@ public class TranslationBuilder {
         WynnTransText wText = WynnTransText.of(text);
         String keyNewQuest = rootKey + dirFuncional + "NewQuest";
         String valNewQuest = ((LiteralTextContent) text.getContent()).string();
-        String valQuestName = ((LiteralTextContent) text.getSiblings().get(0).getContent()).string();
+        String valQuestName = getContentLiteral(text, 0);
         String tQuestName = valQuestName.replace(" ", "");
         String keyQuestName = rootKey + dirQuest + tQuestName;
 
         if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keyNewQuest, valNewQuest)) {
-            wText.setContent(keyNewQuest);
+            wText.setTranslateContent(keyNewQuest);
         }
 
         if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keyQuestName, valQuestName)) {
-            wText.getSiblingByIndex(0).setContent(keyQuestName);
+            wText.getSiblingByIndex(0).setTranslateContent(keyQuestName);
         }
+
         return wText;
     }
 
@@ -202,16 +208,17 @@ public class TranslationBuilder {
         String valIndent = ((LiteralTextContent) text.getContent()).string();
 
         if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keyIndent, valIndent)) {
-            wText.setContent(keyIndent);
+            wText.setTranslateContent(keyIndent);
         }
 
         for (int index = 0; text.getSiblings().size() > index; index++) {
             String keySibling = keyBase + "_" + index;
-            String valSibling = ((LiteralTextContent) text.getSiblings().get(index).getContent()).string();
+            String valSibling = getContentLiteral(text, index);
             if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keySibling, valSibling)) {
-                wText.getSiblingByIndex(index).setContent(keySibling);
+                wText.getSiblingByIndex(index).setTranslateContent(keySibling);
             }
         }
+
         return wText;
     }
 
@@ -222,16 +229,279 @@ public class TranslationBuilder {
         String valIndent = ((LiteralTextContent) text.getContent()).string();
 
         if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keyIndent, valIndent)) {
-            wText.setContent(keyIndent);
+            wText.setTranslateContent(keyIndent);
         }
 
         for (int index = 0; text.getSiblings().size() > index; index++) {
             String keySibling = keyBase + "_" + index;
-            String valSibling = ((LiteralTextContent) text.getSiblings().get(index).getContent()).string();
+            String valSibling = getContentLiteral(text, index);
             if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keySibling, valSibling)) {
-                wText.getSiblingByIndex(index).setContent(keySibling);
+                wText.getSiblingByIndex(index).setTranslateContent(keySibling);
             }
         }
+
         return wText;
+    }
+
+    public WynnTransText buildShoutTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        String keyShout = rootKey + dirFuncional + "Shout";
+        Matcher m = ChatType.SHOUT.getRegex().matcher(text.getSiblings().get(0).getString());
+        m.find();
+        String name = m.group(1);
+        String server = m.group(2);
+        String valShout = "%1$s [WC%2$s] shouts: ";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyShout, valShout)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyShout, name, server);
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildInfoTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        String keyBase = rootKey + dirFuncional + "Info";
+        String valInfo = "[Info] ";
+        String tInfoBody = text.getString();
+        String hash = DigestUtils.sha1Hex(tInfoBody).substring(0, 8);
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyBase, valInfo)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyBase);
+        }
+
+        for (int index = 1; text.getSiblings().size() > index; index++) {
+            String keySibling = keyBase + "." + hash + "_" + index;
+            String valSibling = getContentLiteral(text, index);
+            if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keySibling, valSibling)) {
+                wText.getSiblingByIndex(index).setTranslateContent(keySibling);
+            }
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildEventInfoTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        String keyBase = rootKey + dirFuncional + "EventInfo";
+        String valEInfo = "[Event] ";
+        String tEInfoBody = text.getString();
+        String hash = DigestUtils.sha1Hex(tEInfoBody).substring(0, 8);
+        String valEName = getContentLiteral(text, 1);
+        String hash2 = DigestUtils.sha1Hex(valEName).substring(0,4);
+        String keyEName = keyBase + "EventName" + hash2;
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyBase, valEInfo)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyBase);
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyEName, valEName)) {
+            wText.getSiblingByIndex(1).setTranslateContent(keyEName);
+        }
+
+        for (int index = 2; text.getSiblings().size() > index; index++) {
+            String keySibling = keyBase + "." + hash + "_" + index;
+            String valSibling = getContentLiteral(text, index);
+            if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keySibling, valSibling)) {
+                wText.getSiblingByIndex(index).setTranslateContent(keySibling);
+            }
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildCLevelAnnounceTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        wText.removeSibling(4, 7);
+        Matcher m = ChatType.CLEVEL_ANNOUNCE.getRegex().matcher(text.getString());
+        m.find();
+        String level = m.group(2);
+        String playerName = getContentLiteral(text, 4);
+        String keyCAnnounce = rootKey + dirFuncional + "LevelAnnounce.Combat";
+        String valCAnnounce = "§8Congratulations to §f%1$s §8for reaching combat §flevel %2$s!";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyCAnnounce, valCAnnounce)) {
+            wText.getSiblingByIndex(3).setTranslateContent(keyCAnnounce, playerName, level);
+            wText.getSiblingByIndex(3).removeStyle();
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildPLevelAnnounceTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        wText.removeSibling(4, 9);
+        Matcher m = ChatType.PLEVEL_ANNOUNCE.getRegex().matcher(text.getString());
+        m.find();
+        String playerName = m.group(1);
+        String level = m.group(2);
+        String profName = m.group(3);
+        String keyPAnnounce = rootKey + dirFuncional + "LevelAnnounce.Profession";
+        String valPAnnounce = "Congratulations to %1$s for reaching level %2$s in %3$s!";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyPAnnounce, valPAnnounce)) {
+            wText.getSiblingByIndex(3).setTranslateContent(keyPAnnounce, playerName, level, profName);
+            wText.getSiblingByIndex(3).removeStyle();
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildBlacksmithNoTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        String keyBlacksmith = rootKey + dirFuncional + "Blacksmith";
+        String valBlacksmith = getContentLiteral(text, 0);
+        String keySellGuide = rootKey + dirFuncional + "Blacksmith.No";
+        String valSellGuide = getContentLiteral(text, 1);
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyBlacksmith, valBlacksmith)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyBlacksmith);
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keySellGuide, valSellGuide)) {
+            wText.getSiblingByIndex(1).setTranslateContent(keySellGuide);
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildBlacksmithSoldTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        String keyBlacksmith = rootKey + dirFuncional + "Blacksmith";
+        String valBlacksmith = getContentLiteral(text, 0);
+        Matcher m = Pattern.compile("^You sold me: (.+)?$").matcher(getContentLiteral(text, 1));
+        m.find();
+        String soldItem = m.group(1);
+        String keySoldMessage = rootKey + dirFuncional + "Blacksmith.Sold";
+        String valSoldMessage_1 = "You sold me: %s";
+        String valSoldMessage_2 = " for a total of ";
+        String valSoldMessage_3 = " emeralds. It was a pleasure doing business with you.";
+        int lastIndex = text.getSiblings().size() - 1;
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyBlacksmith, valBlacksmith)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyBlacksmith);
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keySoldMessage + "_1", valSoldMessage_1)) {
+            wText.getSiblingByIndex(1).setTranslateContent(keySoldMessage + "_1", soldItem);
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keySoldMessage + "_2", valSoldMessage_2)) {
+            wText.getSiblingByIndex(lastIndex - 2).setTranslateContent(keySoldMessage + "_2");
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keySoldMessage + "_3", valSoldMessage_3)) {
+            wText.getSiblingByIndex(lastIndex).setTranslateContent(keySoldMessage + "_3");
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildIdentifierTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        String keyIden = rootKey + dirFuncional + "Identifier";
+        String valIden = getContentLiteral(text, 0);
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyIden, valIden)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyIden);
+        }
+
+        for (int index = 1; text.getSiblings().size() > index; index++) {
+            String keySibling = keyIden + "_" + index;
+            String valSibling = getContentLiteral(text, index);
+            if (WynnTrans.wynnTranslationStorage.checkTranslationExist(keySibling, valSibling)) {
+                wText.getSiblingByIndex(index).setTranslateContent(keySibling);
+            }
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildAreaEnterTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        Matcher m = ChatType.AREA_ENTER.getRegex().matcher(text.getString());
+        m.find();
+        String areaName = m.group(1);
+        String keyAreaEnter = rootKey + dirFuncional + "Area.Enter";
+        String valAreaEnter = "[You are now entering %s]";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyAreaEnter, valAreaEnter)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyAreaEnter, areaName);
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildAreaLeaveTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        Matcher m = ChatType.AREA_LEAVE.getRegex().matcher(text.getString());
+        m.find();
+        String areaName = m.group(1);
+        String keyAreaLeave = rootKey + dirFuncional + "Area.Leave";
+        String valAreaLeave = "[You are now leaving %s]";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyAreaLeave, valAreaLeave)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyAreaLeave, areaName);
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildThanksTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        wText.removeSibling(1, 2);
+        String playerName = getContentLiteral(text, 1);
+        String keyThanks = rootKey + dirFuncional + "BombThanks";
+        String valThanks_1 = "§8Want to thank §f%s§8? ";
+        String valThanks_2 = getContentLiteral(text, 3);
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyThanks + "_1", valThanks_1)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyThanks + "_1", playerName);
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyThanks + "_2", valThanks_2)) {
+            wText.getSiblingByIndex(1).setTranslateContent(keyThanks + "_2");
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildThankyouTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        Matcher m = ChatType.THANK_YOU.getRegex().matcher(text.getString());
+        m.find();
+        String playerName = m.group(1);
+        String keyThankYou = rootKey + dirFuncional + "ThankYou";
+        String valThankYou = "You have thanked %s";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyThankYou, valThankYou)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyThankYou, playerName);
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildCrateGetTranslation(Text text){
+        WynnTransText wText = WynnTransText.of(text);
+        Matcher m = ChatType.CRATE_GET.getRegex().matcher(text.getString());
+        m.find();
+        String playerName = m.group(1);
+        String keyCrateGet = rootKey + dirFuncional + "CrateReward";
+        String valCrateGet_1 = "%s has gotten a ";
+        String valCrateGet_2 = " from their crate. Buy your own at ";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyCrateGet + "_1", valCrateGet_1)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyCrateGet + "_1", playerName);
+        }
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyCrateGet + "_2", valCrateGet_2)) {
+            wText.getSiblingByIndex(2).setTranslateContent(keyCrateGet + "_2");
+        }
+
+        return wText;
+    }
+
+    private String getContentLiteral(Text text, int index) {
+        return ((LiteralTextContent) text.getSiblings().get(index).getContent()).string();
     }
 }

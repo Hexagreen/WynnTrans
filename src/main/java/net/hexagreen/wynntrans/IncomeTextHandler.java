@@ -52,7 +52,6 @@ public class IncomeTextHandler {
 
     public boolean sortIncomeText(Text text) {
         if(TextContent.EMPTY.equals(text.getContent())) {
-            debugClass.writeTextListAsJSON(text);
             if(!text.getString().contains("\n")) {
                 return this.analyseSinglelineText(text);
             } else {
@@ -63,7 +62,38 @@ public class IncomeTextHandler {
     }
 
     private boolean analyseSinglelineText(Text text) {
-        this.printText(text);
+        WynnTransText out = WynnTransText.of(text);
+        switch (ChatType.findType(text)) {
+            case NORMAL_CHAT -> {
+                return false;
+            }
+            case SHOUT -> out = WynnTrans.translationBuilder.buildShoutTranslation(text);
+            case INFO -> out = WynnTrans.translationBuilder.buildInfoTranslation(text);
+            case INFO_EVENT -> out = WynnTrans.translationBuilder.buildEventInfoTranslation(text);
+            case CLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildCLevelAnnounceTranslation(text);
+            case PLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildPLevelAnnounceTranslation(text);
+            case BLACKSMITH_NO -> out = WynnTrans.translationBuilder.buildBlacksmithNoTranslation(text);
+            case BLACKSMITH_SOLD -> out = WynnTrans.translationBuilder.buildBlacksmithSoldTranslation(text);
+            case IDENTIFIER -> out = WynnTrans.translationBuilder.buildIdentifierTranslation(text);
+            case AREA_ENTER -> out = WynnTrans.translationBuilder.buildAreaEnterTranslation(text);
+            case AREA_LEAVE -> out = WynnTrans.translationBuilder.buildAreaLeaveTranslation(text);
+            case BOMB_THANK -> out = WynnTrans.translationBuilder.buildThanksTranslation(text);
+            case THANK_YOU -> out = WynnTrans.translationBuilder.buildThankyouTranslation(text);
+            case CRATE_GET -> out = WynnTrans.translationBuilder.buildCrateGetTranslation(text);
+            case ITEMBOMB_THROWN -> {
+                return false;
+            }
+            case ITEMBOMB_MESSAGE -> {
+                return false;
+            }
+            case NO_TYPE -> {
+                debugClass.writeString2File(text.getString(), "getString.txt");
+                debugClass.writeString2File(text.toString(), "toString.txt");
+                debugClass.writeTextListAsJSON(text);
+                out = WynnTransText.of(text);
+            }
+        }
+        this.printText(out);
         return true;
     }
 
@@ -178,7 +208,6 @@ public class IncomeTextHandler {
     private void printFocusedText(Text text) {
         MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
         MinecraftClient.getInstance().player.sendMessage(text);
-        debugClass.writeTextList(text.getSiblings(), "npcDialog.txt");
     }
 
 }
