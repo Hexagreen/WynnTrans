@@ -29,6 +29,13 @@ public enum ChatType {
     ITEMBOMB_THROWN(Pattern.compile("^(.+) has thrown an Item Bomb!$")),
     ITEMBOMB_MESSAGE(Pattern.compile("^Everybody gets 2 Random Items! ")),
     NORMAL_CHAT(Pattern.compile("^\uE056\uE042")),
+    RANKS_LOGIN(Pattern.compile("^. .+ has just logged in!$")),
+    PROF_LEVELUP(Pattern.compile("^(.+) is now level ([0-9]+) in (.) (.+)$")),
+    SERVER_RESTART(Pattern.compile("^This world will restart in ([0-9]+) (minutes?|seconds?)\\.$")),
+    RESTARTING(Pattern.compile("^The world is restarting!$")),
+    DAILY_REWARD(Pattern.compile("^\\[Daily Rewards: ([0-9]+) emeralds and ([0-9]+) items]$")),
+    PRIVATE_MESSAGE(Pattern.compile("\\[(.+) \\(WC[0-9]+\\) ➤ (.+)]")),
+    DISGUISE(Pattern.compile("^.+ has disguised as a .+!")),
 
     NO_TYPE(null);
 

@@ -51,12 +51,20 @@ public class IncomeTextHandler {
     }
 
     public boolean sortIncomeText(Text text) {
-        if(TextContent.EMPTY.equals(text.getContent())) {
-            if(!text.getString().contains("\n")) {
-                return this.analyseSinglelineText(text);
-            } else {
-                return this.analyseMultilineText(text);
+        try{
+            if(TextContent.EMPTY.equals(text.getContent())) {
+                if(!text.getString().contains("\n")) {
+                    return this.analyseSinglelineText(text);
+                } else {
+                    return this.analyseMultilineText(text);
+                }
             }
+            else {
+                debugClass.writeString2File(text.getString(), "literal.txt");
+            }
+        } catch(Exception e) {
+            debugClass.writeString2File(text.getString(), "exception.txt");
+            debugClass.writeTextListAsJSON(text);
         }
         return false;
     }
@@ -64,7 +72,7 @@ public class IncomeTextHandler {
     private boolean analyseSinglelineText(Text text) {
         WynnTransText out = WynnTransText.of(text);
         switch (ChatType.findType(text)) {
-            case NORMAL_CHAT -> {
+            case NORMAL_CHAT, PRIVATE_MESSAGE -> {
                 return false;
             }
             case SHOUT -> out = WynnTrans.translationBuilder.buildShoutTranslation(text);
@@ -80,17 +88,26 @@ public class IncomeTextHandler {
             case BOMB_THANK -> out = WynnTrans.translationBuilder.buildThanksTranslation(text);
             case THANK_YOU -> out = WynnTrans.translationBuilder.buildThankyouTranslation(text);
             case CRATE_GET -> out = WynnTrans.translationBuilder.buildCrateGetTranslation(text);
-            case ITEMBOMB_THROWN -> {
-                return false;
-            }
-            case ITEMBOMB_MESSAGE -> {
-                return false;
-            }
+//            case ITEMBOMB_THROWN -> {
+//            }
+//            case ITEMBOMB_MESSAGE -> {
+//            }
+            case RANKS_LOGIN -> out = WynnTrans.translationBuilder.buildRankLogInTranslation(text);
+            case PROF_LEVELUP -> out = WynnTrans.translationBuilder.buildProfessionLevelUpTranslation(text);
+            case SERVER_RESTART -> out = WynnTrans.translationBuilder.buildServerRestartTranslation(text);
+            case RESTARTING -> out = WynnTrans.translationBuilder.buildRestartingTranslation(text);
+            case DAILY_REWARD -> out = WynnTrans.translationBuilder.buildDailyRewardTranslation(text);
+            case DISGUISE -> out = WynnTrans.translationBuilder.buildDisguiseTranslation(text);
             case NO_TYPE -> {
-                debugClass.writeString2File(text.getString(), "getString.txt");
-                debugClass.writeString2File(text.toString(), "toString.txt");
-                debugClass.writeTextListAsJSON(text);
-                out = WynnTransText.of(text);
+                if(text.getSiblings().size() == 1) {
+                    out = WynnTrans.translationBuilder.buildSimpleTextTranslation(text);
+                }
+                else {
+                    debugClass.writeString2File(text.getString(), "getString.txt");
+                    debugClass.writeString2File(text.toString(), "toString.txt");
+                    debugClass.writeTextListAsJSON(text);
+                    out = WynnTransText.of(text);
+                }
             }
         }
         this.printText(out);
@@ -136,9 +153,9 @@ public class IncomeTextHandler {
             else if(ChatType.NEW_QUEST.match(text, 2)){
                 out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNewQuestTranslation(text.getSiblings().get(2)));
             }
-            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-
-            }
+//            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
+//
+//            }
             else {
                 out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)));
             }

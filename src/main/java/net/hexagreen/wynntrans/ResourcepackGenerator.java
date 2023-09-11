@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -12,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResourcepackGenerator {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
     public static boolean addTranslation(String key, String value) {
-        String fileName = "resourcepacks/WynnTrans Language Pack/assets/minecraft/lang/wy_tr.json";
+        String fileName = "resourcepacks/WynnTrans Language Pack/assets/parsing/lang/wy_tr.json";
         File file = new File(fileName);
         if(!file.exists()) return false;
 

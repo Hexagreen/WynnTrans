@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class WynnTransText implements Text {
     private TextContent content;
-    private List<WynnTransText> siblings;
+    private final List<WynnTransText> siblings;
     private Style style;
     private OrderedText ordered;
     @Nullable
@@ -43,9 +43,11 @@ public class WynnTransText implements Text {
     }
 
     public void removeSibling(int from, int to) {
-        for(int i = from; i <= to && i < this.siblings.size(); i++) {
-            this.siblings.remove(i);
+        int count = to - from + 1;
+        while (count > 0 && from < this.siblings.size()) {
+            this.siblings.remove(from);
         }
+
     }
 
     public WynnTransText getSiblingByIndex(int index) {
