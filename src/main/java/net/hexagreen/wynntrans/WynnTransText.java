@@ -30,6 +30,10 @@ public class WynnTransText implements Text {
         return new WynnTransText(text.getContent(), text.getSiblings(), text.getStyle());
     }
 
+    public static WynnTransText of(TextContent content) {
+        return new WynnTransText(content, Lists.newArrayList(), Style.EMPTY);
+    }
+
     public void setTranslateContent(String key) {
         this.content = new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS);
     }
@@ -38,8 +42,28 @@ public class WynnTransText implements Text {
         this.content = new TranslatableTextContent(key, null, args);
     }
 
+    public void addTranslateSibling(String key) {
+        this.addSibling(WynnTransText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS)));
+    }
+
+    public void addTranslateSibling(int index, String key) {
+        this.addSibling(index, WynnTransText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS)));
+    }
+
+    public void addTranslateSibling(int index, String key, Object... args) {
+        this.addSibling(index, WynnTransText.of(new TranslatableTextContent(key, null, args)));
+    }
+
     public void addSibling(Text text) {
         this.siblings.add((WynnTransText) text);
+    }
+
+    public void addSibling(WynnTransText text) {
+        this.siblings.add(text);
+    }
+
+    public void addSibling(int index, WynnTransText text) {
+        this.siblings.add(index, text);
     }
 
     public void removeSibling(int from, int to) {
@@ -53,8 +77,12 @@ public class WynnTransText implements Text {
     public WynnTransText getSiblingByIndex(int index) {
         return this.siblings.get(index);
     }
-    public void setSiblingByIndex(int index, WynnTransText text) {
+    public void setSiblingByIndex(WynnTransText text, int index) {
         this.siblings.set(index, text);
+    }
+
+    public void addStyle(Style style) {
+        this.style = style;
     }
 
     public void removeStyle() {

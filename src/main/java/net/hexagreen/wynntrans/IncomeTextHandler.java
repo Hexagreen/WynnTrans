@@ -148,18 +148,18 @@ public class IncomeTextHandler {
         if(ChatType.DIALOG_END.match(text, 6)) {
             WynnTransText out = WynnTransText.of(text);
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-                out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)));
+                out.setSiblingByIndex(WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)), 2);
             }
             else if(ChatType.NEW_QUEST.match(text, 2)){
-                out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNewQuestTranslation(text.getSiblings().get(2)));
+                out.setSiblingByIndex(WynnTrans.translationBuilder.buildNewQuestTranslation(text.getSiblings().get(2)), 2);
             }
 //            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
 //
 //            }
             else {
-                out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)));
+                out.setSiblingByIndex(WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)), 2);
             }
-            out.setSiblingByIndex(6, WynnTrans.translationBuilder.buildPressShiftContinue(text.getSiblings().get(6)));
+            out.setSiblingByIndex(WynnTrans.translationBuilder.buildPressShiftContinue(text.getSiblings().get(6)), 6);
             this.printFocusedText(out);
             return true;
         }
@@ -186,10 +186,10 @@ public class IncomeTextHandler {
     private boolean processConfirmlessDialog(Text text) {
         WynnTransText out = WynnTransText.of(text);
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-            out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)));
+            out.setSiblingByIndex(WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)), 2);
         }
         else {
-            out.setSiblingByIndex(2, WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)));
+            out.setSiblingByIndex(WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)), 2);
         }
         this.printFocusedText(out);
         return true;

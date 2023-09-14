@@ -13,7 +13,7 @@ import java.util.Map;
 public class ResourcepackGenerator {
     private static final Gson gson = new Gson();
     public static boolean addTranslation(String key, String value) {
-        String fileName = "resourcepacks/WynnTrans Language Pack/assets/parsing/lang/wy_tr.json";
+        String fileName = "WynnTrans/scannedTexts.json";
         File file = new File(fileName);
         if(!file.exists()) return false;
 
