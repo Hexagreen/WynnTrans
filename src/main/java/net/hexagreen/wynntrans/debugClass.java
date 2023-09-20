@@ -4,13 +4,10 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class debugClass {
@@ -42,7 +39,7 @@ public class debugClass {
         }
     }
 
-    public static void writeTextListAsJSON(Text text) {
+    public static void writeTextAsJSON(Text text) {
         String str = Text.Serializer.toJson(text);
         debugClass.writeString2File(str, "json.txt");
     }

@@ -60,13 +60,23 @@ public class IncomeTextHandler {
                 }
             }
             else {
-                debugClass.writeString2File(text.getString(), "literal.txt");
+                return this.analyseLiteralText(text);
             }
         } catch(Exception e) {
             debugClass.writeString2File(text.getString(), "exception.txt");
-            debugClass.writeTextListAsJSON(text);
+            debugClass.writeTextAsJSON(text);
         }
         return false;
+    }
+
+    private boolean analyseLiteralText(Text text) {
+        WynnTransText out = WynnTransText.of(text);
+        switch (ChatType.findType(text)) {
+            case COMBAT_LEVELUP -> out = WynnTrans.translationBuilder.buildCombatLevelUpTranslation(text);
+            case NO_TYPE -> debugClass.writeString2File(text.getString(), "literal.txt");
+        }
+        this.printText(out);
+        return true;
     }
 
     private boolean analyseSinglelineText(Text text) {
@@ -80,8 +90,7 @@ public class IncomeTextHandler {
             case INFO_EVENT -> out = WynnTrans.translationBuilder.buildEventInfoTranslation(text);
             case CLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildCLevelAnnounceTranslation(text);
             case PLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildPLevelAnnounceTranslation(text);
-            case BLACKSMITH_NO -> out = WynnTrans.translationBuilder.buildBlacksmithNoTranslation(text);
-            case BLACKSMITH_SOLD -> out = WynnTrans.translationBuilder.buildBlacksmithSoldTranslation(text);
+            case BLACKSMITH -> out = WynnTrans.translationBuilder.buildBlacksmithTranslation(text);
             case IDENTIFIER -> out = WynnTrans.translationBuilder.buildIdentifierTranslation(text);
             case AREA_ENTER -> out = WynnTrans.translationBuilder.buildAreaEnterTranslation(text);
             case AREA_LEAVE -> out = WynnTrans.translationBuilder.buildAreaLeaveTranslation(text);
@@ -93,11 +102,15 @@ public class IncomeTextHandler {
 //            case ITEMBOMB_MESSAGE -> {
 //            }
             case RANKS_LOGIN -> out = WynnTrans.translationBuilder.buildRankLogInTranslation(text);
-            case PROF_LEVELUP -> out = WynnTrans.translationBuilder.buildProfessionLevelUpTranslation(text);
+            case COMBAT_LEVELUP -> out = WynnTrans.translationBuilder.buildCombatLevelUpTranslation(text);
+            case PROFESSION_LEVELUP -> out = WynnTrans.translationBuilder.buildProfessionLevelUpTranslation(text);
             case SERVER_RESTART -> out = WynnTrans.translationBuilder.buildServerRestartTranslation(text);
             case RESTARTING -> out = WynnTrans.translationBuilder.buildRestartingTranslation(text);
             case DAILY_REWARD -> out = WynnTrans.translationBuilder.buildDailyRewardTranslation(text);
             case DISGUISE -> out = WynnTrans.translationBuilder.buildDisguiseTranslation(text);
+            case SKILL_COOLDOWN -> out = WynnTrans.translationBuilder.buildSkillCooldownTranslation(text);
+            case SPEEDBOOST -> out = WynnTrans.translationBuilder.buildSpeedboostTranslation(text);
+            case RESISTANCE -> out = WynnTrans.translationBuilder.buildResistanceTranslation(text);
             case NO_TYPE -> {
                 if(text.getSiblings().size() == 1) {
                     out = WynnTrans.translationBuilder.buildSimpleTextTranslation(text);
@@ -105,7 +118,7 @@ public class IncomeTextHandler {
                 else {
                     debugClass.writeString2File(text.getString(), "getString.txt");
                     debugClass.writeString2File(text.toString(), "toString.txt");
-                    debugClass.writeTextListAsJSON(text);
+                    debugClass.writeTextAsJSON(text);
                     out = WynnTransText.of(text);
                 }
             }

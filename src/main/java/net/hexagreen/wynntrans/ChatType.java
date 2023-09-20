@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public enum ChatType {
+    NORMAL_CHAT(Pattern.compile("^\uE056\uE042")),
     DIALOG_NORMAL(Pattern.compile("^\\[[0-9]+/[0-9]+] .+:")),
     DIALOG_ITEM(Pattern.compile("^\\[[+\\-][0-9] .+]$")),
     DIALOG_PLACEHOLDER(Pattern.compile("^À+$")),
@@ -17,8 +18,7 @@ public enum ChatType {
     INFO_EVENT(Pattern.compile("^\\[Event] ")),
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$")),
     PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (. .+)!$")),
-    BLACKSMITH_NO(Pattern.compile("^Blacksmith: I can't buy that item! ")),
-    BLACKSMITH_SOLD(Pattern.compile("^Blacksmith: You sold me: (.+) for a total of ([0-9]+) emeralds\\. ")),
+    BLACKSMITH(Pattern.compile("^Blacksmith: ")),
     IDENTIFIER(Pattern.compile("^Item Identifier: I can't identify this item! ")),
     AREA_ENTER(Pattern.compile("^\\[You are now entering (.+)]$")),
     AREA_LEAVE(Pattern.compile("^\\[You are now leaving (.+)]$")),
@@ -28,13 +28,16 @@ public enum ChatType {
     CRATE_GET(Pattern.compile("^(.+) has gotten a (.+) from their crate\\. ")),
     ITEMBOMB_THROWN(Pattern.compile("^(.+) has thrown an Item Bomb!$")),
     ITEMBOMB_MESSAGE(Pattern.compile("^Everybody gets 2 Random Items! ")),
-    NORMAL_CHAT(Pattern.compile("^\uE056\uE042")),
     RANKS_LOGIN(Pattern.compile("^. .+ has just logged in!$")),
-    PROF_LEVELUP(Pattern.compile("^(.+) is now level ([0-9]+) in (.) (.+)$")),
+    COMBAT_LEVELUP(Pattern.compile("^(.+) is now combat level ([0-9]+)$")),
+    PROFESSION_LEVELUP(Pattern.compile("^(.+) is now level ([0-9]+) in (.) (.+)$")),
     SERVER_RESTART(Pattern.compile("^This world will restart in ([0-9]+) (minutes?|seconds?)\\.$")),
     RESTARTING(Pattern.compile("^The world is restarting!$")),
-    DAILY_REWARD(Pattern.compile("^\\[Daily Rewards: ([0-9]+) emeralds and ([0-9]+) items]$")),
+    DAILY_REWARD(Pattern.compile("^\\[Daily Rewards: (?:([0-9]+) emeralds)?(?: and )?(?:([0-9]+) items)?]$")),
     PRIVATE_MESSAGE(Pattern.compile("\\[(.+) \\(WC[0-9]+\\) ➤ (.+)]")),
+    SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$")),
+    SPEEDBOOST(Pattern.compile("^\\+([0-9]) minutes speed boost\\.")),
+    RESISTANCE(Pattern.compile("^.+ has given you 20% resistance")),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!")),
 
     NO_TYPE(null);
