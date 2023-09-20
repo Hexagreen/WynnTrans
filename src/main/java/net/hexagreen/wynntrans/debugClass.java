@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class debugClass {
-    private static int mType;
     private static final String path = "D:/debug/";
 
     public static void writeString2File(String str, String fileName) {
