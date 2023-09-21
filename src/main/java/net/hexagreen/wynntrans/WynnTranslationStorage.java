@@ -1,31 +1,22 @@
 package net.hexagreen.wynntrans;
 
-import net.minecraft.client.resource.language.TranslationStorage;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class WynnTranslationStorage {
-    private Map<String, String> wynnTransDict = new HashMap<>();
-    private Set<String> unregisteredTextSet = new HashSet<>();
-    private TranslationStorage wynnTranslationStorage;
-
-    public WynnTranslationStorage() {
-        this.wynnTranslationStorage = null;
-    }
-
-    public void setWynnTranslationStorage(TranslationStorage trs) {
-        this.wynnTranslationStorage = trs;
-    }
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private final Map<String, String> wynnTransDict = new HashMap<>();
+    private final Set<String> unregisteredTextSet = new HashSet<>();
 
     public void onLanguageReloaded(Map<String, String> translationMap) {
         wynnTransDict.clear();
         unregisteredTextSet.clear();
 
         wynnTransDict.putAll(translationMap);
-        System.out.println("[WynnTrans] Reloaded Wynncraft Text Language Map.");
+        unregisteredTextSet.addAll(WynnTransFileManager.readUnregistereds());
+        LOGGER.info("[WynnTrans] Reloaded Wynncraft Text Language Map.");
     }
 
     public boolean checkTranslationExist(String key, String value) {
@@ -42,7 +33,11 @@ public class WynnTranslationStorage {
             return;
         }
         this.unregisteredTextSet.add(key);
-        boolean recorded = ResourcepackGenerator.addTranslation(key, value);
-        if(!recorded) System.out.println("[WynnTrans] Failed to record translation key: " + key);
+        boolean recorded = WynnTransFileManager.addTranslation(key, value);
+        if(!recorded) {
+            LOGGER.warn("[WynnTrans] Failed to record translation.");
+            LOGGER.warn("[WynnTrans] key: {}", key);
+            LOGGER.warn("[WynnTrans] value: {}", value);
+        }
     }
 }

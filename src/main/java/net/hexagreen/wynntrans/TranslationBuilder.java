@@ -361,12 +361,34 @@ public class TranslationBuilder {
             int lastIndex = text.getSiblings().size() - 1;
 
             wText.getSiblingByIndex(1).setTranslateContent(keySmithSold + "_1", soldItem);
-            wText.getSiblingByIndex(lastIndex - 2).setTranslateContent(keySmithSold + "_2");
-            wText.getSiblingByIndex(lastIndex).setTranslateContent(keySmithSold + "_3");
+            wText.getSiblingByIndex(lastIndex - 2).setTranslateContent(keySmithSold + "_3");
+            wText.getSiblingByIndex(lastIndex).setTranslateContent(keySmithSold + "_4");
+            if(textStr.contains("and")) {
+                wText.getSiblingByIndex(lastIndex - 4).setTranslateContent(keySmithSold + "_2");
+            }
         }
         else if(textStr.contains("I can only")) {
             String keySmithOver = keyBlacksmith + ".Over";
             wText.getSiblingByIndex(1).setTranslateContent(keySmithOver);
+        }
+        else if(textStr.contains("You need more scrap")) {
+            String keyMoreScrap = keyBlacksmith + ".MoreScrap";
+            wText.getSiblingByIndex(1).setTranslateContent(keyMoreScrap);
+        }
+        else if(textStr.contains("I can't scrap that")) {
+            String keyCantScrap = keyBlacksmith + ".CantScrap";
+            wText.getSiblingByIndex(1).setTranslateContent(keyCantScrap);
+        }
+        else if(textStr.contains("You scrapped")) {
+            String keyScrapped = keyBlacksmith + ".Scrapped";
+            int lastIndex = text.getSiblings().size() - 1;
+
+            wText.getSiblingByIndex(1).setTranslateContent(keyScrapped + "_1");
+            wText.getSiblingByIndex(lastIndex - 2).setTranslateContent(keyBlacksmith + ".Sold_3");
+            wText.getSiblingByIndex(lastIndex).setTranslateContent(keyScrapped + "_4");
+            if(textStr.contains("and")) {
+                wText.getSiblingByIndex(lastIndex - 4).setTranslateContent(keyBlacksmith + ".Sold_2");
+            }
         }
         else {
             debugClass.writeString2File(textStr, "getString.txt");
@@ -480,22 +502,23 @@ public class TranslationBuilder {
     }
 
     public WynnTransText buildCombatLevelUpTranslation(Text text) {
-        WynnTransText wText = WynnTransText.of(text);
+        WynnTransText wText = WynnTransText.of(Text.empty());
         Matcher m = ChatType.COMBAT_LEVELUP.getRegex().matcher(text.getString());
-        if(!m.find()) return wText;
+        if(!m.find()) return WynnTransText.of(text);
         WynnTransText playerName;
         if(text.getSiblings().size() != 0) {
-            wText.removeSibling(1,1);
             playerName = getPlayerName(text, 0);
         }
         else {
             playerName = WynnTransText.of(Text.of(m.group(1)));
         }
-        String level = m.group(2);
+        String level = "§6" + m.group(2);
         String keyCombatLvUp = rootKey + dirFuncional + "CombatLevelUp";
 
         wText.addSibling(0, playerName);
-        wText.getSiblingByIndex(1).setTranslateContent(keyCombatLvUp, level);
+        wText.addTranslateSibling(1, keyCombatLvUp, level);
+        wText.getSiblingByIndex(0).addStyle(Style.EMPTY.withColor(Formatting.GOLD));
+        wText.getSiblingByIndex(1).addStyle(Style.EMPTY.withColor(Formatting.GOLD));
 
         return wText;
     }
@@ -621,7 +644,7 @@ public class TranslationBuilder {
         return wText;
     }
 
-    public  WynnTransText buildResistanceTranslation(Text text) {
+    public WynnTransText buildResistanceTranslation(Text text) {
         WynnTransText wText = WynnTransText.of(text);
         String keyResistance = rootKey + dirFuncional + "Resistance";
         int lastIndex = text.getSiblings().size() - 1;
@@ -632,6 +655,50 @@ public class TranslationBuilder {
         if(lastIndex == 5) {
             wText.getSiblingByIndex(3).setTranslateContent(keyResistance + "_3");
             wText.getSiblingByIndex(4).setTranslateContent(keyResistance + "_4");
+        }
+
+        return wText;
+    }
+
+    public WynnTransText buildPartyFinderTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        Matcher m = ChatType.PARTYFINDER.getRegex().matcher(text.getString());
+        if(!m.find()) return wText;
+        String playerName = m.group(1);
+        String players = m.group(2);
+        String keyPartyFinder = rootKey + dirFuncional + "PartyFinder";
+
+        wText.getSiblingByIndex(0).setTranslateContent(keyPartyFinder);
+        wText.getSiblingByIndex(1).setTranslateContent(keyPartyFinder + "_1", playerName);
+        wText.getSiblingByIndex(3).setTranslateContent(keyPartyFinder + "_2");
+        wText.getSiblingByIndex(4).setTranslateContent(keyPartyFinder + "_3", players);
+        wText.getSiblingByIndex(5).setTranslateContent(keyPartyFinder + "_4");
+
+        return wText;
+    }
+
+    public WynnTransText buildMerchantTranslation(Text text) {
+        WynnTransText wText = WynnTransText.of(text);
+        Matcher m = ChatType.MERCHANT.getRegex().matcher(text.getString());
+        if(!m.find()) return wText;
+        String merchantName = m.group(1);
+        String textstr = text.getString();
+        String keyMerchant = rootKey + dirFuncional + "Merchant";
+        String keyMerchantName = keyMerchant + "." + merchantName.replace(" ", "");
+        String valMerchantName = merchantName + " Merchant: ";
+
+        if(WynnTrans.wynnTranslationStorage.checkTranslationExist(keyMerchantName, valMerchantName)) {
+            wText.getSiblingByIndex(0).setTranslateContent(keyMerchantName);
+        }
+
+        if(textstr.contains("Thank you for your business")) {
+            wText.getSiblingByIndex(1).setTranslateContent(keyMerchant + "_confirm");
+        }
+        else if(textstr.contains("cannot afford that")) {
+            wText.getSiblingByIndex(1).setTranslateContent(keyMerchant + "_noEmerald");
+        }
+        else if(textstr.contains("don't have enough space")) {
+            wText.getSiblingByIndex(1).setTranslateContent(keyMerchant + "_noSpace");
         }
 
         return wText;

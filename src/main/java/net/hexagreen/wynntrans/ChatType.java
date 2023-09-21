@@ -38,6 +38,8 @@ public enum ChatType {
     SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$")),
     SPEEDBOOST(Pattern.compile("^\\+([0-9]) minutes speed boost\\.")),
     RESISTANCE(Pattern.compile("^.+ has given you 20% resistance")),
+    PARTYFINDER(Pattern.compile("^Party Finder: Hey (.+), over here! Join the .+ queue and match up with ([0-9]+) other players!$")),
+    MERCHANT(Pattern.compile("^(.+) Merchant: ")),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!")),
 
     NO_TYPE(null);

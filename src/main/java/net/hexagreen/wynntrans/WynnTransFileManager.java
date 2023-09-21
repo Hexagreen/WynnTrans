@@ -1,19 +1,25 @@
 package net.hexagreen.wynntrans;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.mojang.logging.LogUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-public class ResourcepackGenerator {
+
+public class WynnTransFileManager {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson gson = new Gson();
+    private static final String fileName = "WynnTrans/scannedTexts.json";
     public static boolean addTranslation(String key, String value) {
-        String fileName = "WynnTrans/scannedTexts.json";
         File file = new File(fileName);
         if(!file.exists()) return false;
 
@@ -45,8 +51,20 @@ public class ResourcepackGenerator {
             langFile.write(lineBytes);
 
         } catch (IOException e) {
-            System.out.println("[WynnTrans] Failed to load language file. Is file corrupted?");
+            LOGGER.warn("[WynnTrans] Failed to load language file. Is file corrupted?");
         }
         return true;
+    }
+
+    public static Set<String> readUnregistereds() {
+        File file = new File(fileName);
+        try {
+            FileReader reader = new FileReader(file);
+            Map<String, String> map = gson.fromJson(new JsonReader(reader), new TypeToken<HashMap<String, String>>() {}.getType());
+            return map.keySet();
+        } catch (FileNotFoundException e) {
+            LOGGER.warn("[WynnTrans] Failed to read unregistered texts. File doesn't exist.");
+        }
+        return new HashSet<>();
     }
 }

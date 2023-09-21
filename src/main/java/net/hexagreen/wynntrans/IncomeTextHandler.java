@@ -13,39 +13,30 @@ public class IncomeTextHandler {
     private MutableText gluedDialog;
     private List<Text> backgroundText;
     private List<Text> pendingText;
-    private boolean slownessRemoved;
-    private long slownessRemovedTime;
+    private byte pendingTime;
+    private byte pendingCounter;
     private boolean selectionDialogReady;
-    private static final long SLOWNESS_APPLY_DIFFERANCE = 2;
+    private static final long PENDINGTICKTHRES = 2;
 
     public IncomeTextHandler() {
         this.concatingSelection = false;
         this.gluedDialog = MutableText.of(TextContent.EMPTY);
         this.backgroundText = Lists.newArrayList();
         this.pendingText = Lists.newArrayList();
-        this.slownessRemovedTime = 0;
         this.selectionDialogReady = false;
-        this.slownessRemoved = false;
-    }
-
-    public void onSlownessRemoved() {
-        this.slownessRemoved = true;
-        this.backgroundText = Lists.newArrayList();
-        this.slownessRemovedTime = MinecraftClient.getInstance().world.getTime();
-        MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
-    }
-
-    public void onSlownessApplied() {
-        this.slownessRemoved = false;
+        this.pendingTime = 0;
+        this.pendingCounter = 0;
     }
 
     public void sendPendingText() {
-        if(this.slownessRemoved) {
-            if(MinecraftClient.getInstance().world.getTime() - this.slownessRemovedTime >= SLOWNESS_APPLY_DIFFERANCE) {
+        if(this.pendingCounter == 4) {
+            if(++this.pendingTime >= PENDINGTICKTHRES) {
+                this.pendingCounter = 0;
+                this.pendingTime = 0;
+                MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
                 for(Text background : this.pendingText) {
                     MinecraftClient.getInstance().player.sendMessage(background);
                 }
-                this.slownessRemoved = false;
             }
         }
     }
@@ -111,6 +102,8 @@ public class IncomeTextHandler {
             case SKILL_COOLDOWN -> out = WynnTrans.translationBuilder.buildSkillCooldownTranslation(text);
             case SPEEDBOOST -> out = WynnTrans.translationBuilder.buildSpeedboostTranslation(text);
             case RESISTANCE -> out = WynnTrans.translationBuilder.buildResistanceTranslation(text);
+            case PARTYFINDER -> out = WynnTrans.translationBuilder.buildPartyFinderTranslation(text);
+            case MERCHANT -> out = WynnTrans.translationBuilder.buildMerchantTranslation(text);
             case NO_TYPE -> {
                 if(text.getSiblings().size() == 1) {
                     out = WynnTrans.translationBuilder.buildSimpleTextTranslation(text);
@@ -129,10 +122,12 @@ public class IncomeTextHandler {
 
     private boolean analyseMultilineText(Text text) {
         if(ChatType.DIALOG_PLACEHOLDER.match(text, 2)) {
+            this.pendingCounter = 0;
             this.printFocusedText(text);
             return true;
         }
         if(this.concatingSelection && (ChatType.SELECTION_END.match(text) || ChatType.SELECTION_OPTION.match(text))) {
+            this.pendingCounter = 0;
             this.concatSelectionDialog(text, ChatType.SELECTION_END.match(text));
             return true;
         }
@@ -159,6 +154,7 @@ public class IncomeTextHandler {
 
     private boolean processConfirmableDialog(Text text) {
         if(ChatType.DIALOG_END.match(text, 6)) {
+            this.pendingCounter = 0;
             WynnTransText out = WynnTransText.of(text);
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
                 out.setSiblingByIndex(WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)), 2);
@@ -177,6 +173,7 @@ public class IncomeTextHandler {
             return true;
         }
         else if(ChatType.SELECTION_OPTION.match(text, 6)) {
+            this.pendingCounter = 0;
             this.concatingSelection = !ChatType.SELECTION_END.match(text);
             if(this.concatingSelection) {
                 this.concatSelectionDialog(text, false);
@@ -184,12 +181,11 @@ public class IncomeTextHandler {
             }
         }
         else {
-            if(this.slownessRemoved) {
-                this.backgroundText.add(text);
-                if(this.backgroundText.size() == 4) {
-                    this.pendingText = this.backgroundText;
-                    this.backgroundText = Lists.newArrayList();
-                }
+            this.backgroundText.add(text);
+            this.pendingCounter++;
+            if(this.backgroundText.size() == 4) {
+                this.pendingText = this.backgroundText;
+                this.backgroundText = Lists.newArrayList();
             }
             return true;
         }
@@ -197,6 +193,7 @@ public class IncomeTextHandler {
     }
 
     private boolean processConfirmlessDialog(Text text) {
+        this.pendingCounter = 0;
         WynnTransText out = WynnTransText.of(text);
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
             out.setSiblingByIndex(WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)), 2);

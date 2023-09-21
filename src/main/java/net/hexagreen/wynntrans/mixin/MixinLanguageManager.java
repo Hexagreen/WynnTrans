@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.mixin;
 
-import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.client.resource.language.LanguageManager;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.resource.ResourceManager;
@@ -16,7 +15,6 @@ public abstract class MixinLanguageManager {
 
     @Inject(method = "reload", at = @At("TAIL"))
     public void mixinReload(ResourceManager manager, CallbackInfo ci) {
-        TranslationStorage trs = TranslationStorage.load(manager, List.of("wy_tr"), false);
-        WynnTrans.wynnTranslationStorage.setWynnTranslationStorage(trs);
+        TranslationStorage.load(manager, List.of("wy_tr"), false);
     }
 }
