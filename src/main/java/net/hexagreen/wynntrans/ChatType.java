@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public enum ChatType {
     NORMAL_CHAT(Pattern.compile("^\uE056\uE042")),
-    DIALOG_NORMAL(Pattern.compile("^\\[[0-9]+/[0-9]+] .+:")),
+    DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:")),
     DIALOG_ITEM(Pattern.compile("^\\[[+\\-][0-9] .+]$")),
     DIALOG_PLACEHOLDER(Pattern.compile("^À+$")),
     SELECTION_OPTION(Pattern.compile("^   \\[[0-9]] .+")),

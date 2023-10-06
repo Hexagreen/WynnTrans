@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans;
 
+import net.hexagreen.wynntrans.texts.NpcDialog;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -157,7 +158,7 @@ public class IncomeTextHandler {
             this.pendingCounter = 0;
             WynnTransText out = WynnTransText.of(text);
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-                out.setSiblingByIndex(WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)), 2);
+                NpcDialog.of(text, ChatType.DIALOG_NORMAL.getRegex(), "confirmable").print();
             }
             else if(ChatType.NEW_QUEST.match(text, 2)){
                 out.setSiblingByIndex(WynnTrans.translationBuilder.buildNewQuestTranslation(text.getSiblings().get(2)), 2);
@@ -196,7 +197,7 @@ public class IncomeTextHandler {
         this.pendingCounter = 0;
         WynnTransText out = WynnTransText.of(text);
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-            out.setSiblingByIndex(WynnTrans.translationBuilder.buildNPCDialogTranslation(text.getSiblings().get(2)), 2);
+            NpcDialog.of(text, ChatType.DIALOG_NORMAL.getRegex(), "confirmless").print();
         }
         else {
             out.setSiblingByIndex(WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)), 2);
@@ -213,8 +214,7 @@ public class IncomeTextHandler {
             if(isLastDialog) {
                 this.concatingSelection = false;
                 this.selectionDialogReady = false;
-                WynnTransText out = WynnTrans.translationBuilder.buildNPCSelectionTranslation(this.gluedDialog);
-                this.printFocusedText(out);
+                NpcDialog.of(gluedDialog, ChatType.DIALOG_NORMAL.getRegex(), "selection").print();
                 this.gluedDialog = MutableText.of(TextContent.EMPTY);
             }
             else{
@@ -236,5 +236,4 @@ public class IncomeTextHandler {
         MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
         MinecraftClient.getInstance().player.sendMessage(text);
     }
-
 }

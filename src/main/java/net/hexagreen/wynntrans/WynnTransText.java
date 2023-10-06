@@ -77,6 +77,7 @@ public class WynnTransText implements Text {
     public WynnTransText getSiblingByIndex(int index) {
         return this.siblings.get(index);
     }
+
     public void setSiblingByIndex(WynnTransText text, int index) {
         this.siblings.set(index, text);
     }
