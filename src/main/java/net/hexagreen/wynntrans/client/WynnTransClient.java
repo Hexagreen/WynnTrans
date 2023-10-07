@@ -19,18 +19,18 @@ public class WynnTransClient implements ClientModInitializer {
     public void onInitializeClient() {
         Path wynnTrans = FabricLoader.getInstance().getGameDir().resolve("WynnTrans");
         File dir = wynnTrans.toFile();
-        if(!dir.exists()) {
-            try {
+        try {
+            if(!dir.exists()) {
                 if (!dir.mkdirs()) throw new IOException();
-                File file = new File(dir , "scannedTexts.json");
-                if(file.createNewFile()) {
-                    FileWriter writer = new FileWriter(file);
-                    writer.write("{}");
-                    writer.close();
-                }
-            } catch (IOException e) {
-                LOGGER.warn("[WynnTrans] Cannot reach to WynnTrans directory or its file.");
             }
+            File file = new File(dir , "scannedTexts.json");
+            if(file.createNewFile()) {
+                FileWriter writer = new FileWriter(file);
+                writer.write("{\r\n\t\"_comment\":\"Scanned Texts Here\"}");
+                writer.close();
+            }
+        } catch (IOException e) {
+            LOGGER.warn("[WynnTrans] Cannot reach to WynnTrans directory or its file.");
         }
         LOGGER.info("[WynnTrans] Loaded.");
     }

@@ -1,4 +1,4 @@
-package net.hexagreen.wynntrans.texts;
+package net.hexagreen.wynntrans.chat;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
@@ -10,18 +10,19 @@ import org.slf4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class WynnText {
+public abstract class WynnChatText {
     protected static final Logger LOGGER = LogUtils.getLogger();
     protected static final String rootKey = "wytr.";
     protected static final String dirFunctional = "func.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
-    protected MutableText inputText;
+    protected final MutableText inputText;
     protected Matcher matcher;
     protected String parentKey;
     protected MutableText resultText;
 
-    WynnText(MutableText text, Pattern regex) {
-        this.inputText = text;
+    WynnChatText(Text text, Pattern regex) {
+        this.inputText = (MutableText) text;
+        this.parentKey = setParentKey();
         if(regex != null) {
             this.matcher = regex.matcher(text.getString());
             this.matcher.find();
@@ -41,7 +42,6 @@ public abstract class WynnText {
 
     @SuppressWarnings("DataFlowIssue")
     public void print() {
-        parentKey = setParentKey();
         build();
         MinecraftClient.getInstance().player.sendMessage(resultText);
     }
@@ -56,23 +56,23 @@ public abstract class WynnText {
 //        }
 //    }
 
-    protected String getLiteralContent() {
+    protected String getContentLiteral() {
         return inputText.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) inputText.getContent()).string();
     }
 
-    protected String getLiteralContent(int siblingIndex) {
-        return getLiteralContent(inputText.getSiblings().get(siblingIndex));
+    protected String getContentLiteral(int siblingIndex) {
+        return getContentLiteral(inputText.getSiblings().get(siblingIndex));
     }
 
-    private String getLiteralContent(Text text) {
+    private String getContentLiteral(Text text) {
         return text.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) text.getContent()).string();
     }
 
-    protected MutableText getTranslate(String key) {
+    protected MutableText newTranslate(String key) {
         return MutableText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS));
     }
 
-    protected MutableText getTranslate(String key, Object... args) {
+    protected MutableText newTranslate(String key, Object... args) {
         return MutableText.of(new TranslatableTextContent(key, null, args));
     }
 

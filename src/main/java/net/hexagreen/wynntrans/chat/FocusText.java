@@ -1,4 +1,4 @@
-package net.hexagreen.wynntrans.texts;
+package net.hexagreen.wynntrans.chat;
 
 import net.hexagreen.wynntrans.ChatType;
 import net.minecraft.text.LiteralTextContent;
@@ -9,13 +9,15 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public abstract class FocusText extends WynnText{
-    int selFirstOptionIdx = 6;
-    int selLastOptionIdx;
-    int selTooltipIdx = 10;
-    FocusText(MutableText text, Pattern regex) {
-        super(text, regex);
-        for(int i = inputText.getSiblings().size() - 1; i > 10; i--) {
+public abstract class FocusText extends NpcDialog {
+    private final int selLastOptionIdx;
+    private final Text fullText;
+    private int selTooltipIdx = 10;
+
+    FocusText(Text text, Pattern regex) {
+        super(text.getSiblings().get(2), regex);
+        this.fullText = text;
+        for(int i = text.getSiblings().size() - 1; i > 10; i--) {
             if(ChatType.SELECTION_END.match(text, i)) {
                 selTooltipIdx = i;
                 break;
@@ -40,12 +42,12 @@ public abstract class FocusText extends WynnText{
         resultText = confirmable;
     }
 
-    protected void setToSelectOption(String pKey) {
+    protected void setToSelectOption() {
         MutableText confirmable = Text.empty().append("\n");
         confirmable.append(resultText).append("\n");
         confirmable.append(Text.empty()).append("\n");
         resultText = confirmable;
-        selectionOptions(pKey + ".selOpt.");
+        selectionOptions();
         resultText.append(Text.empty()).append("\n");
         resultText.append(selectOptionContinue()).append("\n");
         resultText.append(Text.empty());
@@ -53,35 +55,35 @@ public abstract class FocusText extends WynnText{
 
     private Text pressShiftToContinue() {
         String key = rootKey + dirFunctional + "PressShift";
-        List<Text> original = inputText.getSiblings().get(6).getSiblings();
-        MutableText text = getTranslate(key + "_indent");
-        text.append(getTranslate(key + "_1").setStyle(original.get(1).getStyle()))
-                .append(getTranslate(key + "_2").setStyle(original.get(2).getStyle()))
-                .append(getTranslate(key + "_3").setStyle(original.get(3).getStyle()));
+        List<Text> original = fullText.getSiblings().get(6).getSiblings();
+        MutableText text = newTranslate(key + "_indent");
+        text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
+                .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
+                .append(newTranslate(key + "_3").setStyle(original.get(2).getStyle()));
         return text;
     }
 
     private Text selectOptionContinue() {
         String key = rootKey + dirFunctional + "SelectOption";
-        List<Text> original = inputText.getSiblings().get(selTooltipIdx).getSiblings();
-        MutableText text = getTranslate(key + "_indent");
-        text.append(getTranslate(key + "_1").setStyle(original.get(1).getStyle()))
-                .append(getTranslate(key + "_2").setStyle(original.get(2).getStyle()))
-                .append(getTranslate(key + "_3").setStyle(original.get(3).getStyle()));
+        List<Text> original = fullText.getSiblings().get(selTooltipIdx).getSiblings();
+        MutableText text = newTranslate(key + "_indent");
+        text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
+                .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
+                .append(newTranslate(key + "_3").setStyle(original.get(2).getStyle()));
         return text;
     }
 
-    private void selectionOptions(String pKey) {
-        List<Text> original = inputText.getSiblings();
-        for(int i = selFirstOptionIdx; i <= selLastOptionIdx; i = i + 2) {
+    private void selectionOptions() {
+        List<Text> original = fullText.getSiblings();
+        for(int i = 6; i <= selLastOptionIdx; i = i + 2) {
             Text textBody = original.get(i).getSiblings().get(2);
-            String keySelOpt = pKey + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
+            String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
             String valSelOpt = ((LiteralTextContent) textBody.getContent()).string();
             MutableText selection = MutableText.of(original.get(i).getContent())
                     .append(original.get(i).getSiblings().get(0))
                     .append(original.get(i).getSiblings().get(1));
             if(WTS.checkTranslationExist(keySelOpt, valSelOpt)) {
-                selection.append(getTranslate(keySelOpt).setStyle(textBody.getStyle()));
+                selection.append(newTranslate(keySelOpt).setStyle(textBody.getStyle()));
             }
             else {
                 selection.append(textBody);

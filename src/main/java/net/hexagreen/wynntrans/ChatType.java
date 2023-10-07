@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans;
 
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
@@ -46,8 +47,10 @@ public enum ChatType {
 
 
     private final Pattern regex;
-    ChatType(Pattern regex) {
+    //private WynnChatText wct;
+    ChatType(Pattern regex/*, WynnChatText wct*/) {
         this.regex = regex;
+        //this.wct = wct;
     }
 
     public Pattern getRegex() {
