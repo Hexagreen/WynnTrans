@@ -6,9 +6,9 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class NpcDialogConfirmless extends FocusText {
+public class NpcDialogConfirmless extends NpcDialog implements FocusTextInterface {
     NpcDialogConfirmless(MutableText text, Pattern regex) {
-        super(text, regex);
+        super(text.getSiblings().get(2), regex);
     }
 
     public static NpcDialogConfirmless of(Text text, Pattern regex) {
@@ -18,7 +18,7 @@ public class NpcDialogConfirmless extends FocusText {
     @Override
     protected void build() {
         super.build();
-        setToConfirmless();
+        resultText = setToConfirmless(resultText);
     }
 
     @SuppressWarnings("DataFlowIssue")

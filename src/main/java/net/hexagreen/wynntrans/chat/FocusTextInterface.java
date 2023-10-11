@@ -4,57 +4,46 @@ import net.hexagreen.wynntrans.ChatType;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
-public abstract class FocusText extends NpcDialog {
-    private final int selLastOptionIdx;
-    private final Text fullText;
-    private int selTooltipIdx = 10;
+import static net.hexagreen.wynntrans.chat.WynnChatText.WTS;
 
-    FocusText(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
-        this.fullText = text;
-        for(int i = text.getSiblings().size() - 1; i > 10; i--) {
-            if(ChatType.SELECTION_END.match(text, i)) {
-                selTooltipIdx = i;
-                break;
-            }
-        }
-        selLastOptionIdx = selTooltipIdx - 4;
-    }
-
-    protected void setToConfirmless() {
+public interface FocusTextInterface {
+    default MutableText setToConfirmless(Text text) {
         MutableText confirmless = Text.empty().append("\n");
-        confirmless.append(resultText).append("\n");
+        confirmless.append(text).append("\n");
         confirmless.append(Text.empty());
-        resultText = confirmless;
+
+        return confirmless;
     }
 
-    protected void setToPressShift() {
+    default MutableText setToPressShift(Text text, Text fullText) {
         MutableText confirmable = Text.empty().append("\n");
-        confirmable.append(resultText).append("\n");
+        confirmable.append(text).append("\n");
         confirmable.append(Text.empty()).append("\n");
-        confirmable.append(pressShiftToContinue()).append("\n");
+        confirmable.append(pressShiftToContinue(fullText)).append("\n");
         confirmable.append(Text.empty());
-        resultText = confirmable;
+
+        return confirmable;
     }
 
-    protected void setToSelectOption() {
+    default MutableText setToSelectOption(Text text, Text fullText, String pKeyDialog) {
         MutableText confirmable = Text.empty().append("\n");
-        confirmable.append(resultText).append("\n");
+        confirmable.append(text).append("\n");
         confirmable.append(Text.empty()).append("\n");
-        resultText = confirmable;
-        selectionOptions();
-        resultText.append(Text.empty()).append("\n");
-        resultText.append(selectOptionContinue()).append("\n");
-        resultText.append(Text.empty());
+        selectionOptions(confirmable, fullText, pKeyDialog);
+        confirmable.append(Text.empty()).append("\n");
+        confirmable.append(selectOptionContinue(fullText)).append("\n");
+        confirmable.append(Text.empty());
+
+        return confirmable;
     }
 
-    private Text pressShiftToContinue() {
-        String key = rootKey + dirFunctional + "PressShift";
+    private Text pressShiftToContinue(Text fullText) {
+        String key = "wytr.func.PressShift";
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
         MutableText text = newTranslate(key + "_indent");
         text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
@@ -63,9 +52,9 @@ public abstract class FocusText extends NpcDialog {
         return text;
     }
 
-    private Text selectOptionContinue() {
-        String key = rootKey + dirFunctional + "SelectOption";
-        List<Text> original = fullText.getSiblings().get(selTooltipIdx).getSiblings();
+    private Text selectOptionContinue(Text fullText) {
+        String key = "wytr.func.SelectOption";
+        List<Text> original = fullText.getSiblings().get(getLastOptionIndex(fullText) + 4).getSiblings();
         MutableText text = newTranslate(key + "_indent");
         text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
                 .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
@@ -73,9 +62,20 @@ public abstract class FocusText extends NpcDialog {
         return text;
     }
 
-    private void selectionOptions() {
+    private int getLastOptionIndex(Text fullText) {
+        int selTooltipIdx = 0;
+        for (int i = fullText.getSiblings().size() - 1; i > 10; i--) {
+            if (ChatType.SELECTION_END.match(fullText, i)) {
+                selTooltipIdx = i;
+                break;
+            }
+        }
+        return selTooltipIdx - 4;
+    }
+
+    private void selectionOptions(MutableText constructingText, Text fullText, String pKeyDialog) {
         List<Text> original = fullText.getSiblings();
-        for(int i = 6; i <= selLastOptionIdx; i = i + 2) {
+        for(int i = 6; i <= getLastOptionIndex(fullText); i = i + 2) {
             Text textBody = original.get(i).getSiblings().get(2);
             String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
             String valSelOpt = ((LiteralTextContent) textBody.getContent()).string();
@@ -88,7 +88,11 @@ public abstract class FocusText extends NpcDialog {
             else {
                 selection.append(textBody);
             }
-            resultText.append(selection).append("\n");
+            constructingText.append(selection).append("\n");
         }
+    }
+
+    private MutableText newTranslate(String key) {
+        return MutableText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS));
     }
 }

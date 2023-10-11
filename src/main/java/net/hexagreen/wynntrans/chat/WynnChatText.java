@@ -75,12 +75,4 @@ public abstract class WynnChatText {
     protected MutableText newTranslate(String key, Object... args) {
         return MutableText.of(new TranslatableTextContent(key, null, args));
     }
-
-    protected Style getStyle() {
-        return inputText.getStyle();
-    }
-
-    protected Style getStyle(int siblingIndex) {
-        return inputText.getSiblings().get(siblingIndex).getStyle();
-    }
 }

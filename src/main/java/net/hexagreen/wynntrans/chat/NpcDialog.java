@@ -9,23 +9,19 @@ import java.util.regex.Pattern;
 
 public class NpcDialog extends WynnChatText{
     private final String playername;
-    private final String dialogIdx;
-    private final String dialogLen;
-    private final String npcName;
     private final String keyName;
     private final String valName;
-    private final String hash;
     protected final String pKeyDialog;
 
     NpcDialog(Text text, Pattern regex) {
         super(text, regex);
         this.playername = MinecraftClient.getInstance().player.getName().getString();
-        this.dialogIdx = matcher.group(1) + ".";
-        this.dialogLen = matcher.group(2) + ".";
         this.valName = getContentLiteral(0).replace(":", "");
-        this.npcName = valName.replace(" ", "").replace(".", "");
+        String npcName = valName.replace(" ", "").replace(".", "");
         this.keyName = parentKey + "name." + npcName;
-        this.hash = DigestUtils.sha1Hex(text.getString().replace(playername, "%1$s")).substring(0, 8);
+        String dialogIdx = matcher.group(1) + ".";
+        String dialogLen = matcher.group(2) + ".";
+        String hash = DigestUtils.sha1Hex(inputText.getString().replace(playername, "%1$s")).substring(0, 8);
         this.pKeyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
     }
 

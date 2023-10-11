@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MessageHandler.class)
 abstract public class MixinMessageHandler {
-
     @Inject(method = "onGameMessage", at = @At("HEAD"), cancellable = true)
     public void mixinOnGameMessage(Text text, boolean bl, CallbackInfo ci) {
         if(text != null && !bl) {

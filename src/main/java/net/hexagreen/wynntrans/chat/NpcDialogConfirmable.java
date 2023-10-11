@@ -6,9 +6,12 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class NpcDialogConfirmable extends FocusText {
+public class NpcDialogConfirmable extends NpcDialog implements FocusTextInterface {
+    private final Text fullText;
+
     NpcDialogConfirmable(MutableText text, Pattern regex) {
-        super(text, regex);
+        super(text.getSiblings().get(2), regex);
+        this.fullText = text;
     }
 
     public static NpcDialogConfirmable of(Text text, Pattern regex) {
@@ -18,7 +21,7 @@ public class NpcDialogConfirmable extends FocusText {
     @Override
     protected void build() {
         super.build();
-        setToPressShift();
+        resultText = setToPressShift(resultText, fullText);
     }
 
     @SuppressWarnings("DataFlowIssue")

@@ -6,9 +6,12 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class NpcDialogSelection extends FocusText {
+public class NpcDialogSelection extends NpcDialog implements FocusTextInterface {
+    private final Text fullText;
+
     NpcDialogSelection(MutableText text, Pattern regex) {
-        super(text, regex);
+        super(text.getSiblings().get(2), regex);
+        this.fullText = text;
     }
 
     public static NpcDialogSelection of(Text text, Pattern regex) {
@@ -18,7 +21,7 @@ public class NpcDialogSelection extends FocusText {
     @Override
     protected void build() {
         super.build();
-        setToSelectOption();
+        resultText = setToSelectOption(resultText, fullText, pKeyDialog);
     }
 
     @SuppressWarnings("DataFlowIssue")

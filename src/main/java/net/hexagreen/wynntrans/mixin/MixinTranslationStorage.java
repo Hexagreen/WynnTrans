@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Mixin(TranslationStorage.class)
 public abstract class MixinTranslationStorage {
-
     @Inject(method = "load(Lnet/minecraft/resource/ResourceManager;Ljava/util/List;Z)Lnet/minecraft/client/resource/language/TranslationStorage;", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
     private static void mixinLoad(ResourceManager resourceManager, List<String> definitions, boolean rightToLeft, CallbackInfoReturnable<TranslationStorage> cir, Map<String, String> map) {
         if(definitions.get(0).equals("wy_tr")) {

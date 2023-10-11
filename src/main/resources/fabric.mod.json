@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "icon": "assets/WynnTrans/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "net.hexagreen.wynntrans.client.WynnTransClient"
