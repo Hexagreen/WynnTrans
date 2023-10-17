@@ -1,7 +1,6 @@
 package net.hexagreen.wynntrans.enums;
 
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
 public enum CharacterClass {

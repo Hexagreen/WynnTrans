@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.chat;
 
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;

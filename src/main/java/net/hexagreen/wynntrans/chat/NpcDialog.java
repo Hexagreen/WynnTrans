@@ -2,9 +2,7 @@ package net.hexagreen.wynntrans.chat;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
