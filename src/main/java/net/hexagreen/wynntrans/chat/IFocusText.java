@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.chat;
 
-import net.hexagreen.wynntrans.ChatType;
+import net.hexagreen.wynntrans.enums.ChatType;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -11,7 +12,7 @@ import java.util.List;
 
 import static net.hexagreen.wynntrans.chat.WynnChatText.WTS;
 
-public interface FocusTextInterface {
+public interface IFocusText {
     default MutableText setToConfirmless(Text text) {
         MutableText confirmless = Text.empty().append("\n");
         confirmless.append(text).append("\n");
@@ -42,8 +43,12 @@ public interface FocusTextInterface {
         return confirmable;
     }
 
+    default void clearChat() {
+        MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+    }
+
     private Text pressShiftToContinue(Text fullText) {
-        String key = "wytr.func.PressShift";
+        String key = "wytr.func.pressShift";
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
         MutableText text = newTranslate(key + "_indent");
         text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
@@ -53,7 +58,7 @@ public interface FocusTextInterface {
     }
 
     private Text selectOptionContinue(Text fullText) {
-        String key = "wytr.func.SelectOption";
+        String key = "wytr.func.selectOption";
         List<Text> original = fullText.getSiblings().get(getLastOptionIndex(fullText) + 4).getSiblings();
         MutableText text = newTranslate(key + "_indent");
         text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
@@ -79,7 +84,7 @@ public interface FocusTextInterface {
             Text textBody = original.get(i).getSiblings().get(2);
             String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
             String valSelOpt = ((LiteralTextContent) textBody.getContent()).string();
-            MutableText selection = MutableText.of(original.get(i).getContent())
+            MutableText selection = MutableText.of(original.get(i).getContent()).setStyle(original.get(i).getStyle())
                     .append(original.get(i).getSiblings().get(0))
                     .append(original.get(i).getSiblings().get(1));
             if(WTS.checkTranslationExist(keySelOpt, valSelOpt)) {

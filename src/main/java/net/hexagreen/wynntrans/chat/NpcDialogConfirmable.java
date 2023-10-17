@@ -1,21 +1,19 @@
 package net.hexagreen.wynntrans.chat;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class NpcDialogConfirmable extends NpcDialog implements FocusTextInterface {
+public class NpcDialogConfirmable extends NpcDialog implements IFocusText {
     private final Text fullText;
 
-    NpcDialogConfirmable(MutableText text, Pattern regex) {
+    protected NpcDialogConfirmable(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
         this.fullText = text;
     }
 
     public static NpcDialogConfirmable of(Text text, Pattern regex) {
-        return new NpcDialogConfirmable((MutableText) text, regex);
+        return new NpcDialogConfirmable(text, regex);
     }
 
     @Override
@@ -24,11 +22,9 @@ public class NpcDialogConfirmable extends NpcDialog implements FocusTextInterfac
         resultText = setToPressShift(resultText, fullText);
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Override
-    public void print() {
-        build();
-        MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
-        MinecraftClient.getInstance().player.sendMessage(resultText);
+    public boolean print() {
+        clearChat();
+        return super.print();
     }
 }

@@ -2,26 +2,30 @@ package net.hexagreen.wynntrans.chat;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
 
 public class NpcDialog extends WynnChatText{
-    private final String playername;
+    private final Object playername;
+    private final String pNameString;
     private final String keyName;
     private final String valName;
     protected final String pKeyDialog;
 
-    NpcDialog(Text text, Pattern regex) {
-        super(text, regex);
-        this.playername = MinecraftClient.getInstance().player.getName().getString();
+    protected NpcDialog(Text text, Pattern regex) {
+        super(removeCustomNickname(text), regex);
+        this.pNameString = MinecraftClient.getInstance().player.getName().getString();
+        this.playername = removedCustomNickname == null ? this.pNameString : removedCustomNickname;
         this.valName = getContentLiteral(0).replace(":", "");
         String npcName = valName.replace(" ", "").replace(".", "");
         this.keyName = parentKey + "name." + npcName;
         String dialogIdx = matcher.group(1) + ".";
         String dialogLen = matcher.group(2) + ".";
-        String hash = DigestUtils.sha1Hex(inputText.getString().replace(playername, "%1$s")).substring(0, 8);
+        String hash = DigestUtils.sha1Hex(inputText.getString().replace(pNameString, "%1$s")).substring(0, 8);
         this.pKeyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
     }
 
@@ -48,7 +52,7 @@ public class NpcDialog extends WynnChatText{
         }
 
         if(inputText.getSiblings().size() == 2) {
-            String valDialog = getContentLiteral(1).replace(playername, "%1$s");
+            String valDialog = getContentLiteral(1).replace(pNameString, "%1$s");
 
             Text t1 = inputText.getSiblings().get(1);
             if(WTS.checkTranslationExist(pKeyDialog, valDialog)) {
@@ -66,7 +70,7 @@ public class NpcDialog extends WynnChatText{
         else {
             for(int index = 1; inputText.getSiblings().size() > index; index++) {
                 String keyDialog = pKeyDialog + "_" + index;
-                String valDialog = getContentLiteral(index).replace(playername, "%1$s");
+                String valDialog = getContentLiteral(index).replace(pNameString, "%1$s");
 
                 Text ti = inputText.getSiblings().get(index);
                 if(WTS.checkTranslationExist(keyDialog, valDialog)) {

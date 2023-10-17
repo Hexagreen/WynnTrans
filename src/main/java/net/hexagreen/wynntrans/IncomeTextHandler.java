@@ -1,18 +1,20 @@
 package net.hexagreen.wynntrans;
 
-import net.hexagreen.wynntrans.chat.NpcDialog;
-import net.hexagreen.wynntrans.chat.NpcDialogConfirmable;
-import net.hexagreen.wynntrans.chat.NpcDialogConfirmless;
-import net.hexagreen.wynntrans.chat.NpcDialogSelection;
+import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.chat.*;
+import net.hexagreen.wynntrans.enums.ChatType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 import org.apache.commons.compress.utils.Lists;
+import org.slf4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 @SuppressWarnings("DataFlowIssue")
 public class IncomeTextHandler {
+    protected static final Logger LOGGER = LogUtils.getLogger();
     private boolean concatingSelection;
     private MutableText gluedDialog;
     private List<Text> backgroundText;
@@ -65,70 +67,76 @@ public class IncomeTextHandler {
     }
 
     private boolean analyseLiteralText(Text text) {
-        WynnTransText out = WynnTransText.of(text);
         switch (ChatType.findType(text)) {
-            case COMBAT_LEVELUP -> out = WynnTrans.translationBuilder.buildCombatLevelUpTranslation(text);
+            case COMBAT_LEVELUP -> CombatLevelUp.of(text, ChatType.COMBAT_LEVELUP.getRegex()).print();
             case NO_TYPE -> debugClass.writeString2File(text.getString(), "literal.txt");
         }
-        this.printText(out);
         return true;
     }
 
     private boolean analyseSinglelineText(Text text) {
-        WynnTransText out = WynnTransText.of(text);
-        switch (ChatType.findType(text)) {
-            case NORMAL_CHAT, PRIVATE_MESSAGE -> {
-                return false;
-            }
-            case SHOUT -> out = WynnTrans.translationBuilder.buildShoutTranslation(text);
-            case INFO -> out = WynnTrans.translationBuilder.buildInfoTranslation(text);
-            case INFO_EVENT -> out = WynnTrans.translationBuilder.buildEventInfoTranslation(text);
-            case CLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildCLevelAnnounceTranslation(text);
-            case PLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildPLevelAnnounceTranslation(text);
-            case BLACKSMITH -> out = WynnTrans.translationBuilder.buildBlacksmithTranslation(text);
-            case IDENTIFIER -> out = WynnTrans.translationBuilder.buildIdentifierTranslation(text);
-            case AREA_ENTER -> out = WynnTrans.translationBuilder.buildAreaEnterTranslation(text);
-            case AREA_LEAVE -> out = WynnTrans.translationBuilder.buildAreaLeaveTranslation(text);
-            case BOMB_THANK -> out = WynnTrans.translationBuilder.buildThanksTranslation(text);
-            case THANK_YOU -> out = WynnTrans.translationBuilder.buildThankyouTranslation(text);
-            case CRATE_GET -> out = WynnTrans.translationBuilder.buildCrateGetTranslation(text);
-//            case ITEMBOMB_THROWN -> {
-//            }
-//            case ITEMBOMB_MESSAGE -> {
-//            }
-            case RANKS_LOGIN -> out = WynnTrans.translationBuilder.buildRankLogInTranslation(text);
-            case COMBAT_LEVELUP -> out = WynnTrans.translationBuilder.buildCombatLevelUpTranslation(text);
-            case PROFESSION_LEVELUP -> out = WynnTrans.translationBuilder.buildProfessionLevelUpTranslation(text);
-            case SERVER_RESTART -> out = WynnTrans.translationBuilder.buildServerRestartTranslation(text);
-            case RESTARTING -> out = WynnTrans.translationBuilder.buildRestartingTranslation(text);
-            case DAILY_REWARD -> out = WynnTrans.translationBuilder.buildDailyRewardTranslation(text);
-            case DISGUISE -> out = WynnTrans.translationBuilder.buildDisguiseTranslation(text);
-            case SKILL_COOLDOWN -> out = WynnTrans.translationBuilder.buildSkillCooldownTranslation(text);
-            case SPEEDBOOST -> out = WynnTrans.translationBuilder.buildSpeedboostTranslation(text);
-            case RESISTANCE -> out = WynnTrans.translationBuilder.buildResistanceTranslation(text);
-            case PARTYFINDER -> out = WynnTrans.translationBuilder.buildPartyFinderTranslation(text);
-            case MERCHANT -> out = WynnTrans.translationBuilder.buildMerchantTranslation(text);
-            case NO_TYPE -> {
-                if(text.getSiblings().size() == 1) {
-                    out = WynnTrans.translationBuilder.buildSimpleTextTranslation(text);
-                }
-                else {
-                    debugClass.writeString2File(text.getString(), "getString.txt");
-                    debugClass.writeString2File(text.toString(), "toString.txt");
-                    debugClass.writeTextAsJSON(text);
-                    out = WynnTransText.of(text);
-                }
-            }
+        try {
+            if(ChatType.findAndRun(text)) return true;
+            debugClass.writeString2File(text.getString(), "getString.txt", "Line");
+            debugClass.writeString2File(text.toString(), "toString.txt", "Line");
+            debugClass.writeTextAsJSON(text);
+            return false;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            LOGGER.warn("ChatType.findAndRun Error.");
+            return false;
         }
-        this.printText(out);
-        return true;
+//        WynnTransText out = WynnTransText.of(text);
+//        switch (ChatType.findType(text)) {
+//            case NORMAL_CHAT, PRIVATE_MESSAGE -> {
+//                return false;
+//            }
+//            case SHOUT -> out = WynnTrans.translationBuilder.buildShoutTranslation(text);
+//            case INFO -> out = WynnTrans.translationBuilder.buildInfoTranslation(text);
+//            case INFO_EVENT -> out = WynnTrans.translationBuilder.buildEventInfoTranslation(text);
+//            case CLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildCLevelAnnounceTranslation(text);
+//            case PLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildPLevelAnnounceTranslation(text);
+//            case BLACKSMITH -> out = WynnTrans.translationBuilder.buildBlacksmithTranslation(text);
+//            case IDENTIFIER -> out = WynnTrans.translationBuilder.buildIdentifierTranslation(text);
+//            case AREA_ENTER -> out = WynnTrans.translationBuilder.buildAreaEnterTranslation(text);
+//            case AREA_LEAVE -> out = WynnTrans.translationBuilder.buildAreaLeaveTranslation(text);
+//            case BOMB_THANK -> out = WynnTrans.translationBuilder.buildThanksTranslation(text);
+//            case THANK_YOU -> out = WynnTrans.translationBuilder.buildThankyouTranslation(text);
+//            case CRATE_GET -> out = WynnTrans.translationBuilder.buildCrateGetTranslation(text);
+////            case ITEMBOMB_THROWN -> {
+////            }
+////            case ITEMBOMB_MESSAGE -> {
+////            }
+//            case RANKS_LOGIN -> out = WynnTrans.translationBuilder.buildRankLogInTranslation(text);
+//            case COMBAT_LEVELUP -> out = WynnTrans.translationBuilder.buildCombatLevelUpTranslation(text);
+//            case PROFESSION_LEVELUP -> out = WynnTrans.translationBuilder.buildProfessionLevelUpTranslation(text);
+//            case SERVER_RESTART -> out = WynnTrans.translationBuilder.buildServerRestartTranslation(text);
+//            case RESTARTING -> out = WynnTrans.translationBuilder.buildRestartingTranslation(text);
+//            case DAILY_REWARD -> out = WynnTrans.translationBuilder.buildDailyRewardTranslation(text);
+//            case DISGUISE -> out = WynnTrans.translationBuilder.buildDisguiseTranslation(text);
+//            case SKILL_COOLDOWN -> out = WynnTrans.translationBuilder.buildSkillCooldownTranslation(text);
+//            case SPEEDBOOST -> out = WynnTrans.translationBuilder.buildSpeedboostTranslation(text);
+//            case RESISTANCE -> out = WynnTrans.translationBuilder.buildResistanceTranslation(text);
+//            case PARTYFINDER -> out = WynnTrans.translationBuilder.buildPartyFinderTranslation(text);
+//            case MERCHANT -> out = WynnTrans.translationBuilder.buildMerchantTranslation(text);
+//            case NO_TYPE -> {
+//                if(text.getSiblings().size() == 1) {
+//                    out = WynnTrans.translationBuilder.buildSimpleTextTranslation(text);
+//                }
+//                else {
+//                    debugClass.writeString2File(text.getString(), "getString.txt");
+//                    debugClass.writeString2File(text.toString(), "toString.txt");
+//                    debugClass.writeTextAsJSON(text);
+//                    out = WynnTransText.of(text);
+//                }
+//            }
+//        }
+//        this.printText(out);
     }
 
     private boolean analyseMultilineText(Text text) {
         if(ChatType.DIALOG_PLACEHOLDER.match(text, 2)) {
             this.pendingCounter = 0;
-            this.printFocusedText(text);
-            return true;
+            return DialogPlaceholder.of(text, ChatType.DIALOG_PLACEHOLDER.getRegex()).print();
         }
         if(this.concatingSelection && (ChatType.SELECTION_END.match(text) || ChatType.SELECTION_OPTION.match(text))) {
             this.pendingCounter = 0;
@@ -159,22 +167,18 @@ public class IncomeTextHandler {
     private boolean processConfirmableDialog(Text text) {
         if(ChatType.DIALOG_END.match(text, 6)) {
             this.pendingCounter = 0;
-            WynnTransText out = WynnTransText.of(text);
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
                 NpcDialogConfirmable.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
-                return true;
             }
             else if(ChatType.NEW_QUEST.match(text, 2)){
-                out.setSiblingByIndex(WynnTrans.translationBuilder.buildNewQuestTranslation(text.getSiblings().get(2)), 2);
+                NewQuest.of(text, ChatType.NEW_QUEST.getRegex()).print();
             }
 //            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
 //
 //            }
             else {
-                out.setSiblingByIndex(WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)), 2);
+                NarrationConfirmable.of(text, null).print();
             }
-            out.setSiblingByIndex(WynnTrans.translationBuilder.buildPressShiftContinue(text.getSiblings().get(6)), 6);
-            this.printFocusedText(out);
             return true;
         }
         else if(ChatType.SELECTION_OPTION.match(text, 6)) {
@@ -199,15 +203,15 @@ public class IncomeTextHandler {
 
     private boolean processConfirmlessDialog(Text text) {
         this.pendingCounter = 0;
-        WynnTransText out = WynnTransText.of(text);
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
             NpcDialogConfirmless.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
-            return true;
+        }
+        else if(text.getSiblings().get(2).getString().equals("empty")) {
+            return false;
         }
         else {
-            out.setSiblingByIndex(WynnTrans.translationBuilder.buildNarrationTranslation(text.getSiblings().get(2)), 2);
+            NarrationConfirmless.of(text, null).print();
         }
-        this.printFocusedText(out);
         return true;
     }
 
@@ -231,14 +235,5 @@ public class IncomeTextHandler {
                 this.selectionDialogReady = true;
             }
         }
-    }
-
-    private void printText(Text text) {
-        MinecraftClient.getInstance().player.sendMessage(text);
-    }
-
-    private void printFocusedText(Text text) {
-        MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
-        MinecraftClient.getInstance().player.sendMessage(text);
     }
 }

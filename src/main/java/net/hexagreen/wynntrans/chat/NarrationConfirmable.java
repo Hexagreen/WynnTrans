@@ -4,22 +4,22 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class NpcDialogSelection extends NpcDialog implements IFocusText {
+public class NarrationConfirmable extends Narration implements IFocusText {
     private final Text fullText;
 
-    protected NpcDialogSelection(Text text, Pattern regex) {
+    protected NarrationConfirmable(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
         this.fullText = text;
     }
 
-    public static NpcDialogSelection of(Text text, Pattern regex) {
-        return new NpcDialogSelection(text, regex);
+    public static NarrationConfirmable of(Text text, Pattern regex) {
+        return new NarrationConfirmable(text, regex);
     }
 
     @Override
     protected void build() {
         super.build();
-        resultText = setToSelectOption(resultText, fullText, pKeyDialog);
+        resultText = setToPressShift(resultText, fullText);
     }
 
     @Override
