@@ -75,9 +75,5 @@ public class Blacksmith extends WynnChatText {
                     .append(getSibling(lastItemIndex + 2))
                     .append(newTranslate(parentKey + ".scrap_2").setStyle(getStyle(1)));
         }
-        else {
-            debugClass.writeString2File(inputText.getString(), "getString.txt", "Smith");
-            debugClass.writeString2File(inputText.toString(), "toString.txt", "Smith");
-        }
     }
 }

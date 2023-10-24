@@ -16,7 +16,7 @@ public class WynnTrans implements ModInitializer {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static IncomeTextHandler incomeTextHandler;
     public static WynnTranslationStorage wynnTranslationStorage;
-//    private static Iterator<String> debugString;
+    private static Iterator<String> debugString;
 
     @Override
     public void onInitialize() {
@@ -24,15 +24,15 @@ public class WynnTrans implements ModInitializer {
         wynnTranslationStorage = new WynnTranslationStorage();
         LOGGER.info("[WynnTrans] Hello, Wynn!");
 
-//        debugString = List.of(debugClass.readTextListFromJSON()).iterator();
-//        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("readJson")
-//                .executes(context -> {
-//                    if(debugString.hasNext()) {
-//                        Text readText = Text.Serializer.fromJson(debugString.next());
-//                        context.getSource().sendMessage(readText);
-//                    }
-//                    return 1;
-//                })));
+        debugString = List.of(debugClass.readTextListFromJSON()).iterator();
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(literal("readJson")
+                .executes(context -> {
+                    if(debugString.hasNext()) {
+                        Text readText = Text.Serializer.fromJson(debugString.next());
+                        context.getSource().sendMessage(readText);
+                    }
+                    return 1;
+                })));
 
         ClientTickEvents.START_WORLD_TICK.register((StartTick) -> incomeTextHandler.sendPendingText());
     }
