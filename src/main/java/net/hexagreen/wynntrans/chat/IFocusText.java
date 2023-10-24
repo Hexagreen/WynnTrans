@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.chat;
 
-import net.hexagreen.wynntrans.enums.ChatType;
+import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
@@ -70,7 +70,7 @@ public interface IFocusText {
     private int getLastOptionIndex(Text fullText) {
         int selTooltipIdx = 0;
         for (int i = fullText.getSiblings().size() - 1; i > 10; i--) {
-            if (ChatType.SELECTION_END.match(fullText, i)) {
+            if (FunctionalRegex.SELECTION_END.match(fullText, i)) {
                 selTooltipIdx = i;
                 break;
             }

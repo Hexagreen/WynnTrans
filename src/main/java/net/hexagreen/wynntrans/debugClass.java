@@ -1,9 +1,11 @@
 package net.hexagreen.wynntrans;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class debugClass {
-    private static final String path = "D:/debug/";
+    private static final String path = FabricLoader.getInstance().getGameDir().resolve("WynnTrans") + File.separator;
 
     public static void writeString2File(String str, String fileName) {
         try{

@@ -2,9 +2,11 @@ package net.hexagreen.wynntrans;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.chat.*;
+import net.hexagreen.wynntrans.chat.glue.Selection;
+import net.hexagreen.wynntrans.chat.glue.TextGlue;
 import net.hexagreen.wynntrans.enums.ChatType;
+import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 import org.apache.commons.compress.utils.Lists;
@@ -15,23 +17,27 @@ import java.util.List;
 @SuppressWarnings("DataFlowIssue")
 public class IncomeTextHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    private boolean concatingSelection;
-    private MutableText gluedDialog;
+    private static final long PENDINGTICKTHRES = 2;
+    protected TextGlue textGlue;
     private List<Text> backgroundText;
     private List<Text> pendingText;
     private byte pendingTime;
     private byte pendingCounter;
-    private boolean selectionDialogReady;
-    private static final long PENDINGTICKTHRES = 2;
 
     public IncomeTextHandler() {
-        this.concatingSelection = false;
-        this.gluedDialog = MutableText.of(TextContent.EMPTY);
+        this.textGlue = null;
         this.backgroundText = Lists.newArrayList();
         this.pendingText = Lists.newArrayList();
-        this.selectionDialogReady = false;
         this.pendingTime = 0;
         this.pendingCounter = 0;
+    }
+
+    public void attachGlue(TextGlue glue) {
+        this.textGlue = glue;
+    }
+
+    public void removeGlue() {
+        this.textGlue = null;
     }
 
     public void sendPendingText() {
@@ -40,8 +46,10 @@ public class IncomeTextHandler {
                 this.pendingCounter = 0;
                 this.pendingTime = 0;
                 MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
-                for(Text background : this.pendingText) {
-                    MinecraftClient.getInstance().player.sendMessage(background);
+                for(Text chunk : this.pendingText) {
+                    for(Text line : chunk.getSiblings()) {
+                        sortIncomeText(line);
+                    }
                 }
             }
         }
@@ -60,6 +68,7 @@ public class IncomeTextHandler {
                 return this.analyseLiteralText(text);
             }
         } catch(Exception e) {
+            LOGGER.error("Error in sortIncomeText", e);
             debugClass.writeString2File(text.getString(), "exception.txt");
             debugClass.writeTextAsJSON(text);
         }
@@ -69,79 +78,31 @@ public class IncomeTextHandler {
     private boolean analyseLiteralText(Text text) {
         switch (ChatType.findType(text)) {
             case COMBAT_LEVELUP -> CombatLevelUp.of(text, ChatType.COMBAT_LEVELUP.getRegex()).print();
-            case NO_TYPE -> debugClass.writeString2File(text.getString(), "literal.txt");
+            case NO_TYPE -> {
+                debugClass.writeString2File(text.getString(), "literal.txt");
+                return false;
+            }
         }
         return true;
     }
 
     private boolean analyseSinglelineText(Text text) {
         try {
-            if(ChatType.findAndRun(text)) return true;
-            debugClass.writeString2File(text.getString(), "getString.txt", "Line");
-            debugClass.writeString2File(text.toString(), "toString.txt", "Line");
-            debugClass.writeTextAsJSON(text);
-            return false;
+            return ChatType.findAndRun(text);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             LOGGER.warn("ChatType.findAndRun Error.");
             return false;
         }
-//        WynnTransText out = WynnTransText.of(text);
-//        switch (ChatType.findType(text)) {
-//            case NORMAL_CHAT, PRIVATE_MESSAGE -> {
-//                return false;
-//            }
-//            case SHOUT -> out = WynnTrans.translationBuilder.buildShoutTranslation(text);
-//            case INFO -> out = WynnTrans.translationBuilder.buildInfoTranslation(text);
-//            case INFO_EVENT -> out = WynnTrans.translationBuilder.buildEventInfoTranslation(text);
-//            case CLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildCLevelAnnounceTranslation(text);
-//            case PLEVEL_ANNOUNCE -> out = WynnTrans.translationBuilder.buildPLevelAnnounceTranslation(text);
-//            case BLACKSMITH -> out = WynnTrans.translationBuilder.buildBlacksmithTranslation(text);
-//            case IDENTIFIER -> out = WynnTrans.translationBuilder.buildIdentifierTranslation(text);
-//            case AREA_ENTER -> out = WynnTrans.translationBuilder.buildAreaEnterTranslation(text);
-//            case AREA_LEAVE -> out = WynnTrans.translationBuilder.buildAreaLeaveTranslation(text);
-//            case BOMB_THANK -> out = WynnTrans.translationBuilder.buildThanksTranslation(text);
-//            case THANK_YOU -> out = WynnTrans.translationBuilder.buildThankyouTranslation(text);
-//            case CRATE_GET -> out = WynnTrans.translationBuilder.buildCrateGetTranslation(text);
-////            case ITEMBOMB_THROWN -> {
-////            }
-////            case ITEMBOMB_MESSAGE -> {
-////            }
-//            case RANKS_LOGIN -> out = WynnTrans.translationBuilder.buildRankLogInTranslation(text);
-//            case COMBAT_LEVELUP -> out = WynnTrans.translationBuilder.buildCombatLevelUpTranslation(text);
-//            case PROFESSION_LEVELUP -> out = WynnTrans.translationBuilder.buildProfessionLevelUpTranslation(text);
-//            case SERVER_RESTART -> out = WynnTrans.translationBuilder.buildServerRestartTranslation(text);
-//            case RESTARTING -> out = WynnTrans.translationBuilder.buildRestartingTranslation(text);
-//            case DAILY_REWARD -> out = WynnTrans.translationBuilder.buildDailyRewardTranslation(text);
-//            case DISGUISE -> out = WynnTrans.translationBuilder.buildDisguiseTranslation(text);
-//            case SKILL_COOLDOWN -> out = WynnTrans.translationBuilder.buildSkillCooldownTranslation(text);
-//            case SPEEDBOOST -> out = WynnTrans.translationBuilder.buildSpeedboostTranslation(text);
-//            case RESISTANCE -> out = WynnTrans.translationBuilder.buildResistanceTranslation(text);
-//            case PARTYFINDER -> out = WynnTrans.translationBuilder.buildPartyFinderTranslation(text);
-//            case MERCHANT -> out = WynnTrans.translationBuilder.buildMerchantTranslation(text);
-//            case NO_TYPE -> {
-//                if(text.getSiblings().size() == 1) {
-//                    out = WynnTrans.translationBuilder.buildSimpleTextTranslation(text);
-//                }
-//                else {
-//                    debugClass.writeString2File(text.getString(), "getString.txt");
-//                    debugClass.writeString2File(text.toString(), "toString.txt");
-//                    debugClass.writeTextAsJSON(text);
-//                    out = WynnTransText.of(text);
-//                }
-//            }
-//        }
-//        this.printText(out);
     }
 
     private boolean analyseMultilineText(Text text) {
-        if(ChatType.DIALOG_PLACEHOLDER.match(text, 2)) {
+        if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2)) {
             this.pendingCounter = 0;
-            return DialogPlaceholder.of(text, ChatType.DIALOG_PLACEHOLDER.getRegex()).print();
+            return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }
-        if(this.concatingSelection && (ChatType.SELECTION_END.match(text) || ChatType.SELECTION_OPTION.match(text))) {
+        if(textGlue instanceof Selection && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))) {
             this.pendingCounter = 0;
-            this.concatSelectionDialog(text, ChatType.SELECTION_END.match(text));
-            return true;
+            return textGlue.push(text);
         }
         List<Text> sibling = text.getSiblings();
         switch (sibling.size()) {
@@ -165,7 +126,7 @@ public class IncomeTextHandler {
     }
 
     private boolean processConfirmableDialog(Text text) {
-        if(ChatType.DIALOG_END.match(text, 6)) {
+        if(FunctionalRegex.DIALOG_END.match(text, 6)) {
             this.pendingCounter = 0;
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
                 NpcDialogConfirmable.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
@@ -173,21 +134,17 @@ public class IncomeTextHandler {
             else if(ChatType.NEW_QUEST.match(text, 2)){
                 NewQuest.of(text, ChatType.NEW_QUEST.getRegex()).print();
             }
-//            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-//
-//            }
+            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
+                ItemGiveAndTakeConfirmable.of(text, ChatType.DIALOG_ITEM.getRegex()).print();
+            }
             else {
                 NarrationConfirmable.of(text, null).print();
             }
             return true;
         }
-        else if(ChatType.SELECTION_OPTION.match(text, 6)) {
+        else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
             this.pendingCounter = 0;
-            this.concatingSelection = !ChatType.SELECTION_END.match(text);
-            if(this.concatingSelection) {
-                this.concatSelectionDialog(text, false);
-                return true;
-            }
+            Selection.get().push(text);
         }
         else {
             this.backgroundText.add(text);
@@ -206,6 +163,9 @@ public class IncomeTextHandler {
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
             NpcDialogConfirmless.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
         }
+        else if(ChatType.DIALOG_ITEM.match(text, 2)) {
+            ItemGiveAndTakeConfirmable.of(text, ChatType.DIALOG_ITEM.getRegex()).print();
+        }
         else if(text.getSiblings().get(2).getString().equals("empty")) {
             return false;
         }
@@ -213,27 +173,5 @@ public class IncomeTextHandler {
             NarrationConfirmless.of(text, null).print();
         }
         return true;
-    }
-
-    private void concatSelectionDialog(Text text, boolean isLastDialog) {
-        if(this.selectionDialogReady){
-            for(Text sibling : text.getSiblings()) {
-                this.gluedDialog.append(sibling);
-            }
-            if(isLastDialog) {
-                this.concatingSelection = false;
-                this.selectionDialogReady = false;
-                NpcDialogSelection.of(gluedDialog, ChatType.DIALOG_NORMAL.getRegex()).print();
-                this.gluedDialog = MutableText.of(TextContent.EMPTY);
-            }
-            else{
-                this.gluedDialog.append(Text.of("\n"));
-            }
-        }
-        else {
-            if(ChatType.SELECTION_END.match(text)){
-                this.selectionDialogReady = true;
-            }
-        }
     }
 }

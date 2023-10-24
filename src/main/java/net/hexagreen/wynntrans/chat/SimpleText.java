@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.chat;
 
 import net.hexagreen.wynntrans.debugClass;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -27,7 +28,12 @@ public class SimpleText extends WynnChatText {
 
     @Override
     protected void build() {
-        if(inputText.getSiblings().size() != 1) {
+        if(valText.equals("")) {
+            resultText = inputText;
+            return;
+        }
+
+        if(inputText.getSiblings().size() > 1) {
             debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
             debugClass.writeString2File(inputText.toString(), "toString.txt", "Simple");
             debugClass.writeTextAsJSON(inputText);
@@ -35,14 +41,23 @@ public class SimpleText extends WynnChatText {
             return;
         }
 
-        resultText = Text.empty().setStyle(getStyle());
-        if(valText.equals("")) return;
-
-        if(WTS.checkTranslationExist(keyText, valText)) {
-            resultText.append(newTranslate(keyText).setStyle(getStyle(0)));
+        if(inputText.getSiblings().size() == 1) {
+            resultText = Text.empty().setStyle(getStyle());
+            if(WTS.checkTranslationExist(keyText, valText)) {
+                resultText.append(newTranslate(keyText).setStyle(getStyle(0)));
+            }
+            else {
+                resultText.append(getSibling(0));
+            }
         }
         else {
-            resultText.append(getSibling(0));
+            if(WTS.checkTranslationExist(keyText, getContentLiteral())) {
+                resultText = newTranslate(keyText);
+            }
+            else {
+                resultText = MutableText.of(inputText.getContent());
+            }
         }
+
     }
 }
