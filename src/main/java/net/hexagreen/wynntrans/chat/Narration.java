@@ -15,6 +15,10 @@ public class Narration extends WynnChatText {
         this.pKeyNarration = parentKey + hash;
     }
 
+    public static Narration of(Text text, Pattern regex) {
+        return new Narration(text, regex);
+    }
+
     @Override
     protected String setParentKey() {
         return rootKey + "narration.";
@@ -24,7 +28,7 @@ public class Narration extends WynnChatText {
     protected void build() {
         if(inputText.getSiblings().size() == 0) {
             if(WTS.checkTranslationExist(pKeyNarration, getContentLiteral())) {
-                resultText = newTranslate(pKeyNarration);
+                resultText = newTranslate(pKeyNarration).setStyle(getStyle());
             }
             else {
                 resultText = inputText;
@@ -34,16 +38,16 @@ public class Narration extends WynnChatText {
             String keyContent = pKeyNarration + "_1";
             String valContent = getContentLiteral();
             if(WTS.checkTranslationExist(keyContent, valContent)) {
-                resultText = newTranslate(keyContent);
+                resultText = newTranslate(keyContent).setStyle(getStyle());
             }
             else {
-                resultText = (MutableText) inputText.getContent();
+                resultText = MutableText.of(inputText.getContent()).setStyle(getStyle());
             }
             for(int index = 0; inputText.getSiblings().size() > index; index++) {
                 String keySibling = pKeyNarration + "_" + (index + 2);
                 String valSibling = getContentLiteral(index);
                 if(WTS.checkTranslationExist(keySibling, valSibling)) {
-                    resultText.append(newTranslate(keySibling));
+                    resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
                 }
                 else {
                     resultText.append(inputText.getSiblings().get(index));

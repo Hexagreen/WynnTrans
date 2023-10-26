@@ -38,6 +38,7 @@ public enum ChatType {
     MERCHANT(Pattern.compile("^(.+) Merchant: "), Merchants.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
+    DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+:) (.+)"), NpcDialogLiteral.class),
 
     NO_TYPE(null, SimpleText.class);
 
@@ -53,16 +54,7 @@ public enum ChatType {
     public Pattern getRegex() {
         return this.regex;
     }
-
-    public boolean match(Text text){
-        for(Text sibling : text.getSiblings()) {
-            if(this.regex.matcher(sibling.getString()).find()){
-                return true;
-            }
-        }
-        return false;
-    }
-
+    
     public boolean match(Text text, int siblingIndex) {
         return this.regex.matcher(text.getSiblings().get(siblingIndex).getString()).find();
     }
@@ -81,5 +73,9 @@ public enum ChatType {
     public static boolean findAndRun(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         ChatType find = findType(text);
         return find.wct != null && find.wct.cast(find.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, find.regex)).print();
+    }
+
+    public boolean run(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        return this.wct.cast(this.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, this.regex)).print();
     }
 }

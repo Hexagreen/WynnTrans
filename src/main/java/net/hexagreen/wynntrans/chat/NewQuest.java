@@ -31,10 +31,10 @@ public class NewQuest extends WynnChatText implements IFocusText {
                 .append(": ");
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
-            resultText.append(newTranslate(keyQuestName));
+            resultText.append(newTranslate(keyQuestName).setStyle(getSibling(0).getStyle()));
         }
         else {
-            resultText.append(inputText.getSiblings().get(0));
+            resultText.append(getSibling(0));
         }
 
         resultText = setToPressShift(resultText, fullText);

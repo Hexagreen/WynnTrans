@@ -2,10 +2,11 @@ package net.hexagreen.wynntrans;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.chat.*;
-import net.hexagreen.wynntrans.chat.glue.Selection;
+import net.hexagreen.wynntrans.chat.glue.SelectionGlue;
 import net.hexagreen.wynntrans.chat.glue.TextGlue;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
+import net.hexagreen.wynntrans.enums.GlueType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
@@ -14,10 +15,9 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-@SuppressWarnings("DataFlowIssue")
 public class IncomeTextHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    private static final long PENDINGTICKTHRES = 2;
+    private static final byte PENDINGTICKTHRES = 2;
     protected TextGlue textGlue;
     private List<Text> backgroundText;
     private List<Text> pendingText;
@@ -32,15 +32,23 @@ public class IncomeTextHandler {
         this.pendingCounter = 0;
     }
 
-    public void attachGlue(TextGlue glue) {
-        this.textGlue = glue;
+    public void attachGlue(Text text) {
+        if(this.textGlue == null) {
+            try {
+                this.textGlue = GlueType.findAndGet(text);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignore) {
+                LOGGER.warn("GlueType.findAndGet Error.");
+            }
+        }
     }
 
     public void removeGlue() {
         this.textGlue = null;
     }
 
-    public void sendPendingText() {
+    @SuppressWarnings("DataFlowIssue")
+    public void onStartWorldTick() {
+        if(this.textGlue != null) textGlue.timer();
         if(this.pendingCounter == 4) {
             if(++this.pendingTime >= PENDINGTICKTHRES) {
                 this.pendingCounter = 0;
@@ -48,9 +56,13 @@ public class IncomeTextHandler {
                 MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
                 for(Text chunk : this.pendingText) {
                     for(Text line : chunk.getSiblings()) {
-                        sortIncomeText(line);
+                        if("\n".equals(line.getString())) continue;
+                        if(!sortIncomeText(line)){
+                            MinecraftClient.getInstance().player.sendMessage(line);
+                        }
                     }
                 }
+                this.pendingText = Lists.newArrayList();
             }
         }
     }
@@ -76,19 +88,31 @@ public class IncomeTextHandler {
     }
 
     private boolean analyseLiteralText(Text text) {
-        switch (ChatType.findType(text)) {
-            case COMBAT_LEVELUP -> CombatLevelUp.of(text, ChatType.COMBAT_LEVELUP.getRegex()).print();
-            case NO_TYPE -> {
-                debugClass.writeString2File(text.getString(), "literal.txt");
-                return false;
+        attachGlue(text);
+        if(this.textGlue != null) return this.textGlue.push(text);
+        try {
+            switch (ChatType.findType(text)) {
+                case COMBAT_LEVELUP -> {
+                    return ChatType.COMBAT_LEVELUP.run(text);
+                }
+                case DIALOG_LITERAL -> {
+                    return ChatType.DIALOG_LITERAL.run(text);
+                }
+                case NO_TYPE -> {
+                    debugClass.writeString2File(text.getString(), "literal.txt");
+                    return false;
+                }
             }
+        } catch(Exception e) {
+            LOGGER.error("Error in analyseLiteralText", e);
         }
         return true;
     }
 
     private boolean analyseSinglelineText(Text text) {
         try {
-            return ChatType.findAndRun(text);
+            attachGlue(text);
+            return this.textGlue == null ? ChatType.findAndRun(text) : this.textGlue.push(text);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             LOGGER.warn("ChatType.findAndRun Error.");
             return false;
@@ -100,7 +124,7 @@ public class IncomeTextHandler {
             this.pendingCounter = 0;
             return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }
-        if(textGlue instanceof Selection && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))) {
+        if(textGlue instanceof SelectionGlue && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))) {
             this.pendingCounter = 0;
             return textGlue.push(text);
         }
@@ -144,7 +168,8 @@ public class IncomeTextHandler {
         }
         else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
             this.pendingCounter = 0;
-            Selection.get().push(text);
+            this.textGlue = SelectionGlue.get();
+            this.textGlue.push(text);
         }
         else {
             this.backgroundText.add(text);

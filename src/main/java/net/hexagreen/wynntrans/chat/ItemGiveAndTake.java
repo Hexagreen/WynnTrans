@@ -1,6 +1,9 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.hexagreen.wynntrans.enums.ChatType;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextContent;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +30,16 @@ public class ItemGiveAndTake extends WynnChatText {
 
     @Override
     protected void build() {
+        if(!inputText.getContent().equals(TextContent.EMPTY)) {
+            processMalformedDialog();
+            return;
+        }
         resultText = Text.empty().setStyle(getStyle(0));
         resultText.append("[" + direction + number + " " + item + "]");
+    }
+
+    private void processMalformedDialog() {
+        MutableText corrected = Text.empty().append(inputText);
+        resultText = ItemGiveAndTake.of(corrected, ChatType.DIALOG_ITEM.getRegex()).text();
     }
 }

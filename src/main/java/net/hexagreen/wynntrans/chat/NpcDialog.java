@@ -1,8 +1,10 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.hexagreen.wynntrans.enums.ChatType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
@@ -14,6 +16,7 @@ public class NpcDialog extends WynnChatText{
     private final String valName;
     protected final String pKeyDialog;
 
+    @SuppressWarnings("DataFlowIssue")
     protected NpcDialog(Text text, Pattern regex) {
         super(removeCustomNickname(text), regex);
         this.pNameString = MinecraftClient.getInstance().player.getName().getString();
@@ -38,9 +41,14 @@ public class NpcDialog extends WynnChatText{
 
     @Override
     protected void build() {
+        if(inputText.getContent().equals(TextContent.EMPTY)) {
+            processMalformedDialog();
+            return;
+        }
+
         resultText = MutableText.of(inputText.getContent()).setStyle(inputText.getStyle());
 
-        Text t0 = inputText.getSiblings().get(0);
+        Text t0 = getSibling(0);
         if(WTS.checkTranslationExist(keyName, valName)) {
             resultText.append(newTranslate(keyName).setStyle(t0.getStyle()));
             resultText.append(Text.literal(": ").setStyle(t0.getStyle()));
@@ -52,7 +60,7 @@ public class NpcDialog extends WynnChatText{
         if(inputText.getSiblings().size() == 2) {
             String valDialog = getContentLiteral(1).replace(pNameString, "%1$s");
 
-            Text t1 = inputText.getSiblings().get(1);
+            Text t1 = getSibling(1);
             if(WTS.checkTranslationExist(pKeyDialog, valDialog)) {
                 if(valDialog.contains("%1$s")) {
                     resultText.append(newTranslate(pKeyDialog, playername).setStyle(t1.getStyle()));
@@ -70,7 +78,7 @@ public class NpcDialog extends WynnChatText{
                 String keyDialog = pKeyDialog + "_" + index;
                 String valDialog = getContentLiteral(index).replace(pNameString, "%1$s");
 
-                Text ti = inputText.getSiblings().get(index);
+                Text ti = getSibling(index);
                 if(WTS.checkTranslationExist(keyDialog, valDialog)) {
                     if(valDialog.contains("%1$s")) {
                         resultText.append(newTranslate(keyDialog, playername).setStyle(ti.getStyle()));
@@ -84,5 +92,13 @@ public class NpcDialog extends WynnChatText{
                 }
             }
         }
+    }
+
+    private void processMalformedDialog() {
+        MutableText corrected = Text.empty().append(inputText.getSiblings().get(0));
+        for(int i = 1; inputText.getSiblings().size() > i; i++) {
+            corrected.append(getSibling(i));
+        }
+        resultText = NpcDialog.of(corrected, ChatType.DIALOG_NORMAL.getRegex()).text();
     }
 }

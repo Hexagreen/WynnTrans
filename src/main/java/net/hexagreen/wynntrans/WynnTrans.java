@@ -34,6 +34,6 @@ public class WynnTrans implements ModInitializer {
                     return 1;
                 })));
 
-        ClientTickEvents.START_WORLD_TICK.register((StartTick) -> incomeTextHandler.sendPendingText());
+        ClientTickEvents.START_WORLD_TICK.register((StartTick) -> incomeTextHandler.onStartWorldTick());
     }
 }
