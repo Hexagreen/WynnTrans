@@ -22,7 +22,7 @@ public class NpcDialog extends WynnChatText{
         this.pNameString = MinecraftClient.getInstance().player.getName().getString();
         this.playername = removedCustomNickname == null ? this.pNameString : removedCustomNickname;
         this.valName = getContentLiteral(0).replace(": ", "");
-        String npcName = valName.replace(" ", "").replace(".", "");
+        String npcName = valName.replace(" ", "").replace(".", "").replace("'", "");
         this.keyName = parentKey + "name." + npcName;
         String dialogIdx = matcher.group(1) + ".";
         String dialogLen = matcher.group(2) + ".";
@@ -95,7 +95,7 @@ public class NpcDialog extends WynnChatText{
     }
 
     private void processMalformedDialog() {
-        MutableText corrected = Text.empty().append(inputText.getSiblings().get(0));
+        MutableText corrected = inputText.getSiblings().get(0).copy();
         for(int i = 1; inputText.getSiblings().size() > i; i++) {
             corrected.append(getSibling(i));
         }

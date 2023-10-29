@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public abstract class TextGlue {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    private static final byte TIMER_THRESHOLD = 4;
+    private static final byte TIMER_THRESHOLD = 2;
     protected MutableText gluedText;
     protected final Pattern regex;
     protected final Class<? extends WynnChatText> wctClass;
@@ -26,6 +26,14 @@ public abstract class TextGlue {
         this.safetyLock = false;
     }
 
+    /**
+     * This method must have these routines.<p>
+     * To remove this glue: {@code pop() -> return false}<br>
+     * To append text : {@code resetTimer() -> gluedText.append(text)}<br>
+     * To complete this glue: {@code safeNow() -> pop() -> return true}
+     * @param text Text line for glue
+     * @return Returns {@code true} if this method complete gluing, {@code false} if ignore its text
+     */
     public abstract boolean push(Text text);
 
     public void timer() {

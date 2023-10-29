@@ -27,7 +27,6 @@ public class SelectionGlue extends TextGlue {
                 this.gluedText.append(sibling);
             }
             if(FunctionalRegex.SELECTION_END.match(text)) {
-                this.ready = false;
                 pop();
             }
             else{

@@ -1,42 +1,44 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class QuestCompleted extends WynnChatText implements ICenterAligned {
+public class CaveCompleted extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) Experience Points$");
-    private static final Pattern REGEX_EME = Pattern.compile("^\\+(\\d+) Emeralds$");
+    private static final Pattern REGEX_EME = Pattern.compile("^ +- \\+(\\d+) Emeralds$");
     private static final String func = rootKey + dirFunctional;
-    private final String keyQuestName;
-    private final String valQuestName;
+    private final String keyCaveName;
+    private final String valCaveName;
 
-    protected QuestCompleted(Text text, Pattern regex) {
+    protected CaveCompleted(Text text, Pattern regex) {
         super(text, regex);
-        this.valQuestName = getSibling(2).getSiblings().get(1).getString();
-        this.keyQuestName = parentKey + valQuestName.replace(" ","");
+        this.valCaveName = getSibling(2).getSiblings().get(1).getString();
+        this.keyCaveName = parentKey + valCaveName.replace(" ", "");
     }
 
-    public static QuestCompleted of(Text text, Pattern regex) {
-        return new QuestCompleted(text, regex);
+    public static CaveCompleted of(Text text, Pattern regex) {
+        return new CaveCompleted(text, regex);
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + "quest.";
+        return rootKey + "cave.";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty()
-                .append(getCenterIndent(func + "questCompleted"))
-                .append(newTranslate(func + "questCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n");
+                .append(getCenterIndent(func + "caveCompleted"))
+                .append(newTranslate(func + "caveCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n")
+                .append(getCenterIndent(keyCaveName));
 
-        if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
-            resultText.append(getCenterIndent(keyQuestName))
-                    .append(newTranslate(keyQuestName).setStyle(getSibling(2).getSiblings().get(1).getStyle()));
+        if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
+            resultText.append(newTranslate(keyCaveName).setStyle(getSibling(2).getSiblings().get(1).getStyle()));
         }
         else {
             Text origin = getSibling(2).getSiblings().get(1);
@@ -45,6 +47,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
 
         resultText.append("\n\n")
                 .append(newTranslate(func + "reward").setStyle(getSibling(4).getSiblings().get(0).getStyle())).append("\n");
+
 
         for(int i = 5; inputText.getSiblings().size() > i; i++) {
             Matcher m1 = REGEX_EXP.matcher(getSibling(i).getSiblings().get(1).getString());
@@ -57,13 +60,13 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
             Matcher m2 = REGEX_EME.matcher(getSibling(i).getSiblings().get(1).getString());
             if(m2.find()) {
                 resultText.append(getSibling(i).getSiblings().get(0))
-                        .append(newTranslate(func + "reward.emerald", m2.group(1)).setStyle(getSibling(i).getSiblings().get(1).getStyle()))
+                        .append(newTranslate(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)))
                         .append("\n");
                 continue;
             }
-            String valExclusiveReward = getSibling(i).getSiblings().get(1).getString();
+            String valExclusiveReward = getSibling(i).getString();
             String hash = DigestUtils.sha1Hex(valExclusiveReward).substring(0, 4);
-            String keyExclusiveReward = keyQuestName + ".reward_" + hash;
+            String keyExclusiveReward = keyCaveName + ".reward_" + hash;
             if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
                 resultText.append(getSibling(i).getSiblings().get(0));
                 resultText.append(newTranslate(keyExclusiveReward).setStyle(getSibling(i).getSiblings().get(1).getStyle()));

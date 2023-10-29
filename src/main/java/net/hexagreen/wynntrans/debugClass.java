@@ -57,8 +57,7 @@ public class debugClass {
     public static String[] readTextListFromJSON() {
         try{
             String str = Files.readString(Paths.get("D:/debug/json.txt"));
-            return str.split("\n~~~~~\n");
-            //return Text.Serializer.fromJson(str);
+            return str.split("\r\n~~~~~\r\n");
         } catch (Exception ignored) {}
         return new String[]{"EMPTY"};
     }

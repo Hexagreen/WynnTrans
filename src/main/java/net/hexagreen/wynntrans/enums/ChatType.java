@@ -38,7 +38,7 @@ public enum ChatType {
     MERCHANT(Pattern.compile("^(.+) Merchant: "), Merchants.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
-    DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+:) (.+)"), NpcDialogLiteral.class),
+    DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
 
     NO_TYPE(null, SimpleText.class);
 
@@ -54,7 +54,7 @@ public enum ChatType {
     public Pattern getRegex() {
         return this.regex;
     }
-    
+
     public boolean match(Text text, int siblingIndex) {
         return this.regex.matcher(text.getSiblings().get(siblingIndex).getString()).find();
     }

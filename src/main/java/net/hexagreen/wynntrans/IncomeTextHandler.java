@@ -8,6 +8,7 @@ import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.enums.GlueType;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 import org.apache.commons.compress.utils.Lists;
@@ -48,7 +49,6 @@ public class IncomeTextHandler {
 
     @SuppressWarnings("DataFlowIssue")
     public void onStartWorldTick() {
-        if(this.textGlue != null) textGlue.timer();
         if(this.pendingCounter == 4) {
             if(++this.pendingTime >= PENDINGTICKTHRES) {
                 this.pendingCounter = 0;
@@ -65,6 +65,7 @@ public class IncomeTextHandler {
                 this.pendingText = Lists.newArrayList();
             }
         }
+        if(this.textGlue != null) textGlue.timer();
     }
 
     public boolean sortIncomeText(Text text) {
@@ -89,7 +90,13 @@ public class IncomeTextHandler {
 
     private boolean analyseLiteralText(Text text) {
         attachGlue(text);
-        if(this.textGlue != null) return this.textGlue.push(text);
+        if(this.textGlue != null) {
+            if(!this.textGlue.push(text)) {
+                attachGlue(text);
+                if(this.textGlue != null) return this.textGlue.push(text);
+            }
+            else return true;
+        }
         try {
             switch (ChatType.findType(text)) {
                 case COMBAT_LEVELUP -> {
@@ -100,6 +107,7 @@ public class IncomeTextHandler {
                 }
                 case NO_TYPE -> {
                     debugClass.writeString2File(text.getString(), "literal.txt");
+                    debugClass.writeTextAsJSON(text);
                     return false;
                 }
             }
@@ -112,7 +120,14 @@ public class IncomeTextHandler {
     private boolean analyseSinglelineText(Text text) {
         try {
             attachGlue(text);
-            return this.textGlue == null ? ChatType.findAndRun(text) : this.textGlue.push(text);
+            if(this.textGlue != null) {
+                if(!this.textGlue.push(text)) {
+                    attachGlue(text);
+                    if(this.textGlue != null) return this.textGlue.push(text);
+                }
+                else return true;
+            }
+            return ChatType.findAndRun(text);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             LOGGER.warn("ChatType.findAndRun Error.");
             return false;
@@ -123,6 +138,9 @@ public class IncomeTextHandler {
         if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2)) {
             this.pendingCounter = 0;
             return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
+        }
+        if(FunctionalRegex.QUEST_COMPLETE.match(text, 1)) {
+            return QuestCompleted.of(editMalformedQuestComplete(text), null).print();
         }
         if(textGlue instanceof SelectionGlue && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))) {
             this.pendingCounter = 0;
@@ -144,6 +162,10 @@ public class IncomeTextHandler {
                 ) {
                     return this.processConfirmableDialog(text);
                 }
+            }
+            default -> {
+                debugClass.writeTextAsJSON(text);
+                return false;
             }
         }
         return false;
@@ -198,5 +220,21 @@ public class IncomeTextHandler {
             NarrationConfirmless.of(text, null).print();
         }
         return true;
+    }
+
+    private Text editMalformedQuestComplete(Text text) {
+        MutableText result = Text.empty();
+        MutableText tmp = Text.empty();
+        for(Text sibling : text.getSiblings()) {
+            if(sibling.getString().equals("\n")) {
+                tmp.append(text);
+                result.append(tmp);
+                tmp = Text.empty();
+            }
+            else {
+                tmp.append(text);
+            }
+        }
+        return result;
     }
 }

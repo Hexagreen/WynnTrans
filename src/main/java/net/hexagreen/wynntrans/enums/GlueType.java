@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 
 public enum GlueType {
     QUEST_CLEAR(Pattern.compile("^ +\\[Quest Completed]$"), QuestGlue.class),
-    CAVE_CLEAR(null, CaveGlue.class),
-    OBJECTIVE_CLEAR(null, ObjectiveGlue.class),
-    LEVELUP(null, LevelUpGlue.class),
+    CAVE_CLEAR(Pattern.compile("^ +\\[Cave Completed]$"), CaveGlue.class),
+    OBJECTIVE_CLEAR(Pattern.compile("^ +\\[Objective Completed]$"), ObjectiveGlue.class),
+    LEVELUP(Pattern.compile("^                                Level Up!$"), LevelUpGlue.class),
 
     NO_TYPE(null, null);
 

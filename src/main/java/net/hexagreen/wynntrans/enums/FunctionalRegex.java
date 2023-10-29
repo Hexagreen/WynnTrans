@@ -8,7 +8,8 @@ public enum FunctionalRegex {
     DIALOG_PLACEHOLDER(Pattern.compile("^À+$")),
     SELECTION_OPTION(Pattern.compile("^   \\[[0-9]] .+")),
     SELECTION_END(Pattern.compile("^ +(Select|CLICK) an option to continue$")),
-    DIALOG_END(Pattern.compile("^ +Press (SHIFT|SNEAK) to continue$"));
+    DIALOG_END(Pattern.compile("^ +Press (SHIFT|SNEAK) to continue$")),
+    QUEST_COMPLETE(Pattern.compile("^ +\\[Quest Completed]"));
 
     private final Pattern regex;
 

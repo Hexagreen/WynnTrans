@@ -8,7 +8,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class NpcDialogLiteral extends NpcDialog {
+public class NpcDialogLiteral extends WynnChatText {
     private final String dialogIdx;
     private final String dialogLen;
     private final String npcName;
@@ -22,14 +22,19 @@ public class NpcDialogLiteral extends NpcDialog {
         this.dialog = matcher.group(4);
     }
 
+    @Override
+    protected String setParentKey() {
+        return null;
+    }
+
     public static NpcDialogLiteral of(Text text, Pattern regex) {
         return new NpcDialogLiteral(text, regex);
     }
 
     @Override
     public void build(){
-        MutableText reformed = Text.literal("[" + dialogIdx + "/" + dialogLen + "]" ).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        reformed.append(npcName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))
+        MutableText reformed = Text.literal("[" + dialogIdx + "/" + dialogLen + "] " ).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        reformed.append(Text.literal(npcName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)))
                 .append(dialog);
         resultText = NpcDialog.of(reformed, ChatType.DIALOG_NORMAL.getRegex()).text();
     }

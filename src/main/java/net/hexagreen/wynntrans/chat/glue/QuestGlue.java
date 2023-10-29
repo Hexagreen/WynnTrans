@@ -9,9 +9,12 @@ import java.util.regex.Pattern;
 
 public class QuestGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^            - \\+.+$");
+    private int count = 0;
+
     protected QuestGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
         super(regex, wctClass);
         gluedText.append("");
+        count++;
     }
 
     public static QuestGlue get() {
@@ -21,15 +24,15 @@ public class QuestGlue extends TextGlue {
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
-        int size = gluedText.getSiblings().size();
-        if(size == 1 && !text.getContent().equals(TextContent.EMPTY)) {
+        if(count == 1 && !text.getContent().equals(TextContent.EMPTY)) {
             pop();
             return false;
         }
-        switch(size) {
+        switch(count) {
             case 1, 2, 3, 4 -> {
                 resetTimer();
                 gluedText.append(text);
+                count++;
                 return true;
             }
             default -> {
