@@ -105,6 +105,9 @@ public class IncomeTextHandler {
                 case DIALOG_LITERAL -> {
                     return ChatType.DIALOG_LITERAL.run(text);
                 }
+                case WELCOME -> {
+                    return ChatType.WELCOME.run(text);
+                }
                 case NO_TYPE -> {
                     debugClass.writeString2File(text.getString(), "literal.txt");
                     debugClass.writeTextAsJSON(text);
@@ -215,6 +218,9 @@ public class IncomeTextHandler {
         }
         else if(text.getSiblings().get(2).getString().equals("empty")) {
             return false;
+        }
+        else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
+            GuideAlert.of(text, null).print();
         }
         else {
             NarrationConfirmless.of(text, null).print();

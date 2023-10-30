@@ -39,6 +39,7 @@ public enum ChatType {
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
     DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
+    WELCOME(Pattern.compile("^\\n +....Welcome to Wynncraft!\\n"), WelcomeMessage.class),
 
     NO_TYPE(null, SimpleText.class);
 
