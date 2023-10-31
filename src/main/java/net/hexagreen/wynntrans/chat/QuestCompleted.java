@@ -16,7 +16,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
     protected QuestCompleted(Text text, Pattern regex) {
         super(text, regex);
         this.valQuestName = getSibling(2).getSiblings().get(1).getString();
-        this.keyQuestName = parentKey + valQuestName.replace(" ","");
+        this.keyQuestName = parentKey + valQuestName.replace(" ","").replace("'", "");
     }
 
     public static QuestCompleted of(Text text, Pattern regex) {
@@ -30,7 +30,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
 
     @Override
     protected void build() {
-        resultText = Text.empty()
+        resultText = Text.empty().append("\n")
                 .append(getCenterIndent(func + "questCompleted"))
                 .append(newTranslate(func + "questCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n");
 
@@ -71,7 +71,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
             else {
                 resultText.append(getSibling(i));
             }
-            resultText.append("\n");
         }
+        resultText.append("\n");
     }
 }

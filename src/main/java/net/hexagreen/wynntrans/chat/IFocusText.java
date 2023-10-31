@@ -12,7 +12,7 @@ import java.util.List;
 
 import static net.hexagreen.wynntrans.chat.WynnChatText.WTS;
 
-public interface IFocusText {
+public interface IFocusText extends ICenterAligned {
     default MutableText setToConfirmless(Text text) {
         MutableText confirmless = Text.empty().append("\n");
         confirmless.append(text).append("\n");
@@ -50,21 +50,19 @@ public interface IFocusText {
     private Text pressShiftToContinue(Text fullText) {
         String key = "wytr.func.pressShift";
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
-        MutableText text = newTranslate(key + "_indent");
-        text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
+        MutableText textBody = (newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
                 .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
                 .append(newTranslate(key + "_3").setStyle(original.get(2).getStyle()));
-        return text;
+        return Text.literal(getCenterIndent(textBody)).append(textBody);
     }
 
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
         List<Text> original = fullText.getSiblings().get(getLastOptionIndex(fullText) + 4).getSiblings();
-        MutableText text = newTranslate(key + "_indent");
-        text.append(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
+        MutableText textBody =(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
                 .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
                 .append(newTranslate(key + "_3").setStyle(original.get(2).getStyle()));
-        return text;
+        return Text.literal(getCenterIndent(textBody)).append(textBody);
     }
 
     private int getLastOptionIndex(Text fullText) {

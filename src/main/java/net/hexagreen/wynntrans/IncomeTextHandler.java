@@ -143,9 +143,12 @@ public class IncomeTextHandler {
             return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }
         if(FunctionalRegex.QUEST_COMPLETE.match(text, 1)) {
-            return QuestCompleted.of(editMalformedQuestComplete(text), null).print();
+            return QuestCompleted.of(editMultilineQuestComplete(text), null).print();
         }
-        if(textGlue instanceof SelectionGlue && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))) {
+        if(FunctionalRegex.QUEST_COMPLETE.match(text, 0)) {
+            return QuestCompleted.of(editMultilineQuestCompleteNoHeader(text), null).print();
+        }
+        if(textGlue instanceof SelectionGlue) {
             this.pendingCounter = 0;
             return textGlue.push(text);
         }
@@ -194,7 +197,7 @@ public class IncomeTextHandler {
         else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
             this.pendingCounter = 0;
             this.textGlue = SelectionGlue.get();
-            this.textGlue.push(text);
+            return this.textGlue.push(text);
         }
         else {
             this.backgroundText.add(text);
@@ -205,7 +208,6 @@ public class IncomeTextHandler {
             }
             return true;
         }
-        return false;
     }
 
     private boolean processConfirmlessDialog(Text text) {
@@ -228,18 +230,40 @@ public class IncomeTextHandler {
         return true;
     }
 
-    private Text editMalformedQuestComplete(Text text) {
+    private Text editMultilineQuestComplete(Text text) {
         MutableText result = Text.empty();
         MutableText tmp = Text.empty();
         for(Text sibling : text.getSiblings()) {
             if(sibling.getString().equals("\n")) {
-                tmp.append(text);
+                tmp.append(sibling);
                 result.append(tmp);
                 tmp = Text.empty();
             }
             else {
-                tmp.append(text);
+                tmp.append(sibling);
             }
+        }
+        if(!tmp.equals(Text.empty())) {
+            result.append(tmp);
+        }
+        return result;
+    }
+
+    private Text editMultilineQuestCompleteNoHeader(Text text) {
+        MutableText result = Text.empty().append("\n");
+        MutableText tmp = Text.empty();
+        for(Text sibling : text.getSiblings()) {
+            if(sibling.getString().equals("\n")) {
+                tmp.append(sibling);
+                result.append(tmp);
+                tmp = Text.empty();
+            }
+            else {
+                tmp.append(sibling);
+            }
+        }
+        if(!tmp.equals(Text.empty())) {
+            result.append(tmp);
         }
         return result;
     }

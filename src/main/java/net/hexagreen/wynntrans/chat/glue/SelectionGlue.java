@@ -22,14 +22,18 @@ public class SelectionGlue extends TextGlue {
 
     @Override
     public boolean push(Text text) {
-        if(this.ready){
+        if(this.ready && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))){
             for(Text sibling : text.getSiblings()) {
+                resetTimer();
                 this.gluedText.append(sibling);
             }
             if(FunctionalRegex.SELECTION_END.match(text)) {
+                safeNow();
                 pop();
+                return true;
             }
             else{
+                resetTimer();
                 this.gluedText.append(Text.of("\n"));
             }
         }
