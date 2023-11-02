@@ -15,7 +15,7 @@ public abstract class TextGlue {
     private static final byte TIMER_THRESHOLD = 2;
     protected MutableText gluedText;
     protected final Pattern regex;
-    protected final Class<? extends WynnChatText> wctClass;
+    private Class<? extends WynnChatText> wctClass;
     private byte timer;
     private boolean safetyLock;
 
@@ -61,6 +61,10 @@ public abstract class TextGlue {
 
     protected void safeNow(){
         this.safetyLock = true;
+    }
+
+    protected void changeWct(Class<? extends WynnChatText> wct) {
+        this.wctClass = wct;
     }
 
     private void reset() {

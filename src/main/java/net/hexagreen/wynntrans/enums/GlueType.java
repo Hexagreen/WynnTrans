@@ -24,8 +24,7 @@ public enum GlueType {
     }
 
     public boolean matchFullText(Text text) {
-        if(this.regex == null) return false;
-//        if(this == NO_TYPE) return false;
+        if(this == NO_TYPE) return false;
         return this.regex.matcher(text.getString()).find();
     }
 
