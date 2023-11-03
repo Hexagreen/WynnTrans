@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.chat;
 
-import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -33,23 +32,19 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
         resultText.append(Text.literal(getCenterIndent(t1)).append(t1).append("\n"));
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
-        if(!m2.find()) {
-            debugClass.writeTextAsJSON(inputText);
-            return;
+        if(m2.find()) {
+            Text t2 = newTranslate(parentKey + ".nowOn", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+            resultText.append(Text.literal(getCenterIndent(t2)).append(t2).append("\n"));
         }
-        Text t2 = newTranslate(parentKey + ".nowOn", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-        resultText.append(Text.literal(getCenterIndent(t2)).append(t2).append("\n"));
 
         resultText.append("\n");
 
         Matcher m3 = REGEX_NEXTAP.matcher(getSibling(4).getString());
-        if(!m3.find()) {
-            debugClass.writeTextAsJSON(inputText);
-            return;
+        if(m3.find()) {
+            Text num = Text.literal(m3.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+            Text t3 = newTranslate(parentKey + ".nextAP", num);
+            resultText.append(Text.literal(getCenterIndent(t3)).append(t3).append("\n"));
         }
-        Text num = Text.literal(m3.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-        Text t3 = newTranslate(parentKey + ".nextAP", num);
-        resultText.append(Text.literal(getCenterIndent(t3)).append(t3).append("\n"));
 
         resultText.append("\n");
 
@@ -88,8 +83,6 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                 continue;
             }
             resultText.append(getSibling(i));
-            debugClass.writeString2File(getSibling(i).getString(), "getString.txt", "LevelUp");
-            debugClass.writeTextAsJSON(getSibling(i));
         }
     }
 }

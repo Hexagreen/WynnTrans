@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.chat;
 
-import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -11,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class LevelUpProfession extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_LEVELUP = Pattern.compile("^ +You are now level (\\d+) in (.)");
-    private static final Pattern REGEX_NEXTFEATURE = Pattern.compile("^Only (\\d+) more levels? until you can .+(?:(.) Gathering)?.+(?:T(\\d+))?$");
+    private static final Pattern REGEX_NEXTFEATURE = Pattern.compile("^Only (\\d+) more levels? until you can .+?(?:(.) Gathering.+T(\\d+))?$");
 
     protected LevelUpProfession(Text text, Pattern regex) {
         super(text, regex);
@@ -35,12 +34,10 @@ public class LevelUpProfession extends WynnChatText implements ICenterAligned {
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
         if(!m2.find()) {
-            debugClass.writeTextAsJSON(inputText);
-            return;
+            Text prof = Profession.getProfession(m2.group(2).charAt(0)).getText().setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+            Text t2 = newTranslate(parentKey + ".nowOnIn", m2.group(1), prof).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+            resultText.append(Text.literal(getCenterIndent(t2)).append(t2).append("\n"));
         }
-        Text prof = Profession.getProfession(m2.group(2).charAt(0)).getText().setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-        Text t2 = newTranslate(parentKey + ".nowOnIn", m2.group(1), prof).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-        resultText.append(Text.literal(getCenterIndent(t2)).append(t2).append("\n"));
 
         resultText.append("\n");
 
@@ -104,12 +101,11 @@ public class LevelUpProfession extends WynnChatText implements ICenterAligned {
                     Text nextResource = newTranslate(parentKey + ".nextResource", moreLevel, resourceName).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
                     resultText.append(getCenterIndent(nextResource)).append(nextResource);
                 }
+                resultText.append("\n");
                 return;
             }
 
             resultText.append(getSibling(i));
-            debugClass.writeString2File(getSibling(i).getString(), "getString.txt", "ProfLevelUp");
-            debugClass.writeTextAsJSON(getSibling(i));
         }
     }
 }

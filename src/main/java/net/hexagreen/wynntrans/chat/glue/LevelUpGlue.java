@@ -78,7 +78,7 @@ public class LevelUpGlue extends TextGlue {
                 gluedText.append(text);
                 return true;
             }
-            else if(text.getString().equals("empty")) {
+            else if(text.getString().equals("")) {
                 resetTimer();
                 gluedText.append(text);
                 return true;
