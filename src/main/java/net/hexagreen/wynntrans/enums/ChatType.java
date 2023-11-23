@@ -40,11 +40,15 @@ public enum ChatType {
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
     DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
     WELCOME(Pattern.compile("^\\n +....Welcome to Wynncraft!\\n"), WelcomeMessage.class),
+    RECRUIT(Pattern.compile("^\\n +§6§lEnjoying Wynncraft\\?"), RecruitMessage.class),
     EQUIP_STAT_REQ(Pattern.compile("requires your (.+) skill to be at least"), EquipmentSkillRequirement.class),
     EQUIP_LEVEL_REQ(Pattern.compile("is for combat level "), EquipmentLevelRequirement.class),
     UNUSED_STAT_POINT(Pattern.compile("^You have (?:(\\d+) unused Skill Points?)?(?: and )?(?:(\\d+) unused Ability Points?)?! Right-Click"), UnusedStatPoint.class),
     POUCH_SOLD(Pattern.compile("^You have sold \\d+ ingredients"), PouchSold.class),
     SKIP_TUTORIAL(Pattern.compile("^You may skip the tutorial"), SkipTutorial.class),
+    WEEKLY_OBJECTIVE(Pattern.compile("^ \n +§lObjective Finished"), WeeklyObjective.class),
+    GUILD_INFO(Pattern.compile("§3\\[INFO§3]"), GuildInfo.class),
+    EVENT_CRATE_ALARM(Pattern.compile("^Use /crates to open your (.+ Crate)!$"), CrateAlert.class),
 
     NO_TYPE(null, SimpleText.class);
 
@@ -81,7 +85,7 @@ public enum ChatType {
         return find.wct != null && find.wct.cast(find.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, find.regex)).print();
     }
 
-    public boolean run(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        return this.wct.cast(this.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, this.regex)).print();
+    public void run(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        this.wct.cast(this.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, this.regex)).print();
     }
 }

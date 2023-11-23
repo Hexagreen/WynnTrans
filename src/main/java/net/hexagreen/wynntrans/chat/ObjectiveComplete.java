@@ -14,8 +14,8 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
     private static final String func = rootKey + dirFunctional;
     private final String keyObjectiveName;
     private final String valObjectiveName;
-    private String keyEName;
-    private String valEName;
+    private String keyEName = null;
+    private String valEName = null;
 
     protected ObjectiveComplete(Text text, Pattern regex) {
         super(text, regex);

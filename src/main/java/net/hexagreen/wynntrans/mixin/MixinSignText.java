@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.mixin;
 
+import net.hexagreen.wynntrans.sign.Sign;
 import net.minecraft.block.entity.SignText;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -15,6 +16,7 @@ abstract public class MixinSignText {
     private static Text[] mixinCreate(Text[] messages) {
         if(!Arrays.equals(messages, new Text[]{
                 ScreenTexts.EMPTY, ScreenTexts.EMPTY, ScreenTexts.EMPTY, ScreenTexts.EMPTY})) {
+            return Sign.get(messages).translate();
         }
         return messages;
     }

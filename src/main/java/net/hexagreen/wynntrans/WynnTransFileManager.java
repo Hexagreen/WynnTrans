@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 public class WynnTransFileManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     private static final String fileName = "WynnTrans/scannedTexts.json";
     public static boolean addTranslation(String key, String value) {
         File file = new File(fileName);

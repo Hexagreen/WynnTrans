@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
 public class IncomeTextHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
     private static final byte PENDINGTICKTHRES = 2;
@@ -98,22 +99,18 @@ public class IncomeTextHandler {
             else return true;
         }
         try {
-            switch (ChatType.findType(text)) {
-                case COMBAT_LEVELUP -> {
-                    return ChatType.COMBAT_LEVELUP.run(text);
-                }
-                case DIALOG_LITERAL -> {
-                    return ChatType.DIALOG_LITERAL.run(text);
-                }
-                case WELCOME -> {
-                    return ChatType.WELCOME.run(text);
-                }
+            ChatType chatType = ChatType.findType(text);
+            switch(chatType) {
                 case NO_TYPE -> {
                     debugClass.writeString2File(text.getString(), "literal.txt");
                     debugClass.writeTextAsJSON(text);
                     return false;
                 }
+                case PRIVATE_MESSAGE, NORMAL_CHAT -> {
+                    return false;
+                }
             }
+            chatType.run(text);
         } catch(Exception e) {
             LOGGER.error("Error in analyseLiteralText", e);
         }
@@ -138,7 +135,7 @@ public class IncomeTextHandler {
     }
 
     private boolean analyseMultilineText(Text text) {
-        if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2)) {
+        if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2) || FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 1)) {
             this.pendingCounter = 0;
             return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }

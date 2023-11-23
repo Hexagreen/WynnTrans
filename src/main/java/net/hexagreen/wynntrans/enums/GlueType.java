@@ -12,6 +12,7 @@ public enum GlueType {
     CAVE_CLEAR(Pattern.compile("^ +\\[Cave Completed]$"), CaveGlue.class),
     OBJECTIVE_CLEAR(Pattern.compile("^ +\\[Objective Completed]$"), ObjectiveGlue.class),
     LEVELUP(Pattern.compile("^                                Level Up!$"), LevelUpGlue.class),
+    CRATE_GET_PERSONAL(Pattern.compile("^You've gotten a .+ reward!"), CrateGlue.class),
 
     NO_TYPE(null, null);
 

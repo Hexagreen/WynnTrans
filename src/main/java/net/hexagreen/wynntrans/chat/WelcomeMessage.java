@@ -75,14 +75,16 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
             return;
         }
 
-        String valGuide = getSibling(1).getString().replaceAll("^ +", "");
-        String keyGuide = parentKey + ".guide." + DigestUtils.sha1Hex(valGuide).substring(0, 6);
-        if(WTS.checkTranslationExist(keyGuide, valGuide)) {
-            Text guide = newTranslate(keyGuide);
-            resultText.append(getCenterIndent(guide)).append(guide).append("\n");
-        }
-        else {
-            resultText.append(getCenterIndent(valGuide)).append(valGuide).append("\n");
+        for(int i = 1; inputText.getSiblings().size() - 1 > i; i++) {
+            String valGuide = getSibling(i).getString().replaceAll("^ +", "");
+            String keyGuide = parentKey + ".guide." + DigestUtils.sha1Hex(valGuide).substring(0, 6);
+            if(WTS.checkTranslationExist(keyGuide, valGuide)) {
+                Text guide = newTranslate(keyGuide).setStyle(getStyle(i));
+                resultText.append(getCenterIndent(guide)).append(guide).append("\n");
+            }
+            else {
+                resultText.append(getCenterIndent(valGuide)).append(valGuide).append("\n");
+            }
         }
     }
 }
