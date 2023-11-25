@@ -39,6 +39,10 @@ public class WynnSign {
                 if(WTS.checkTranslationExist(keySign + "_" + sIndex, valSignSibling)) {
                     result.append(Text.translatable(keySign + "_" + sIndex).setStyle(sibling.getStyle()));
                 }
+                else {
+                    result.append(sibling);
+                }
+                sIndex++;
             }
             message[i] = result;
         }

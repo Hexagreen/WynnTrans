@@ -16,12 +16,15 @@ public class WynnTrans implements ModInitializer {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static IncomeTextHandler incomeTextHandler;
     public static WynnTranslationStorage wynnTranslationStorage;
+    public static boolean translationTargetSignMarker;
     private static Iterator<String> debugString;
 
     @Override
     public void onInitialize() {
         incomeTextHandler = new IncomeTextHandler();
         wynnTranslationStorage = new WynnTranslationStorage();
+        translationTargetSignMarker = false;
+
         LOGGER.info("[WynnTrans] Hello, Wynn!");
 
         debugString = List.of(debugClass.readTextListFromJSON()).iterator();
