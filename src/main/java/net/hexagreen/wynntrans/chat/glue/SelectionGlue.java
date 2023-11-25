@@ -1,12 +1,9 @@
 package net.hexagreen.wynntrans.chat.glue;
 
 import net.hexagreen.wynntrans.chat.NpcDialogSelection;
-import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.minecraft.text.Text;
-
-import java.util.regex.Pattern;
 
 public class SelectionGlue extends TextGlue {
     private boolean ready;
