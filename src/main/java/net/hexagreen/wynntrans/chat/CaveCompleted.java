@@ -15,14 +15,10 @@ public class CaveCompleted extends WynnChatText implements ICenterAligned {
     private final String keyCaveName;
     private final String valCaveName;
 
-    protected CaveCompleted(Text text, Pattern regex) {
+    public CaveCompleted(Text text, Pattern regex) {
         super(text, regex);
         this.valCaveName = getSibling(2).getSiblings().get(1).getString();
         this.keyCaveName = parentKey + valCaveName.replace(" ", "");
-    }
-
-    public static CaveCompleted of(Text text, Pattern regex) {
-        return new CaveCompleted(text, regex);
     }
 
     @Override

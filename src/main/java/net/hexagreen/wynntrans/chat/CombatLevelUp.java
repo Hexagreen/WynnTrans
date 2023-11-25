@@ -10,7 +10,7 @@ public class CombatLevelUp extends WynnChatText {
     private final Text level;
     private final Text playerName;
 
-    protected CombatLevelUp(Text text, Pattern regex) {
+    public CombatLevelUp(Text text, Pattern regex) {
         super(text, regex);
         this.level = Text.literal(matcher.group(2));
         if(inputText.getSiblings().size() != 0) {
@@ -19,10 +19,6 @@ public class CombatLevelUp extends WynnChatText {
         else {
             this.playerName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
         }
-    }
-
-    public static CombatLevelUp of(Text text, Pattern regex) {
-        return new CombatLevelUp(text, regex);
     }
 
     @Override

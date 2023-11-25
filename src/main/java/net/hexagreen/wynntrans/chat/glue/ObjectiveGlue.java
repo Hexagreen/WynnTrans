@@ -13,14 +13,10 @@ public class ObjectiveGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^     - \\+.+$");
     private int count = 0;
 
-    protected ObjectiveGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        super(regex, wctClass);
+    public ObjectiveGlue() {
+        super(null, ObjectiveComplete.class);
         gluedText.append("");
         count++;
-    }
-
-    public static ObjectiveGlue get() {
-        return new ObjectiveGlue(null, ObjectiveComplete.class);
     }
 
     @Override

@@ -5,13 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class CrateGetPersonal extends WynnChatText {
-
-    protected CrateGetPersonal(Text text, Pattern regex) {
+    public CrateGetPersonal(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static CrateGetPersonal of(Text text, Pattern regex) {
-        return new CrateGetPersonal(text, regex);
     }
 
     @Override

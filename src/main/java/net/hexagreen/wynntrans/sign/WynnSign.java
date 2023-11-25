@@ -6,17 +6,17 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
-public class Sign {
+public class WynnSign {
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
     private static final String rootKey = "wytr.sign.";
     private final Text[] message;
 
-    private Sign(Text[] text) {
+    private WynnSign(Text[] text) {
         this.message = text;
     }
 
-    public static Sign get(Text[] text) {
-        return new Sign(text);
+    public static WynnSign get(Text[] text) {
+        return new WynnSign(text);
     }
 
     public Text[] translate() {

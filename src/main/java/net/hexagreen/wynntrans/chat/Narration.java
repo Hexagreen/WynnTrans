@@ -9,14 +9,10 @@ import java.util.regex.Pattern;
 public class Narration extends WynnChatText {
     private final String pKeyNarration;
 
-    protected Narration(Text text, Pattern regex) {
+    public Narration(Text text, Pattern regex) {
         super(text, regex);
         String hash = DigestUtils.sha1Hex(text.getString());
         this.pKeyNarration = parentKey + hash;
-    }
-
-    public static Narration of(Text text, Pattern regex) {
-        return new Narration(text, regex);
     }
 
     @Override

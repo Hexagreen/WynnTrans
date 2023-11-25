@@ -38,7 +38,7 @@ public class IncomeTextHandler {
         if(this.textGlue == null) {
             try {
                 this.textGlue = GlueType.findAndGet(text);
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignore) {
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException ignore) {
                 LOGGER.warn("GlueType.findAndGet Error.");
             }
         }
@@ -128,7 +128,7 @@ public class IncomeTextHandler {
                 else return true;
             }
             return ChatType.findAndRun(text);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             LOGGER.warn("ChatType.findAndRun Error.");
             return false;
         }
@@ -137,13 +137,13 @@ public class IncomeTextHandler {
     private boolean analyseMultilineText(Text text) {
         if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2) || FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 1)) {
             this.pendingCounter = 0;
-            return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
+            return new DialogPlaceholder(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }
         if(FunctionalRegex.QUEST_COMPLETE.match(text, 1)) {
-            return QuestCompleted.of(editMultilineQuestComplete(text), null).print();
+            return new QuestCompleted(editMultilineQuestComplete(text), null).print();
         }
         if(FunctionalRegex.QUEST_COMPLETE.match(text, 0)) {
-            return QuestCompleted.of(editMultilineQuestCompleteNoHeader(text), null).print();
+            return new QuestCompleted(editMultilineQuestCompleteNoHeader(text), null).print();
         }
         if(textGlue instanceof SelectionGlue) {
             this.pendingCounter = 0;
@@ -178,22 +178,22 @@ public class IncomeTextHandler {
         if(FunctionalRegex.DIALOG_END.match(text, 6)) {
             this.pendingCounter = 0;
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-                NpcDialogConfirmable.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
+                new NpcDialogConfirmable(text, ChatType.DIALOG_NORMAL.getRegex()).print();
             }
             else if(ChatType.NEW_QUEST.match(text, 2)){
-                NewQuest.of(text, ChatType.NEW_QUEST.getRegex()).print();
+                new NewQuest(text, ChatType.NEW_QUEST.getRegex()).print();
             }
             else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-                ItemGiveAndTakeConfirmable.of(text, ChatType.DIALOG_ITEM.getRegex()).print();
+                new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
             }
             else {
-                NarrationConfirmable.of(text, null).print();
+                new NarrationConfirmable(text, null).print();
             }
             return true;
         }
         else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
             this.pendingCounter = 0;
-            this.textGlue = SelectionGlue.get();
+            this.textGlue = new SelectionGlue();
             return this.textGlue.push(text);
         }
         else {
@@ -210,19 +210,19 @@ public class IncomeTextHandler {
     private boolean processConfirmlessDialog(Text text) {
         this.pendingCounter = 0;
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-            NpcDialogConfirmless.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
+            new NpcDialogConfirmless(text, ChatType.DIALOG_NORMAL.getRegex()).print();
         }
         else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-            ItemGiveAndTakeConfirmable.of(text, ChatType.DIALOG_ITEM.getRegex()).print();
+            new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
         }
         else if(text.getSiblings().get(2).getString().equals("empty")) {
             return false;
         }
         else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
-            GuideAlert.of(text, null).print();
+            new GuideAlert(text, null).print();
         }
         else {
-            NarrationConfirmless.of(text, null).print();
+            new NarrationConfirmless(text, null).print();
         }
         return true;
     }

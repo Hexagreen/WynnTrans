@@ -13,6 +13,7 @@ public enum GlueType {
     OBJECTIVE_CLEAR(Pattern.compile("^ +\\[Objective Completed]$"), ObjectiveGlue.class),
     LEVELUP(Pattern.compile("^                                Level Up!$"), LevelUpGlue.class),
     CRATE_GET_PERSONAL(Pattern.compile("^You've gotten a .+ reward!"), CrateGlue.class),
+    AREA_DISCOVERY(Pattern.compile("^ +Area Discovered: "), AreaDiscoveryGlue.class),
 
     NO_TYPE(null, null);
 
@@ -35,8 +36,8 @@ public enum GlueType {
                 .findFirst().orElse(NO_TYPE);
     }
 
-    public static TextGlue findAndGet(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static TextGlue findAndGet(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         GlueType find = findType(text);
-        return find == NO_TYPE ? null : find.glue.cast(find.glue.getMethod("get").invoke(null));
+        return find == NO_TYPE ? null : find.glue.cast(find.glue.getConstructor().newInstance());
     }
 }

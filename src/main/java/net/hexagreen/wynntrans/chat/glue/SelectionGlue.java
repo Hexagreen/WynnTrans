@@ -11,13 +11,9 @@ import java.util.regex.Pattern;
 public class SelectionGlue extends TextGlue {
     private boolean ready;
 
-    protected SelectionGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        super(regex, wctClass);
+    public SelectionGlue() {
+        super(ChatType.DIALOG_NORMAL.getRegex(), NpcDialogSelection.class);
         this.ready = false;
-    }
-
-    public static SelectionGlue get() {
-        return new SelectionGlue(ChatType.DIALOG_NORMAL.getRegex(), NpcDialogSelection.class);
     }
 
     @Override
@@ -44,7 +40,4 @@ public class SelectionGlue extends TextGlue {
         }
         return true;
     }
-
-    @Override
-    public void timer() {}
 }

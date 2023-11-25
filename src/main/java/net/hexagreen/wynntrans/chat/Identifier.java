@@ -6,12 +6,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class Identifier extends WynnChatText {
-    protected Identifier(Text text, Pattern regex) {
+    public Identifier(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static Identifier of(Text text, Pattern regex) {
-        return new Identifier(text, regex);
     }
 
     @Override

@@ -14,7 +14,7 @@ public abstract class TextGlue {
     protected static final Logger LOGGER = LogUtils.getLogger();
     private static final byte TIMER_THRESHOLD = 3;
     protected MutableText gluedText;
-    protected final Pattern regex;
+    protected Pattern regex;
     private Class<? extends WynnChatText> wctClass;
     private byte timer;
     private boolean safetyLock;
@@ -47,8 +47,8 @@ public abstract class TextGlue {
     protected void pop() {
         if(safetyLock){
             try {
-                wctClass.cast(wctClass.getMethod("of", Text.class, Pattern.class).invoke(null, gluedText, regex)).print();
-            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
                 LOGGER.error("TextGlue Error:", e);
             }
         }

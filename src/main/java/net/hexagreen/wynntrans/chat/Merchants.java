@@ -8,15 +8,11 @@ public class Merchants extends WynnChatText {
     private final String keyMerchantName;
     private final String valMerchantName;
 
-    protected Merchants(Text text, Pattern regex) {
+    public Merchants(Text text, Pattern regex) {
         super(text, regex);
         String merchantName = matcher.group(1);
         this.keyMerchantName = parentKey + "." + merchantName.replace(" ","");
         this.valMerchantName = merchantName + " Merchant";
-    }
-
-    public static Merchants of(Text text,Pattern regex) {
-        return new Merchants(text, regex);
     }
 
     @Override

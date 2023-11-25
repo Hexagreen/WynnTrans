@@ -7,13 +7,9 @@ import java.util.regex.Pattern;
 public class AreaLeave extends WynnChatText {
     private final String areaName;
 
-    protected AreaLeave(Text text, Pattern regex) {
+    public AreaLeave(Text text, Pattern regex) {
         super(text, regex);
         this.areaName = matcher.group(1);
-    }
-
-    public static AreaLeave of(Text text, Pattern regex) {
-        return new AreaLeave(text, regex);
     }
 
     @Override

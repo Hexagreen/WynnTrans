@@ -17,7 +17,7 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
     private String keyEName = null;
     private String valEName = null;
 
-    protected ObjectiveComplete(Text text, Pattern regex) {
+    public ObjectiveComplete(Text text, Pattern regex) {
         super(text, regex);
         this.valObjectiveName = getSibling(2).getSiblings().get(0).getString().replaceAll("^ +", "");
         this.keyObjectiveName = parentKey + valObjectiveName.replace(" ", "");
@@ -27,10 +27,6 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
             String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
             this.keyEName = "wytr.eventInfo.eventName." + hash2;
         }
-    }
-
-    public static ObjectiveComplete of(Text text, Pattern regex) {
-        return new ObjectiveComplete(text, regex);
     }
 
     @Override

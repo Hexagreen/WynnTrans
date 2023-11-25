@@ -11,14 +11,10 @@ public class SimpleText extends WynnChatText {
     private final String keyText;
     private final String valText;
 
-    protected SimpleText(Text text, Pattern regex) {
+    public SimpleText(Text text, Pattern regex) {
         super(text, regex);
         this.valText = inputText.getString();
         this.keyText = parentKey + DigestUtils.sha1Hex(valText);
-    }
-
-    public static SimpleText of(Text text, Pattern regex) {
-        return new SimpleText(text, regex);
     }
 
     @Override

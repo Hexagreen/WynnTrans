@@ -10,7 +10,7 @@ public class ProfessionLevelUp extends WynnChatText {
     private final String professionIcon;
     private final String professionName;
 
-    protected ProfessionLevelUp(Text text, Pattern regex) {
+    public ProfessionLevelUp(Text text, Pattern regex) {
         super(text, regex);
         this.level = matcher.group(2);
         this.professionIcon = "§f" + matcher.group(3);
@@ -21,10 +21,6 @@ public class ProfessionLevelUp extends WynnChatText {
         else {
             this.plyerName = Text.literal(matcher.group(1)).setStyle(getStyle(0));
         }
-    }
-
-    public static ProfessionLevelUp of(Text text, Pattern regex) {
-        return new ProfessionLevelUp(text, regex);
     }
 
     @Override

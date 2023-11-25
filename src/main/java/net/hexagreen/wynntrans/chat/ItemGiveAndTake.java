@@ -12,15 +12,11 @@ public class ItemGiveAndTake extends WynnChatText {
     private final String number;
     private final String item;
 
-    protected ItemGiveAndTake(Text text, Pattern regex) {
+    public ItemGiveAndTake(Text text, Pattern regex) {
         super(text, regex);
         this.direction = matcher.group(1);
         this.number = matcher.group(2);
         this.item = matcher.group(3);
-    }
-
-    public static ItemGiveAndTake of(Text text, Pattern regex) {
-        return new ItemGiveAndTake(text, regex);
     }
 
     @Override
@@ -40,6 +36,6 @@ public class ItemGiveAndTake extends WynnChatText {
 
     private void processMalformedDialog() {
         MutableText corrected = Text.empty().append(inputText);
-        resultText = ItemGiveAndTake.of(corrected, ChatType.DIALOG_ITEM.getRegex()).text();
+        resultText = new ItemGiveAndTake(corrected, ChatType.DIALOG_ITEM.getRegex()).text();
     }
 }

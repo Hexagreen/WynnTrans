@@ -12,7 +12,7 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
     private String keyEName = null;
     private String valEName = null;
 
-    protected WeeklyObjective(Text text, Pattern regex) {
+    public WeeklyObjective(Text text, Pattern regex) {
         super(text, regex);
 
         if(text.getSiblings().size() == 8) {
@@ -20,10 +20,6 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
             String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
             this.keyEName = "wytr.eventInfo.eventName." + hash2;
         }
-    }
-
-    public static WeeklyObjective of(Text text, Pattern regex) {
-        return new WeeklyObjective(text, regex);
     }
 
     @Override

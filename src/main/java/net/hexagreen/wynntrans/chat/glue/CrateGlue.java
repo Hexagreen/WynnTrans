@@ -9,14 +9,10 @@ import java.util.regex.Pattern;
 public class CrateGlue extends TextGlue {
     private int count = 0;
 
-    protected CrateGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        super(regex, wctClass);
+    public CrateGlue() {
+        super(null, CrateGetPersonal.class);
         gluedText.append("");
         count++;
-    }
-
-    public static CrateGlue get() {
-        return new CrateGlue(null, CrateGetPersonal.class);
     }
 
     @Override

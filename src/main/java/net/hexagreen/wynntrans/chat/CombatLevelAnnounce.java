@@ -8,14 +8,10 @@ public class CombatLevelAnnounce extends WynnChatText {
     private final String level;
     private final Text playerName;
 
-    protected CombatLevelAnnounce(Text text, Pattern regex) {
+    public CombatLevelAnnounce(Text text, Pattern regex) {
         super(text, regex);
         this.level = matcher.group(2);
         this.playerName = getPlayerNameFromSibling(4);
-    }
-
-    public static CombatLevelAnnounce of(Text text, Pattern regex) {
-        return new CombatLevelAnnounce(text, regex);
     }
 
     @Override

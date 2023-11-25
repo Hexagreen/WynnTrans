@@ -11,12 +11,8 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_LEVELUP = Pattern.compile("^ +You are now combat level (\\d+)");
     private static final Pattern REGEX_NEXTAP = Pattern.compile("^ +Only (\\d+) more levels? until your next Ability Point");
 
-    protected LevelUp(Text text, Pattern regex) {
+    public LevelUp(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static LevelUp of(Text text, Pattern regex) {
-        return new LevelUp(text, regex);
     }
 
     @Override

@@ -7,13 +7,9 @@ import java.util.regex.Pattern;
 public class AreaEnter extends WynnChatText {
     private final String areaName;
 
-    protected AreaEnter(Text text, Pattern regex) {
+    public AreaEnter(Text text, Pattern regex) {
         super(text, regex);
         this.areaName = matcher.group(1);
-    }
-
-    public static AreaEnter of(Text text, Pattern regex) {
-        return new AreaEnter(text, regex);
     }
 
     @Override

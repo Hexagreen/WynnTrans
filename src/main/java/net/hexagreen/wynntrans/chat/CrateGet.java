@@ -6,12 +6,8 @@ import net.minecraft.text.TextContent;
 import java.util.regex.Pattern;
 
 public class CrateGet extends WynnChatText {
-    protected CrateGet(Text text, Pattern regex) {
+    public CrateGet(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static CrateGet of(Text text, Pattern regex) {
-        return new CrateGet(text, regex);
     }
 
     @Override

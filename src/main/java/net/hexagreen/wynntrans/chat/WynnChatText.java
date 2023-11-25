@@ -1,17 +1,14 @@
 package net.hexagreen.wynntrans.chat;
 
-import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
-import org.slf4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class WynnChatText {
-    protected static final Logger LOGGER = LogUtils.getLogger();
     protected static final String rootKey = "wytr.";
     protected static final String dirFunctional = "func.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
@@ -22,7 +19,7 @@ public abstract class WynnChatText {
     protected MutableText resultText;
     private final boolean regexMatched;
 
-    protected WynnChatText(Text text, Pattern regex) {
+    public WynnChatText(Text text, Pattern regex) {
         this.inputText = (MutableText) text;
         this.parentKey = setParentKey();
         if(regex != null) {
@@ -151,7 +148,7 @@ public abstract class WynnChatText {
         return inputText.getSiblings().get(siblingIndex);
     }
 
-    protected static Text removeCustomNickname(Text text) {
+    protected static Text removeCustomNicknameFromDialog(Text text) {
         MutableText newText = text.copyContentOnly().setStyle(text.getStyle());
         newText.append(text.getSiblings().get(0));
         String partial = "";

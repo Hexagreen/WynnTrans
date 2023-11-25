@@ -12,12 +12,8 @@ public class LevelUpProfession extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_LEVELUP = Pattern.compile("^ +You are now level (\\d+) in (.)");
     private static final Pattern REGEX_NEXTFEATURE = Pattern.compile("^Only (\\d+) more levels? until you can .+?(?:(.) Gathering.+T(\\d+))?$");
 
-    protected LevelUpProfession(Text text, Pattern regex) {
+    public LevelUpProfession(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static LevelUpProfession of(Text text, Pattern regex) {
-        return new LevelUpProfession(text, regex);
     }
 
     @Override

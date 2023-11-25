@@ -9,15 +9,11 @@ public class ProfessionLevelAnnounce extends WynnChatText {
     private final String profName;
     private final Text playerName;
 
-    protected ProfessionLevelAnnounce(Text text, Pattern regex) {
+    public ProfessionLevelAnnounce(Text text, Pattern regex) {
         super(text, regex);
         this.level = matcher.group(2);
         this.profName = matcher.group(3);
         this.playerName = getPlayerNameFromSibling(4);
-    }
-
-    public static ProfessionLevelAnnounce of(Text text, Pattern regex) {
-        return new ProfessionLevelAnnounce(text, regex);
     }
 
     @Override

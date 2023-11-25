@@ -8,12 +8,8 @@ import java.util.regex.Pattern;
 
 public class PouchSold extends WynnChatText {
 
-    protected PouchSold(Text text, Pattern regex) {
+    public PouchSold(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static PouchSold of(Text text, Pattern regex) {
-        return new PouchSold(text, regex);
     }
 
     @Override

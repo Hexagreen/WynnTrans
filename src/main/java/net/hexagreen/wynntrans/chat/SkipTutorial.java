@@ -9,12 +9,8 @@ import java.util.regex.Pattern;
 
 public class SkipTutorial extends WynnChatText {
 
-    protected SkipTutorial(Text text, Pattern regex) {
+    public SkipTutorial(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static SkipTutorial of(Text text, Pattern regex) {
-        return new SkipTutorial(text, regex);
     }
 
     @Override

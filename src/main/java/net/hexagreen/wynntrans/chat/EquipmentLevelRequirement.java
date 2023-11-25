@@ -7,13 +7,8 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class EquipmentLevelRequirement extends WynnChatText {
-
-    protected EquipmentLevelRequirement(Text text, Pattern regex) {
+    public EquipmentLevelRequirement(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static EquipmentLevelRequirement of(Text text, Pattern regex) {
-        return new EquipmentLevelRequirement(text, regex);
     }
 
     @Override

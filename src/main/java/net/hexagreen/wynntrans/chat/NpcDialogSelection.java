@@ -7,13 +7,9 @@ import java.util.regex.Pattern;
 public class NpcDialogSelection extends NpcDialog implements IFocusText {
     private final Text fullText;
 
-    protected NpcDialogSelection(Text text, Pattern regex) {
+    public NpcDialogSelection(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
         this.fullText = text;
-    }
-
-    public static NpcDialogSelection of(Text text, Pattern regex) {
-        return new NpcDialogSelection(text, regex);
     }
 
     @Override

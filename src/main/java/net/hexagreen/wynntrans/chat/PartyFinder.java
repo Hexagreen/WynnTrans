@@ -8,7 +8,7 @@ public class PartyFinder extends WynnChatText {
     private final Object playerName;
     private final String players;
 
-    protected PartyFinder(Text text, Pattern regex) {
+    public PartyFinder(Text text, Pattern regex) {
         super(text, regex);
         if(inputText.getSiblings().size() > 6) {
             this.playerName = getSibling(2);
@@ -16,10 +16,6 @@ public class PartyFinder extends WynnChatText {
             this.playerName = matcher.group(1);
         }
         this.players = matcher.group(2);
-    }
-
-    public static PartyFinder of(Text text, Pattern regex) {
-        return new PartyFinder(text, regex);
     }
 
     @Override

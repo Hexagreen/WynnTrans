@@ -14,7 +14,7 @@ public class NpcDialogLiteral extends WynnChatText {
     private final String npcName;
     private final String dialog;
 
-    protected NpcDialogLiteral(Text text, Pattern regex) {
+    public NpcDialogLiteral(Text text, Pattern regex) {
         super(text, regex);
         this.dialogIdx = matcher.group(1);
         this.dialogLen = matcher.group(2);
@@ -27,15 +27,11 @@ public class NpcDialogLiteral extends WynnChatText {
         return null;
     }
 
-    public static NpcDialogLiteral of(Text text, Pattern regex) {
-        return new NpcDialogLiteral(text, regex);
-    }
-
     @Override
     public void build(){
         MutableText reformed = Text.literal("[" + dialogIdx + "/" + dialogLen + "] " ).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
         reformed.append(Text.literal(npcName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)))
                 .append(dialog);
-        resultText = NpcDialog.of(reformed, ChatType.DIALOG_NORMAL.getRegex()).text();
+        resultText = new NpcDialog(reformed, ChatType.DIALOG_NORMAL.getRegex()).text();
     }
 }

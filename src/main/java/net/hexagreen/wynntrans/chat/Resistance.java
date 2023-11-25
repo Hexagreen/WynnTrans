@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class Resistance extends WynnChatText {
-    protected Resistance(Text text, Pattern regex) {
+    public Resistance(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static Resistance of(Text text, Pattern regex) {
-        return new Resistance(text, regex);
     }
 
     @Override

@@ -49,6 +49,7 @@ public enum ChatType {
     WEEKLY_OBJECTIVE(Pattern.compile("^ \n +§lObjective Finished"), WeeklyObjective.class),
     GUILD_INFO(Pattern.compile("§3\\[INFO§3]"), GuildInfo.class),
     EVENT_CRATE_ALARM(Pattern.compile("^Use /crates to open your (.+ Crate)!$"), CrateAlert.class),
+    WORLD_JOIN_QUEUE(Pattern.compile("^\\n +§b§lYou are in world WC(25)!"), WorldJoinQueue.class),
 
     NO_TYPE(null, SimpleText.class);
 
@@ -80,12 +81,12 @@ public enum ChatType {
                 .findFirst().orElse(NO_TYPE);
     }
 
-    public static boolean findAndRun(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static boolean findAndRun(Text text) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         ChatType find = findType(text);
-        return find.wct != null && find.wct.cast(find.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, find.regex)).print();
+        return find.wct != null && find.wct.cast(find.wct.getConstructor(Text.class, Pattern.class).newInstance(text, find.regex)).print();
     }
 
-    public void run(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        this.wct.cast(this.wct.getMethod("of", Text.class, Pattern.class).invoke(null, text, this.regex)).print();
+    public void run(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        this.wct.cast(this.wct.getConstructor(Text.class, Pattern.class).newInstance(text, this.regex)).print();
     }
 }

@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class DialogPlaceholder extends WynnChatText implements IFocusText {
-    protected DialogPlaceholder(Text text, Pattern regex) {
+    public DialogPlaceholder(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
-    }
-
-    public static DialogPlaceholder of(Text text, Pattern regex) {
-        return new DialogPlaceholder(text, regex);
     }
 
     @Override

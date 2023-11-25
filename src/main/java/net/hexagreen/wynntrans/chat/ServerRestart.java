@@ -8,14 +8,10 @@ public class ServerRestart extends WynnChatText {
     private final String number;
     private final String unit;
 
-    protected ServerRestart(Text text, Pattern regex) {
+    public ServerRestart(Text text, Pattern regex) {
         super(text, regex);
         this.number = matcher.group(1);
         this.unit = matcher.group(2);
-    }
-
-    public static ServerRestart of(Text text, Pattern regex) {
-        return new ServerRestart(text, regex);
     }
 
     @Override

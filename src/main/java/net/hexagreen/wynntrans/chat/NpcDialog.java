@@ -17,8 +17,8 @@ public class NpcDialog extends WynnChatText{
     protected final String pKeyDialog;
 
     @SuppressWarnings("DataFlowIssue")
-    protected NpcDialog(Text text, Pattern regex) {
-        super(removeCustomNickname(text), regex);
+    public NpcDialog(Text text, Pattern regex) {
+        super(removeCustomNicknameFromDialog(text), regex);
         this.pNameString = MinecraftClient.getInstance().player.getName().getString();
         this.playername = removedCustomNickname == null ? this.pNameString : removedCustomNickname;
         this.valName = getContentLiteral(0).replace(": ", "");
@@ -28,10 +28,6 @@ public class NpcDialog extends WynnChatText{
         String dialogLen = matcher.group(2) + ".";
         String hash = DigestUtils.sha1Hex(inputText.getString().replace(pNameString, "%1$s")).substring(0, 8);
         this.pKeyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
-    }
-
-    public static NpcDialog of(Text text, Pattern regex) {
-        return new NpcDialog(text, regex);
     }
 
     @Override
@@ -99,6 +95,6 @@ public class NpcDialog extends WynnChatText{
         for(int i = 1; inputText.getSiblings().size() > i; i++) {
             corrected.append(getSibling(i));
         }
-        resultText = NpcDialog.of(corrected, ChatType.DIALOG_NORMAL.getRegex()).text();
+        resultText = new NpcDialog(corrected, ChatType.DIALOG_NORMAL.getRegex()).text();
     }
 }

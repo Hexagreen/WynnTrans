@@ -11,14 +11,10 @@ public class CaveGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^           - \\+.+$");
     private int count = 0;
 
-    protected CaveGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        super(regex, wctClass);
+    public CaveGlue() {
+        super(null, CaveCompleted.class);
         gluedText.append("");
         count++;
-    }
-
-    public static CaveGlue get() {
-        return new CaveGlue(null, CaveCompleted.class);
     }
 
     @Override

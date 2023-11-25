@@ -9,14 +9,10 @@ import java.util.regex.Pattern;
 public class Blacksmith extends WynnChatText {
     private final Matcher soldMatcher;
 
-    protected Blacksmith(Text text, Pattern regex) {
+    public Blacksmith(Text text, Pattern regex) {
         super(text, regex);
         this.soldMatcher = Pattern.compile("^You sold me: (\\w+)$").matcher(getContentLiteral(1));
 
-    }
-
-    public static Blacksmith of(Text text, Pattern regex) {
-        return new Blacksmith(text, regex);
     }
 
     @Override

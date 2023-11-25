@@ -13,14 +13,10 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
     private final String keyQuestName;
     private final String valQuestName;
 
-    protected QuestCompleted(Text text, Pattern regex) {
+    public QuestCompleted(Text text, Pattern regex) {
         super(text, regex);
         this.valQuestName = getSibling(2).getSiblings().get(1).getString();
         this.keyQuestName = parentKey + valQuestName.replace(" ","").replace("'", "");
-    }
-
-    public static QuestCompleted of(Text text, Pattern regex) {
-        return new QuestCompleted(text, regex);
     }
 
     @Override

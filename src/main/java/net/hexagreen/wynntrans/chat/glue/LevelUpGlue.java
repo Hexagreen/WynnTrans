@@ -2,7 +2,6 @@ package net.hexagreen.wynntrans.chat.glue;
 
 import net.hexagreen.wynntrans.chat.LevelUp;
 import net.hexagreen.wynntrans.chat.LevelUpProfession;
-import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 
@@ -16,14 +15,10 @@ public class LevelUpGlue extends TextGlue {
     private int count = 0;
     private boolean isProfession = false;
 
-    protected LevelUpGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        super(regex, wctClass);
+    public LevelUpGlue() {
+        super(null, LevelUp.class);
         gluedText.append("");
         count++;
-    }
-
-    public static LevelUpGlue get() {
-        return new LevelUpGlue(null, LevelUp.class);
     }
 
     @Override

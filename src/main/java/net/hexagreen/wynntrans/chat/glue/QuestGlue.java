@@ -11,14 +11,10 @@ public class QuestGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^            - \\+.+$");
     private int count = 0;
 
-    protected QuestGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        super(regex, wctClass);
+    public QuestGlue() {
+        super(null, QuestCompleted.class);
         gluedText.append("");
         count++;
-    }
-
-    public static QuestGlue get() {
-        return new QuestGlue(null, QuestCompleted.class);
     }
 
     @Override

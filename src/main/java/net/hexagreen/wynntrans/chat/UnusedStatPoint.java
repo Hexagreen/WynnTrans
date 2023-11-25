@@ -10,14 +10,10 @@ public class UnusedStatPoint extends WynnChatText {
     private final String skillPoint;
     private final String abilityPoint;
 
-    protected UnusedStatPoint(Text text, Pattern regex) {
+    public UnusedStatPoint(Text text, Pattern regex) {
         super(text, regex);
         this.skillPoint = matcher.group(1);
         this.abilityPoint = matcher.group(2);
-    }
-
-    public static UnusedStatPoint of(Text text, Pattern regex) {
-        return new UnusedStatPoint(text, regex);
     }
 
     @Override

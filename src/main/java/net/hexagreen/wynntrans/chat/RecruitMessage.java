@@ -7,13 +7,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class RecruitMessage extends WynnChatText implements ICenterAligned {
-
-    protected RecruitMessage(Text text, Pattern regex) {
+    public RecruitMessage(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static RecruitMessage of(Text text, Pattern regex) {
-        return new RecruitMessage(text, regex);
     }
 
     @Override

@@ -9,14 +9,10 @@ import java.util.regex.Pattern;
 public class GuideAlert extends WynnChatText {
     private final String pKeyGnA;
 
-    protected GuideAlert(Text text, Pattern regex) {
+    public GuideAlert(Text text, Pattern regex) {
         super(text, regex);
         String hash = DigestUtils.sha1Hex(text.getString());
         this.pKeyGnA = parentKey + hash;
-    }
-
-    public static GuideAlert of(Text text, Pattern regex) {
-        return new GuideAlert(text, regex);
     }
 
     @Override
