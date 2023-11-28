@@ -1,40 +1,43 @@
 package net.hexagreen.wynntrans.chat.glue;
 
-import net.hexagreen.wynntrans.chat.AreaDiscovery;
+import net.hexagreen.wynntrans.chat.SecretDiscovery;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
-public class AreaDiscoveryGlue extends TextGlue {
-    private int count = 0;
-    private boolean shortForm = false;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public AreaDiscoveryGlue() {
-        super(null, AreaDiscovery.class);
+public class SecretDiscoveryGlue extends TextGlue {
+    private static final Pattern DISCOVERY_AREA = Pattern.compile(" +.+ \\[\\d+/\\d+]");
+    private int count = 0;
+
+    public SecretDiscoveryGlue(){
+        super(null, SecretDiscovery.class);
         gluedText.append("");
     }
-
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
         if(count == 0) {
             resetTimer();
             count++;
-            if(text.getSiblings().get(2).getStyle().getColor() == TextColor.fromFormatting(Formatting.WHITE)) {
-                safeNow();
-                gluedText.append(text);
-                shortForm = true;
-            }
-            else {
-                gluedText.append(text);
-            }
+            gluedText.append(text);
             return true;
         }
         else if(count == 1) {
+            Matcher m = DISCOVERY_AREA.matcher(text.getString());
+            if(m.find()) {
+                resetTimer();
+                count++;
+                gluedText.append(text);
+                return true;
+            }
+        }
+        else if(count == 2) {
             if(text.getString().equals(" ")) {
                 resetTimer();
                 count++;
-                if(shortForm) pop();
                 return true;
             }
         }

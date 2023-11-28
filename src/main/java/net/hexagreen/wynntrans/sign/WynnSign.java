@@ -52,7 +52,7 @@ public class WynnSign {
         switch(text.getString().toLowerCase().replaceAll(" ?\\d", "")) {
             case "[merchant]", "[buyer]", "[identifier]", "spawn", "eventswarm", "[powder]",
                     "next wave", "checker", "mob", "pos", "stop checker", "sounds", "sound",
-                    "particles", "wave end", "remove wall" -> {
+                    "particles", "wave end", "remove wall", "CMD", "RESET CMD", "COMMAND BLOCK", "OPEN CMD" -> {
                 return true;
             }
         }

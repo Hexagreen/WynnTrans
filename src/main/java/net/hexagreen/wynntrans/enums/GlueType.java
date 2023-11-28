@@ -11,9 +11,10 @@ public enum GlueType {
     QUEST_CLEAR(Pattern.compile("^ +\\[Quest Completed]$"), QuestGlue.class),
     CAVE_CLEAR(Pattern.compile("^ +\\[Cave Completed]$"), CaveGlue.class),
     OBJECTIVE_CLEAR(Pattern.compile("^ +\\[Objective Completed]$"), ObjectiveGlue.class),
-    LEVELUP(Pattern.compile("^                                Level Up!$"), LevelUpGlue.class),
+    LEVELUP(Pattern.compile("^ {32}Level Up!$"), LevelUpGlue.class),
     CRATE_GET_PERSONAL(Pattern.compile("^You've gotten a .+ reward!"), CrateGlue.class),
     AREA_DISCOVERY(Pattern.compile("^ +Area Discovered: "), AreaDiscoveryGlue.class),
+    SECRET_DISCOVERY(Pattern.compile("^ +Secret Discovery: "), SecretDiscoveryGlue.class),
 
     NO_TYPE(null, null);
 

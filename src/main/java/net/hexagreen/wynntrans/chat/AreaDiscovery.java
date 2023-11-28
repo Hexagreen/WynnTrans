@@ -12,7 +12,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
     private final String valAreaName;
     private final boolean shortForm;
 
-    protected AreaDiscovery(Text text, Pattern regex) {
+    public AreaDiscovery(Text text, Pattern regex) {
         super(text, regex);
         String areaName = getSibling(1).getSiblings().get(2).getString();
         this.keyAreaName = rootKey + "area." + areaName.replace(" ", "").replace(".","");
@@ -27,7 +27,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n");
+        resultText = Text.empty();
 
         MutableText t0 = Text.empty().append(newTranslate(parentKey).setStyle(getSibling(1).getSiblings().get(1).getStyle()));
         if(WTS.checkTranslationExist(keyAreaName, valAreaName)) {
@@ -41,6 +41,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
         resultText.append(getCenterIndent(t0)).append(t0).append("\n");
 
         if(shortForm) return;
+        else resultText.append("\n");
 
         for(int i = 2; inputText.getSiblings().size() > i; i++) {
             MutableText line = Text.empty();
@@ -50,7 +51,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
                 line.append(newTranslate(keyAreaLore).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             }
             else {
-                line.append(valAreaLore);
+                line.append(getSibling(i).getSiblings().get(1));
             }
             resultText.append(getCenterIndent(line)).append(line).append("\n");
         }
