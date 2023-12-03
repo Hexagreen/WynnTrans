@@ -15,7 +15,7 @@ public class WynnTranslationStorage {
         unregisteredTextSet.clear();
 
         wynnTransDict.putAll(translationMap);
-        unregisteredTextSet.addAll(WynnTransFileManager.readUnregistereds());
+        unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
         LOGGER.info("[WynnTrans] Reloaded Wynncraft Text Language Map.");
     }
 
@@ -26,6 +26,11 @@ public class WynnTranslationStorage {
             return false;
         }
         return true;
+    }
+
+    public boolean checkTranslationDoNotRegister(String key) {
+        String v = this.wynnTransDict.get(key);
+        return !(v == null);
     }
 
     private void recordUnregisteredText(String key, String value) {
