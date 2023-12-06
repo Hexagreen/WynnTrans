@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.sign;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
 import net.minecraft.block.entity.SignText;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
@@ -71,6 +72,8 @@ public class WynnSign {
                 sIndex++;
             }
         }
+        //noinspection DataFlowIssue
+        MinecraftClient.getInstance().player.sendMessage(Text.literal("Translation key registered."));
     }
 
     private boolean systemSignFilter(Text text) {

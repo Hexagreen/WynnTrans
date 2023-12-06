@@ -26,7 +26,6 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
         return rootKey + dirFunctional + "welcome";
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     protected void build() {
         resultText = Text.literal("\n");

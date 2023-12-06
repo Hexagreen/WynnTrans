@@ -29,7 +29,7 @@ public class WynnTransFileManager {
     }
 
     public static void addSpace(String string) {
-        String str = ",\r\n\t";
+        String str = "\r\n\t";
         if(!string.equals("")) {
             str += ",\r\n\t\"_c\":\"" + string + "\"";
         }
