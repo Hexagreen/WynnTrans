@@ -5,6 +5,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +13,9 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) Experience Points$");
     private static final Pattern REGEX_EME = Pattern.compile("^\\+(\\d+) Emeralds$");
     private static final String func = rootKey + dirFunctional;
-    private final String keyObjectiveName;
-    private final String valObjectiveName;
+    private String keyObjectiveName;
+    private String valObjectiveName;
+    private Object argObjectiveName = new Object[0];
     private String keyEName = null;
     private String valEName = null;
 
@@ -21,6 +23,7 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
         super(text, regex);
         this.valObjectiveName = getSibling(2).getSiblings().get(0).getString().replaceAll("^ +", "");
         this.keyObjectiveName = parentKey + valObjectiveName.replace(" ", "");
+        normalizeKeyVal();
 
         if(text.getSiblings().size() == 8) {
             this.valEName = getSibling(4).getSiblings().get(1).getString();
@@ -41,8 +44,8 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
                 .append(newTranslate(func + "objCompleted").setStyle(getSibling(1).getSiblings().get(1).getStyle())).append("\n");
 
         if(WTS.checkTranslationExist(keyObjectiveName, valObjectiveName)) {
-            resultText.append(getCenterIndent(keyObjectiveName))
-                    .append(newTranslate(keyObjectiveName).setStyle(getSibling(2).getSiblings().get(0).getStyle()));
+            resultText.append(getCenterIndent(keyObjectiveName, argObjectiveName))
+                    .append(newTranslate(keyObjectiveName, argObjectiveName).setStyle(getSibling(2).getSiblings().get(0).getStyle()));
         }
         else {
             resultText.append(getCenterIndent(Text.literal(valObjectiveName)))
@@ -92,5 +95,49 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
 
         resultText.append(getCenterIndent(func + "objReward"))
                 .append(newTranslate(func + "objReward").setStyle(getSibling(-1).getSiblings().get(1).getStyle())).append("\n");
+    }
+
+    private void normalizeKeyVal() {
+        NormalizedObjective normalizedObjective = NormalizedObjective.findNormalized(valObjectiveName);
+        if(normalizedObjective != NormalizedObjective.NO_TYPE){
+            this.keyObjectiveName = normalizedObjective.normalizedKey;
+            this.valObjectiveName = normalizedObjective.normalizedVal;
+            this.argObjectiveName = normalizedObjective.normalizedArg;
+        }
+    }
+
+    private enum NormalizedObjective {
+        SLAY_LEVELED_MOBS(Pattern.compile("Slay Lv\\. \\d+\\+ Mobs"), "SlayLeveledMobs", "Slay Lv. %s+ Mobs"),
+        TIERED_LOOT_CHEST(Pattern.compile("Loot Chests T\\d\\+"), "LootChestsTiered", "Loot Chests T%s+"),
+        NO_TYPE(null, null, null);
+
+        private final Pattern regex;
+        private final String normalizedKey;
+        private final String normalizedVal;
+        private Object normalizedArg;
+
+        NormalizedObjective(Pattern regex, String normalizedKey, String normalizedVal) {
+            this.regex = regex;
+            this.normalizedKey = normalizedKey;
+            this.normalizedVal = normalizedVal;
+            this.normalizedArg = null;
+        }
+
+        boolean isMatch(String string) {
+            if(this == NO_TYPE) return false;
+            Matcher m = this.regex.matcher(string);
+            boolean result = m.find();
+            if(result) {
+                normalizedArg = m.group(0);
+                return true;
+            }
+            return false;
+        }
+
+        static NormalizedObjective findNormalized(String string) {
+            return Arrays.stream(NormalizedObjective.values())
+                    .filter(normalizedObjective -> normalizedObjective.isMatch(string))
+                    .findFirst().orElse(NO_TYPE);
+        }
     }
 }

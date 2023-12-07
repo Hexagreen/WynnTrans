@@ -45,6 +45,7 @@ public class WynnTrans implements ModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> WriteCommentClass.register(dispatcher));
 
         ClientTickEvents.START_WORLD_TICK.register((StartTick) -> incomeTextHandler.onStartWorldTick());
+
         UseBlockCallback.EVENT.register(new UseBlockHandler());
     }
     private static class WriteCommentClass {

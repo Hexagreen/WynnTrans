@@ -10,6 +10,10 @@ public interface ICenterAligned {
         return getCenterIndent(MutableText.of(new TranslatableTextContent(alignTargetKey, null, TranslatableTextContent.EMPTY_ARGUMENTS)));
     }
 
+    default String getCenterIndent(String alignTargetKey, Object... args) {
+        return getCenterIndent(MutableText.of(new TranslatableTextContent(alignTargetKey, null, args)));
+    }
+
     default String getCenterIndent(Text alignTargetText) {
         int CENTER = 40;
 
