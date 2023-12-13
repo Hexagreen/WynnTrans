@@ -22,10 +22,6 @@ public class PouchSold extends WynnChatText {
         Style style = Style.EMPTY.withColor(Formatting.LIGHT_PURPLE);
 
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_1").setStyle(style))
-                .append(getSibling(1))
-                .append(newTranslate(parentKey + "_2").setStyle(style))
-                .append(getSibling(3))
-                .append(newTranslate(parentKey + "_3").setStyle(style));
+        resultText.append(newTranslate(parentKey, getSibling(1), getSibling(3)).setStyle(style));
     }
 }

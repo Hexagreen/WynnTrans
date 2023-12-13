@@ -22,6 +22,6 @@ public class ServerRestart extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_" + unit, number).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey + "." + unit, number).setStyle(getStyle(0)));
     }
 }

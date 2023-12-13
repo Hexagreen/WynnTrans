@@ -25,8 +25,6 @@ public class SkipTutorial extends WynnChatText {
                         .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/skiptutorial")));
 
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_1").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)))
-                .append(command)
-                .append(newTranslate(parentKey + "_2").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+        resultText.append(newTranslate(parentKey, command).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }
 }

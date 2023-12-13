@@ -25,12 +25,11 @@ public class PartyFinder extends WynnChatText {
 
     @Override
     protected void build() {
+        Text standingPlayers = Text.empty()
+                .append(newTranslate(parentKey + ".players", players).setStyle(getStyle(4)));
+
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey).setStyle(getStyle(0)).append(": "))
-                .append(newTranslate(parentKey + "_1", playerName).setStyle(getStyle(1)))
-                .append(getSibling(2))
-                .append(newTranslate(parentKey + "_2").setStyle(getStyle(3)))
-                .append(newTranslate(parentKey + "_3", players).setStyle(getStyle(4)))
-                .append(newTranslate(parentKey + "_4").setStyle(getStyle(5)));
+                .append(newTranslate(parentKey + ".message", playerName, getSibling(2), standingPlayers).setStyle(getStyle(1)));
     }
 }

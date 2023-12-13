@@ -38,6 +38,7 @@ public enum ChatType {
     MERCHANT(Pattern.compile("^(.+) Merchant: "), Merchants.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
+    FRIEND_LEFT(Pattern.compile("^(.+) left the game\\.$"), FriendLeft.class),
     DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
     WELCOME(Pattern.compile("^\\n +....Welcome to Wynncraft!\\n"), WelcomeMessage.class),
     RECRUIT(Pattern.compile("^\\n +§6§lEnjoying Wynncraft\\?"), RecruitMessage.class),
@@ -49,8 +50,10 @@ public enum ChatType {
     WEEKLY_OBJECTIVE(Pattern.compile("^ \n +§lObjective Finished"), WeeklyObjective.class),
     GUILD_INFO(Pattern.compile("§3\\[INFO§3]"), GuildInfo.class),
     EVENT_CRATE_ALARM(Pattern.compile("^Use /crates to open your (.+ Crate)!$"), CrateAlert.class),
-    WORLD_JOIN_QUEUE(Pattern.compile("^\\n +§b§lYou are in world WC(25)!"), WorldJoinQueue.class),
-
+    WORLD_JOIN_QUEUE(Pattern.compile("^\\n +§b§lYou are in world WC(\\d+)!"), WorldJoinQueue.class),
+    OFFLINE_SOULPOINT(Pattern.compile("^\\[You have received (\\d+) soul points while you were offline]$"), OfflineSoulpoint.class),
+    PARTY_JOINED(Pattern.compile("^(.+) has joined your party, say hello!$"), PartyJoined.class),
+    KEY_COLLECTOR(Pattern.compile("^Key Collector: "), KeyCollector.class),
     NO_TYPE(null, SimpleText.class);
 
 

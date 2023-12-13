@@ -17,9 +17,6 @@ public class Disguise extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(getSibling(0))
-                .append(newTranslate(parentKey + "_1").setStyle(getStyle(1)))
-                .append(getSibling(2))
-                .append(newTranslate(parentKey + "_2").setStyle(getStyle(3)));
+        resultText.append(newTranslate(parentKey, getSibling(0), getSibling(2)).setStyle(getStyle(1)));
     }
 }

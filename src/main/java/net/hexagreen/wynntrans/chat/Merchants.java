@@ -11,7 +11,7 @@ public class Merchants extends WynnChatText {
     public Merchants(Text text, Pattern regex) {
         super(text, regex);
         String merchantName = matcher.group(1);
-        this.keyMerchantName = parentKey + "." + merchantName.replace(" ","");
+        this.keyMerchantName = "wytr.merchant." + merchantName.replace(" ","");
         this.valMerchantName = merchantName + " Merchant";
     }
 
@@ -33,13 +33,13 @@ public class Merchants extends WynnChatText {
         }
 
         if(getContentLiteral(1).contains("Thank you for your business")) {
-            resultText.append(newTranslate(parentKey + "_confirm").setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".confirm").setStyle(getStyle(1)));
         }
         else if(getContentLiteral(1).contains("cannot afford that")) {
-            resultText.append(newTranslate(parentKey + "_noEmerald").setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".noEmerald").setStyle(getStyle(1)));
         }
         else if(getContentLiteral(1).contains("don't have enough space")) {
-            resultText.append(newTranslate(parentKey + "_noSpace").setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".noSpace").setStyle(getStyle(1)));
         }
     }
 }

@@ -50,18 +50,18 @@ public interface IFocusText extends ICenterAligned {
     private Text pressShiftToContinue(Text fullText) {
         String key = "wytr.func.pressShift";
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
-        MutableText textBody = (newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
-                .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
-                .append(newTranslate(key + "_3").setStyle(original.get(2).getStyle()));
+        MutableText textBody = (newTranslate(key + ".1").setStyle(original.get(0).getStyle()))
+                .append(newTranslate(key + ".2").setStyle(original.get(1).getStyle()))
+                .append(newTranslate(key + ".3").setStyle(original.get(2).getStyle()));
         return Text.literal(getCenterIndent(textBody)).append(textBody);
     }
 
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
         List<Text> original = fullText.getSiblings().get(getLastOptionIndex(fullText) + 4).getSiblings();
-        MutableText textBody =(newTranslate(key + "_1").setStyle(original.get(0).getStyle()))
-                .append(newTranslate(key + "_2").setStyle(original.get(1).getStyle()))
-                .append(newTranslate(key + "_3").setStyle(original.get(2).getStyle()));
+        MutableText textBody =(newTranslate(key + ".1").setStyle(original.get(0).getStyle()))
+                .append(newTranslate(key + ".2").setStyle(original.get(1).getStyle()))
+                .append(newTranslate(key + ".3").setStyle(original.get(2).getStyle()));
         return Text.literal(getCenterIndent(textBody)).append(textBody);
     }
 

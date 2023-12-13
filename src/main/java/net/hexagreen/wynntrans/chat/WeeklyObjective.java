@@ -31,11 +31,11 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
     protected void build() {
         resultText = Text.empty();
         Text t1 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA)).append("\n");
-        Text t2 = newTranslate(parentKey + "_1").setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("\n");
-        Text t3 = newTranslate(parentKey + "_2").setStyle(
+        Text t2 = newTranslate(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("\n");
+        Text t3 = newTranslate(parentKey + ".2").setStyle(
                 Style.EMPTY.withColor(Formatting.DARK_AQUA)
                         .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild rewards"))).append("\n");
-        Text t4 = newTranslate(parentKey + "_3").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append("\n");
+        Text t4 = newTranslate(parentKey + ".3").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append("\n");
 
         resultText.append(getCenterIndent(t1)).append(t1)
                 .append(getCenterIndent(t2)).append(t2)

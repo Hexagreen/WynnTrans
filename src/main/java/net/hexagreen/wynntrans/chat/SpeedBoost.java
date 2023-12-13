@@ -21,9 +21,9 @@ public class SpeedBoost extends WynnChatText {
 
     @Override
     protected void build() {
+        Text buffTime = newTranslate(parentKey, duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_pre").setStyle(getStyle(1)))
-                .append(newTranslate(parentKey, duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
-                .append(newTranslate(parentKey + "_suf").setStyle(getStyle(1)));
+        resultText.append(newTranslate(parentKey + ".body", buffTime).setStyle(getStyle(1)));
     }
 }

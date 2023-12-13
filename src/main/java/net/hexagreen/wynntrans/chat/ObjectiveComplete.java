@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
-    private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) Experience Points$");
-    private static final Pattern REGEX_EME = Pattern.compile("^\\+(\\d+) Emeralds$");
+    private static final Pattern REGEX_EXP = Pattern.compile("\\+(\\d+) Experience Points");
+    private static final Pattern REGEX_EME = Pattern.compile("\\+(\\d+) Emeralds");
     private static final String func = rootKey + dirFunctional;
     private String keyObjectiveName;
     private String valObjectiveName;
@@ -100,15 +100,15 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
     private void normalizeKeyVal() {
         NormalizedObjective normalizedObjective = NormalizedObjective.findNormalized(valObjectiveName);
         if(normalizedObjective != NormalizedObjective.NO_TYPE){
-            this.keyObjectiveName = normalizedObjective.normalizedKey;
+            this.keyObjectiveName = parentKey + normalizedObjective.normalizedKey;
             this.valObjectiveName = normalizedObjective.normalizedVal;
             this.argObjectiveName = normalizedObjective.normalizedArg;
         }
     }
 
     private enum NormalizedObjective {
-        SLAY_LEVELED_MOBS(Pattern.compile("Slay Lv\\. \\d+\\+ Mobs"), "SlayLeveledMobs", "Slay Lv. %s+ Mobs"),
-        TIERED_LOOT_CHEST(Pattern.compile("Loot Chests T\\d\\+"), "LootChestsTiered", "Loot Chests T%s+"),
+        SLAY_LEVELED_MOBS(Pattern.compile("Slay Lv\\. (\\d+)\\+ Mobs"), "SlayLeveledMobs", "Slay Lv. %s+ Mobs"),
+        TIERED_LOOT_CHEST(Pattern.compile("Loot Chests T(\\d)\\+"), "LootChestsTiered", "Loot Chests T%s+"),
         NO_TYPE(null, null, null);
 
         private final Pattern regex;
@@ -128,7 +128,7 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
             Matcher m = this.regex.matcher(string);
             boolean result = m.find();
             if(result) {
-                normalizedArg = m.group(0);
+                normalizedArg = m.group(1);
                 return true;
             }
             return false;

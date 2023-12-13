@@ -30,7 +30,7 @@ public class CrateGet extends WynnChatText {
                     .append(getSibling(nextIndexItemname + 1));
         }
         else {
-            int nextIndexItemname = inputText.getSiblings().size() - 2;
+            int nextIndexItemname = inputText.getSiblings().size() - 3;
             resultText.append(Text.literal(matcher.group(1)).setStyle(getStyle(0)))
                     .append(newTranslate(parentKey + "_1").setStyle(getStyle(0)));
             for(int i = 1; nextIndexItemname > i; i++){

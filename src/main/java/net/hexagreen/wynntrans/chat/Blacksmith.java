@@ -41,7 +41,7 @@ public class Blacksmith extends WynnChatText {
         else if(getContentLiteral(1).contains("You sold me")) {
             String soldItem = soldMatcher.find() ? soldMatcher.group(1) : "";
 
-            resultText.append(newTranslate(parentKey + ".sold_1", soldItem).setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".sold.head", soldItem).setStyle(getStyle(1)));
 
             int lastItemIndex = inputText.getSiblings().size() - 4;
             for(int index = 2; lastItemIndex >= index; index++) {
@@ -53,10 +53,10 @@ public class Blacksmith extends WynnChatText {
             }
             resultText.append(newTranslate(parentKey + ".total").setStyle(getStyle(1)))
                     .append(getSibling(lastItemIndex + 2))
-                    .append(newTranslate(parentKey + ".sold_2").setStyle(getStyle(1)));
+                    .append(newTranslate(parentKey + ".sold.tail").setStyle(getStyle(1)));
         }
         else if(getContentLiteral(1).contains("You scrapped")) {
-            resultText.append(newTranslate(parentKey + ".scrap_1").setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".scrap.head").setStyle(getStyle(1)));
 
             int lastItemIndex = inputText.getSiblings().size() - 4;
             for(int index = 2; lastItemIndex >= index; index++) {
@@ -68,7 +68,7 @@ public class Blacksmith extends WynnChatText {
             }
             resultText.append(newTranslate(parentKey + ".total").setStyle(getStyle(1)))
                     .append(getSibling(lastItemIndex + 2))
-                    .append(newTranslate(parentKey + ".scrap_2").setStyle(getStyle(1)));
+                    .append(newTranslate(parentKey + ".scrap.tail").setStyle(getStyle(1)));
         }
     }
 }

@@ -44,19 +44,19 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
             Text textFestival = newTranslate(keyFestival).setStyle(Style.EMPTY.withFormatting(f1, f2));
             resultText.append(getCenterIndent(textFestival)).append(textFestival).append("\n");
 
-            Text festivalGuide1 = newTranslate(parentKey + ".fesGuide_1").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+            Text festivalGuide1 = newTranslate(parentKey + ".fesGuide.1").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
             resultText.append(getCenterIndent(festivalGuide1)).append(festivalGuide1).append("\n");
 
             Matcher crate = REGEX_CRATE.matcher(getSibling(3).getString());
             crate.find();
             String strCrate = "§d" + crate.group(1);
-            Text festivalGuide2 = newTranslate(parentKey + ".fesGuide_2", strCrate).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+            Text festivalGuide2 = newTranslate(parentKey + ".fesGuide.2", strCrate).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
             resultText.append(getCenterIndent(festivalGuide2)).append(festivalGuide2).append("\n\n");
 
             Matcher time = REGEX_TIME.matcher(getSibling(5).getString());
             time.find();
             String strTime = time.group(1);
-            Text festivalGuide3 = newTranslate(parentKey + ".fesGuide_3", strTime).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+            Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", strTime).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
             resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");
 
             return;
@@ -72,7 +72,7 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
 
         for(int i = 1; inputText.getSiblings().size() - 1 > i; i++) {
             String valGuide = getSibling(i).getString().replaceAll("^ +", "");
-            String keyGuide = parentKey + ".guide." + DigestUtils.sha1Hex(valGuide).substring(0, 6);
+            String keyGuide = "wytr.welcome." + DigestUtils.sha1Hex(valGuide).substring(0, 6);
             if(WTS.checkTranslationExist(keyGuide, valGuide)) {
                 Text guide = newTranslate(keyGuide).setStyle(getStyle(i));
                 resultText.append(getCenterIndent(guide)).append(guide).append("\n");

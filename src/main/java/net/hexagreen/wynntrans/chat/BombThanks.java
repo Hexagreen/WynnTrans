@@ -21,7 +21,7 @@ public class BombThanks extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_1", playerName).setStyle(getStyle(0)))
-                .append(newTranslate(parentKey + "_2").setStyle(getStyle(3)));
+        resultText.append(newTranslate(parentKey, playerName).setStyle(getStyle(0)))
+                .append(newTranslate(parentKey + ".click").setStyle(getStyle(3)));
     }
 }

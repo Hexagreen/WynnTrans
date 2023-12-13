@@ -47,13 +47,13 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
         for(int i = 6; inputText.getSiblings().size() > i; i++) {
             if(getSibling(i).getString().contains("+1 Ability Point")) {
                 resultText.append(newTranslate(parentKey + ".ap").setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
-                        .append(newTranslate(parentKey + ".ap_guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
+                        .append(newTranslate(parentKey + ".ap.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                         .append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+2 Skill Points")) {
                 resultText.append(newTranslate(parentKey + ".sp").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
-                        .append(newTranslate(parentKey + ".sp_guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
+                        .append(newTranslate(parentKey + ".sp.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
                         .append("\n");
                 continue;
             }

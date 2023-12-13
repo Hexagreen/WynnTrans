@@ -23,7 +23,7 @@ public class CombatLevelUp extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "combatLevelUp";
+        return rootKey + dirFunctional + "levelUp.combat";
     }
 
     @Override

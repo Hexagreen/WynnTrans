@@ -45,7 +45,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
 
         for(int i = 2; inputText.getSiblings().size() > i; i++) {
             MutableText line = Text.empty();
-            String keyAreaLore = keyAreaName + "_" + (i - 1);
+            String keyAreaLore = keyAreaName + "." + (i - 1);
             String valAreaLore = getSibling(i).getSiblings().get(1).getString();
             if(WTS.checkTranslationExist(keyAreaLore, valAreaLore)) {
                 line.append(newTranslate(keyAreaLore).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));

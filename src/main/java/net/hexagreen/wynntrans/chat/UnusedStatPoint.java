@@ -26,17 +26,17 @@ public class UnusedStatPoint extends WynnChatText {
         Style style = Style.EMPTY.withColor(Formatting.DARK_RED);
 
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_1").setStyle(style));
+        resultText.append(newTranslate(parentKey + ".1").setStyle(style));
         if(skillPoint != null) {
             resultText.append(newTranslate(parentKey + ".sp", skillPoint).setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)));
             if(abilityPoint != null) {
-                resultText.append(newTranslate(parentKey + "_2").setStyle(style))
+                resultText.append(newTranslate(parentKey + ".2").setStyle(style))
                         .append(newTranslate(parentKey + ".ap", abilityPoint).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)));
             }
         }
         else {
             resultText.append(newTranslate(parentKey + ".ap", abilityPoint).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)));
         }
-        resultText.append(newTranslate(parentKey + "_3").setStyle(style));
+        resultText.append(newTranslate(parentKey + ".3").setStyle(style));
     }
 }

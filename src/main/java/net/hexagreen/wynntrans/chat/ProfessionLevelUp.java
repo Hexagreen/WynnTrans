@@ -25,7 +25,7 @@ public class ProfessionLevelUp extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "professionLevelUp";
+        return rootKey + dirFunctional + "levelUp.profession";
     }
 
     @Override

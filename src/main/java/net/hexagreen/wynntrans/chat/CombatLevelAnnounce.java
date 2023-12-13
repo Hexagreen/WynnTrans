@@ -1,6 +1,8 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -25,8 +27,6 @@ public class CombatLevelAnnounce extends WynnChatText {
         resultText.append(getSibling(0))
                 .append(getSibling(1))
                 .append(getSibling(2))
-                .append(newTranslate(parentKey + "_pre", level))
-                .append(playerName)
-                .append(newTranslate(parentKey + "_suf", level));
+                .append(newTranslate(parentKey, playerName, level).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

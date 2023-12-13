@@ -21,7 +21,7 @@ public class WorldJoinQueue extends WynnChatText implements ICenterAligned {
     protected void build() {
         resultText = Text.empty();
         Text t0 = newTranslate(parentKey, worldChannel);
-        Text t1 = newTranslate(parentKey + "_1");
+        Text t1 = newTranslate(parentKey + ".guide");
 
         resultText.append(getCenterIndent(t0)).append("\n")
                 .append(getCenterIndent(t1)).append("\n");
