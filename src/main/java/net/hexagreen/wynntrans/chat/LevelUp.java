@@ -63,8 +63,17 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                 continue;
             }
             if(getSibling(i).getString().contains("+ New Quest")) {
-                String valQuestName = getSibling(i).getSiblings().get(1).getString().replace("[", "").replace("]", "");
+                String keyNewQuest = parentKey + ".newQuest";
+                String valQuestName = getSibling(i).getSiblings().get(1).getString()
+                        .replace("[", "").replace("]", "")
+                        .replace("֎", "");
+                if(valQuestName.contains("Mini-Quest - ")) {
+                    keyNewQuest = parentKey + ".newMiniQuest";
+                    valQuestName = valQuestName.replace("Mini-Quest - ", "");
+                }
+
                 String keyQuestName = "wytr.quest." + valQuestName.replace(" ", "");
+
                 Text questText;
                 if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
                     questText = Text.literal("[" + newTranslate(keyQuestName).getString() + "]").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY));
@@ -73,7 +82,7 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                     questText = getSibling(i).getSiblings().get(1);
                 }
 
-                resultText.append(newTranslate(parentKey + ".newQuest").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
+                resultText.append(newTranslate(keyNewQuest).setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
                         .append(questText)
                         .append("\n");
                 continue;

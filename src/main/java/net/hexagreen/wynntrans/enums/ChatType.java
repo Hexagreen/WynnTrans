@@ -17,7 +17,7 @@ public enum ChatType {
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), EventInfo.class),
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$"), CombatLevelAnnounce.class),
-    PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (. .+)!$"), ProfessionLevelAnnounce.class),
+    PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (.) (.+)!$"), ProfessionLevelAnnounce.class),
     BLACKSMITH(Pattern.compile("^Blacksmith: "), Blacksmith.class),
     IDENTIFIER(Pattern.compile("^Item Identifier: I can't identify this item! "), Identifier.class),
     AREA_ENTER(Pattern.compile("^\\[You are now entering (.+)]$"), AreaEnter.class),
@@ -54,6 +54,7 @@ public enum ChatType {
     OFFLINE_SOULPOINT(Pattern.compile("^\\[You have received (\\d+) soul points while you were offline]$"), OfflineSoulpoint.class),
     PARTY_JOINED(Pattern.compile("^(.+) has joined your party, say hello!$"), PartyJoined.class),
     KEY_COLLECTOR(Pattern.compile("^Key Collector: "), KeyCollector.class),
+    SERVER_KICK(Pattern.compile("^Kicked from WC(\\d+): "), KickFromServer.class),
     NO_TYPE(null, SimpleText.class);
 
 

@@ -9,6 +9,7 @@ public class WynnTranslationStorage {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final Map<String, String> wynnTransDict = new HashMap<>();
     private final Set<String> unregisteredTextSet = new HashSet<>();
+    private boolean registerControl = true;
 
     public void onLanguageReloaded(Map<String, String> translationMap) {
         wynnTransDict.clear();
@@ -21,7 +22,7 @@ public class WynnTranslationStorage {
 
     public boolean checkTranslationExist(String key, String value) {
         String v = this.wynnTransDict.get(key);
-        if(v == null) {
+        if(v == null && registerControl) {
             this.recordUnregisteredText(key, value);
             return false;
         }
@@ -31,6 +32,10 @@ public class WynnTranslationStorage {
     public boolean checkTranslationDoNotRegister(String key) {
         String v = this.wynnTransDict.get(key);
         return !(v == null);
+    }
+
+    public void toggleRegisterControl() {
+        this.registerControl = !registerControl;
     }
 
     private void recordUnregisteredText(String key, String value) {

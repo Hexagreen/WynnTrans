@@ -55,6 +55,7 @@ public class IncomeTextHandler {
                 this.pendingCounter = 0;
                 this.pendingTime = 0;
                 MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+                WynnTrans.wynnTranslationStorage.toggleRegisterControl();
                 for(Text chunk : this.pendingText) {
                     for(Text line : chunk.getSiblings()) {
                         if("\n".equals(line.getString())) continue;
@@ -63,6 +64,7 @@ public class IncomeTextHandler {
                         }
                     }
                 }
+                WynnTrans.wynnTranslationStorage.toggleRegisterControl();
                 this.pendingText = Lists.newArrayList();
             }
         }
