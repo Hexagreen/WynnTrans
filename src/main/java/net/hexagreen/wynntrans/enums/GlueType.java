@@ -15,7 +15,7 @@ public enum GlueType {
     CRATE_GET_PERSONAL(Pattern.compile("^You've gotten a .+ reward!"), CrateGlue.class),
     AREA_DISCOVERY(Pattern.compile("^ +Area Discovered: "), AreaDiscoveryGlue.class),
     SECRET_DISCOVERY(Pattern.compile("^ +Secret Discovery: "), SecretDiscoveryGlue.class),
-    BOMB_START(Pattern.compile("^.+ has thrown an .+ Bomb!"), BombGlue.class),
+    BOMB_START(Pattern.compile("^.+ has thrown an? .+ Bomb!"), BombGlue.class),
     NO_TYPE(null, null);
 
     private final Pattern regex;

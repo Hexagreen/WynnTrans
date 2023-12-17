@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class WeeklyObjective extends WynnChatText implements ICenterAligned {
     private String keyEName = null;
     private String valEName = null;
+    private Style styleEName = null;
 
     public WeeklyObjective(Text text, Pattern regex) {
         super(text, regex);
@@ -19,6 +20,7 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
             this.valEName = getSibling(3).getString().replaceAll("\\n +§.§.", "");
             String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
             this.keyEName = "wytr.eventInfo.eventName." + hash2;
+            this.styleEName = getStyle(3);
         }
     }
 
@@ -43,7 +45,7 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
 
         if(keyEName != null) {
             if(WTS.checkTranslationExist(keyEName, valEName)) {
-                Text text = newTranslate(keyEName);
+                Text text = newTranslate(keyEName).setStyle(styleEName);
                 resultText.append(getCenterIndent(text)).append(text);
             }
             else {

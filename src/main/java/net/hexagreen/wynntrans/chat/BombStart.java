@@ -29,17 +29,19 @@ public class BombStart extends WynnChatText {
 
         switch(bomb) {
             case COMBAT_XP, PROFESSION_XP, PROFESSION_SPEED, LOOT ->
-                    resultText.append(newTranslate(rootKey, playerName, bomb.bombName)
+                    resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
-                    .append(newTranslate(rootKey + "durational", bomb.bombDescription, bomb.bombTime)
+                    .append(newTranslate(parentKey + ".durational", bomb.bombDescription, bomb.bombTime)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
-            case ITEM, INGREDIENT ->
-                    resultText.append(newTranslate(rootKey, playerName, bomb.bombName)
+            case ITEM ->
+                    resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
-                    .append(newTranslate(rootKey + "instant", bomb.bombDescription, bomb.bombTime)
+                    .append(newTranslate(parentKey + ".instant", bomb.bombDescription, bomb.bombTime)
                             .setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-            default ->
-                    debugClass.writeTextAsJSON(inputText);
+            default -> {
+                debugClass.writeTextAsJSON(inputText);
+                resultText = inputText;
+            }
         }
     }
 

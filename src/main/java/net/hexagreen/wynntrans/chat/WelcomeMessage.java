@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -10,11 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WelcomeMessage extends WynnChatText implements ICenterAligned {
-    public static final Pattern REGEX_FES = Pattern.compile("^ +(....)(Festival.+)\\n");
-    public static final Pattern REGEX_CRATE = Pattern.compile("TIME ..(.+) Crates!");
-    public static final Pattern REGEX_TIME = Pattern.compile("doors in (.+)\\.");
-    public static final Pattern REGEX_TRADE = Pattern.compile("^ +§d§l(\\d+)§5 of your items sold");
-    public static final Text LINK = Text.literal("§fplay.wynncraft.com §7-/-§f wynncraft.com")
+    private static final Pattern REGEX_FES_COLOR = Pattern.compile("^ +§(.)");
+    private static final Pattern REGEX_FES = Pattern.compile("^ +(....)(Festival.+)\\n");
+    private static final Pattern REGEX_CRATE = Pattern.compile(" (§.[A-z]+) Crates");
+    private static final Pattern REGEX_TIME = Pattern.compile("doors in (.+)\\.");
+    private static final Pattern REGEX_TRADE = Pattern.compile("^ +§d§l(\\d+)§5 of your items sold");
+    private static final Text LINK = Text.literal("§fplay.wynncraft.com §7-/-§f wynncraft.com")
             .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://wynncraft.com")));
 
     public WelcomeMessage(Text text, Pattern regex) {
@@ -37,28 +39,43 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
 
         Matcher festival = REGEX_FES.matcher(getSibling(1).getString());
         if(festival.find()) {
+            Matcher color = REGEX_FES_COLOR.matcher(getSibling(2).getString());
+            Formatting colorFormat;
+            if(color.find()) {
+                colorFormat = Formatting.byCode(color.group(1).charAt(0));
+            }
+            else colorFormat = Formatting.WHITE;
+
             char[] format = festival.group(1).toCharArray();
             Formatting f1 = Formatting.byCode(format[1]);
             Formatting f2 = Formatting.byCode(format[3]);
             String keyFestival = "wytr.eventInfo.eventName." + DigestUtils.sha1Hex(festival.group(2)).substring(0, 4);
-            Text textFestival = newTranslate(keyFestival).setStyle(Style.EMPTY.withFormatting(f1, f2));
+            Text textFestival;
+            if(WTS.checkTranslationExist(keyFestival, festival.group(2))) {
+                textFestival = newTranslate(keyFestival).setStyle(Style.EMPTY.withFormatting(f1, f2));
+            }
+            else {
+                textFestival = Text.literal(festival.group(2)).setStyle(Style.EMPTY.withFormatting(f1, f2));
+            }
             resultText.append(getCenterIndent(textFestival)).append(textFestival).append("\n");
 
-            Text festivalGuide1 = newTranslate(parentKey + ".fesGuide.1").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+            Text festivalGuide1 = newTranslate(parentKey + ".fesGuide.1").setStyle(Style.EMPTY.withColor(colorFormat));
             resultText.append(getCenterIndent(festivalGuide1)).append(festivalGuide1).append("\n");
 
             Matcher crate = REGEX_CRATE.matcher(getSibling(3).getString());
-            crate.find();
-            String strCrate = "§d" + crate.group(1);
-            Text festivalGuide2 = newTranslate(parentKey + ".fesGuide.2", strCrate).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
-            resultText.append(getCenterIndent(festivalGuide2)).append(festivalGuide2).append("\n\n");
+            if(crate.find()) {
+                String strCrate = crate.group(1);
+                Text festivalGuide2 = newTranslate(parentKey + ".fesGuide.2", strCrate).setStyle(Style.EMPTY.withColor(colorFormat));
+                resultText.append(getCenterIndent(festivalGuide2)).append(festivalGuide2).append("\n\n");
+            }
+            else debugClass.writeTextAsJSON(inputText);
 
             Matcher time = REGEX_TIME.matcher(getSibling(5).getString());
-            time.find();
-            String strTime = time.group(1);
-            Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", strTime).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
-            resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");
-
+            if(time.find()) {
+                String strTime = time.group(1);
+                Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", strTime).setStyle(Style.EMPTY.withColor(colorFormat));
+                resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");
+            }
             return;
         }
 

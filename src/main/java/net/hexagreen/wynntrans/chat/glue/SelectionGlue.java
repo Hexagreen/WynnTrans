@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.chat.glue;
 
+import net.hexagreen.wynntrans.chat.NarrationSelection;
 import net.hexagreen.wynntrans.chat.NpcDialogSelection;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
@@ -22,6 +23,9 @@ public class SelectionGlue extends TextGlue {
             }
             if(FunctionalRegex.SELECTION_END.match(text)) {
                 safeNow();
+                if(gluedText.getSiblings().get(2).getSiblings().size() == 0) {
+                    changeWct(NarrationSelection.class);
+                }
                 pop();
                 return true;
             }

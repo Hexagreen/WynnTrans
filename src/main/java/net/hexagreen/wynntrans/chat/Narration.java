@@ -7,7 +7,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class Narration extends WynnChatText {
-    private final String pKeyNarration;
+    protected final String pKeyNarration;
 
     public Narration(Text text, Pattern regex) {
         super(text, regex);

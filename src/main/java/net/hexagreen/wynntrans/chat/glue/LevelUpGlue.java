@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class LevelUpGlue extends TextGlue {
     private static final Pattern PROFESSION = Pattern.compile("^ +You are now level \\d+ in");
-    private static final Pattern PROF_TAIL = Pattern.compile("^Only (\\d+) more levels until you can");
+    private static final Pattern PROF_TAIL = Pattern.compile("^Only (\\d+) more levels? until you can");
     private static final Pattern REWARD = Pattern.compile("^\\+");
     private int count = 0;
     private boolean isProfession = false;

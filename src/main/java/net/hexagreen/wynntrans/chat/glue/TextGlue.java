@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.chat.glue;
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public abstract class TextGlue {
                 wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
                 LOGGER.error("TextGlue Error:", e);
+                debugClass.writeTextAsJSON(gluedText);
             }
         }
         reset();

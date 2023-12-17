@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class BombGlue extends TextGlue {
     private static final Pattern bombThanks = ChatType.BOMB_THANK.getRegex();
 
-    protected BombGlue() {
+    public BombGlue() {
         super(null, BombStart.class);
     }
 
@@ -17,13 +17,13 @@ public class BombGlue extends TextGlue {
     public boolean push(Text text) {
         if(gluedText.equals(Text.empty())) {
             gluedText = text.copy();
+            safeNow();
             return true;
         }
         if(!bombThanks.matcher(text.getString()).find()) {
             return true;
         }
         else {
-            safeNow();
             pop();
             return false;
         }

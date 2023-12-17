@@ -14,7 +14,7 @@ public class ProfessionLevelAnnounce extends WynnChatText {
     public ProfessionLevelAnnounce(Text text, Pattern regex) {
         super(text, regex);
         this.level = "§f" + matcher.group(2);
-        String profIcon = matcher.group(3);
+        String profIcon = matcher.group(3) + " ";
         String keyProfName = "wytr.profession." + matcher.group(4).toLowerCase();
         this.playerName = getPlayerNameFromSibling(4);
         this.profession = Text.literal(profIcon).setStyle(Style.EMPTY.withColor(Formatting.WHITE))
