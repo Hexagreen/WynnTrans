@@ -47,6 +47,7 @@ public abstract class TextGlue {
 
     protected void pop() {
         if(safetyLock){
+            reset();
             try {
                 wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
@@ -54,7 +55,6 @@ public abstract class TextGlue {
                 debugClass.writeTextAsJSON(gluedText);
             }
         }
-        reset();
     }
 
     protected void resetTimer() {
@@ -70,7 +70,6 @@ public abstract class TextGlue {
     }
 
     private void reset() {
-        this.gluedText = Text.empty();
         WynnTrans.incomeTextHandler.removeGlue();
     }
 }

@@ -1,20 +1,20 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GuildInfo extends WynnChatText {
-    private static final Pattern WEEKLY_OBJ = Pattern.compile("^(.+) has finished their weekly objective");
-    private String playerName;
+    private final GuildInformation infoType;
 
     public GuildInfo(Text text, Pattern regex) {
         super(text, regex);
-        Matcher weekObj = WEEKLY_OBJ.matcher(getSibling(0).getSiblings().get(0).getString());
-        if(weekObj.find()) playerName = weekObj.group(1);
+        this.infoType = GuildInformation.findAndGet(text);
     }
 
     @Override
@@ -26,8 +26,49 @@ public class GuildInfo extends WynnChatText {
     protected void build() {
         resultText = newTranslate(parentKey);
 
-        if(playerName != null) {
-            resultText.append(newTranslate(parentKey + ".weekObj", playerName).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+        switch(infoType) {
+            case WEEK_OBJ_COMPLETE -> {
+                resultText.append(newTranslate(parentKey + ".weekObj.complete", infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+            }
+            case WEEK_OBJ_EXPIRE -> {
+                Text time = Text.literal(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
+                resultText.append(newTranslate(parentKey + ".weekObj.expire", time).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+            }
+            case WEEK_OBJ_NEW -> {
+                resultText.append(newTranslate(parentKey + "weekObj.new").setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+            }
+            default ->  {
+                debugClass.writeTextAsJSON(inputText);
+            }
+        }
+    }
+
+    private enum GuildInformation {
+        WEEK_OBJ_COMPLETE(Pattern.compile("^ (.+) has finished their weekly objective")),
+        WEEK_OBJ_EXPIRE(Pattern.compile("^ Only (.+) left to complete the Weekly Guild")),
+        WEEK_OBJ_NEW(Pattern.compile("^ New Weekly Guild Objective are being assigned"));
+
+        private final Pattern infoRegex;
+        private Matcher matcher;
+
+        GuildInformation(Pattern infoRegex) {
+            this.infoRegex = infoRegex;
+            this.matcher = null;
+        }
+
+        private boolean find(Text text) {
+            Matcher m = this.infoRegex.matcher(text.getSiblings().get(0).getString());
+            if(m.find()) {
+                this.matcher = m;
+                return true;
+            }
+            return false;
+        }
+
+        private static GuildInformation findAndGet(Text text) {
+            return Arrays.stream(GuildInformation.values())
+                    .filter(guildInformation -> guildInformation.find(text))
+                    .findFirst().orElse(null);
         }
     }
 }

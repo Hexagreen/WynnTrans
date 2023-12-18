@@ -45,6 +45,10 @@ public class AreaDiscoveryGlue extends TextGlue {
                 gluedText.append(text);
                 return true;
             }
+            else {
+                pop();
+                return false;
+            }
         }
         return false;
     }
