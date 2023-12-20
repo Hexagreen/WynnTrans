@@ -21,7 +21,7 @@ public class NpcDialog extends WynnChatText{
         super(removeCustomNicknameFromDialog(text), regex);
         this.pNameString = MinecraftClient.getInstance().player.getName().getString();
         this.playername = removedCustomNickname == null ? this.pNameString : removedCustomNickname;
-        this.valName = getContentLiteral(0).replace(": ", "");
+        this.valName = getContentString(0).replace(": ", "");
         String npcName = valName.replace(" ", "").replace(".", "").replace("'", "");
         this.keyName = parentKey + "name." + npcName;
         String dialogIdx = matcher.group(1) + ".";
@@ -54,7 +54,7 @@ public class NpcDialog extends WynnChatText{
         }
 
         if(inputText.getSiblings().size() == 2) {
-            String valDialog = getContentLiteral(1).replace(pNameString, "%1$s");
+            String valDialog = getContentString(1).replace(pNameString, "%1$s");
 
             Text t1 = getSibling(1);
             if(WTS.checkTranslationExist(pKeyDialog, valDialog)) {
@@ -72,7 +72,7 @@ public class NpcDialog extends WynnChatText{
         else {
             for(int index = 1; inputText.getSiblings().size() > index; index++) {
                 String keyDialog = pKeyDialog + "_" + index;
-                String valDialog = getContentLiteral(index).replace(pNameString, "%1$s");
+                String valDialog = getContentString(index).replace(pNameString, "%1$s");
 
                 Text ti = getSibling(index);
                 if(WTS.checkTranslationExist(keyDialog, valDialog)) {

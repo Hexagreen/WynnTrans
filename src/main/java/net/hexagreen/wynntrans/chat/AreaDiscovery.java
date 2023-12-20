@@ -15,7 +15,8 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
     public AreaDiscovery(Text text, Pattern regex) {
         super(text, regex);
         String areaName = getSibling(1).getSiblings().get(2).getString();
-        this.keyAreaName = rootKey + "area." + areaName.replace(" ", "").replace(".","");
+        this.keyAreaName = rootKey + "area." + areaName.replace(" ", "").replace(".","")
+                .replace("'", "").replace("-", "");
         this.valAreaName = areaName;
         this.shortForm = text.getSiblings().size() == 2;
     }

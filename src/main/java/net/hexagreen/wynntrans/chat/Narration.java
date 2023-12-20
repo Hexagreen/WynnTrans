@@ -22,8 +22,8 @@ public class Narration extends WynnChatText {
 
     @Override
     protected void build() {
-        if(inputText.getSiblings().size() == 0) {
-            if(WTS.checkTranslationExist(pKeyNarration, getContentLiteral())) {
+        if(inputText.getSiblings().isEmpty()) {
+            if(WTS.checkTranslationExist(pKeyNarration, getContentString())) {
                 resultText = newTranslate(pKeyNarration).setStyle(getStyle());
             }
             else {
@@ -32,7 +32,7 @@ public class Narration extends WynnChatText {
         }
         else {
             String keyContent = pKeyNarration + "_1";
-            String valContent = getContentLiteral();
+            String valContent = getContentString();
             if(WTS.checkTranslationExist(keyContent, valContent)) {
                 resultText = newTranslate(keyContent).setStyle(getStyle());
             }
@@ -41,7 +41,7 @@ public class Narration extends WynnChatText {
             }
             for(int index = 0; inputText.getSiblings().size() > index; index++) {
                 String keySibling = pKeyNarration + "_" + (index + 2);
-                String valSibling = getContentLiteral(index);
+                String valSibling = getContentString(index);
                 if(WTS.checkTranslationExist(keySibling, valSibling)) {
                     resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
                 }

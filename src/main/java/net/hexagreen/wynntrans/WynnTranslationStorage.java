@@ -22,7 +22,7 @@ public class WynnTranslationStorage {
 
     public boolean checkTranslationExist(String key, String value) {
         String v = this.wynnTransDict.get(key);
-        if(v == null && registerControl) {
+        if(v == null) {
             this.recordUnregisteredText(key, value);
             return false;
         }
@@ -39,6 +39,7 @@ public class WynnTranslationStorage {
     }
 
     private void recordUnregisteredText(String key, String value) {
+        if(!registerControl) return;
         if(this.unregisteredTextSet.contains(key)) {
             return;
         }

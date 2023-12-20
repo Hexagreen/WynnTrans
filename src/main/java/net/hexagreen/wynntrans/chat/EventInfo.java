@@ -44,7 +44,7 @@ public class EventInfo extends WynnChatText {
 
         for (int index = 1; inputText.getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + (index - 1);
-            String valSibling = getContentLiteral(index);
+            String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
             if(valSibling.contains("wynncraft.com")) {
                 resultText.append(getSibling(index));

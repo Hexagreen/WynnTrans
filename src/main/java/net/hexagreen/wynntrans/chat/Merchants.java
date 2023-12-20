@@ -32,13 +32,13 @@ public class Merchants extends WynnChatText {
             resultText.append(getSibling(0));
         }
 
-        if(getContentLiteral(1).contains("Thank you for your business")) {
+        if(getContentString(1).contains("Thank you for your business")) {
             resultText.append(newTranslate(parentKey + ".confirm").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("cannot afford that")) {
+        else if(getContentString(1).contains("cannot afford that")) {
             resultText.append(newTranslate(parentKey + ".noEmerald").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("don't have enough space")) {
+        else if(getContentString(1).contains("don't have enough space")) {
             resultText.append(newTranslate(parentKey + ".noSpace").setStyle(getStyle(1)));
         }
     }

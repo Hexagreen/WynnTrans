@@ -33,7 +33,7 @@ public class BombStart extends WynnChatText {
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                     .append(newTranslate(parentKey + ".durational", bomb.bombDescription, bomb.bombTime)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
-            case ITEM ->
+            case ITEM, INGREDIENT->
                     resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                     .append(newTranslate(parentKey + ".instant", bomb.bombDescription, bomb.bombTime)
@@ -73,7 +73,7 @@ public class BombStart extends WynnChatText {
         INGREDIENT(Text.translatable(bombRootKey + "name.ingredient").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
                 Text.translatable(bombRootKey + "desc.ingredient").setStyle(Style.EMPTY.withColor(Formatting.WHITE)),
                 Text.translatable(bombRootKey + "time.ingredient").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, ""))
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claimingredientbomb"))
                         .withUnderline(true))),
         PARTY(Text.translatable(bombRootKey + "name.party").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
                 Text.translatable(bombRootKey + "desc.party").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),

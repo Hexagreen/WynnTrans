@@ -24,7 +24,7 @@ public class SimpleText extends WynnChatText {
 
     @Override
     protected void build() {
-        if(valText.equals("")) {
+        if(valText.isEmpty()) {
             resultText = inputText;
             return;
         }
@@ -47,7 +47,7 @@ public class SimpleText extends WynnChatText {
             }
         }
         else {
-            if(WTS.checkTranslationExist(keyText, getContentLiteral())) {
+            if(WTS.checkTranslationExist(keyText, getContentString())) {
                 resultText = newTranslate(keyText);
             }
             else {

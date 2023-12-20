@@ -10,7 +10,7 @@ public class Blacksmith extends WynnChatText {
 
     public Blacksmith(Text text, Pattern regex) {
         super(text, regex);
-        this.soldMatcher = Pattern.compile("^You sold me: (\\w+)$").matcher(getContentLiteral(1));
+        this.soldMatcher = Pattern.compile("^You sold me: (\\w+)$").matcher(getContentString(1));
 
     }
 
@@ -26,19 +26,19 @@ public class Blacksmith extends WynnChatText {
         resultText.append(newTranslate(parentKey).setStyle(getStyle(0)))
                 .append(Text.literal(": ").setStyle(getStyle(0)));
 
-        if(getContentLiteral(1).contains("I can't buy")) {
+        if(getContentString(1).contains("I can't buy")) {
             resultText.append(newTranslate(parentKey + ".no").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("I can only")) {
+        else if(getContentString(1).contains("I can only")) {
             resultText.append(newTranslate(parentKey + ".over").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("You need more scrap")) {
+        else if(getContentString(1).contains("You need more scrap")) {
             resultText.append(newTranslate(parentKey + ".moreScrap").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("I can't scrap that")) {
+        else if(getContentString(1).contains("I can't scrap that")) {
             resultText.append(newTranslate(parentKey + ".cantScrap").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("You sold me")) {
+        else if(getContentString(1).contains("You sold me")) {
             String soldItem = soldMatcher.find() ? soldMatcher.group(1) : "";
 
             resultText.append(newTranslate(parentKey + ".sold.head", soldItem).setStyle(getStyle(1)));
@@ -55,7 +55,7 @@ public class Blacksmith extends WynnChatText {
                     .append(getSibling(lastItemIndex + 2))
                     .append(newTranslate(parentKey + ".sold.tail").setStyle(getStyle(1)));
         }
-        else if(getContentLiteral(1).contains("You scrapped")) {
+        else if(getContentString(1).contains("You scrapped")) {
             resultText.append(newTranslate(parentKey + ".scrap.head").setStyle(getStyle(1)));
 
             int lastItemIndex = inputText.getSiblings().size() - 4;

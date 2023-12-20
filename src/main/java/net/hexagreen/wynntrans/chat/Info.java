@@ -25,7 +25,7 @@ public class Info extends WynnChatText {
 
         for (int index = 1; inputText.getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + index;
-            String valSibling = getContentLiteral(index);
+            String valSibling = getContentString(index);
 
             if(valSibling.isEmpty()) {
                 resultText.append("");

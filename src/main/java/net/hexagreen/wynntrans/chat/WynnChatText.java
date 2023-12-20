@@ -68,7 +68,7 @@ public abstract class WynnChatText {
      * @return Custom nickname or Original name as {@code Text}
      */
     protected Text getPlayerNameFromSibling(int index) {
-        String name = getContentLiteral(index);
+        String name = getContentString(index);
         if("".equals(name)) {
             return getSibling(index).getSiblings().get(0);
         }
@@ -81,7 +81,7 @@ public abstract class WynnChatText {
      * Get {@code String} of {@code inputText}'s content.
      * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
      */
-    protected String getContentLiteral() {
+    protected String getContentString() {
         return inputText.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) inputText.getContent()).string();
     }
 
@@ -89,8 +89,8 @@ public abstract class WynnChatText {
      * Get {@code String} from {@code inputText}'s sibling.
      * @return Returns empty {@code String} if sibling's content is empty, otherwise some {@code String}
      * */
-    protected String getContentLiteral(int siblingIndex) {
-        return getContentLiteral(inputText.getSiblings().get(siblingIndex));
+    protected String getContentString(int siblingIndex) {
+        return getContentString(inputText.getSiblings().get(siblingIndex));
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class WynnChatText {
      * @param text Target text
      * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
      */
-    private String getContentLiteral(Text text) {
+    private String getContentString(Text text) {
         return text.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) text.getContent()).string();
     }
 

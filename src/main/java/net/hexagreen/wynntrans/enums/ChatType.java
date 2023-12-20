@@ -13,7 +13,7 @@ public enum ChatType {
     DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:"), NpcDialog.class),
     DIALOG_ITEM(Pattern.compile("^\\[([+-])([0-9]+) (.+)]$"), ItemGiveAndTake.class),
     SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$"), SkillCooldown.class),
-    NEW_QUEST(Pattern.compile("^New Quest Started: "), NewQuest.class),
+    NEW_QUEST(Pattern.compile("^New Quest(?:line)? Started: "), NewQuest.class),
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), EventInfo.class),
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$"), CombatLevelAnnounce.class),
