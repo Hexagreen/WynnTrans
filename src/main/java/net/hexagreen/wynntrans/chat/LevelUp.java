@@ -72,7 +72,7 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                     valQuestName = valQuestName.replace("Mini-Quest - ", "");
                 }
 
-                String keyQuestName = "wytr.quest." + valQuestName.replace(" ", "");
+                String keyQuestName = "wytr.quest." + replaceStringQuestName(valQuestName);
 
                 Text questText;
                 if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {

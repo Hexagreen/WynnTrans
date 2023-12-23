@@ -13,9 +13,8 @@ public class NewQuest extends WynnChatText implements IFocusText {
     public NewQuest(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
         this.questlineMode = getContentString().contains("Questline");
-        this.valQuestName = getContentString(0);
-        this.keyQuestName = parentKey + valQuestName
-                .replace(" ", "").replace("'", "").replace("֎", "");
+        this.valQuestName = getContentString(0).replace("֎", "");
+        this.keyQuestName = parentKey + replaceStringQuestName(valQuestName);
         this.fullText = text;
     }
 

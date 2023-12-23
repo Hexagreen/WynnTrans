@@ -20,12 +20,12 @@ public class SecretDiscovery extends WynnChatText implements ICenterAligned {
     public SecretDiscovery(Text text, Pattern regex) {
         super(text, regex);
         String discoveryName = getSibling(1).getSiblings().get(2).getString();
-        this.keyDiscoveryName = rootKey + "discovery." + discoveryName.replace(" ", "").replace(".","").replace("'", "");
+        this.keyDiscoveryName = rootKey + "discovery." + replaceStringAreaName(discoveryName);
         this.valDiscoveryName = discoveryName;
         Matcher m = DISCOVERY_COUNT.matcher(getSibling(2).getString());
-        m.find();
+        boolean ignore = m.find();
         String areaName = m.group(1);
-        this.keyDiscoveryArea = rootKey + "discovery.area." + areaName.replace(" ", "").replace(".","").replace("'", "");
+        this.keyDiscoveryArea = rootKey + "discovery.area." + replaceStringAreaName(areaName);
         this.valDiscoveryArea = m.group(1);
         this.revealed = m.group(2);
         this.total = m.group(3);

@@ -50,6 +50,7 @@ public class IncomeTextHandler {
 
     @SuppressWarnings("DataFlowIssue")
     public void onStartWorldTick() {
+        this.backgroundText = Lists.newArrayList();
         if(this.pendingCounter == 4) {
             if(++this.pendingTime >= PENDINGTICKTHRES) {
                 this.pendingCounter = 0;
@@ -74,7 +75,7 @@ public class IncomeTextHandler {
     public boolean sortIncomeText(Text text) {
         try{
             if(TextContent.EMPTY.equals(text.getContent())) {
-                if(!text.getString().contains("\n")) {
+                if(!text.contains(Text.of("\n"))) {
                     return this.analyseSinglelineText(text);
                 } else {
                     return this.analyseMultilineText(text);

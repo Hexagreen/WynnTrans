@@ -12,8 +12,7 @@ public class AreaEnter extends WynnChatText {
     public AreaEnter(Text text, Pattern regex) {
         super(text, regex);
         String areaName = matcher.group(1);
-        String keyAreaName = rootKey + "area." + areaName.replace(" ", "").replace(".","")
-                .replace("'", "").replace("-", "");
+        String keyAreaName = rootKey + "area." + replaceStringAreaName(areaName);
         if(WTS.checkTranslationExist(keyAreaName, areaName)) {
             this.areaText = newTranslate(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
         }

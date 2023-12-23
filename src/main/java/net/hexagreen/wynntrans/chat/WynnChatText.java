@@ -181,4 +181,23 @@ public abstract class WynnChatText {
 
         return newText;
     }
+
+    protected String replaceStringAreaName(String string) {
+        return string.replace(" ", "").replace(".","")
+                .replace("'", "").replace("-", "")
+                .replace("À", "");
+    }
+
+    protected String replaceStringCaveName(String string) {
+        return string.replace(" ", "").replace("'", "");
+    }
+
+    protected String replaceStringQuestName(String string) {
+        return string.replace(" ", "").replace("'", "");
+    }
+
+    protected String replaceStringNPCName(String string) {
+        return string.replace(" ", "").replace(".", "")
+                .replace("'", "");
+    }
 }
