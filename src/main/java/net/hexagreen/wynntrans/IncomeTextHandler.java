@@ -19,7 +19,7 @@ import java.util.List;
 
 public class IncomeTextHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    private static final byte PENDINGTICKTHRES = 2;
+    private static final byte PENDINGTICKTHRES = 1;
     protected TextGlue textGlue;
     private List<Text> backgroundText;
     private List<Text> pendingText;
@@ -48,7 +48,6 @@ public class IncomeTextHandler {
         this.textGlue = null;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public void onStartWorldTick() {
         this.backgroundText = Lists.newArrayList();
         if(this.pendingCounter == 4) {
@@ -56,16 +55,17 @@ public class IncomeTextHandler {
                 this.pendingCounter = 0;
                 this.pendingTime = 0;
                 MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
-                WynnTrans.wynnTranslationStorage.toggleRegisterControl();
+                SimpleText.setTranslationControl(false);
                 for(Text chunk : this.pendingText) {
                     for(Text line : chunk.getSiblings()) {
                         if("\n".equals(line.getString())) continue;
-                        if(!sortIncomeText(line)){
+                        if(!sortIncomeText(line)) {
+                            //noinspection DataFlowIssue
                             MinecraftClient.getInstance().player.sendMessage(line);
                         }
                     }
                 }
-                WynnTrans.wynnTranslationStorage.toggleRegisterControl();
+                SimpleText.setTranslationControl(true);
                 this.pendingText = Lists.newArrayList();
             }
         }
@@ -73,6 +73,7 @@ public class IncomeTextHandler {
     }
 
     public boolean sortIncomeText(Text text) {
+        //debugClass.writeTextAsJSON(text, "parse.txt");
         try{
             if(TextContent.EMPTY.equals(text.getContent())) {
                 if(!text.contains(Text.of("\n"))) {
@@ -93,6 +94,7 @@ public class IncomeTextHandler {
     }
 
     private boolean analyseLiteralText(Text text) {
+        this.pendingCounter = 0;
         attachGlue(text);
         if(this.textGlue != null) {
             if(!this.textGlue.push(text)) {
@@ -222,7 +224,7 @@ public class IncomeTextHandler {
             return false;
         }
         else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
-            new GuideAlert(text, null).print();
+            new GuideAlert(text.getSiblings().get(2), null).print();
         }
         else {
             new NarrationConfirmless(text, null).print();

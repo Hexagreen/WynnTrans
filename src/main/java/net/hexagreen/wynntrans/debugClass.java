@@ -45,6 +45,11 @@ public class debugClass {
         debugClass.writeString2File(str, "json.txt");
     }
 
+    public static void writeTextAsJSON(Text text, String filename) {
+        String str = Text.Serializer.toJson(text);
+        debugClass.writeString2File(str, filename);
+    }
+
     public static Text assembleTextFromList(List<Text> texts) {
         MutableText text = Text.empty();
         for(Text t : texts) {
