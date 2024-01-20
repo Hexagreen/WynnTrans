@@ -18,7 +18,7 @@ public class CaveCompleted extends WynnChatText implements ICenterAligned {
     public CaveCompleted(Text text, Pattern regex) {
         super(text, regex);
         this.valCaveName = getSibling(2).getSiblings().get(1).getString();
-        this.keyCaveName = parentKey + replaceStringCaveName(valCaveName);
+        this.keyCaveName = parentKey + normalizeStringCaveName(valCaveName);
     }
 
     @Override
@@ -30,18 +30,18 @@ public class CaveCompleted extends WynnChatText implements ICenterAligned {
     protected void build() {
         resultText = Text.empty()
                 .append(getCenterIndent(func + "caveCompleted"))
-                .append(newTranslate(func + "caveCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n")
-                .append(getCenterIndent(keyCaveName));
+                .append(newTranslate(func + "caveCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n");
 
+        Text t0;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
-            resultText.append(newTranslate(keyCaveName).setStyle(getSibling(2).getSiblings().get(1).getStyle()));
+            t0 = newTranslate(keyCaveName).setStyle(getSibling(2).getSiblings().get(1).getStyle());
         }
         else {
-            Text origin = getSibling(2).getSiblings().get(1);
-            resultText.append(getCenterIndent(origin)).append(origin);
+            t0 = getSibling(2).getSiblings().get(1);
         }
 
-        resultText.append("\n\n")
+        resultText.append(getCenterIndent(t0)).append(t0)
+                .append("\n\n")
                 .append(newTranslate(func + "reward").setStyle(getSibling(4).getSiblings().get(0).getStyle())).append("\n");
 
 

@@ -8,13 +8,15 @@ public class NewQuest extends WynnChatText implements IFocusText {
     private final String keyQuestName;
     private final String valQuestName;
     private final Text fullText;
-    private final boolean questlineMode;
+    private final boolean questLineMode;
+    private final boolean miniQuestMode;
 
     public NewQuest(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
-        this.questlineMode = getContentString().contains("Questline");
-        this.valQuestName = getContentString(0).replace("֎", "");
-        this.keyQuestName = parentKey + replaceStringQuestName(valQuestName);
+        this.questLineMode = getContentString().contains("Questline");
+        this.miniQuestMode = getContentString().contains("Mini-Quest");
+        this.valQuestName = getContentString(0);
+        this.keyQuestName = parentKey + normalizeStringQuestName(valQuestName);
         this.fullText = text;
     }
 
@@ -25,8 +27,12 @@ public class NewQuest extends WynnChatText implements IFocusText {
 
     @Override
     protected void build() {
-        if(questlineMode) {
+        if(questLineMode) {
             resultText = newTranslate(rootKey + dirFunctional + "newQuestline").setStyle(getStyle())
+                    .append(": ");
+        }
+        else if(miniQuestMode) {
+            resultText = newTranslate(rootKey + dirFunctional + "newMiniQuest").setStyle(getStyle())
                     .append(": ");
         }
         else{

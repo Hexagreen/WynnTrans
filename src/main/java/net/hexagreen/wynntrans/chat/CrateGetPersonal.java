@@ -31,7 +31,7 @@ public class CrateGetPersonal extends WynnChatText {
                 .append(getSibling(3));
 
         resultText.append("\n")
-                .append(getSibling(4));
+                .append(RewardDescription.findAndGet(getSibling(4)));
 
         resultText.append("\n");
     }
@@ -73,6 +73,44 @@ public class CrateGetPersonal extends WynnChatText {
                 return Text.translatable(rootKey + dirFunctional + "crateReward.personal", text).setStyle(grades.gradeStyle);
             }
             else return Text.translatable(rootKey + dirFunctional + "crateReward.personal", BLACK_MARKET.gradeText).setStyle(grades.gradeStyle);
+        }
+    }
+
+    private enum RewardDescription {
+        PLAYER_EFFECT_1(Pattern.compile("^Give your character a "),
+                Text.translatable("wytr.crateReward.playerEffect").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        PLAYER_EFFECT_2(Pattern.compile("effect around your character"),
+                Text.translatable("wytr.crateReward.playerEffect").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        HELMET(Pattern.compile("^Disguise your helmet"),
+                Text.translatable("wytr.crateReward.helmet").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        WEAPON(Pattern.compile("^Disguise your (wand|spear|bow|relik|dagger)"),
+                Text.translatable("wytr.crateReward.weapon").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        DISGUISE(Pattern.compile("^Disguise yourself as"),
+                Text.translatable("wytr.crateReward.disguise").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        ATTACK_EFFECT(Pattern.compile("effect whenever you hit"),
+                Text.translatable("wytr.crateReward.attackEffect").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        PET_TOKEN(Pattern.compile("^This token can be redeemed for"),
+                Text.translatable("wytr.crateReward.petToken").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
+        NULL(null, null);
+
+        private final Pattern descRegex;
+        private final Text translatedText;
+
+        RewardDescription(Pattern descRegex, Text translatedText) {
+            this.descRegex = descRegex;
+            this.translatedText = translatedText;
+        }
+
+        private static RewardDescription find(Text text) {
+            return Arrays.stream(RewardDescription.values())
+                    .filter(rewardDescription -> rewardDescription.descRegex.matcher(text.getString()).find())
+                    .findFirst().orElse(NULL);
+        }
+
+        private static Text findAndGet(Text text) {
+            RewardDescription rewardDescription = find(text);
+            if(rewardDescription != NULL) return rewardDescription.translatedText;
+            else return text;
         }
     }
 }

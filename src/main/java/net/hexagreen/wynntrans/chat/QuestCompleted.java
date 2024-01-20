@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.hexagreen.wynntrans.enums.Profession;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -7,16 +8,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class QuestCompleted extends WynnChatText implements ICenterAligned {
-    private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) Experience Points$");
+    private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) (?:Combat )?Experience Points$");
     private static final Pattern REGEX_EME = Pattern.compile("^\\+(\\d+) Emeralds$");
+    private static final Pattern REGEX_PROF = Pattern.compile("^\\+(\\d+) (.+) Experience Points$");
     private static final String func = rootKey + dirFunctional;
     private final String keyQuestName;
     private final String valQuestName;
+    private String keyTitle = func + "questCompleted";
 
     public QuestCompleted(Text text, Pattern regex) {
         super(text, regex);
         this.valQuestName = getSibling(2).getSiblings().get(1).getString();
-        this.keyQuestName = parentKey + replaceStringQuestName(valQuestName);
+        this.keyQuestName = parentKey + normalizeStringQuestName(valQuestName);
+        if(getSibling(1).getString().contains("Mini-Quest")) {
+            this.keyTitle = func + "miniQuestCompleted";
+        }
     }
 
     @Override
@@ -27,8 +33,8 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
     @Override
     protected void build() {
         resultText = Text.empty().append("\n")
-                .append(getCenterIndent(func + "questCompleted"))
-                .append(newTranslate(func + "questCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n");
+                .append(getCenterIndent(keyTitle))
+                .append(newTranslate(keyTitle).setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n");
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
             resultText.append(getCenterIndent(keyQuestName))
@@ -50,6 +56,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
                         .append("\n");
                 continue;
             }
+
             Matcher m2 = REGEX_EME.matcher(getSibling(i).getSiblings().get(1).getString());
             if(m2.find()) {
                 resultText.append(getSibling(i).getSiblings().get(0))
@@ -57,6 +64,16 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
                         .append("\n");
                 continue;
             }
+
+            Matcher m3 = REGEX_PROF.matcher(getSibling(i).getSiblings().get(1).getString());
+            if(m3.find()) {
+                Text profText = Profession.getProfession(m3.group(2)).getText();
+                resultText.append(getSibling(i).getSiblings().get(0))
+                        .append(newTranslate(func + "reward.pExperience", m3.group(1), profText)).setStyle(getSibling(i).getSiblings().get(1).getStyle())
+                        .append("\n");
+                continue;
+            }
+
             String valExclusiveReward = getSibling(i).getSiblings().get(1).getString();
             String hash = DigestUtils.sha1Hex(valExclusiveReward).substring(0, 4);
             String keyExclusiveReward = keyQuestName + ".reward_" + hash;

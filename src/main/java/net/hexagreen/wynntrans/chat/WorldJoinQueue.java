@@ -1,6 +1,8 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -19,11 +21,11 @@ public class WorldJoinQueue extends WynnChatText implements ICenterAligned {
 
     @Override
     protected void build() {
-        resultText = Text.empty();
-        Text t0 = newTranslate(parentKey, worldChannel);
+        resultText = Text.empty().append("\n");
+        Text t0 = newTranslate(parentKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true));
         Text t1 = newTranslate(parentKey + ".guide");
 
-        resultText.append(getCenterIndent(t0)).append("\n")
-                .append(getCenterIndent(t1)).append("\n");
+        resultText.append(getCenterIndent(t0)).append(t0).append("\n")
+                .append(getCenterIndent(t1)).append(t1).append("\n");
     }
 }

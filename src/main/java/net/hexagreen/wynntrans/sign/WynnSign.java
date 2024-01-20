@@ -34,12 +34,18 @@ public class WynnSign {
     private void translateLine() {
         for(int i = 0; 4 > i; i++) {
             if(message[i].equals(Text.empty())) continue;
-            if(systemSignFilter(message[i])) break;
 
             String hash = DigestUtils.sha1Hex(message[i].getString()).substring(0, 24);
             String keySign = rootKey + hash;
 
-            MutableText result = Text.empty();
+            MutableText result;
+            if(WTS.checkTranslationDoNotRegister(keySign)) {
+                result = Text.translatable(keySign).setStyle(message[i].getStyle());
+            }
+            else {
+                result = message[i].copy();
+            }
+
             int sIndex = 1;
             for(Text sibling : message[i].getSiblings()) {
                 if(WTS.checkTranslationDoNotRegister(keySign + "_" + sIndex)) {
@@ -58,12 +64,15 @@ public class WynnSign {
         for(int i = 0; 4 > i; i++) {
             if(message[i].equals(Text.empty())) continue;
             try {
-                if (message[i].getSiblings().get(0).getContent() instanceof TranslatableTextContent) return;
+                if (message[i].getContent() instanceof TranslatableTextContent) return;
             }
             catch(IndexOutOfBoundsException ignore) {}
 
             String hash = DigestUtils.sha1Hex(message[i].getString()).substring(0, 24);
             String keySign = rootKey + hash;
+            String valSign = message[i].getContent().toString();
+
+            WTS.checkTranslationExist(keySign, valSign);
 
             int sIndex = 1;
             for(Text sibling : message[i].getSiblings()) {
@@ -76,14 +85,4 @@ public class WynnSign {
         MinecraftClient.getInstance().player.sendMessage(Text.literal("Translation key registered."));
     }
 
-    private boolean systemSignFilter(Text text) {
-        switch(text.getString().toLowerCase().replaceAll(" ?\\d", "")) {
-            case "[merchant]", "[buyer]", "[identifier]", "spawn", "eventswarm", "[powder]",
-                    "next wave", "checker", "mob", "pos", "stop checker", "sounds", "sound",
-                    "particles", "wave end", "remove wall", "CMD", "RESET CMD", "COMMAND BLOCK", "OPEN CMD" -> {
-                return true;
-            }
-        }
-        return false;
-    }
 }

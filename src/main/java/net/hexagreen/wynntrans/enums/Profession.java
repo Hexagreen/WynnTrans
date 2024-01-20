@@ -4,6 +4,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
+import java.util.Arrays;
+
 public enum Profession {
     COOKING(Text.literal("§fⒶ "), "cooking"),
     MINING(Text.literal("Ⓑ "), "mining", MutableText.of(new TranslatableTextContent("wytr.profession.mining.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
@@ -37,6 +39,12 @@ public enum Profession {
     public static Profession getProfession(char icon) {
         int index = icon - 'Ⓐ';
         return values()[index];
+    }
+
+    public static Profession getProfession(String profName) {
+        return Arrays.stream(values())
+                .filter(profession -> profession.key.equals(profName.toLowerCase()))
+                .findFirst().orElse(null);
     }
 
     public MutableText getText() {

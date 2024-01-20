@@ -40,23 +40,24 @@ public abstract class WynnChatText {
     /**
      * Method for creating translatable text
      */
-    protected abstract void build();
+    protected abstract void build() throws IndexOutOfBoundsException;
 
     @SuppressWarnings("DataFlowIssue")
     public boolean print() {
-        if(regexMatched) {
-            build();
-            MinecraftClient.getInstance().player.sendMessage(resultText);
-            return true;
+        if(!regexMatched) {
+            return false;
         }
-        return false;
+        MinecraftClient.getInstance().player.sendMessage(text());
+        return true;
     }
 
     public MutableText text() {
-        if(regexMatched) {
-            build();
-            return resultText;
-        }
+        try {
+            if(regexMatched) {
+                build();
+                return resultText;
+            }
+        } catch (IndexOutOfBoundsException ignore) {}
         return inputText;
     }
 
@@ -182,21 +183,23 @@ public abstract class WynnChatText {
         return newText;
     }
 
-    protected String replaceStringAreaName(String string) {
+    protected String normalizeStringAreaName(String string) {
         return string.replace(" ", "").replace(".","")
                 .replace("'", "").replace("-", "")
-                .replace("À", "");
+                .replace("À", "").replace("֎", "");
     }
 
-    protected String replaceStringCaveName(String string) {
-        return string.replace(" ", "").replace("'", "");
+    protected String normalizeStringCaveName(String string) {
+        return string.replace(" ", "").replace("'", "")
+                .replace("À", "").replace("֎", "");
     }
 
-    protected String replaceStringQuestName(String string) {
-        return string.replace(" ", "").replace("'", "");
+    protected String normalizeStringQuestName(String string) {
+        return string.replace(" ", "").replace("'", "")
+                .replace("À", "").replace("֎", "");
     }
 
-    protected String replaceStringNPCName(String string) {
+    protected String normalizeStringNPCName(String string) {
         return string.replace(" ", "").replace(".", "")
                 .replace("'", "");
     }

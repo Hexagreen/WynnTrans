@@ -1,8 +1,10 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,13 +68,13 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                 String keyNewQuest = parentKey + ".newQuest";
                 String valQuestName = getSibling(i).getSiblings().get(1).getString()
                         .replace("[", "").replace("]", "")
-                        .replace("֎", "");
+                        .replace("À", "").replace("֎", "");
                 if(valQuestName.contains("Mini-Quest - ")) {
                     keyNewQuest = parentKey + ".newMiniQuest";
                     valQuestName = valQuestName.replace("Mini-Quest - ", "");
                 }
 
-                String keyQuestName = "wytr.quest." + replaceStringQuestName(valQuestName);
+                String keyQuestName = "wytr.quest." + normalizeStringQuestName(valQuestName);
 
                 Text questText;
                 if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
@@ -87,7 +89,35 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                         .append("\n");
                 continue;
             }
-            resultText.append(getSibling(i));
+            String hashOtherReward = DigestUtils.sha1Hex(getSibling(i).getString()).substring(0, 4);
+            MutableText otherReward = Text.literal("+ ").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            if(getSibling(i).getSiblings().size() == 2) {
+                Text origin = getSibling(i).getSiblings().get(1);
+                String keyOtherReward = "wytr.level." + m2.group(1) + "." + hashOtherReward;
+                String valOtherReward = origin.getString();
+
+                if(WTS.checkTranslationExist(keyOtherReward, valOtherReward)) {
+                    otherReward.append(newTranslate(keyOtherReward).setStyle(origin.getStyle()));
+                }
+                else {
+                    otherReward.append(origin);
+                }
+            }
+            else {
+                for(int index = 1; index < getSibling(i).getSiblings().size(); index++) {
+                    Text origin = getSibling(i).getSiblings().get(index);
+                    String keyOtherReward = "wytr.level." + m2.group(1) + "." + hashOtherReward + "_" + index;
+                    String valOtherReward = origin.getString();
+
+                    if(WTS.checkTranslationExist(keyOtherReward, valOtherReward)) {
+                        otherReward.append(newTranslate(keyOtherReward).setStyle(origin.getStyle()));
+                    }
+                    else {
+                        otherReward.append(origin);
+                    }
+                }
+            }
+            resultText.append(otherReward);
         }
     }
 }

@@ -12,7 +12,7 @@ public class AreaLeave extends WynnChatText {
     public AreaLeave(Text text, Pattern regex) {
         super(text, regex);
         String areaName = matcher.group(1);
-        String keyAreaName = rootKey + "area." + replaceStringAreaName(areaName);
+        String keyAreaName = rootKey + "area." + normalizeStringAreaName(areaName);
         if(WTS.checkTranslationExist(keyAreaName, areaName)) {
             this.areaText = newTranslate(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
         }

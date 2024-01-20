@@ -27,17 +27,22 @@ public class BombStart extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
+        if(bomb == null) return;
         switch(bomb) {
             case COMBAT_XP, PROFESSION_XP, PROFESSION_SPEED, LOOT ->
                     resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                     .append(newTranslate(parentKey + ".durational", bomb.bombDescription, bomb.bombTime)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
-            case ITEM, INGREDIENT->
+            case ITEM, INGREDIENT ->
                     resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                     .append(newTranslate(parentKey + ".instant", bomb.bombDescription, bomb.bombTime)
                             .setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            case DUNGEON ->
+                    resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
+                            .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
+                    .append(bomb.bombDescription);
             default -> {
                 debugClass.writeTextAsJSON(inputText);
                 resultText = inputText;
@@ -65,8 +70,10 @@ public class BombStart extends WynnChatText {
                 Text.translatable(bombRootKey + "desc.soulPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
                 Text.translatable(bombRootKey + "time.soulPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
         DUNGEON(Text.translatable(bombRootKey + "name.dungeon").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.dungeon").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.dungeon").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
+                Text.translatable(bombRootKey + "desc.dungeon",
+                        Text.translatable(bombRootKey + "time.dungeon").setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
+                    .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)),
+                null),
         LOOT(Text.translatable(bombRootKey + "name.loot").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
                 Text.translatable(bombRootKey + "desc.loot").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
                 Text.translatable(bombRootKey + "time.loot").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),

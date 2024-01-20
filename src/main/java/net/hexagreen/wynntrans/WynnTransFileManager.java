@@ -31,7 +31,7 @@ public class WynnTransFileManager {
     public static void addSpace(String string) {
         String str = "\r\n\t";
         if(!string.isEmpty()) {
-            str += ",\r\n\t\"_c\":\"" + string + "\"";
+            str = ",\r\n\t\"_c_" + string + "\":\"" + string + "\"";
         }
         str += "}";
         writeToFile(str);

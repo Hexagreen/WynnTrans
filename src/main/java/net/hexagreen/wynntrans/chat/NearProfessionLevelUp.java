@@ -5,12 +5,12 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class ProfessionLevelUp extends WynnChatText {
+public class NearProfessionLevelUp extends WynnChatText {
     private final String level;
     private final Text playerName;
     private final Text profession;
 
-    public ProfessionLevelUp(Text text, Pattern regex) {
+    public NearProfessionLevelUp(Text text, Pattern regex) {
         super(text, regex);
         this.level = matcher.group(2);
         this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getText().setStyle(getStyle(0));

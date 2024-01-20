@@ -29,7 +29,7 @@ public class LevelUpProfession extends WynnChatText implements ICenterAligned {
         resultText.append(Text.literal(getCenterIndent(t1)).append(t1).append("\n"));
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
-        if(!m2.find()) {
+        if(m2.find()) {
             Text prof = Profession.getProfession(m2.group(2).charAt(0)).getText().setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
             Text t2 = newTranslate(parentKey + ".nowOnIn", m2.group(1), prof).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
             resultText.append(Text.literal(getCenterIndent(t2)).append(t2).append("\n"));

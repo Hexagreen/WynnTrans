@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.enums;
 
+import net.hexagreen.wynntrans.FriendList;
 import net.hexagreen.wynntrans.chat.*;
 import net.minecraft.text.Text;
 
@@ -13,7 +14,7 @@ public enum ChatType {
     DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:"), NpcDialog.class),
     DIALOG_ITEM(Pattern.compile("^\\[([+-])([0-9]+) (.+)]$"), ItemGiveAndTake.class),
     SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$"), SkillCooldown.class),
-    NEW_QUEST(Pattern.compile("^New Quest(?:line)? Started: "), NewQuest.class),
+    NEW_QUEST(Pattern.compile("^(?:New |Mini-)Quest(?:line)? Started: "), NewQuest.class),
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), EventInfo.class),
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$"), CombatLevelAnnounce.class),
@@ -27,8 +28,8 @@ public enum ChatType {
     SHOUT(Pattern.compile("^(.+) \\[WC([0-9]+)] shouts: "), Shout.class),
     CRATE_GET(Pattern.compile("^(.+) has gotten a (.+) from their crate\\. "), CrateGet.class),
     RANKS_LOGIN(Pattern.compile("^. .+ has just logged in!$"), RankJoin.class),
-    COMBAT_LEVELUP(Pattern.compile("^(.+) is now combat level ([0-9]+)$"), CombatLevelUp.class),
-    PROFESSION_LEVELUP(Pattern.compile("^(.+) is now level ([0-9]+) in (.) (.+)$"), ProfessionLevelUp.class),
+    COMBAT_LEVELUP(Pattern.compile("^(.+) is now combat level ([0-9]+)$"), NearCombatLevelUp.class),
+    PROFESSION_LEVELUP(Pattern.compile("^(.+) is now level ([0-9]+) in (.) (.+)$"), NearProfessionLevelUp.class),
     SERVER_RESTART(Pattern.compile("^This world will restart in ([0-9]+) (minutes?|seconds?)\\.$"), ServerRestart.class),
     RESTARTING(Pattern.compile("^The world is restarting!$"), ServerRestarting.class),
     DAILY_REWARD(Pattern.compile("^\\[Daily Rewards: (?:([0-9]+) emeralds)?(?: and )?(?:([0-9]+) items)?]$"), DailyReward.class),
@@ -55,6 +56,8 @@ public enum ChatType {
     PARTY_JOINED(Pattern.compile("^(.+) has joined your party, say hello!$"), PartyJoined.class),
     KEY_COLLECTOR(Pattern.compile("^Key Collector: "), KeyCollector.class),
     SERVER_KICK(Pattern.compile("^Kicked from WC(\\d+): "), KickFromServer.class),
+    SERVER_SWAP_SAVE(Pattern.compile("^Saving your player data before switching to WC\\d+"), ServerSwapSave.class),
+    FRIEND_LIST(Pattern.compile("(.+)'s friends \\((\\d+)\\): "), FriendList.class),
     NO_TYPE(null, SimpleText.class);
 
 

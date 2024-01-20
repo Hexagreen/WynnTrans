@@ -23,7 +23,7 @@ public class SelectionGlue extends TextGlue {
             }
             if(FunctionalRegex.SELECTION_END.match(text)) {
                 safeNow();
-                if(gluedText.getSiblings().get(2).getSiblings().size() == 0) {
+                if(!ChatType.DIALOG_NORMAL.match(gluedText, 2)) {
                     changeWct(NarrationSelection.class);
                 }
                 pop();
