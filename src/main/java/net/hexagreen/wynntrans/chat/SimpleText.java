@@ -33,7 +33,6 @@ public class SimpleText extends WynnChatText {
         if(inputText.getSiblings().size() > 1) {
             if(translationRegisterControl) {
                 debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
-                debugClass.writeString2File(inputText.toString(), "toString.txt", "Simple");
                 debugClass.writeTextAsJSON(inputText);
             }
             resultText = inputText;

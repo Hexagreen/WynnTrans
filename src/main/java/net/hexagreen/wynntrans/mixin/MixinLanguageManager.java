@@ -14,6 +14,6 @@ import java.util.List;
 public abstract class MixinLanguageManager {
     @Inject(method = "reload", at = @At("TAIL"))
     public void mixinReload(ResourceManager manager, CallbackInfo ci) {
-        TranslationStorage.load(manager, List.of("wy_tr"), false);
+        TranslationStorage.load(manager, List.of("en_us"), false);
     }
 }

@@ -29,13 +29,12 @@ public class WynnTransClient implements ClientModInitializer {
                 writer.write("{\r\n\t\"_comment\":\"Scanned Texts Here\"}");
                 writer.close();
             }
-            File tstr = new File(dir, "toString.txt");
             File gstr = new File(dir, "getString.txt");
             File json = new File(dir, "json.txt");
             File excp = new File(dir, "exception.txt");
             File litr = new File(dir, "literal.txt");
-            if(tstr.createNewFile() && gstr.createNewFile() && json.createNewFile() && excp.createNewFile() && litr.createNewFile()) {
-                LOGGER.info("Text capturing file initialized.");
+            if(gstr.createNewFile() && json.createNewFile() && excp.createNewFile() && litr.createNewFile()) {
+                LOGGER.info("[WynnTrans] Text capturing file initialized.");
             }
         } catch (IOException e) {
             LOGGER.warn("[WynnTrans] Cannot reach to WynnTrans directory or its file.");
