@@ -8,16 +8,16 @@ public class NewQuest extends WynnChatText implements IFocusText {
     private final String keyQuestName;
     private final String valQuestName;
     private final Text fullText;
+    private final boolean questLineMode;
+    private final boolean miniQuestMode;
 
-    protected NewQuest(Text text, Pattern regex) {
+    public NewQuest(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
-        this.valQuestName = getContentLiteral(0);
-        this.keyQuestName = parentKey + valQuestName.replace(" ", "");
+        this.questLineMode = getContentString().contains("Questline");
+        this.miniQuestMode = getContentString().contains("Mini-Quest");
+        this.valQuestName = getContentString(0);
+        this.keyQuestName = parentKey + normalizeStringQuestName(valQuestName);
         this.fullText = text;
-    }
-
-    public static NewQuest of(Text text, Pattern regex) {
-        return new NewQuest(text, regex);
     }
 
     @Override
@@ -27,14 +27,24 @@ public class NewQuest extends WynnChatText implements IFocusText {
 
     @Override
     protected void build() {
-        resultText = newTranslate(rootKey + dirFunctional + "newQuest").setStyle(getStyle())
-                .append(": ");
+        if(questLineMode) {
+            resultText = newTranslate(rootKey + dirFunctional + "newQuestline").setStyle(getStyle())
+                    .append(": ");
+        }
+        else if(miniQuestMode) {
+            resultText = newTranslate(rootKey + dirFunctional + "newMiniQuest").setStyle(getStyle())
+                    .append(": ");
+        }
+        else{
+            resultText = newTranslate(rootKey + dirFunctional + "newQuest").setStyle(getStyle())
+                    .append(": ");
+        }
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
-            resultText.append(newTranslate(keyQuestName));
+            resultText.append(newTranslate(keyQuestName).setStyle(getSibling(0).getStyle()));
         }
         else {
-            resultText.append(inputText.getSiblings().get(0));
+            resultText.append(getSibling(0));
         }
 
         resultText = setToPressShift(resultText, fullText);

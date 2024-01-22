@@ -1,23 +1,24 @@
 package net.hexagreen.wynntrans.chat;
 
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
 public class ProfessionLevelAnnounce extends WynnChatText {
     private final String level;
-    private final String profName;
     private final Text playerName;
+    private final Text profession;
 
-    protected ProfessionLevelAnnounce(Text text, Pattern regex) {
+    public ProfessionLevelAnnounce(Text text, Pattern regex) {
         super(text, regex);
-        this.level = matcher.group(2);
-        this.profName = matcher.group(3);
+        this.level = "§f" + matcher.group(2);
+        String profIcon = matcher.group(3) + " ";
+        String keyProfName = "wytr.profession." + matcher.group(4).toLowerCase();
         this.playerName = getPlayerNameFromSibling(4);
-    }
-
-    public static ProfessionLevelAnnounce of(Text text, Pattern regex) {
-        return new ProfessionLevelAnnounce(text, regex);
+        this.profession = Text.literal(profIcon).setStyle(Style.EMPTY.withColor(Formatting.WHITE))
+                .append(Text.translatable(keyProfName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     @Override
@@ -31,8 +32,6 @@ public class ProfessionLevelAnnounce extends WynnChatText {
         resultText.append(getSibling(0))
                 .append(getSibling(1))
                 .append(getSibling(2))
-                .append(newTranslate(parentKey + "_pre", level, profName))
-                .append(playerName)
-                .append(newTranslate(parentKey + "_suf", level, profName));
+                .append(newTranslate(parentKey, playerName, level, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

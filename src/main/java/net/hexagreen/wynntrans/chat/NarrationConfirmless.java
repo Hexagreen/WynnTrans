@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class NarrationConfirmless extends Narration implements IFocusText {
-    protected NarrationConfirmless(Text text, Pattern regex) {
+    public NarrationConfirmless(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
-    }
-
-    public static NarrationConfirmless of(Text text, Pattern regex) {
-        return new NarrationConfirmless(text, regex);
     }
 
     @Override

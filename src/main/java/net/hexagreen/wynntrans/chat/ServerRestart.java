@@ -8,14 +8,10 @@ public class ServerRestart extends WynnChatText {
     private final String number;
     private final String unit;
 
-    protected ServerRestart(Text text, Pattern regex) {
+    public ServerRestart(Text text, Pattern regex) {
         super(text, regex);
         this.number = matcher.group(1);
         this.unit = matcher.group(2);
-    }
-
-    public static ServerRestart of(Text text, Pattern regex) {
-        return new ServerRestart(text, regex);
     }
 
     @Override
@@ -26,6 +22,6 @@ public class ServerRestart extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_" + unit, number).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey + "." + unit, number).setStyle(getStyle(0)));
     }
 }

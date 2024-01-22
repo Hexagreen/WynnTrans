@@ -8,13 +8,9 @@ import java.util.regex.Pattern;
 public class BombThanks extends WynnChatText {
     private final Text playerName;
 
-    protected BombThanks(Text text, Pattern regex) {
+    public BombThanks(Text text, Pattern regex) {
         super(text, regex);
         this.playerName = ((MutableText) getPlayerNameFromSibling(1)).setStyle(getStyle(0));
-    }
-
-    public static BombThanks of(Text text, Pattern regex) {
-        return new BombThanks(text, regex);
     }
 
     @Override
@@ -25,7 +21,7 @@ public class BombThanks extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_1", playerName).setStyle(getStyle(0)))
-                .append(newTranslate(parentKey + "_2").setStyle(getStyle(3)));
+        resultText.append(newTranslate(parentKey, playerName).setStyle(getStyle(0)))
+                .append(newTranslate(parentKey + ".click").setStyle(getStyle(3)));
     }
 }

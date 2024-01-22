@@ -2,11 +2,13 @@ package net.hexagreen.wynntrans;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.chat.*;
-import net.hexagreen.wynntrans.chat.glue.Selection;
+import net.hexagreen.wynntrans.chat.glue.SelectionGlue;
 import net.hexagreen.wynntrans.chat.glue.TextGlue;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
+import net.hexagreen.wynntrans.enums.GlueType;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 import org.apache.commons.compress.utils.Lists;
@@ -14,10 +16,10 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-@SuppressWarnings("DataFlowIssue")
+
 public class IncomeTextHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    private static final long PENDINGTICKTHRES = 2;
+    private static final byte PENDINGTICKTHRES = 1;
     protected TextGlue textGlue;
     private List<Text> backgroundText;
     private List<Text> pendingText;
@@ -32,33 +34,49 @@ public class IncomeTextHandler {
         this.pendingCounter = 0;
     }
 
-    public void attachGlue(TextGlue glue) {
-        this.textGlue = glue;
+    public void attachGlue(Text text) {
+        if(this.textGlue == null) {
+            try {
+                this.textGlue = GlueType.findAndGet(text);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException ignore) {
+                LOGGER.warn("GlueType.findAndGet Error.");
+            }
+        }
     }
 
     public void removeGlue() {
         this.textGlue = null;
     }
 
-    public void sendPendingText() {
+    public void onStartWorldTick() {
+        this.backgroundText = Lists.newArrayList();
         if(this.pendingCounter == 4) {
             if(++this.pendingTime >= PENDINGTICKTHRES) {
                 this.pendingCounter = 0;
                 this.pendingTime = 0;
                 MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+                SimpleText.setTranslationControl(false);
                 for(Text chunk : this.pendingText) {
                     for(Text line : chunk.getSiblings()) {
-                        sortIncomeText(line);
+                        if("\n".equals(line.getString())) continue;
+                        if(!sortIncomeText(line)) {
+                            //noinspection DataFlowIssue
+                            MinecraftClient.getInstance().player.sendMessage(line);
+                        }
                     }
                 }
+                SimpleText.setTranslationControl(true);
+                this.pendingText = Lists.newArrayList();
             }
         }
+        if(this.textGlue != null) textGlue.timer();
     }
 
     public boolean sortIncomeText(Text text) {
+        //debugClass.writeTextAsJSON(text, "parse.txt");
         try{
             if(TextContent.EMPTY.equals(text.getContent())) {
-                if(!text.getString().contains("\n")) {
+                if(!text.contains(Text.of("\n"))) {
                     return this.analyseSinglelineText(text);
                 } else {
                     return this.analyseMultilineText(text);
@@ -76,31 +94,63 @@ public class IncomeTextHandler {
     }
 
     private boolean analyseLiteralText(Text text) {
-        switch (ChatType.findType(text)) {
-            case COMBAT_LEVELUP -> CombatLevelUp.of(text, ChatType.COMBAT_LEVELUP.getRegex()).print();
-            case NO_TYPE -> {
-                debugClass.writeString2File(text.getString(), "literal.txt");
-                return false;
+        this.pendingCounter = 0;
+        attachGlue(text);
+        if(this.textGlue != null) {
+            if(!this.textGlue.push(text)) {
+                attachGlue(text);
+                if(this.textGlue != null) return this.textGlue.push(text);
             }
+            else return true;
+        }
+        try {
+            ChatType chatType = ChatType.findType(text);
+            switch(chatType) {
+                case NO_TYPE -> {
+                    debugClass.writeString2File(text.getString(), "literal.txt");
+                    debugClass.writeTextAsJSON(text);
+                    return false;
+                }
+                case PRIVATE_MESSAGE, NORMAL_CHAT -> {
+                    return false;
+                }
+            }
+            chatType.run(text);
+        } catch(Exception e) {
+            LOGGER.error("Error in analyseLiteralText", e);
         }
         return true;
     }
 
     private boolean analyseSinglelineText(Text text) {
         try {
+            attachGlue(text);
+            if(this.textGlue != null) {
+                if(!this.textGlue.push(text)) {
+                    attachGlue(text);
+                    if(this.textGlue != null) return this.textGlue.push(text);
+                }
+                else return true;
+            }
             return ChatType.findAndRun(text);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             LOGGER.warn("ChatType.findAndRun Error.");
             return false;
         }
     }
 
     private boolean analyseMultilineText(Text text) {
-        if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2)) {
+        if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2) || FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 1)) {
             this.pendingCounter = 0;
-            return DialogPlaceholder.of(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
+            return new DialogPlaceholder(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }
-        if(textGlue instanceof Selection && (FunctionalRegex.SELECTION_END.match(text) || FunctionalRegex.SELECTION_OPTION.match(text))) {
+        if(FunctionalRegex.QUEST_COMPLETE.match(text, 1)) {
+            return new QuestCompleted(editMultilineQuestComplete(text), null).print();
+        }
+        if(FunctionalRegex.QUEST_COMPLETE.match(text, 0)) {
+            return new QuestCompleted(editMultilineQuestCompleteNoHeader(text), null).print();
+        }
+        if(textGlue instanceof SelectionGlue) {
             this.pendingCounter = 0;
             return textGlue.push(text);
         }
@@ -121,6 +171,10 @@ public class IncomeTextHandler {
                     return this.processConfirmableDialog(text);
                 }
             }
+            default -> {
+                debugClass.writeTextAsJSON(text);
+                return false;
+            }
         }
         return false;
     }
@@ -129,22 +183,26 @@ public class IncomeTextHandler {
         if(FunctionalRegex.DIALOG_END.match(text, 6)) {
             this.pendingCounter = 0;
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-                NpcDialogConfirmable.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
+                new NpcDialogConfirmable(text, ChatType.DIALOG_NORMAL.getRegex()).print();
             }
             else if(ChatType.NEW_QUEST.match(text, 2)){
-                NewQuest.of(text, ChatType.NEW_QUEST.getRegex()).print();
+                new NewQuest(text, ChatType.NEW_QUEST.getRegex()).print();
             }
             else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-                ItemGiveAndTakeConfirmable.of(text, ChatType.DIALOG_ITEM.getRegex()).print();
+                new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
+            }
+            else if(FunctionalRegex.MINI_QUEST_DESC.match(text, 2)) {
+                new MiniQuestInfoConfirmable(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
             }
             else {
-                NarrationConfirmable.of(text, null).print();
+                new NarrationConfirmable(text, null).print();
             }
             return true;
         }
         else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
             this.pendingCounter = 0;
-            Selection.get().push(text);
+            this.textGlue = new SelectionGlue();
+            return this.textGlue.push(text);
         }
         else {
             this.backgroundText.add(text);
@@ -155,23 +213,63 @@ public class IncomeTextHandler {
             }
             return true;
         }
-        return false;
     }
 
     private boolean processConfirmlessDialog(Text text) {
         this.pendingCounter = 0;
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-            NpcDialogConfirmless.of(text, ChatType.DIALOG_NORMAL.getRegex()).print();
+            new NpcDialogConfirmless(text, ChatType.DIALOG_NORMAL.getRegex()).print();
         }
         else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-            ItemGiveAndTakeConfirmable.of(text, ChatType.DIALOG_ITEM.getRegex()).print();
+            new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
         }
         else if(text.getSiblings().get(2).getString().equals("empty")) {
             return false;
         }
+        else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
+            new GuideAlert(text.getSiblings().get(2), null).print();
+        }
         else {
-            NarrationConfirmless.of(text, null).print();
+            new NarrationConfirmless(text, null).print();
         }
         return true;
+    }
+
+    private Text editMultilineQuestComplete(Text text) {
+        MutableText result = Text.empty();
+        MutableText tmp = Text.empty();
+        for(Text sibling : text.getSiblings()) {
+            if(sibling.getString().equals("\n")) {
+                tmp.append(sibling);
+                result.append(tmp);
+                tmp = Text.empty();
+            }
+            else {
+                tmp.append(sibling);
+            }
+        }
+        if(!tmp.equals(Text.empty())) {
+            result.append(tmp);
+        }
+        return result;
+    }
+
+    private Text editMultilineQuestCompleteNoHeader(Text text) {
+        MutableText result = Text.empty().append("\n");
+        MutableText tmp = Text.empty();
+        for(Text sibling : text.getSiblings()) {
+            if(sibling.getString().equals("\n")) {
+                tmp.append(sibling);
+                result.append(tmp);
+                tmp = Text.empty();
+            }
+            else {
+                tmp.append(sibling);
+            }
+        }
+        if(!tmp.equals(Text.empty())) {
+            result.append(tmp);
+        }
+        return result;
     }
 }

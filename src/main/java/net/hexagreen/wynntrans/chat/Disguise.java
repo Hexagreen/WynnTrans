@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class Disguise extends WynnChatText {
-    protected Disguise(Text text, Pattern regex) {
+    public Disguise(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static Disguise of(Text text, Pattern regex) {
-        return new Disguise(text, regex);
     }
 
     @Override
@@ -21,9 +17,6 @@ public class Disguise extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(getSibling(0))
-                .append(newTranslate(parentKey + "_1").setStyle(getStyle(1)))
-                .append(getSibling(2))
-                .append(newTranslate(parentKey + "_2").setStyle(getStyle(3)));
+        resultText.append(newTranslate(parentKey, getSibling(0), getSibling(2)).setStyle(getStyle(1)));
     }
 }

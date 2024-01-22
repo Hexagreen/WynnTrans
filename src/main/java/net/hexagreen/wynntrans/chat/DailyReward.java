@@ -8,14 +8,10 @@ public class DailyReward extends WynnChatText {
     private final String emeralds;
     private final String items;
 
-    protected DailyReward(Text text, Pattern regex) {
+    public DailyReward(Text text, Pattern regex) {
         super(text, regex);
         this.emeralds = matcher.group(1);
         this.items = matcher.group(2);
-    }
-
-    public static DailyReward of(Text text, Pattern regex) {
-        return new DailyReward(text, regex);
     }
 
     @Override

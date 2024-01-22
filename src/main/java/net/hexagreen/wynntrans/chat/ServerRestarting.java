@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class ServerRestarting extends WynnChatText {
-    protected ServerRestarting(Text text, Pattern regex) {
+    public ServerRestarting(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static ServerRestarting of(Text text, Pattern regex) {
-        return new ServerRestarting(text, regex);
     }
 
     @Override

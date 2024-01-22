@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class BombThankyou extends WynnChatText {
     private final MutableText playerName;
 
-    protected BombThankyou(Text text, Pattern regex) {
+    public BombThankyou(Text text, Pattern regex) {
         super(text, regex);
         if(text.getSiblings().size() == 2) {
             this.playerName = (MutableText) getPlayerNameFromSibling(1);
@@ -21,10 +21,6 @@ public class BombThankyou extends WynnChatText {
         this.playerName.setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 
-    public static BombThankyou of(Text text, Pattern regex) {
-        return new BombThankyou(text, regex);
-    }
-
     @Override
     protected String setParentKey() {
         return rootKey + dirFunctional + "thankyou";
@@ -33,8 +29,6 @@ public class BombThankyou extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "_pre"))
-                .append(playerName)
-                .append(newTranslate(parentKey + "_suf").setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey, playerName).setStyle(getStyle(0)));
     }
 }

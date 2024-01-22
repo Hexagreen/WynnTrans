@@ -8,17 +8,14 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class SimpleText extends WynnChatText {
+    private static boolean translationRegisterControl = true;
     private final String keyText;
     private final String valText;
 
-    protected SimpleText(Text text, Pattern regex) {
+    public SimpleText(Text text, Pattern regex) {
         super(text, regex);
         this.valText = inputText.getString();
         this.keyText = parentKey + DigestUtils.sha1Hex(valText);
-    }
-
-    public static SimpleText of(Text text, Pattern regex) {
-        return new SimpleText(text, regex);
     }
 
     @Override
@@ -28,22 +25,24 @@ public class SimpleText extends WynnChatText {
 
     @Override
     protected void build() {
-        if(valText.equals("")) {
+        if(valText.isEmpty()) {
             resultText = inputText;
             return;
         }
 
         if(inputText.getSiblings().size() > 1) {
-            debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
-            debugClass.writeString2File(inputText.toString(), "toString.txt", "Simple");
-            debugClass.writeTextAsJSON(inputText);
+            if(translationRegisterControl) {
+                debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
+                debugClass.writeString2File(inputText.toString(), "toString.txt", "Simple");
+                debugClass.writeTextAsJSON(inputText);
+            }
             resultText = inputText;
             return;
         }
 
         if(inputText.getSiblings().size() == 1) {
             resultText = Text.empty().setStyle(getStyle());
-            if(WTS.checkTranslationExist(keyText, valText)) {
+            if(checkTranslationExistWithControl(keyText, valText)) {
                 resultText.append(newTranslate(keyText).setStyle(getStyle(0)));
             }
             else {
@@ -51,13 +50,25 @@ public class SimpleText extends WynnChatText {
             }
         }
         else {
-            if(WTS.checkTranslationExist(keyText, getContentLiteral())) {
+            if(checkTranslationExistWithControl(keyText, getContentString())) {
                 resultText = newTranslate(keyText);
             }
             else {
                 resultText = MutableText.of(inputText.getContent());
             }
         }
+    }
 
+    public static void setTranslationControl(boolean control) {
+        translationRegisterControl = control;
+    }
+
+    private boolean checkTranslationExistWithControl(String key, String value) {
+        if(translationRegisterControl) {
+            return WTS.checkTranslationExist(key, value);
+        }
+        else {
+            return WTS.checkTranslationDoNotRegister(key);
+        }
     }
 }

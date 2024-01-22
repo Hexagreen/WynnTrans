@@ -1,17 +1,14 @@
 package net.hexagreen.wynntrans.chat;
 
-import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
-import org.slf4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class WynnChatText {
-    protected static final Logger LOGGER = LogUtils.getLogger();
     protected static final String rootKey = "wytr.";
     protected static final String dirFunctional = "func.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
@@ -22,7 +19,7 @@ public abstract class WynnChatText {
     protected MutableText resultText;
     private final boolean regexMatched;
 
-    protected WynnChatText(Text text, Pattern regex) {
+    public WynnChatText(Text text, Pattern regex) {
         this.inputText = (MutableText) text;
         this.parentKey = setParentKey();
         if(regex != null) {
@@ -43,23 +40,26 @@ public abstract class WynnChatText {
     /**
      * Method for creating translatable text
      */
-    protected abstract void build();
+    protected abstract void build() throws IndexOutOfBoundsException;
 
     @SuppressWarnings("DataFlowIssue")
     public boolean print() {
-        if(regexMatched) {
-            build();
-            MinecraftClient.getInstance().player.sendMessage(resultText);
-            return true;
+        if(!regexMatched) {
+            return false;
         }
-        return false;
+        Text printLine = text();
+        if(printLine == null) return true;
+        MinecraftClient.getInstance().player.sendMessage(printLine);
+        return true;
     }
 
     public MutableText text() {
-        if(regexMatched) {
-            build();
-            return resultText;
-        }
+        try {
+            if(regexMatched) {
+                build();
+                return resultText;
+            }
+        } catch (IndexOutOfBoundsException ignore) {}
         return inputText;
     }
 
@@ -71,7 +71,7 @@ public abstract class WynnChatText {
      * @return Custom nickname or Original name as {@code Text}
      */
     protected Text getPlayerNameFromSibling(int index) {
-        String name = getContentLiteral(index);
+        String name = getContentString(index);
         if("".equals(name)) {
             return getSibling(index).getSiblings().get(0);
         }
@@ -84,7 +84,7 @@ public abstract class WynnChatText {
      * Get {@code String} of {@code inputText}'s content.
      * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
      */
-    protected String getContentLiteral() {
+    protected String getContentString() {
         return inputText.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) inputText.getContent()).string();
     }
 
@@ -92,8 +92,8 @@ public abstract class WynnChatText {
      * Get {@code String} from {@code inputText}'s sibling.
      * @return Returns empty {@code String} if sibling's content is empty, otherwise some {@code String}
      * */
-    protected String getContentLiteral(int siblingIndex) {
-        return getContentLiteral(inputText.getSiblings().get(siblingIndex));
+    protected String getContentString(int siblingIndex) {
+        return getContentString(inputText.getSiblings().get(siblingIndex));
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class WynnChatText {
      * @param text Target text
      * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
      */
-    private String getContentLiteral(Text text) {
+    private String getContentString(Text text) {
         return text.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) text.getContent()).string();
     }
 
@@ -151,7 +151,7 @@ public abstract class WynnChatText {
         return inputText.getSiblings().get(siblingIndex);
     }
 
-    protected static Text removeCustomNickname(Text text) {
+    protected static Text removeCustomNicknameFromDialog(Text text) {
         MutableText newText = text.copyContentOnly().setStyle(text.getStyle());
         newText.append(text.getSiblings().get(0));
         String partial = "";
@@ -183,5 +183,26 @@ public abstract class WynnChatText {
         newText.append(Text.literal(partial).setStyle(style));
 
         return newText;
+    }
+
+    protected String normalizeStringAreaName(String string) {
+        return string.replace(" ", "").replace(".","")
+                .replace("'", "").replace("-", "")
+                .replace("À", "").replace("֎", "");
+    }
+
+    protected String normalizeStringCaveName(String string) {
+        return string.replace(" ", "").replace("'", "")
+                .replace("À", "").replace("֎", "");
+    }
+
+    protected String normalizeStringQuestName(String string) {
+        return string.replace(" ", "").replace("'", "")
+                .replace("À", "").replace("֎", "");
+    }
+
+    protected String normalizeStringNPCName(String string) {
+        return string.replace(" ", "").replace(".", "")
+                .replace("'", "");
     }
 }

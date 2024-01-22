@@ -15,7 +15,7 @@ public class EventInfo extends WynnChatText {
     private final Text original;
     private final Text timer;
 
-    protected EventInfo(Text text, Pattern regex) {
+    public EventInfo(Text text, Pattern regex) {
         super(cutoffTail(text), regex);
         this.original = text;
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
@@ -23,10 +23,6 @@ public class EventInfo extends WynnChatText {
         String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
         this.keyEName = parentKey + ".eventName." + hash2;
         this.timer = getTimer(text.getSiblings().get(text.getSiblings().size() - 1));
-    }
-
-    public static EventInfo of(Text text, Pattern regex) {
-        return new EventInfo(text, regex);
     }
 
     @Override
@@ -48,7 +44,7 @@ public class EventInfo extends WynnChatText {
 
         for (int index = 1; inputText.getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + (index - 1);
-            String valSibling = getContentLiteral(index);
+            String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
             if(valSibling.contains("wynncraft.com")) {
                 resultText.append(getSibling(index));

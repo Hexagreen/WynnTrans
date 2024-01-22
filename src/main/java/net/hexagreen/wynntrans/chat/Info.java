@@ -8,13 +8,9 @@ import java.util.regex.Pattern;
 public class Info extends WynnChatText {
     private final String hash;
 
-    protected Info(Text text, Pattern regex) {
+    public Info(Text text, Pattern regex) {
         super(text, regex);
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
-    }
-
-    public static Info of(Text text, Pattern regex) {
-        return new Info(text, regex);
     }
 
     @Override
@@ -29,7 +25,7 @@ public class Info extends WynnChatText {
 
         for (int index = 1; inputText.getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + index;
-            String valSibling = getContentLiteral(index);
+            String valSibling = getContentString(index);
 
             if(valSibling.isEmpty()) {
                 resultText.append("");

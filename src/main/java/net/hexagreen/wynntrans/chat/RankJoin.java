@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class RankJoin extends WynnChatText {
-    protected RankJoin(Text text, Pattern regex) {
+    public RankJoin(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static RankJoin of(Text text, Pattern regex) {
-        return new RankJoin(text, regex);
     }
 
     @Override

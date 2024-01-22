@@ -5,12 +5,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class SkillCooldown extends WynnChatText {
-    protected SkillCooldown(Text text, Pattern regex) {
+    public SkillCooldown(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static SkillCooldown of(Text text, Pattern regex) {
-        return new SkillCooldown(text, regex);
     }
 
     @Override

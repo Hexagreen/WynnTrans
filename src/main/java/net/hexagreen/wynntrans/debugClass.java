@@ -45,6 +45,11 @@ public class debugClass {
         debugClass.writeString2File(str, "json.txt");
     }
 
+    public static void writeTextAsJSON(Text text, String filename) {
+        String str = Text.Serializer.toJson(text);
+        debugClass.writeString2File(str, filename);
+    }
+
     public static Text assembleTextFromList(List<Text> texts) {
         MutableText text = Text.empty();
         for(Text t : texts) {
@@ -57,8 +62,7 @@ public class debugClass {
     public static String[] readTextListFromJSON() {
         try{
             String str = Files.readString(Paths.get("D:/debug/json.txt"));
-            return str.split("\n~~~~~\n");
-            //return Text.Serializer.fromJson(str);
+            return str.split("\r\n~~~~~\r\n");
         } catch (Exception ignored) {}
         return new String[]{"EMPTY"};
     }

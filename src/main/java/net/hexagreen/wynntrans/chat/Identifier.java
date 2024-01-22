@@ -6,12 +6,8 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class Identifier extends WynnChatText {
-    protected Identifier(Text text, Pattern regex) {
+    public Identifier(Text text, Pattern regex) {
         super(text, regex);
-    }
-
-    public static Identifier of(Text text, Pattern regex) {
-        return new Identifier(text, regex);
     }
 
     @Override
@@ -24,18 +20,18 @@ public class Identifier extends WynnChatText {
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey).setStyle(getStyle(0)))
                 .append(Text.literal(": ").setStyle(getStyle(0)))
-                .append(newTranslate(parentKey + "_1").setStyle(getStyle(1)))
+                .append(newTranslate(parentKey + ".1").setStyle(getStyle(1)))
                 .append(ItemRarity.UNIQUE.getRarity())
-                .append(newTranslate(parentKey + "_separator").setStyle(getStyle(1)))
+                .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
                 .append(ItemRarity.RARE.getRarity())
-                .append(newTranslate(parentKey + "_separator").setStyle(getStyle(1)))
+                .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
                 .append(ItemRarity.LEGENDARY.getRarity())
-                .append(newTranslate(parentKey + "_separator").setStyle(getStyle(1)))
+                .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
                 .append(ItemRarity.SET.getRarity())
-                .append(newTranslate(parentKey + "_separator").setStyle(getStyle(1)))
+                .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
                 .append(ItemRarity.FABLED.getRarity())
-                .append(newTranslate(parentKey + "_separator_alt").setStyle(getStyle(1)))
+                .append(newTranslate(parentKey + ".separator_alt").setStyle(getStyle(1)))
                 .append(ItemRarity.MYTHIC.getRarity())
-                .append(newTranslate(parentKey + "_2").setStyle(getStyle(1)));
+                .append(newTranslate(parentKey + ".2").setStyle(getStyle(1)));
     }
 }

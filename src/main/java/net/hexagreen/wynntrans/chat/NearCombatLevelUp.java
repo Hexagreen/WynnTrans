@@ -6,14 +6,14 @@ import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class CombatLevelUp extends WynnChatText {
+public class NearCombatLevelUp extends WynnChatText {
     private final Text level;
     private final Text playerName;
 
-    protected CombatLevelUp(Text text, Pattern regex) {
+    public NearCombatLevelUp(Text text, Pattern regex) {
         super(text, regex);
         this.level = Text.literal(matcher.group(2));
-        if(inputText.getSiblings().size() != 0) {
+        if(!inputText.getSiblings().isEmpty()) {
             this.playerName = getPlayerNameFromSibling(0);
         }
         else {
@@ -21,13 +21,9 @@ public class CombatLevelUp extends WynnChatText {
         }
     }
 
-    public static CombatLevelUp of(Text text, Pattern regex) {
-        return new CombatLevelUp(text, regex);
-    }
-
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "combatLevelUp";
+        return rootKey + dirFunctional + "levelUp.combat";
     }
 
     @Override
