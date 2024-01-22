@@ -25,7 +25,9 @@ Most features are WIP.
 
 If you use [Wynntils/Artemis](https://github.com/Wynntils/Artemis) you should follow these settings.
 > Chat - Chat Tabs feature muse be disabled.
+>
 > Chat - Chat Mentions - Highlight Mentions feature must be disabled.
+
 Several Wynntils features, especially control chatting texts, may conflict with this mod.
 
 ## About Text Mining and Resource Pack
