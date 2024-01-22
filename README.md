@@ -24,7 +24,7 @@ Most features are WIP.
 2. Mod will detect translatable texts and replace it into selected Minecraft language if translation exist in resource pack.
 
 If you use [Wynntils/Artemis](https://github.com/Wynntils/Artemis) you should follow these settings.
-> Chat - Chat Tabs feature muse be disabled.
+> Chat - Chat Tabs feature must be disabled.
 >
 > Chat - Chat Mentions - Highlight Mentions feature must be disabled.
 
