@@ -191,6 +191,9 @@ public class IncomeTextHandler {
             else if(ChatType.DIALOG_ITEM.match(text, 2)) {
                 new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
             }
+            else if(FunctionalRegex.MINI_QUEST_DESC.match(text, 2)) {
+                new MiniQuestInfoConfirmable(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
+            }
             else {
                 new NarrationConfirmable(text, null).print();
             }

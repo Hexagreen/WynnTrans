@@ -43,7 +43,7 @@ public class WynnSign {
                 result = Text.translatable(keySign).setStyle(message[i].getStyle());
             }
             else {
-                result = message[i].copy();
+                result = message[i].copyContentOnly();
             }
 
             int sIndex = 1;
@@ -70,7 +70,7 @@ public class WynnSign {
 
             String hash = DigestUtils.sha1Hex(message[i].getString()).substring(0, 24);
             String keySign = rootKey + hash;
-            String valSign = message[i].getContent().toString();
+            String valSign = message[i].copyContentOnly().getString();
 
             WTS.checkTranslationExist(keySign, valSign);
 
@@ -82,7 +82,7 @@ public class WynnSign {
             }
         }
         //noinspection DataFlowIssue
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Translation key registered."));
+        MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.signTranslationRegistered"));
     }
 
 }

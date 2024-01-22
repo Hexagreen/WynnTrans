@@ -83,7 +83,7 @@ public class CrateGetPersonal extends WynnChatText {
                 Text.translatable("wytr.crateReward.playerEffect").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
         HELMET(Pattern.compile("^Disguise your helmet"),
                 Text.translatable("wytr.crateReward.helmet").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
-        WEAPON(Pattern.compile("^Disguise your (wand|spear|bow|relik|dagger)"),
+        WEAPON(Pattern.compile("^Disguise your (wand|spear|bow|relik|dagger|staff)"),
                 Text.translatable("wytr.crateReward.weapon").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
         DISGUISE(Pattern.compile("^Disguise yourself as"),
                 Text.translatable("wytr.crateReward.disguise").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),

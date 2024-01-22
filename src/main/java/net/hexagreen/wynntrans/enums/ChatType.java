@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public enum ChatType {
     NORMAL_CHAT(Pattern.compile("^\uE056\uE042"), null),
-    PRIVATE_MESSAGE(Pattern.compile("\\[(.+) \\(WC[0-9]+\\) ➤ (.+)]"), null),
+    PRIVATE_MESSAGE(Pattern.compile("\\[(.+) (?:\\(WC[0-9]+\\) )?➤ (.+)]"), null),
     DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:"), NpcDialog.class),
     DIALOG_ITEM(Pattern.compile("^\\[([+-])([0-9]+) (.+)]$"), ItemGiveAndTake.class),
     SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$"), SkillCooldown.class),
@@ -58,6 +58,11 @@ public enum ChatType {
     SERVER_KICK(Pattern.compile("^Kicked from WC(\\d+): "), KickFromServer.class),
     SERVER_SWAP_SAVE(Pattern.compile("^Saving your player data before switching to WC\\d+"), ServerSwapSave.class),
     FRIEND_LIST(Pattern.compile("(.+)'s friends \\((\\d+)\\): "), FriendList.class),
+    FINISH_TRADING(Pattern.compile("^Finished (?:buying|selling) "), TradeFinish.class),
+    PARTIAL_TRADING(Pattern.compile("^(\\d+)x .+ has been (?:purchased|sold)\\.$"), TradePartial.class),
+    LITTLE_INFORM(Pattern.compile("^\\[!] .+"), LittleInform.class),
+    BOMB_EXPIRE(Pattern.compile("^.+'s bomb has expired\\. You can buy (.+) bombs at"), BombExpired.class),
+    ITEM_BOMB_IGNORE(Pattern.compile("^Everybody gets 2 Random Items!"), EatThisText.class),
     NO_TYPE(null, SimpleText.class);
 
 

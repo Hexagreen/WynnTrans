@@ -46,7 +46,7 @@ public class GuildInfo extends WynnChatText {
     private enum GuildInformation {
         WEEK_OBJ_COMPLETE(Pattern.compile("^ (.+) has finished their weekly objective")),
         WEEK_OBJ_EXPIRE(Pattern.compile("^ Only (.+) left to complete the Weekly Guild")),
-        WEEK_OBJ_NEW(Pattern.compile("^ New Weekly Guild Objective are being assigned"));
+        WEEK_OBJ_NEW(Pattern.compile("^ New Weekly Guild Objectives are being assigned"));
 
         private final Pattern infoRegex;
         private Matcher matcher;

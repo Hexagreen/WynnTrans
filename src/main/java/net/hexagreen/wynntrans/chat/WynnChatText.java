@@ -47,7 +47,9 @@ public abstract class WynnChatText {
         if(!regexMatched) {
             return false;
         }
-        MinecraftClient.getInstance().player.sendMessage(text());
+        Text printLine = text();
+        if(printLine == null) return true;
+        MinecraftClient.getInstance().player.sendMessage(printLine);
         return true;
     }
 

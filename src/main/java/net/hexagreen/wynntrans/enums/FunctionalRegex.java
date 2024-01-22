@@ -10,7 +10,8 @@ public enum FunctionalRegex {
     SELECTION_END(Pattern.compile("^ +(Select|CLICK) an option to continue$")),
     DIALOG_END(Pattern.compile("^ +Press (SHIFT|SNEAK) to continue$")),
     QUEST_COMPLETE(Pattern.compile("^ +\\[(?:Mini-)?Quest Completed]")),
-    DIALOG_ALERT(Pattern.compile("^\\[!] .+$"));
+    DIALOG_ALERT(Pattern.compile("^\\[!] .+$")),
+    MINI_QUEST_DESC(Pattern.compile("^Bring \\[.+] to the (?:Slaying|Gathering) Post"));
 
     private final Pattern regex;
 
