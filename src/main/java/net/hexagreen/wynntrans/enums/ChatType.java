@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.enums;
 
-import net.hexagreen.wynntrans.FriendList;
+import net.hexagreen.wynntrans.chat.FriendList;
 import net.hexagreen.wynntrans.chat.*;
 import net.minecraft.text.Text;
 

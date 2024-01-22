@@ -1,6 +1,5 @@
-package net.hexagreen.wynntrans;
+package net.hexagreen.wynntrans.chat;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
