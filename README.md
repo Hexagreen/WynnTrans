@@ -44,7 +44,7 @@ Logged texts will save in `(Minecraft Directory)\WynnTrans\`. There will be 5 fi
 `scannedTexts.json` has translation key-value pair. You can move these to resource pack lang file and translation into your language.
 Resource pack's lang file must be named `LANGCODE.json` likes `ko_kr.json` for Korean or `en_us.json` for English.
 
-Your .txt files in WynnTrans directory contains some new data, it would be helpful if you could report it.
+If your .txt files in WynnTrans directory contains some new data, it would be helpful if you could report it.
 
 ## I Want to Upload my Translations!
 
