@@ -38,7 +38,7 @@ public class GuildInfo extends WynnChatText {
                 resultText.append(newTranslate(parentKey + "weekObj.new").setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
             }
             default ->  {
-                debugClass.writeTextAsJSON(inputText);
+                debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
             }
         }
     }

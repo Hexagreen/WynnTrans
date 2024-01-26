@@ -79,12 +79,12 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
             String keyExclusiveReward = keyQuestName + ".reward_" + hash;
             if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
                 resultText.append(getSibling(i).getSiblings().get(0));
-                resultText.append(newTranslate(keyExclusiveReward).setStyle(getSibling(i).getSiblings().get(1).getStyle()));
+                resultText.append(newTranslate(keyExclusiveReward).setStyle(getSibling(i).getSiblings().get(1).getStyle()))
+                        .append("\n");
             }
             else {
-                resultText.append(getSibling(i));
+                resultText.append(getSibling(i)).append("\n");
             }
         }
-        resultText.append("\n");
     }
 }

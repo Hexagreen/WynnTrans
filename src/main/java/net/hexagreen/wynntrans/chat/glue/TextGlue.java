@@ -52,7 +52,7 @@ public abstract class TextGlue {
                 wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
                 LOGGER.error("TextGlue Error:", e);
-                debugClass.writeTextAsJSON(gluedText);
+                debugClass.writeTextAsJSON(gluedText, "GlueError");
             }
         }
     }

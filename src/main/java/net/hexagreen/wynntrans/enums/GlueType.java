@@ -16,6 +16,7 @@ public enum GlueType {
     AREA_DISCOVERY(Pattern.compile("^ +Area Discovered: "), AreaDiscoveryGlue.class),
     SECRET_DISCOVERY(Pattern.compile("^ +Secret Discovery: "), SecretDiscoveryGlue.class),
     BOMB_START(Pattern.compile("^.+ has thrown an? .+ Bomb!"), BombGlue.class),
+    DUNGEON_COMPLETE(Pattern.compile("^Great job! You've completed the .+ Dungeon!"), DungeonCompleteGlue.class),
     NO_TYPE(null, null);
 
     private final Pattern regex;

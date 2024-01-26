@@ -44,7 +44,7 @@ public class BombStart extends WynnChatText {
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                     .append(bomb.bombDescription);
             default -> {
-                debugClass.writeTextAsJSON(inputText);
+                debugClass.writeTextAsJSON(inputText, "UnknownBomb");
                 resultText = inputText;
             }
         }

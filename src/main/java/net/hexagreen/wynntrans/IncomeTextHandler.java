@@ -19,19 +19,12 @@ import java.util.List;
 
 public class IncomeTextHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    private static final byte PENDINGTICKTHRES = 1;
     protected TextGlue textGlue;
-    private List<Text> backgroundText;
-    private List<Text> pendingText;
-    private byte pendingTime;
-    private byte pendingCounter;
+    private final BackgroundText backgroundText;
 
     public IncomeTextHandler() {
         this.textGlue = null;
-        this.backgroundText = Lists.newArrayList();
-        this.pendingText = Lists.newArrayList();
-        this.pendingTime = 0;
-        this.pendingCounter = 0;
+        this.backgroundText = new BackgroundText();
     }
 
     public void attachGlue(Text text) {
@@ -49,31 +42,11 @@ public class IncomeTextHandler {
     }
 
     public void onStartWorldTick() {
-        this.backgroundText = Lists.newArrayList();
-        if(this.pendingCounter == 4) {
-            if(++this.pendingTime >= PENDINGTICKTHRES) {
-                this.pendingCounter = 0;
-                this.pendingTime = 0;
-                MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
-                SimpleText.setTranslationControl(false);
-                for(Text chunk : this.pendingText) {
-                    for(Text line : chunk.getSiblings()) {
-                        if("\n".equals(line.getString())) continue;
-                        if(!sortIncomeText(line)) {
-                            //noinspection DataFlowIssue
-                            MinecraftClient.getInstance().player.sendMessage(line);
-                        }
-                    }
-                }
-                SimpleText.setTranslationControl(true);
-                this.pendingText = Lists.newArrayList();
-            }
-        }
+        this.backgroundText.flush();
         if(this.textGlue != null) textGlue.timer();
     }
 
     public boolean sortIncomeText(Text text) {
-        //debugClass.writeTextAsJSON(text, "parse.txt");
         try{
             if(TextContent.EMPTY.equals(text.getContent())) {
                 if(!text.contains(Text.of("\n"))) {
@@ -88,13 +61,12 @@ public class IncomeTextHandler {
         } catch(Exception e) {
             LOGGER.error("Error in sortIncomeText", e);
             debugClass.writeString2File(text.getString(), "exception.txt");
-            debugClass.writeTextAsJSON(text);
+            debugClass.writeTextAsJSON(text, "Exception");
         }
         return false;
     }
 
     private boolean analyseLiteralText(Text text) {
-        this.pendingCounter = 0;
         attachGlue(text);
         if(this.textGlue != null) {
             if(!this.textGlue.push(text)) {
@@ -108,7 +80,7 @@ public class IncomeTextHandler {
             switch(chatType) {
                 case NO_TYPE -> {
                     debugClass.writeString2File(text.getString(), "literal.txt");
-                    debugClass.writeTextAsJSON(text);
+                    debugClass.writeTextAsJSON(text, "Literal");
                     return false;
                 }
                 case PRIVATE_MESSAGE, NORMAL_CHAT -> {
@@ -141,7 +113,7 @@ public class IncomeTextHandler {
 
     private boolean analyseMultilineText(Text text) {
         if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2) || FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 1)) {
-            this.pendingCounter = 0;
+            this.backgroundText.clear();
             return new DialogPlaceholder(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
         }
         if(FunctionalRegex.QUEST_COMPLETE.match(text, 1)) {
@@ -151,7 +123,7 @@ public class IncomeTextHandler {
             return new QuestCompleted(editMultilineQuestCompleteNoHeader(text), null).print();
         }
         if(textGlue instanceof SelectionGlue) {
-            this.pendingCounter = 0;
+            this.backgroundText.clear();
             return textGlue.push(text);
         }
         List<Text> sibling = text.getSiblings();
@@ -172,7 +144,7 @@ public class IncomeTextHandler {
                 }
             }
             default -> {
-                debugClass.writeTextAsJSON(text);
+                debugClass.writeTextAsJSON(text, "Unregistered");
                 return false;
             }
         }
@@ -181,7 +153,7 @@ public class IncomeTextHandler {
 
     private boolean processConfirmableDialog(Text text) {
         if(FunctionalRegex.DIALOG_END.match(text, 6)) {
-            this.pendingCounter = 0;
+            this.backgroundText.clear();
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
                 new NpcDialogConfirmable(text, ChatType.DIALOG_NORMAL.getRegex()).print();
             }
@@ -200,23 +172,18 @@ public class IncomeTextHandler {
             return true;
         }
         else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
-            this.pendingCounter = 0;
+            this.backgroundText.clear();
             this.textGlue = new SelectionGlue();
             return this.textGlue.push(text);
         }
         else {
-            this.backgroundText.add(text);
-            this.pendingCounter++;
-            if(this.backgroundText.size() == 4) {
-                this.pendingText = this.backgroundText;
-                this.backgroundText = Lists.newArrayList();
-            }
+            this.backgroundText.push(text);
             return true;
         }
     }
 
     private boolean processConfirmlessDialog(Text text) {
-        this.pendingCounter = 0;
+        this.backgroundText.clear();
         if(ChatType.DIALOG_NORMAL.match(text, 2)) {
             new NpcDialogConfirmless(text, ChatType.DIALOG_NORMAL.getRegex()).print();
         }
@@ -271,5 +238,34 @@ public class IncomeTextHandler {
             result.append(tmp);
         }
         return result;
+    }
+
+    private class BackgroundText {
+        private final List<Text> storage = Lists.newArrayList();
+
+        private void push(Text text) {
+            this.storage.add(text);
+        }
+
+        private void clear() {
+            this.storage.clear();
+        }
+
+        private void flush() {
+            if(storage.isEmpty()) return;
+            MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+            SimpleText.setTranslationControl(false);
+            for(Text chunk : storage) {
+                for(Text line : chunk.getSiblings()) {
+                    if("\n".equals(line.getString())) continue;
+                    if(!sortIncomeText(line)) {
+                        //noinspection DataFlowIssue
+                        MinecraftClient.getInstance().player.sendMessage(line);
+                    }
+                }
+            }
+            SimpleText.setTranslationControl(true);
+            clear();
+        }
     }
 }
