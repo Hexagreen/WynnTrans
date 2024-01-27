@@ -1,8 +1,6 @@
 package net.hexagreen.wynntrans;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.io.File;
@@ -10,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 public class debugClass {
     private static final String path = FabricLoader.getInstance().getGameDir().resolve("WynnTrans") + File.separator;
@@ -28,35 +25,14 @@ public class debugClass {
         writeString2File("[" + tag + "] | " + str, fileName);
     }
 
-    public static void writePacket(PacketByteBuf buf) {
-        if(buf.readText() != null) {
-            debugClass.writeString2File(buf.readString(), "packet.txt");
-        }
-    }
-
-    public static void writeTextList(List<Text> text, String fileName) {
-        if(text != null) {
-            debugClass.writeString2File(assembleTextFromList(text).getString(), fileName);
-        }
-    }
-
     public static void writeTextAsJSON(Text text) {
         String str = Text.Serializer.toJson(text);
         debugClass.writeString2File(str, "json.txt");
     }
 
-    public static void writeTextAsJSON(Text text, String filename) {
+    public static void writeTextAsJSON(Text text, String tag) {
         String str = Text.Serializer.toJson(text);
-        debugClass.writeString2File(str, filename);
-    }
-
-    public static Text assembleTextFromList(List<Text> texts) {
-        MutableText text = Text.empty();
-        for(Text t : texts) {
-            text.append(t);
-        }
-
-        return text;
+        debugClass.writeString2File(str, "json.txt", tag);
     }
 
     public static String[] readTextListFromJSON() {

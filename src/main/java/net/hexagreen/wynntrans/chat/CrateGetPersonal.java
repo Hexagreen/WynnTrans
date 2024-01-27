@@ -77,7 +77,7 @@ public class CrateGetPersonal extends WynnChatText {
     }
 
     private enum RewardDescription {
-        PLAYER_EFFECT_1(Pattern.compile("^Give your character a "),
+        PLAYER_EFFECT_1(Pattern.compile("^Give your character (?:a|the) "),
                 Text.translatable("wytr.crateReward.playerEffect").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),
         PLAYER_EFFECT_2(Pattern.compile("effect around your character"),
                 Text.translatable("wytr.crateReward.playerEffect").setStyle(Style.EMPTY.withColor(Formatting.GRAY))),

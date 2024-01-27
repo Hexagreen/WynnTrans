@@ -48,19 +48,26 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
 
         for(int i = 6; inputText.getSiblings().size() > i; i++) {
             if(getSibling(i).getString().contains("+1 Ability Point")) {
-                resultText.append(newTranslate(parentKey + ".ap").setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
-                        .append(newTranslate(parentKey + ".ap.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
+                resultText.append(newTranslate(parentKey + ".abilityPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
+                        .append(newTranslate(parentKey + ".abilityPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
                         .append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+2 Skill Points")) {
-                resultText.append(newTranslate(parentKey + ".sp").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
-                        .append(newTranslate(parentKey + ".sp.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
+                resultText.append(newTranslate(parentKey + ".skillPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
+                        .append(newTranslate(parentKey + ".skillPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
                         .append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+5 Maximum HP")) {
-                resultText.append(newTranslate(parentKey + ".hp").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
+                resultText.append(newTranslate(parentKey + ".healthPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
+                        .append("\n");
+                continue;
+            }
+            if(getSibling(i).getString().contains("+1 Maximum Soul Points")) {
+                String amount = getSibling(i).getSiblings().get(1).getString().replaceAll("^\\d", "");
+                resultText.append(newTranslate(parentKey + ".soulPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
+                        .append(newTranslate(parentKey + ".soulPoint.amount", amount).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
                         .append("\n");
                 continue;
             }
