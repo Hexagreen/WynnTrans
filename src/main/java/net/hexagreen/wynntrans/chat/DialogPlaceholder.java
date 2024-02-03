@@ -5,8 +5,11 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class DialogPlaceholder extends WynnChatText implements IFocusText {
+    private final int lines;
+
     public DialogPlaceholder(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
+        this.lines = text.getString().length() - text.getString().replace("\n", "").length();
     }
 
     @Override
@@ -16,7 +19,10 @@ public class DialogPlaceholder extends WynnChatText implements IFocusText {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n").append("\n").append("\n").append("\n").append("\n");
+        resultText = Text.empty();
+        for(int i = lines; i > 0; i--) {
+            resultText.append("\n");
+        }
     }
 
     @Override

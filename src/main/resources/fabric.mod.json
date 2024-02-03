@@ -3,10 +3,10 @@
   "id": "wynntrans",
   "version": "${version}",
   "name": "WynnTrans",
-  "description": "",
-  "authors": [],
+  "description": "Resource pack based Wynncraft text translation.",
+  "authors": ["Hexagreen329"],
   "contact": {
-    "repo": "https://github.com/Hexagreen/WynnTrans"
+    "homepage": "https://github.com/Hexagreen/WynnTrans"
   },
   "license": "MIT",
   "icon": "assets/WynnTrans/icon.png",

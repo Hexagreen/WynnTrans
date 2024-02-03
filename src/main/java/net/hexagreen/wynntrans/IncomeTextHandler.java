@@ -126,80 +126,39 @@ public class IncomeTextHandler {
             this.backgroundText.clear();
             return textGlue.push(text);
         }
-        List<Text> sibling = text.getSiblings();
-        switch (sibling.size()) {
-            case 5 -> {
-                if (sibling.get(1).equals(Text.of("\n"))
-                        && sibling.get(1).equals(sibling.get(3))) {
-                    return this.processConfirmlessDialog(text);
-                }
-            }
-            case 9 -> {
-                if (sibling.get(1).equals(Text.of("\n"))
-                        && sibling.get(1).equals(sibling.get(3))
-                        && sibling.get(3).equals(sibling.get(5))
-                        && sibling.get(5).equals(sibling.get(7))
-                ) {
-                    return this.processConfirmableDialog(text);
-                }
-            }
-            default -> {
-                debugClass.writeTextAsJSON(text, "Unregistered");
-                return false;
-            }
-        }
-        return false;
+
+        return this.processMultilineText(text);
     }
 
-    private boolean processConfirmableDialog(Text text) {
-        if(FunctionalRegex.DIALOG_END.match(text, 6)) {
-            this.backgroundText.clear();
-            if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-                new NpcDialogConfirmable(text, ChatType.DIALOG_NORMAL.getRegex()).print();
-            }
-            else if(ChatType.NEW_QUEST.match(text, 2)){
-                new NewQuest(text, ChatType.NEW_QUEST.getRegex()).print();
-            }
-            else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-                new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
-            }
-            else if(FunctionalRegex.MINI_QUEST_DESC.match(text, 2)) {
-                new MiniQuestInfoConfirmable(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
-            }
-            else {
-                new NarrationConfirmable(text, null).print();
-            }
-            return true;
-        }
-        else if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
+    private boolean processMultilineText(Text text) {
+        if(FunctionalRegex.SELECTION_OPTION.match(text, 6)) {
             this.backgroundText.clear();
             this.textGlue = new SelectionGlue();
             return this.textGlue.push(text);
         }
+
+        else if (text.getSiblings().get(0).equals(text.getSiblings().get(4)) && text.getSiblings().get(0).equals(Text.empty())){
+            this.backgroundText.clear();
+            if (ChatType.DIALOG_NORMAL.match(text, 2)) {
+                new NpcDialogFocused(text, ChatType.DIALOG_NORMAL.getRegex()).print();
+            } else if (ChatType.NEW_QUEST.match(text, 2)) {
+                new NewQuestFocused(text, ChatType.NEW_QUEST.getRegex()).print();
+            } else if (ChatType.DIALOG_ITEM.match(text, 2)) {
+                new ItemGiveAndTakeFocused(text, ChatType.DIALOG_ITEM.getRegex()).print();
+            } else if (FunctionalRegex.MINI_QUEST_DESC.match(text, 2)) {
+                new MiniQuestInfoConfirmable(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
+            } else if (FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
+                new GuideAlert(text.getSiblings().get(2), null).print();
+            } else {
+                new NarrationFocused(text, null).print();
+            }
+            return true;
+        }
+
         else {
             this.backgroundText.push(text);
             return true;
         }
-    }
-
-    private boolean processConfirmlessDialog(Text text) {
-        this.backgroundText.clear();
-        if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-            new NpcDialogConfirmless(text, ChatType.DIALOG_NORMAL.getRegex()).print();
-        }
-        else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-            new ItemGiveAndTakeConfirmable(text, ChatType.DIALOG_ITEM.getRegex()).print();
-        }
-        else if(text.getSiblings().get(2).getString().equals("empty")) {
-            return false;
-        }
-        else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
-            new GuideAlert(text.getSiblings().get(2), null).print();
-        }
-        else {
-            new NarrationConfirmless(text, null).print();
-        }
-        return true;
     }
 
     private Text editMultilineQuestComplete(Text text) {

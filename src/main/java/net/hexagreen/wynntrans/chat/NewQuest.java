@@ -4,20 +4,18 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class NewQuest extends WynnChatText implements IFocusText {
+public class NewQuest extends WynnChatText {
     private final String keyQuestName;
     private final String valQuestName;
-    private final Text fullText;
     private final boolean questLineMode;
     private final boolean miniQuestMode;
 
     public NewQuest(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
+        super(text, regex);
         this.questLineMode = getContentString().contains("Questline");
         this.miniQuestMode = getContentString().contains("Mini-Quest");
         this.valQuestName = getContentString(0);
         this.keyQuestName = parentKey + normalizeStringQuestName(valQuestName);
-        this.fullText = text;
     }
 
     @Override
@@ -46,13 +44,5 @@ public class NewQuest extends WynnChatText implements IFocusText {
         else {
             resultText.append(getSibling(0));
         }
-
-        resultText = setToPressShift(resultText, fullText);
-    }
-
-    @Override
-    public boolean print() {
-        clearChat();
-        return super.print();
     }
 }

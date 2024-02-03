@@ -65,7 +65,7 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                 continue;
             }
             if(getSibling(i).getString().contains("+1 Maximum Soul Points")) {
-                String amount = getSibling(i).getSiblings().get(1).getString().replaceAll("^\\d", "");
+                String amount = getSibling(i).getSiblings().get(1).getString().replaceAll("\\D", "");
                 resultText.append(newTranslate(parentKey + ".soulPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
                         .append(newTranslate(parentKey + ".soulPoint.amount", amount).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
                         .append("\n");

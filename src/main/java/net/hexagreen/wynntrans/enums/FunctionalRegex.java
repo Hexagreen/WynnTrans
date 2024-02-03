@@ -33,6 +33,11 @@ public enum FunctionalRegex {
     }
 
     public boolean match(Text text, int siblingIndex) {
-        return this.regex.matcher(text.getSiblings().get(siblingIndex).getString()).find();
+        try {
+            return this.regex.matcher(text.getSiblings().get(siblingIndex).getString()).find();
+        }
+        catch (IndexOutOfBoundsException ignore) {
+            return false;
+        }
     }
 }
