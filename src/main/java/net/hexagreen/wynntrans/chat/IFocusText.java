@@ -43,6 +43,25 @@ public interface IFocusText extends ICenterAligned {
         return confirmable;
     }
 
+    default MutableText setToCutScene(Text text) {
+        MutableText cutScene = Text.empty().append("\n");
+        cutScene.append(text).append("\n");
+        cutScene.append(Text.empty()).append("\n");
+        cutScene.append(Text.empty()).append("\n");
+        cutScene.append(Text.empty());
+
+        return cutScene;
+    }
+
+    default FocusType detectFocusType(Text text) {
+        if(text.getSiblings().size() == 5) return FocusType.AUTO;
+        else if(text.getSiblings().size() == 9) {
+            if(FunctionalRegex.DIALOG_END.match(text, 6)) return FocusType.PRESS_SHIFT;
+            else return FocusType.CUTSCENE;
+        }
+        else return FocusType.SELECT_OPTION;
+    }
+
     default void clearChat() {
         MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
     }
@@ -97,5 +116,9 @@ public interface IFocusText extends ICenterAligned {
 
     private MutableText newTranslate(String key) {
         return MutableText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS));
+    }
+
+    enum FocusType {
+        PRESS_SHIFT, SELECT_OPTION, AUTO, CUTSCENE
     }
 }

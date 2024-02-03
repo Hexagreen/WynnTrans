@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.chat.glue;
 
-import net.hexagreen.wynntrans.chat.NarrationSelection;
-import net.hexagreen.wynntrans.chat.NpcDialogSelection;
+import net.hexagreen.wynntrans.chat.NarrationFocused;
+import net.hexagreen.wynntrans.chat.NpcDialogFocused;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.minecraft.text.Text;
@@ -10,7 +10,7 @@ public class SelectionGlue extends TextGlue {
     private boolean ready;
 
     public SelectionGlue() {
-        super(ChatType.DIALOG_NORMAL.getRegex(), NpcDialogSelection.class);
+        super(ChatType.DIALOG_NORMAL.getRegex(), NpcDialogFocused.class);
         this.ready = false;
     }
 
@@ -24,18 +24,18 @@ public class SelectionGlue extends TextGlue {
             if(FunctionalRegex.SELECTION_END.match(text)) {
                 safeNow();
                 if(!ChatType.DIALOG_NORMAL.match(gluedText, 2)) {
-                    changeWct(NarrationSelection.class);
+                    changeWct(NarrationFocused.class);
                 }
                 pop();
                 return true;
             }
-            else{
+            else {
                 resetTimer();
                 this.gluedText.append(Text.of("\n"));
             }
         }
         else {
-            if(FunctionalRegex.SELECTION_END.match(text)){
+            if(FunctionalRegex.SELECTION_END.match(text)) {
                 this.ready = true;
             }
         }
