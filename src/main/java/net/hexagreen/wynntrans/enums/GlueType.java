@@ -17,6 +17,11 @@ public enum GlueType {
     SECRET_DISCOVERY(Pattern.compile("^ +Secret Discovery: "), SecretDiscoveryGlue.class),
     BOMB_START(Pattern.compile("^.+ has thrown an? .+ Bomb!"), BombGlue.class),
     DUNGEON_COMPLETE(Pattern.compile("^Great job! You've completed the .+ Dungeon!"), DungeonCompleteGlue.class),
+    REWARD_RECEIVED(Pattern.compile("^You have received:"), RewardReceivedGlue.class),
+    DEATH_ITEM_LOST(Pattern.compile("^You've lost:"), DeathItemLostGlue.class),
+
+
+
     NO_TYPE(null, null);
 
     private final Pattern regex;
