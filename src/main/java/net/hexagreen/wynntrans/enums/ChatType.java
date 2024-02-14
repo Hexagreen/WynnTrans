@@ -16,7 +16,8 @@ public enum ChatType {
     SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$"), SkillCooldown.class),
     NEW_QUEST(Pattern.compile("^(?:New |Mini-)Quest(?:line)? Started: "), NewQuestFocused.class),
     INFO(Pattern.compile("^\\[Info] "), Info.class),
-    INFO_EVENT(Pattern.compile("^\\[Event] "), EventInfo.class),
+    INFO_EVENT(Pattern.compile("^\\[Event] "), InfoEvent.class),
+    INFO_SALE(Pattern.compile("^\\[Sale] "), InfoSale.class),
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$"), CombatLevelAnnounce.class),
     PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (.) (.+)!$"), ProfessionLevelAnnounce.class),
     BLACKSMITH(Pattern.compile("^Blacksmith: "), Blacksmith.class),
@@ -38,6 +39,7 @@ public enum ChatType {
     PARTYFINDER(Pattern.compile("^Party Finder: Hey (.+), over here! Join the .+ queue and match up with ([0-9]+) other players?!$"), PartyFinder.class),
     MERCHANT(Pattern.compile("^(.+) Merchant: "), Merchants.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
+    DISGUISING(Pattern.compile("^You are (now|no longer) disguised as a"), Disguising.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
     FRIEND_LEFT(Pattern.compile("^(.+) left the game\\.$"), FriendLeft.class),
     DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
@@ -54,6 +56,7 @@ public enum ChatType {
     WORLD_JOIN_QUEUE(Pattern.compile("^\\n +§b§lYou are in world WC(\\d+)!"), WorldJoinQueue.class),
     OFFLINE_SOULPOINT(Pattern.compile("^\\[You have received (\\d+) soul points while you were offline]$"), OfflineSoulpoint.class),
     PARTY_JOINED(Pattern.compile("^(.+) has joined your party, say hello!$"), PartyJoined.class),
+    PARTY_LEAVED(Pattern.compile("^(.+) has left the party.$"), PartyLeaved.class),
     KEY_COLLECTOR(Pattern.compile("^Key Collector: "), KeyCollector.class),
     SERVER_KICK(Pattern.compile("^Kicked from WC(\\d+): "), KickFromServer.class),
     SERVER_SWAP_SAVE(Pattern.compile("^Saving your player data before switching to WC\\d+"), ServerSwapSave.class),
@@ -61,7 +64,15 @@ public enum ChatType {
     FINISH_TRADING(Pattern.compile("^Finished (?:buying|selling) "), TradeFinish.class),
     PARTIAL_TRADING(Pattern.compile("^(\\d+)x .+ has been (?:purchased|sold)\\.$"), TradePartial.class),
     LITTLE_INFORM(Pattern.compile("^\\[!] .+"), LittleInform.class),
-    BOMB_EXPIRE(Pattern.compile("^.+'s bomb has expired\\. You can buy (.+) bombs at"), BombExpired.class),
+    BOMB_EXPIRE(Pattern.compile("^.+'s bomb has expired\\. You can buy (.+) [bB]ombs at"), BombExpired.class),
+    FRIEND_ADD(Pattern.compile("^(.+) has been added to your friends!$"), FriendAdd.class),
+    FRIEND_ADDED(Pattern.compile("^(.+) has added you as a friend!$"), FriendAdded.class),
+    PLAYER_EFFECT_APPLIED(Pattern.compile("^You now have the (.+)\\."), PlayerEffectApplied.class),
+    SKIN_APPLIED(Pattern.compile("^You have set your (weapon|helmet) skin to (.+)$"), SkinApplied.class),
+    CHARACTER_CLASS_CHANGE(Pattern.compile("^Your character's class has been successfully changed to "), CharacterClassChange.class),
+
+
+    GO_TO_STORE(Pattern.compile("wynncraft\\.com/store"), GoToStore.class),
     ITEM_BOMB_IGNORE(Pattern.compile("^Everybody gets 2 Random Items!"), EatThisText.class),
     NO_TYPE(null, SimpleText.class);
 

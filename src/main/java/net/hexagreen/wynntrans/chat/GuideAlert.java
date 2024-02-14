@@ -22,7 +22,7 @@ public class GuideAlert extends WynnChatText {
 
     @Override
     protected void build() {
-        resultText = MutableText.of(inputText.getContent())
+        resultText = MutableText.of(inputText.getContent()).setStyle(inputText.getStyle())
                 .append(getSibling(0))
                 .append(getSibling(1));
         for(int index = 2; inputText.getSiblings().size() > index; index++) {

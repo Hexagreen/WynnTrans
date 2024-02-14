@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.chat;
 
+import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
 import net.minecraft.client.MinecraftClient;
@@ -59,7 +60,9 @@ public abstract class WynnChatText {
                 build();
                 return resultText;
             }
-        } catch (IndexOutOfBoundsException ignore) {}
+        } catch (IndexOutOfBoundsException ignore) {
+            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.");
+        }
         return inputText;
     }
 
@@ -203,6 +206,6 @@ public abstract class WynnChatText {
 
     protected String normalizeStringNPCName(String string) {
         return string.replace(" ", "").replace(".", "")
-                .replace("'", "");
+                .replace("'", "").replace(":", "");
     }
 }

@@ -20,7 +20,8 @@ public class BombGlue extends TextGlue {
             safeNow();
             return true;
         }
-        if(!bombThanks.matcher(text.getString()).find()) {
+        if(bombThanks.matcher(text.getString()).find()) {
+            pop();
             return true;
         }
         else {

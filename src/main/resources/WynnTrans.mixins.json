@@ -7,7 +7,6 @@
   ],
   "client": [
     "MixinSignBlockEntity",
-    "MixinLanguageManager",
     "MixinMessageHandler",
     "MixinSignText",
     "MixinTranslationStorage"

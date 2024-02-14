@@ -17,7 +17,7 @@ public class TradeFinish extends WynnChatText{
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "tradeFinish";
+        return rootKey + dirFunctional + "tradeFinish.";
     }
 
     @Override

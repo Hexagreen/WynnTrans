@@ -8,14 +8,14 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
 
-public class EventInfo extends WynnChatText {
+public class InfoEvent extends WynnChatText {
     private final String keyEName;
     private final String valEName;
     private final String hash;
     private final Text original;
     private final Text timer;
 
-    public EventInfo(Text text, Pattern regex) {
+    public InfoEvent(Text text, Pattern regex) {
         super(cutoffTail(text), regex);
         this.original = text;
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
