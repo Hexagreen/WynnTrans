@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.entity;
 
-import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.DataTracker;
@@ -21,6 +20,7 @@ public class EntityTrackerUpdateHandler {
         this.run();
     }
 
+    @SuppressWarnings({"DataFlowIssue", "unchecked"})
     private void run(){
         Entity entity = client.world.getEntityById(packetID);
         if(entity == null) return;

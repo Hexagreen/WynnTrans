@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.RewardReceived;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.RewardReceived;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;

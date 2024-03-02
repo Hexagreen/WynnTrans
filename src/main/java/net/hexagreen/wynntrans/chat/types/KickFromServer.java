@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -18,7 +19,7 @@ public class KickFromServer extends WynnChatText {
         super(text, regex);
         this.channelNumber = matcher.group(1);
         Matcher m = fallbackRegex.matcher(getSibling(2).getString());
-        m.find();
+        boolean ignore = m.find();
         this.fallbackServer = m.group(1);
     }
 

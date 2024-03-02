@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.chat;
 
 import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.chat.types.*;
 import net.hexagreen.wynntrans.chat.types.glue.SelectionGlue;
-import net.hexagreen.wynntrans.chat.TextGlue;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;

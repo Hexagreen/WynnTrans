@@ -1,5 +1,7 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.ICenterAligned;
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;

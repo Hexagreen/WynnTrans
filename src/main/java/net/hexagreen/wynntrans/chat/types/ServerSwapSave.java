@@ -1,10 +1,11 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class ServerSwapSave extends WynnChatText{
+public class ServerSwapSave extends WynnChatText {
     private final Text worldChannel;
 
     public ServerSwapSave(Text text, Pattern regex) {

@@ -1,11 +1,12 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class TradeFinish extends WynnChatText{
+public class TradeFinish extends WynnChatText {
     private final boolean buyingMode;
     private final Text item;
 

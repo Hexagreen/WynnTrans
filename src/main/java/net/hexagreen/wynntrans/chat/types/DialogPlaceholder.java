@@ -1,5 +1,7 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.IFocusText;
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;

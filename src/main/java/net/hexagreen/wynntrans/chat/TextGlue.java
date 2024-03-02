@@ -2,7 +2,6 @@ package net.hexagreen.wynntrans.chat;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
-import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

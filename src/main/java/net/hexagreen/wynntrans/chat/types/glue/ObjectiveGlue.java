@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.ObjectiveComplete;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.ObjectiveComplete;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 

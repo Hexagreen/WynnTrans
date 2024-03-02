@@ -1,14 +1,14 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.CaveCompleted;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.CaveCompleted;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 
 import java.util.regex.Pattern;
 
 public class CaveGlue extends TextGlue {
-    private static final Pattern REWARD = Pattern.compile("^           - \\+.+$");
+    private static final Pattern REWARD = Pattern.compile("^ {11}- \\+.+$");
     private int count = 0;
 
     public CaveGlue() {

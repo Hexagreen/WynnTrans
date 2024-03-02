@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.LevelUp;
-import net.hexagreen.wynntrans.chat.LevelUpProfession;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.LevelUp;
+import net.hexagreen.wynntrans.chat.types.LevelUpProfession;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextContent;
 

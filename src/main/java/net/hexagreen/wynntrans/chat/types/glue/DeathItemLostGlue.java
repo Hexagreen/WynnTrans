@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.DeathItemLost;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.DeathItemLost;
 import net.minecraft.text.Text;
 
 public class DeathItemLostGlue extends TextGlue {

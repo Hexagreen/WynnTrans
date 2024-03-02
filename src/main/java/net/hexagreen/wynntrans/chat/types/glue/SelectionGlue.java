@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.NarrationFocused;
-import net.hexagreen.wynntrans.chat.NpcDialogFocused;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.NarrationFocused;
+import net.hexagreen.wynntrans.chat.types.NpcDialogFocused;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.minecraft.text.Text;

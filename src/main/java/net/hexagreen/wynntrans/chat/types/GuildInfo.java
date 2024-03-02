@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -27,19 +28,13 @@ public class GuildInfo extends WynnChatText {
         resultText = newTranslate(parentKey);
 
         switch(infoType) {
-            case WEEK_OBJ_COMPLETE -> {
-                resultText.append(newTranslate(parentKey + ".weekObj.complete", infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
-            }
+            case WEEK_OBJ_COMPLETE -> resultText.append(newTranslate(parentKey + ".weekObj.complete", infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
             case WEEK_OBJ_EXPIRE -> {
                 Text time = Text.literal(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
                 resultText.append(newTranslate(parentKey + ".weekObj.expire", time).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
             }
-            case WEEK_OBJ_NEW -> {
-                resultText.append(newTranslate(parentKey + "weekObj.new").setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
-            }
-            default ->  {
-                debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
-            }
+            case WEEK_OBJ_NEW -> resultText.append(newTranslate(parentKey + "weekObj.new").setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+            default -> debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
         }
     }
 

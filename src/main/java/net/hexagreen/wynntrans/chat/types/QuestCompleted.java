@@ -1,5 +1,7 @@
 package net.hexagreen.wynntrans.chat.types;
 
+import net.hexagreen.wynntrans.chat.ICenterAligned;
+import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;

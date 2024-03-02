@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.chat.types.glue;
 
-import net.hexagreen.wynntrans.chat.CrateGetPersonal;
 import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.CrateGetPersonal;
 import net.minecraft.text.Text;
 
 public class CrateGlue extends TextGlue {
