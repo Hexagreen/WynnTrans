@@ -20,8 +20,9 @@
     ]
   },
   "mixins": [
-    "WynnTrans.mixins.json"
+    "wynntrans.mixins.json"
   ],
+  "accessWidener": "wynntrans.accesswidener",
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",

@@ -3,7 +3,10 @@ package net.hexagreen.wynntrans;
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class WynnTranslationStorage {
     private static final Logger LOGGER = LogUtils.getLogger();

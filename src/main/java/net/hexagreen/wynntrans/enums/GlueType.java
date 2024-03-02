@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.enums;
 
-import net.hexagreen.wynntrans.chat.glue.*;
+import net.hexagreen.wynntrans.chat.TextGlue;
+import net.hexagreen.wynntrans.chat.types.glue.*;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,8 +14,8 @@ public enum GlueType {
     OBJECTIVE_CLEAR(Pattern.compile("^ +\\[Objective Completed]$"), ObjectiveGlue.class),
     LEVELUP(Pattern.compile("^ {32}Level Up!$"), LevelUpGlue.class),
     CRATE_GET_PERSONAL(Pattern.compile("^You've gotten a .+ reward!"), CrateGlue.class),
-    AREA_DISCOVERY(Pattern.compile("^ +Area Discovered: "), AreaDiscoveryGlue.class),
-    SECRET_DISCOVERY(Pattern.compile("^ +Secret Discovery: "), SecretDiscoveryGlue.class),
+    AREA_DISCOVERY(Pattern.compile("^ *Area Discovered: "), AreaDiscoveryGlue.class),
+    SECRET_DISCOVERY(Pattern.compile("^ *Secret Discovery: "), SecretDiscoveryGlue.class),
     BOMB_START(Pattern.compile("^.+ has thrown an? .+ Bomb!"), BombGlue.class),
     DUNGEON_COMPLETE(Pattern.compile("^Great job! You've completed the .+ Dungeon!"), DungeonCompleteGlue.class),
     REWARD_RECEIVED(Pattern.compile("^You have received:"), RewardReceivedGlue.class),

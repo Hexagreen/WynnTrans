@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.mixin;
 
 import net.hexagreen.wynntrans.WynnTrans;
-import net.hexagreen.wynntrans.sign.WynnSign;
+import net.hexagreen.wynntrans.entity.sign.WynnSign;
 import net.minecraft.block.entity.SignText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;

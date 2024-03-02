@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.enums;
 
-import net.hexagreen.wynntrans.chat.FriendList;
-import net.hexagreen.wynntrans.chat.*;
+import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.types.*;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +14,7 @@ public enum ChatType {
     DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:"), NpcDialog.class),
     DIALOG_ITEM(Pattern.compile("^\\[([+-])([0-9]+) (.+)]$"), ItemGiveAndTake.class),
     SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$"), SkillCooldown.class),
-    NEW_QUEST(Pattern.compile("^(?:New |Mini-)Quest(?:line)? Started: "), NewQuestFocused.class),
+    NEW_QUEST(Pattern.compile("^(?:New |Mini-)?Quest(?:line)? Started: "), NewQuestFocused.class),
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), InfoEvent.class),
     INFO_SALE(Pattern.compile("^\\[Sale] "), InfoSale.class),
