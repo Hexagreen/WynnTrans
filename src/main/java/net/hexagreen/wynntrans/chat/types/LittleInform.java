@@ -28,7 +28,7 @@ public class LittleInform extends WynnChatText {
             String valInform = getSibling(i).getString();
 
             if(WTS.checkTranslationExist(parentKey + keyInform + "_" + (i - 2), valInform)) {
-                resultText.append(newTranslate(parentKey + keyInform + "_" + (i - 2)).setStyle(getStyle(i - 2)));
+                resultText.append(newTranslate(parentKey + keyInform + "_" + (i - 2)).setStyle(getStyle(i)));
             }
             else {
                 resultText.append(getSibling(i));

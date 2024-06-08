@@ -6,6 +6,7 @@ import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public enum ChatType {
@@ -21,7 +22,7 @@ public enum ChatType {
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$"), CombatLevelAnnounce.class),
     PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (.) (.+)!$"), ProfessionLevelAnnounce.class),
     BLACKSMITH(Pattern.compile("^Blacksmith: "), Blacksmith.class),
-    IDENTIFIER(Pattern.compile("^Item Identifier: I can't identify this item! "), Identifier.class),
+    IDENTIFIER(Pattern.compile("^Item Identifier: "), Identifier.class),
     AREA_ENTER(Pattern.compile("^\\[You are now entering (.+)]$"), AreaEnter.class),
     AREA_LEAVE(Pattern.compile("^\\[You are now leaving (.+)]$"), AreaLeave.class),
     BOMB_THANK(Pattern.compile("^Want to thank (.+)\\? Click here to thank them!$"), BombThanks.class),
@@ -70,6 +71,8 @@ public enum ChatType {
     PLAYER_EFFECT_APPLIED(Pattern.compile("^You now have the (.+)\\."), PlayerEffectApplied.class),
     SKIN_APPLIED(Pattern.compile("^You have set your (weapon|helmet) skin to (.+)$"), SkinApplied.class),
     CHARACTER_CLASS_CHANGE(Pattern.compile("^Your character's class has been successfully changed to "), CharacterClassChange.class),
+    POWDER_MASTER(Pattern.compile("^Powder Master: "), PowderMaster.class),
+    QUICK_TRADE(Pattern.compile("^\n(.+) would like to trade!\n"), QuickTrade.class),
 
 
     GO_TO_STORE(Pattern.compile("wynncraft\\.com/store"), GoToStore.class),
@@ -93,14 +96,10 @@ public enum ChatType {
         return this.regex.matcher(text.getSiblings().get(siblingIndex).getString()).find();
     }
 
-    public boolean matchFullText(Text text) {
-        if(this == NO_TYPE) return false;
-        return this.regex.matcher(text.getString()).find();
-    }
-
     public static ChatType findType(Text text) {
         return Arrays.stream(ChatType.values())
-                .filter(chatType -> chatType.matchFullText(text))
+                .filter(chatType -> Objects.nonNull(chatType.regex))
+                .filter(chatType -> chatType.regex.matcher(text.getString()).find())
                 .findFirst().orElse(NO_TYPE);
     }
 

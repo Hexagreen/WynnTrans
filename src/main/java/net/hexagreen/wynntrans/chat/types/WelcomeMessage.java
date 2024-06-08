@@ -66,7 +66,7 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
                 resultText.append(getCenterIndent(guide)).append(guide).append("\n");
             }
             else {
-                resultText.append(getCenterIndent(valGuide)).append(valGuide).append("\n");
+                resultText.append(getCenterIndent(valGuide)).append(valGuide);
             }
         }
     }

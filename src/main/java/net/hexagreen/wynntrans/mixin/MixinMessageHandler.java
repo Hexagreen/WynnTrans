@@ -13,7 +13,7 @@ abstract public class MixinMessageHandler {
     @Inject(method = "onGameMessage", at = @At("HEAD"), cancellable = true)
     public void mixinOnGameMessage(Text text, boolean bl, CallbackInfo ci) {
         if(text != null && !bl) {
-            boolean confirm = WynnTrans.incomeTextHandler.sortIncomeText(text);
+            boolean confirm = WynnTrans.onGameMessageHandler.sortIncomeText(text);
             if(confirm) ci.cancel();
         }
     }

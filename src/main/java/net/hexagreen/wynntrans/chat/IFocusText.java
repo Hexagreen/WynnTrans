@@ -85,8 +85,8 @@ public interface IFocusText extends ICenterAligned {
     }
 
     private int getLastOptionIndex(Text fullText) {
-        int selTooltipIdx = 0;
-        for (int i = fullText.getSiblings().size() - 1; i > 10; i--) {
+        int selTooltipIdx = 9;
+        for (int i = fullText.getSiblings().size() - 1; i >= 9; i--) {
             if (FunctionalRegex.SELECTION_END.match(fullText, i)) {
                 selTooltipIdx = i;
                 break;

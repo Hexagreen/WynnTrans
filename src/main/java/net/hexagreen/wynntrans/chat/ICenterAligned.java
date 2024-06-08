@@ -19,9 +19,7 @@ public interface ICenterAligned {
     default String getCenterIndent(Text alignTargetText) {
         int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(alignTargetText);
         int newIndent = CENTER - (int)(0.5 + (textWidth / 2.0) / SPACE_WIDTH);
-        String space = "";
-        for(int i = newIndent; 0 <= i; i--) space = space.concat(" ");
 
-        return space;
+        return " ".repeat(Math.max(0, newIndent + 1));
     }
 }

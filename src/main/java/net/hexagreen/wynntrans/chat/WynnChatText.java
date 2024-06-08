@@ -3,6 +3,8 @@ package net.hexagreen.wynntrans.chat;
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
+import net.hexagreen.wynntrans.chat.types.SimpleText;
+import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
 
@@ -41,7 +43,7 @@ public abstract class WynnChatText {
     /**
      * Method for creating translatable text
      */
-    protected abstract void build() throws IndexOutOfBoundsException;
+    protected abstract void build() throws IndexOutOfBoundsException, UnprocessedChatTypeException;
 
     @SuppressWarnings("DataFlowIssue")
     public boolean print() {
@@ -60,8 +62,12 @@ public abstract class WynnChatText {
                 build();
                 return resultText;
             }
-        } catch (IndexOutOfBoundsException ignore) {
-            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.");
+        } catch(IndexOutOfBoundsException e) {
+            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "OutOfBound");
+        } catch(UnprocessedChatTypeException e) {
+            LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
+            return new SimpleText(inputText, null).text();
         }
         return inputText;
     }
@@ -207,5 +213,11 @@ public abstract class WynnChatText {
     protected String normalizeStringNPCName(String string) {
         return string.replace(" ", "").replace(".", "")
                 .replace("'", "").replace(":", "");
+    }
+
+    public static class UnprocessedChatTypeException extends RuntimeException {
+        public UnprocessedChatTypeException(String className) {
+            super(className + " has thrown Exception.");
+        }
     }
 }

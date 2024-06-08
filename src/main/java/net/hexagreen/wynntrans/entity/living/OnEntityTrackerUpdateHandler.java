@@ -1,4 +1,4 @@
-package net.hexagreen.wynntrans.entity;
+package net.hexagreen.wynntrans.entity.living;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -9,12 +9,12 @@ import net.minecraft.text.Text;
 import java.util.List;
 import java.util.Optional;
 
-public class EntityTrackerUpdateHandler {
+public class OnEntityTrackerUpdateHandler {
     private static final MinecraftClient client = MinecraftClient.getInstance();
     private final int packetID;
     private final List<DataTracker.SerializedEntry<?>> packetData;
 
-    public EntityTrackerUpdateHandler(EntityTrackerUpdateS2CPacket packet) {
+    public OnEntityTrackerUpdateHandler(EntityTrackerUpdateS2CPacket packet) {
         this.packetID = packet.id();
         this.packetData = packet.trackedValues();
         this.run();
@@ -31,9 +31,12 @@ public class EntityTrackerUpdateHandler {
                 if(optionalNewName.isEmpty()) return;
 
                 Text newName = optionalNewName.get();
-                if(newName.equals(entity.getCustomName())) return;
+//                if(newName.getString().equals("TranslateThis")) {
+//                    entity.setCustomName(Text.literal("번역완료"));
+//                }
 
-                //debugClass.writeTextAsJSON(newName, "Entity");
+//                String out = entity.getClass().getSimpleName() + " :: " + newName.getString();
+//                debugClass.writeString2File(out, "Entity.txt");
             }
         }
     }

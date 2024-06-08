@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.hexagreen.wynntrans.chat.IncomeTextHandler;
+import net.hexagreen.wynntrans.chat.OnGameMessageHandler;
 import net.hexagreen.wynntrans.entity.sign.UseBlockHandler;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
@@ -20,14 +20,14 @@ import java.util.List;
 
 public class WynnTrans implements ModInitializer {
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static IncomeTextHandler incomeTextHandler;
+    public static OnGameMessageHandler onGameMessageHandler;
     public static WynnTranslationStorage wynnTranslationStorage;
     public static boolean translationTargetSignMarker;
     private static Iterator<String> debugString;
 
     @Override
     public void onInitialize() {
-        incomeTextHandler = new IncomeTextHandler();
+        onGameMessageHandler = new OnGameMessageHandler();
         wynnTranslationStorage = new WynnTranslationStorage();
         translationTargetSignMarker = false;
 
@@ -45,7 +45,7 @@ public class WynnTrans implements ModInitializer {
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> WriteCommentClass.register(dispatcher));
 
-        ClientTickEvents.START_WORLD_TICK.register((StartTick) -> incomeTextHandler.onStartWorldTick());
+        ClientTickEvents.START_WORLD_TICK.register((StartTick) -> onGameMessageHandler.onStartWorldTick());
 
         UseBlockCallback.EVENT.register(new UseBlockHandler());
     }

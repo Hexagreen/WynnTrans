@@ -17,12 +17,12 @@ import org.slf4j.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class IncomeTextHandler {
+public class OnGameMessageHandler {
     protected static final Logger LOGGER = LogUtils.getLogger();
     protected TextGlue textGlue;
     private final BackgroundText backgroundText;
 
-    public IncomeTextHandler() {
+    public OnGameMessageHandler() {
         this.textGlue = null;
         this.backgroundText = new BackgroundText();
     }

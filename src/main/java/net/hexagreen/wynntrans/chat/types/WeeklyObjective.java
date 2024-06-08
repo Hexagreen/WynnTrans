@@ -54,11 +54,16 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
                 Text origin = getSibling(3);
                 resultText.append(getCenterIndent(origin)).append(origin);
             }
-            Text origin = getSibling(4);
+            Text origin = getCrateName(getSibling(4));
             resultText.append("\n").append(getCenterIndent(origin)).append(origin).append("\n\n");
         }
 
         resultText.append(getCenterIndent(t3)).append(t3)
                 .append(getCenterIndent(t4)).append(t4);
+    }
+
+    private Text getCrateName(Text text) {
+        String string = text.getString().replace("^ +", "");
+        return Text.literal(string).setStyle(text.getStyle());
     }
 }

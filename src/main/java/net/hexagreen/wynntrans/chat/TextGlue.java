@@ -69,6 +69,6 @@ public abstract class TextGlue {
     }
 
     private void reset() {
-        WynnTrans.incomeTextHandler.removeGlue();
+        WynnTrans.onGameMessageHandler.removeGlue();
     }
 }
