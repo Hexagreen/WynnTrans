@@ -19,6 +19,7 @@ public enum ChatType {
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), InfoEvent.class),
     INFO_SALE(Pattern.compile("^\\[Sale] "), InfoSale.class),
+    INFO_UPDATE(Pattern.compile("^\\[Major Update] "), InfoUpdate.class),
     CLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching combat level ([0-9]+)!$"), CombatLevelAnnounce.class),
     PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (.) (.+)!$"), ProfessionLevelAnnounce.class),
     BLACKSMITH(Pattern.compile("^Blacksmith: "), Blacksmith.class),
