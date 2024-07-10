@@ -26,7 +26,7 @@ public class OnEntityTrackerUpdateHandler {
         if(entity == null) return;
 
         for(DataTracker.SerializedEntry<?> packetDatum : packetData) {
-            if(packetDatum.id() == Entity.CUSTOM_NAME.getId()) {
+            if(packetDatum.id() == Entity.CUSTOM_NAME.id()) {
                 Optional<Text> optionalNewName = (Optional<Text>) packetDatum.value();
                 if(optionalNewName.isEmpty()) return;
 

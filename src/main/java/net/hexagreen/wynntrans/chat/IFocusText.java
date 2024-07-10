@@ -2,8 +2,8 @@ package net.hexagreen.wynntrans.chat;
 
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -100,7 +100,7 @@ public interface IFocusText extends ICenterAligned {
         for(int i = 6; i <= getLastOptionIndex(fullText); i = i + 2) {
             Text textBody = original.get(i).getSiblings().get(2);
             String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
-            String valSelOpt = ((LiteralTextContent) textBody.getContent()).string();
+            String valSelOpt = ((PlainTextContent) textBody.getContent()).string();
             MutableText selection = MutableText.of(original.get(i).getContent()).setStyle(original.get(i).getStyle())
                     .append(original.get(i).getSiblings().get(0))
                     .append(original.get(i).getSiblings().get(1));

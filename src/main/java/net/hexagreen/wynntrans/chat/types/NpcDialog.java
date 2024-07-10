@@ -4,8 +4,8 @@ import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
@@ -38,7 +38,7 @@ public class NpcDialog extends WynnChatText {
 
     @Override
     protected void build() {
-        if(inputText.getContent().equals(TextContent.EMPTY)) {
+        if(inputText.getContent().equals(PlainTextContent.EMPTY)) {
             processMalformedDialog();
             return;
         }
@@ -92,7 +92,7 @@ public class NpcDialog extends WynnChatText {
     }
 
     private void processMalformedDialog() {
-        MutableText corrected = inputText.getSiblings().get(0).copy();
+        MutableText corrected = inputText.getSiblings().getFirst().copy();
         for(int i = 1; inputText.getSiblings().size() > i; i++) {
             corrected.append(getSibling(i));
         }

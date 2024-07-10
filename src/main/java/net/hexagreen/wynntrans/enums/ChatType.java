@@ -14,7 +14,7 @@ public enum ChatType {
     PRIVATE_MESSAGE(Pattern.compile("\\[(.+) (?:\\(WC[0-9]+\\) )?➤ (.+)]"), null),
     DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:"), NpcDialog.class),
     DIALOG_ITEM(Pattern.compile("^\\[([+-])([0-9]+) (.+)]$"), ItemGiveAndTake.class),
-    SKILL_COOLDOWN(Pattern.compile("^\\[⬤] .+ has been refreshed!$"), SkillCooldown.class),
+    SKILL_REFRESH(Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$"), SkillRefreshed.class),
     NEW_QUEST(Pattern.compile("^(?:New |Mini-)?Quest(?:line)? Started: "), NewQuestFocused.class),
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), InfoEvent.class),

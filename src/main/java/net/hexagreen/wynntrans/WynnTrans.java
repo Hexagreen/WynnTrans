@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.hexagreen.wynntrans.chat.OnGameMessageHandler;
 import net.hexagreen.wynntrans.entity.sign.UseBlockHandler;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -37,7 +38,8 @@ public class WynnTrans implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(CommandManager.literal("readJson")
                 .executes(context -> {
                     if(debugString.hasNext()) {
-                        Text readText = Text.Serializer.fromJson(debugString.next());
+                        @SuppressWarnings("DataFlowIssue")
+                        Text readText = Text.Serialization.fromJson(debugString.next(), MinecraftClient.getInstance().world.getRegistryManager());
                         context.getSource().sendMessage(readText);
                     }
                     return 1;

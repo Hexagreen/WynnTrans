@@ -82,7 +82,7 @@ public abstract class WynnChatText {
     protected Text getPlayerNameFromSibling(int index) {
         String name = getContentString(index);
         if("".equals(name)) {
-            return getSibling(index).getSiblings().get(0);
+            return getSibling(index).getSiblings().getFirst();
         }
         else {
             return getSibling(index);
@@ -94,7 +94,7 @@ public abstract class WynnChatText {
      * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
      */
     protected String getContentString() {
-        return inputText.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) inputText.getContent()).string();
+        return inputText.getContent().toString().equals("empty") ? "" : ((PlainTextContent) inputText.getContent()).string();
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class WynnChatText {
      * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
      */
     private String getContentString(Text text) {
-        return text.getContent().toString().equals("empty") ? "" : ((LiteralTextContent) text.getContent()).string();
+        return text.getContent().toString().equals("empty") ? "" : ((PlainTextContent) text.getContent()).string();
     }
 
     /**
@@ -167,7 +167,7 @@ public abstract class WynnChatText {
         Style style = text.getSiblings().get(1).getStyle();
         for(int index = 1; text.getSiblings().size() > index; index++) {
             Text sibling = text.getSiblings().get(index);
-            if(!sibling.getContent().equals(TextContent.EMPTY)) {
+            if(!sibling.getContent().equals(PlainTextContent.EMPTY)) {
                 if(style.equals(sibling.getStyle())) {
                     partial = partial.concat(sibling.getString());
                 }

@@ -3,8 +3,8 @@ package net.hexagreen.wynntrans.chat.types.glue;
 import net.hexagreen.wynntrans.chat.TextGlue;
 import net.hexagreen.wynntrans.chat.types.LevelUp;
 import net.hexagreen.wynntrans.chat.types.LevelUpProfession;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +25,7 @@ public class LevelUpGlue extends TextGlue {
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
-        if(count == 1 && !text.getContent().equals(TextContent.EMPTY)) {
+        if(count == 1 && !text.getContent().equals(PlainTextContent.EMPTY)) {
             pop();
             return false;
         }

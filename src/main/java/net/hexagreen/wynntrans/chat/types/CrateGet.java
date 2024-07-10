@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 
 import java.util.regex.Pattern;
 
@@ -20,7 +20,7 @@ public class CrateGet extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
-        if(getSibling(0).getContent().equals(TextContent.EMPTY)) {
+        if(getSibling(0).getContent().equals(PlainTextContent.EMPTY)) {
             int nextIndexItemname = inputText.getSiblings().size() - 3;
             resultText.append(getSibling(1))
                     .append(newTranslate(parentKey + "_1").setStyle(getStyle(2)));

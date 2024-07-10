@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 import java.io.File;
@@ -25,14 +26,14 @@ public class debugClass {
         writeString2File("[" + tag + "] | " + str, fileName);
     }
 
-    public static void writeTextAsJSON(Text text) {
-        String str = Text.Serializer.toJson(text);
-        debugClass.writeString2File(str, "json.txt");
+    public static void writeTextAsJSON(Text text, String tag) {
+        @SuppressWarnings("DataFlowIssue")
+        String str = Text.Serialization.toJsonString(text, MinecraftClient.getInstance().world.getRegistryManager());
+        debugClass.writeString2File(str, "json.txt", tag);
     }
 
-    public static void writeTextAsJSON(Text text, String tag) {
-        String str = Text.Serializer.toJson(text);
-        debugClass.writeString2File(str, "json.txt", tag);
+    public static void writeTextAsJSON(Text text) {
+        debugClass.writeTextAsJSON(text, "");
     }
 
     public static String[] readTextListFromJSON() {

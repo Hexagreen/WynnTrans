@@ -8,7 +8,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
 
-public class SimpleText extends WynnChatText {
+public class    SimpleText extends WynnChatText {
     private static boolean translationRegisterControl = true;
     private final String keyText;
     private final String valText;
@@ -33,7 +33,7 @@ public class SimpleText extends WynnChatText {
 
         if(inputText.getSiblings().size() > 1) {
             int i = 1;
-            resultText = Text.empty();
+            resultText = Text.empty().setStyle(getStyle());
             for(Text sibling : inputText.getSiblings()) {
                 String valText = sibling.getString();
                 String keyText = this.keyText + "_" + i++;

@@ -3,8 +3,8 @@ package net.hexagreen.wynntrans.chat.types;
 import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.enums.ChatType;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +27,7 @@ public class ItemGiveAndTake extends WynnChatText {
 
     @Override
     protected void build() {
-        if(!inputText.getContent().equals(TextContent.EMPTY)) {
+        if(!inputText.getContent().equals(PlainTextContent.EMPTY)) {
             processMalformedDialog();
             return;
         }

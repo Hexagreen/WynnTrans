@@ -9,8 +9,8 @@ import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.enums.GlueType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 
@@ -48,7 +48,7 @@ public class OnGameMessageHandler {
 
     public boolean sortIncomeText(Text text) {
         try{
-            if(TextContent.EMPTY.equals(text.getContent())) {
+            if(PlainTextContent.EMPTY.equals(text.getContent())) {
                 if(!text.contains(Text.of("\n"))) {
                     return this.analyseSinglelineText(text);
                 } else {
@@ -142,9 +142,9 @@ public class OnGameMessageHandler {
             return this.textGlue.push(text);
         }
 
-        else if (text.getSiblings().get(0).equals(text.getSiblings().get(4))
-                && text.getSiblings().get(0).equals(text.getSiblings().get(text.getSiblings().size() - 1))
-                && text.getSiblings().get(0).equals(Text.empty())
+        else if (text.getSiblings().getFirst().equals(text.getSiblings().get(4))
+                && text.getSiblings().getFirst().equals(text.getSiblings().getLast())
+                && text.getSiblings().getFirst().equals(Text.empty())
                 && (text.getSiblings().size() == 5 || text.getSiblings().size() == 9)) {
             this.backgroundText.clear();
             if (ChatType.DIALOG_NORMAL.match(text, 2)) {
