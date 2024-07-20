@@ -11,24 +11,24 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class NpcDialog extends WynnChatText {
-    private final Object playername;
-    private final String pNameString;
+    private final Object playerName;
+    private final String clientPlayerName;
     private final String keyName;
     private final String valName;
-    protected final String pKeyDialog;
+    protected final String keyDialog;
 
     @SuppressWarnings("DataFlowIssue")
     public NpcDialog(Text text, Pattern regex) {
         super(removeCustomNicknameFromDialog(text), regex);
-        this.pNameString = MinecraftClient.getInstance().player.getName().getString();
-        this.playername = removedCustomNickname == null ? this.pNameString : removedCustomNickname;
+        this.clientPlayerName = MinecraftClient.getInstance().player.getName().getString();
+        this.playerName = removedCustomNickname == null ? this.clientPlayerName : removedCustomNickname;
         this.valName = getContentString(0).replace(": ", "");
         String npcName = normalizeStringNPCName(valName);
         this.keyName = parentKey + "name." + npcName;
         String dialogIdx = matcher.group(1) + ".";
         String dialogLen = matcher.group(2) + ".";
-        String hash = DigestUtils.sha1Hex(inputText.getString().replace(pNameString, "%1$s")).substring(0, 8);
-        this.pKeyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
+        String hash = DigestUtils.sha1Hex(inputText.getString().replace(clientPlayerName, "%1$s")).substring(0, 8);
+        this.keyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
     }
 
     @Override
@@ -55,15 +55,15 @@ public class NpcDialog extends WynnChatText {
         }
 
         if(inputText.getSiblings().size() == 2) {
-            String valDialog = getContentString(1).replace(pNameString, "%1$s");
+            String valDialog = getContentString(1).replace(clientPlayerName, "%1$s");
 
             Text t1 = getSibling(1);
-            if(WTS.checkTranslationExist(pKeyDialog, valDialog)) {
+            if(WTS.checkTranslationExist(keyDialog, valDialog)) {
                 if(valDialog.contains("%1$s")) {
-                    resultText.append(newTranslate(pKeyDialog, playername).setStyle(t1.getStyle()));
+                    resultText.append(newTranslate(keyDialog, playerName).setStyle(t1.getStyle()));
                 }
                 else {
-                    resultText.append(newTranslate(pKeyDialog).setStyle(t1.getStyle()));
+                    resultText.append(newTranslate(keyDialog).setStyle(t1.getStyle()));
                 }
             }
             else {
@@ -72,13 +72,13 @@ public class NpcDialog extends WynnChatText {
         }
         else {
             for(int index = 1; inputText.getSiblings().size() > index; index++) {
-                String keyDialog = pKeyDialog + "_" + index;
-                String valDialog = getContentString(index).replace(pNameString, "%1$s");
+                String keyDialog = this.keyDialog + "_" + index;
+                String valDialog = getContentString(index).replace(clientPlayerName, "%1$s");
 
                 Text ti = getSibling(index);
                 if(WTS.checkTranslationExist(keyDialog, valDialog)) {
                     if(valDialog.contains("%1$s")) {
-                        resultText.append(newTranslate(keyDialog, playername).setStyle(ti.getStyle()));
+                        resultText.append(newTranslate(keyDialog, playerName).setStyle(ti.getStyle()));
                     }
                     else {
                         resultText.append(newTranslate(keyDialog).setStyle(ti.getStyle()));

@@ -11,9 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DungeonComplete extends WynnChatText {
-    private static final Pattern HEAD = Pattern.compile("Great job! You've completed the (.+) Dungeon!");
-    private static final Pattern EXP = Pattern.compile("^\\[\\+(\\d+) XP]");
-    private static final Pattern FALLING_EMERALD = Pattern.compile("^\\[\\+(\\d+) falling emeralds]");
+    private static final Pattern HEAD = Pattern.compile("§6Great job! You've completed the (.+) Dungeon!");
+    private static final Pattern EXP = Pattern.compile("^§7\\[\\+(\\d+) XP]");
+    private static final Pattern FALLING_EMERALD = Pattern.compile("^§7\\[\\+(\\d+) falling emeralds]");
     private final Dungeons dungeon;
     private final String gainedXp;
     private final String gainedEmerald;

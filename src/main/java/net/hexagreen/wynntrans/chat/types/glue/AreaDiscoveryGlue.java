@@ -2,10 +2,7 @@ package net.hexagreen.wynntrans.chat.types.glue;
 
 import net.hexagreen.wynntrans.chat.TextGlue;
 import net.hexagreen.wynntrans.chat.types.AreaDiscovery;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 
 public class AreaDiscoveryGlue extends TextGlue {
     private int count = 0;
@@ -13,23 +10,17 @@ public class AreaDiscoveryGlue extends TextGlue {
 
     public AreaDiscoveryGlue() {
         super(null, AreaDiscovery.class);
-        gluedText.append("");
+        gluedText.append(" ");
+        count++;
     }
 
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
-        if(count == 0 && !text.getString().startsWith(" ")){
-            MutableText reform = Text.empty().append(Text.empty());
-            for(Text sibling : text.getSiblings()) {
-                reform.append(sibling);
-            }
-            text = reform;
-        }
-        if(count == 0) {
+        if(count == 1) {
             resetTimer();
             count++;
-            if(text.getSiblings().get(2).getStyle().getColor() == TextColor.fromFormatting(Formatting.WHITE)) {
+            if(text.getString().matches("^ *§7.+")) {
                 safeNow();
                 gluedText.append(text);
                 shortForm = true;
@@ -39,7 +30,7 @@ public class AreaDiscoveryGlue extends TextGlue {
             }
             return true;
         }
-        else if(count == 1) {
+        else if(count == 2) {
             if(text.getString().equals(" ")) {
                 resetTimer();
                 count++;
@@ -48,7 +39,7 @@ public class AreaDiscoveryGlue extends TextGlue {
             }
         }
         else {
-            if(text.getSiblings().size() == 2 && text.getSiblings().get(1).getStyle().getColor() == TextColor.fromFormatting(Formatting.GRAY)) {
+            if(text.getString().matches("^ *§.+")) {
                 resetTimer();
                 safeNow();
                 gluedText.append(text);

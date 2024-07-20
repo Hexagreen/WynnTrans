@@ -20,7 +20,7 @@ public class NpcDialogFocused extends NpcDialog implements IFocusText {
         super.build();
         switch(focusType) {
             case PRESS_SHIFT -> resultText = setToPressShift(resultText, fullText);
-            case SELECT_OPTION -> resultText = setToSelectOption(resultText, fullText, pKeyDialog);
+            case SELECT_OPTION -> resultText = setToSelectOption(resultText, fullText, keyDialog);
             case CUTSCENE -> resultText = setToCutScene(resultText);
             case AUTO -> resultText = setToConfirmless(resultText);
         }

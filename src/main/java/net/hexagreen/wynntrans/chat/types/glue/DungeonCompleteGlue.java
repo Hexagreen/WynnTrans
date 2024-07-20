@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class DungeonCompleteGlue extends TextGlue {
-    private static final Pattern REWARD = Pattern.compile("^\\[\\+.+]");
+    private static final Pattern REWARD = Pattern.compile("^§7\\[\\+.+]");
     private int count = 0;
 
     public DungeonCompleteGlue() {

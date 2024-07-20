@@ -30,6 +30,6 @@ public class AreaEnter extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, areaText).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey, areaText).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

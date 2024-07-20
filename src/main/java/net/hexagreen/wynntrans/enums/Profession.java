@@ -38,6 +38,22 @@ public enum Profession {
 
     public static Profession getProfession(char icon) {
         int index = icon - 'Ⓐ';
+        if(index >= 12) {
+            switch(icon - 57344) {
+                case 0 -> {
+                    return FARMING;
+                }
+                case 1 -> {
+                    return FISHING;
+                }
+                case 2 -> {
+                    return MINING;
+                }
+                case 3 -> {
+                    return WOODCUTTING;
+                }
+            }
+        }
         return values()[index];
     }
 

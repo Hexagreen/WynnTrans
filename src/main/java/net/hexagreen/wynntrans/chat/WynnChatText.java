@@ -7,6 +7,7 @@ import net.hexagreen.wynntrans.chat.types.SimpleText;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -160,6 +161,15 @@ public abstract class WynnChatText {
         return inputText.getSiblings().get(siblingIndex);
     }
 
+    protected Style parseStyleCode(String styleCode) {
+        char[] codes = styleCode.replace("§", "").toCharArray();
+        Formatting[] formatting = new Formatting[codes.length];
+        for(int i = 0; i < codes.length; i++) {
+            formatting[i] = Formatting.byCode(codes[i]);
+        }
+        return Style.EMPTY.withFormatting(formatting);
+    }
+
     protected static Text removeCustomNicknameFromDialog(Text text) {
         MutableText newText = text.copyContentOnly().setStyle(text.getStyle());
         newText.append(text.getSiblings().get(0));
@@ -178,7 +188,7 @@ public abstract class WynnChatText {
                 }
             }
             else {
-                removedCustomNickname = sibling;
+                removedCustomNickname = sibling.copy();
                 if(style.equals(sibling.getStyle())) {
                     partial = partial.concat("%1$s");
                 }

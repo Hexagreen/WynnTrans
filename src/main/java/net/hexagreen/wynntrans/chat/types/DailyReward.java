@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -23,17 +25,17 @@ public class DailyReward extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         if(emeralds != null) {
-            resultText.append(newTranslate(parentKey + ".emerald", emeralds).setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".emerald", emeralds).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
             if(items != null) {
-                resultText.append(newTranslate(parentKey + ".and").setStyle(getStyle(2)))
-                        .append(newTranslate(parentKey + ".item", items).setStyle(getStyle(3)));
+                resultText.append(newTranslate(parentKey + ".and").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
+                        .append(newTranslate(parentKey + ".item", items).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
             }
         }
         else {
-            resultText.append(newTranslate(parentKey + ".item", items).setStyle(getStyle(1)));
+            resultText.append(newTranslate(parentKey + ".item", items).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
         }
-        resultText.append(getSibling(-1));
+        resultText.append("]").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
     }
 }

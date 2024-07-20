@@ -75,42 +75,33 @@ public class OnGameMessageHandler {
             }
             else return true;
         }
+
         if(isLiteralBackgroundText(text)) {
             this.backgroundText.push(reformLiteralBackgroundText(text));
             return true;
         }
 
         try {
-            ChatType chatType = ChatType.findType(text);
-            switch(chatType) {
-                case NO_TYPE -> {
-                    debugClass.writeString2File(text.getString(), "literal.txt");
-                    debugClass.writeTextAsJSON(text, "Literal");
-                    return false;
-                }
-                case PRIVATE_MESSAGE, NORMAL_CHAT -> {
-                    return false;
-                }
-            }
-            chatType.run(text);
+            return ChatType.findAndRun(text);
         } catch(Exception e) {
             LOGGER.error("Error in analyseLiteralText", e);
+            return false;
         }
-        return true;
     }
 
     private boolean analyseSinglelineText(Text text) {
-        try {
-            attachGlue(text);
-            if(this.textGlue != null) {
-                if(!this.textGlue.push(text)) {
-                    attachGlue(text);
-                    if(this.textGlue != null) return this.textGlue.push(text);
-                }
-                else return true;
+        attachGlue(text);
+        if(this.textGlue != null) {
+            if(!this.textGlue.push(text)) {
+                attachGlue(text);
+                if(this.textGlue != null) return this.textGlue.push(text);
             }
+            else return true;
+        }
+
+        try {
             return ChatType.findAndRun(text);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+        } catch (Exception e) {
             LOGGER.warn("ChatType.findAndRun Error.");
             return false;
         }

@@ -24,21 +24,21 @@ public enum ChatType {
     PLEVEL_ANNOUNCE(Pattern.compile("^\\[!] Congratulations to (.+) for reaching level ([0-9]+) in (.) (.+)!$"), ProfessionLevelAnnounce.class),
     BLACKSMITH(Pattern.compile("^Blacksmith: "), Blacksmith.class),
     IDENTIFIER(Pattern.compile("^Item Identifier: "), Identifier.class),
-    AREA_ENTER(Pattern.compile("^\\[You are now entering (.+)]$"), AreaEnter.class),
-    AREA_LEAVE(Pattern.compile("^\\[You are now leaving (.+)]$"), AreaLeave.class),
+    AREA_ENTER(Pattern.compile("^§7\\[You are now entering (.+)]$"), AreaEnter.class),
+    AREA_LEAVE(Pattern.compile("^§7\\[You are now leaving (.+)]$"), AreaLeave.class),
     BOMB_THANK(Pattern.compile("^Want to thank (.+)\\? Click here to thank them!$"), BombThanks.class),
     THANK_YOU(Pattern.compile("^You have thanked (.+)$"), BombThankyou.class),
-    SHOUT(Pattern.compile("^(.+) \\[WC([0-9]+)] shouts: "), Shout.class),
+    SHOUT(Pattern.compile("^§5(.+) \\[WC([0-9]+)] shouts: §d"), Shout.class),
     CRATE_GET(Pattern.compile("^(.+) has gotten a (.+) from their crate\\. "), CrateGet.class),
     RANKS_LOGIN(Pattern.compile("^. .+ has just logged in!$"), RankJoin.class),
     COMBAT_LEVELUP(Pattern.compile("^(.+) is now combat level ([0-9]+)$"), NearCombatLevelUp.class),
     PROFESSION_LEVELUP(Pattern.compile("^(.+) is now level ([0-9]+) in (.) (.+)$"), NearProfessionLevelUp.class),
     SERVER_RESTART(Pattern.compile("^This world will restart in ([0-9]+) (minutes?|seconds?)\\.$"), ServerRestart.class),
     RESTARTING(Pattern.compile("^The world is restarting!$"), ServerRestarting.class),
-    DAILY_REWARD(Pattern.compile("^\\[Daily Rewards: (?:([0-9]+) emeralds)?(?: and )?(?:([0-9]+) items)?]$"), DailyReward.class),
+    DAILY_REWARD(Pattern.compile("^§7\\[Daily Rewards: (?:§a([0-9]+) emeralds§7)?(?: and )?(?:§b([0-9]+) items§7)?]$"), DailyReward.class),
     SPEEDBOOST(Pattern.compile("^\\+([0-9]) minutes speed boost\\."), SpeedBoost.class),
     RESISTANCE(Pattern.compile("^.+ has given you 20% resistance"), Resistance.class),
-    PARTYFINDER(Pattern.compile("^Party Finder: Hey (.+), over here! Join the .+ queue and match up with ([0-9]+) other players?!$"), PartyFinder.class),
+    PARTYFINDER(Pattern.compile("^§5Party Finder:§d Hey (.+), over here! Join the (§..+)§d queue and match up with §e([0-9]+) other players?§d!$"), PartyFinder.class),
     MERCHANT(Pattern.compile("^(.+) Merchant: "), Merchants.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     DISGUISING(Pattern.compile("^You are (now|no longer) disguised as a"), Disguising.class),
@@ -49,7 +49,7 @@ public enum ChatType {
     RECRUIT(Pattern.compile("^\\n +§6§lEnjoying Wynncraft\\?"), RecruitMessage.class),
     EQUIP_STAT_REQ(Pattern.compile("requires your (.+) skill to be at least"), EquipmentSkillRequirement.class),
     EQUIP_LEVEL_REQ(Pattern.compile("is for combat level "), EquipmentLevelRequirement.class),
-    UNUSED_STAT_POINT(Pattern.compile("^You have (?:(\\d+) unused Skill Points?)?(?: and )?(?:(\\d+) unused Ability Points?)?! Right-Click"), UnusedStatPoint.class),
+    UNUSED_STAT_POINT(Pattern.compile("^§4You have §c§l(?:(\\d+) unused Skill Points§4?)?(?: and )?§b§l(?:(\\d+) unused Ability Points?)?! §4Right-Click"), UnusedStatPoint.class),
     POUCH_SOLD(Pattern.compile("^You have sold \\d+ ingredients"), PouchSold.class),
     SKIP_TUTORIAL(Pattern.compile("^You may skip the tutorial"), SkipTutorial.class),
     WEEKLY_OBJECTIVE(Pattern.compile("^ \n +§lObjective Finished"), WeeklyObjective.class),
@@ -107,9 +107,5 @@ public enum ChatType {
     public static boolean findAndRun(Text text) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         ChatType find = findType(text);
         return find.wct != null && find.wct.cast(find.wct.getConstructor(Text.class, Pattern.class).newInstance(text, find.regex)).print();
-    }
-
-    public void run(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        this.wct.cast(this.wct.getConstructor(Text.class, Pattern.class).newInstance(text, this.regex)).print();
     }
 }

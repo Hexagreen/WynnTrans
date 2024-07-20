@@ -3,32 +3,27 @@ package net.hexagreen.wynntrans.chat.types.glue;
 import net.hexagreen.wynntrans.chat.TextGlue;
 import net.hexagreen.wynntrans.chat.types.LevelUp;
 import net.hexagreen.wynntrans.chat.types.LevelUpProfession;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LevelUpGlue extends TextGlue {
-    private static final Pattern PROFESSION = Pattern.compile("^ +You are now level \\d+ in");
-    private static final Pattern PROF_TAIL = Pattern.compile("^Only (\\d+) more levels? until you can");
-    private static final Pattern REWARD = Pattern.compile("^\\+");
+    private static final Pattern PROFESSION = Pattern.compile("^§e +You are now level \\d+ in");
+    private static final Pattern PROF_TAIL = Pattern.compile("^§5Only §d(\\d+) more levels? §5until you can");
+    private static final Pattern REWARD = Pattern.compile("^§[7b]\\+");
     private int count = 0;
     private boolean isProfession = false;
 
     public LevelUpGlue() {
         super(null, LevelUp.class);
-        gluedText.append("");
+        gluedText.append(" ");
         count++;
     }
 
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
-        if(count == 1 && !text.getContent().equals(PlainTextContent.EMPTY)) {
-            pop();
-            return false;
-        }
         if (!isProfession) {
             switch(count) {
                 case 1, 3, 4, 5 -> {

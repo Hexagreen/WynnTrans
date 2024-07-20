@@ -12,8 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LevelUp extends WynnChatText implements ICenterAligned {
-    private static final Pattern REGEX_LEVELUP = Pattern.compile("^ +You are now combat level (\\d+)");
-    private static final Pattern REGEX_NEXTAP = Pattern.compile("^ +Only (\\d+) more levels? until your next Ability Point");
+    private static final Pattern REGEX_LEVELUP = Pattern.compile("You are now combat level (\\d+)");
+    private static final Pattern REGEX_NEXTAP = Pattern.compile("^ +§6Only §e(\\d+) more levels?§6 until your next§e Ability Point");
 
     public LevelUp(Text text, Pattern regex) {
         super(text, regex);
@@ -66,16 +66,9 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                         .append("\n");
                 continue;
             }
-            if(getSibling(i).getString().contains("+1 Maximum Soul Points")) {
-                String amount = getSibling(i).getSiblings().get(1).getString().replaceAll("\\D", "");
-                resultText.append(newTranslate(parentKey + ".soulPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
-                        .append(newTranslate(parentKey + ".soulPoint.amount", amount).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
-                        .append("\n");
-                continue;
-            }
             if(getSibling(i).getString().contains("+ New Quest")) {
                 String keyNewQuest = parentKey + ".newQuest";
-                String valQuestName = getSibling(i).getSiblings().get(1).getString()
+                String valQuestName = getSibling(i).getString().substring(16)
                         .replace("[", "").replace("]", "")
                         .replace("À", "").replace("֎", "");
                 if(valQuestName.contains("Mini-Quest - ")) {
@@ -90,7 +83,7 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
                     questText = Text.literal("[" + newTranslate(keyQuestName).getString() + "]").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY));
                 }
                 else {
-                    questText = getSibling(i).getSiblings().get(1);
+                    questText = Text.literal(getSibling(i).getString().substring(16));
                 }
 
                 resultText.append(newTranslate(keyNewQuest).setStyle(Style.EMPTY.withColor(Formatting.GRAY)))
@@ -100,31 +93,14 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
             }
             String hashOtherReward = DigestUtils.sha1Hex(getSibling(i).getString()).substring(0, 4);
             MutableText otherReward = Text.literal("+ ").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-            if(getSibling(i).getSiblings().size() == 2) {
-                Text origin = getSibling(i).getSiblings().get(1);
-                String keyOtherReward = "wytr.level." + m2.group(1) + "." + hashOtherReward;
-                String valOtherReward = origin.getString();
+            String keyOtherReward = "wytr.level." + m2.group(1) + "." + hashOtherReward;
+            String valOtherReward = getSibling(i).getString().substring(4);
 
-                if(WTS.checkTranslationExist(keyOtherReward, valOtherReward)) {
-                    otherReward.append(newTranslate(keyOtherReward).setStyle(origin.getStyle()));
-                }
-                else {
-                    otherReward.append(origin);
-                }
+            if(WTS.checkTranslationExist(keyOtherReward, valOtherReward)) {
+                otherReward.append(newTranslate(keyOtherReward).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             }
             else {
-                for(int index = 1; index < getSibling(i).getSiblings().size(); index++) {
-                    Text origin = getSibling(i).getSiblings().get(index);
-                    String keyOtherReward = "wytr.level." + m2.group(1) + "." + hashOtherReward + "_" + index;
-                    String valOtherReward = origin.getString();
-
-                    if(WTS.checkTranslationExist(keyOtherReward, valOtherReward)) {
-                        otherReward.append(newTranslate(keyOtherReward).setStyle(origin.getStyle()));
-                    }
-                    else {
-                        otherReward.append(origin);
-                    }
-                }
+                otherReward.append(valOtherReward);
             }
             resultText.append(otherReward);
         }
