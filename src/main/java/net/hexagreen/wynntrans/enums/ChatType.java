@@ -74,6 +74,7 @@ public enum ChatType {
     CHARACTER_CLASS_CHANGE(Pattern.compile("^Your character's class has been successfully changed to "), CharacterClassChange.class),
     POWDER_MASTER(Pattern.compile("^Powder Master: "), PowderMaster.class),
     QUICK_TRADE(Pattern.compile("^\n(.+) would like to trade!\n"), QuickTrade.class),
+    CAVE_COMPLETE_LITERAL(Pattern.compile("^ \\n§2 +\\[Cave Completed]"), CaveCompletedLiteral.class),
 
 
     GO_TO_STORE(Pattern.compile("wynncraft\\.com/store"), GoToStore.class),

@@ -61,6 +61,7 @@ public class SimpleText extends WynnChatText {
                 String valText = sibling.getString();
                 String keyText = this.keyText + "_" + i++;
 
+                if(resultText == null) resultText = Text.empty().setStyle(getStyle());
                 if(checkTranslationExistWithControl(keyText, valText)) {
                     resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
                 }

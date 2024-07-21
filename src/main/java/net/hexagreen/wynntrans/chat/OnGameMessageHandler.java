@@ -66,7 +66,7 @@ public class OnGameMessageHandler {
         return false;
     }
 
-    private boolean analyseLiteralText(Text text) {
+    private boolean analyseLiteralText(Text text) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         attachGlue(text);
         if(this.textGlue != null) {
             if(!this.textGlue.push(text)) {
@@ -84,12 +84,12 @@ public class OnGameMessageHandler {
         try {
             return ChatType.findAndRun(text);
         } catch(Exception e) {
-            LOGGER.error("Error in analyseLiteralText", e);
-            return false;
+            LOGGER.error("Error in analyseLiteralText");
+            throw e;
         }
     }
 
-    private boolean analyseSinglelineText(Text text) {
+    private boolean analyseSinglelineText(Text text) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         attachGlue(text);
         if(this.textGlue != null) {
             if(!this.textGlue.push(text)) {
@@ -102,8 +102,8 @@ public class OnGameMessageHandler {
         try {
             return ChatType.findAndRun(text);
         } catch (Exception e) {
-            LOGGER.warn("ChatType.findAndRun Error.");
-            return false;
+            LOGGER.warn("Error in analyseSinglelineText");
+            throw e;
         }
     }
 
