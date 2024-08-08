@@ -39,7 +39,7 @@ public enum ChatType {
     SPEEDBOOST(Pattern.compile("^\\+([0-9]) minutes speed boost\\."), SpeedBoost.class),
     RESISTANCE(Pattern.compile("^.+ has given you 20% resistance"), Resistance.class),
     PARTYFINDER(Pattern.compile("^§5Party Finder:§d Hey (.+), over here! Join the (§..+)§d queue and match up with §e([0-9]+) other players?§d!$"), PartyFinder.class),
-    MERCHANT(Pattern.compile("^(.+) Merchant: "), Merchants.class),
+    MERCHANT(Pattern.compile("^(\\w+) Merchant: "), Merchants.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     DISGUISING(Pattern.compile("^You are (now|no longer) disguised as a"), Disguising.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
@@ -60,7 +60,7 @@ public enum ChatType {
     PARTY_JOINED(Pattern.compile("^(.+) has joined your party, say hello!$"), PartyJoined.class),
     PARTY_LEAVED(Pattern.compile("^(.+) has left the party.$"), PartyLeaved.class),
     KEY_COLLECTOR(Pattern.compile("^Key Collector: "), KeyCollector.class),
-    SERVER_KICK(Pattern.compile("^Kicked from WC(\\d+): "), KickFromServer.class),
+    SERVER_KICK(Pattern.compile("^Kicked from (?:(WC\\d+)|(DUMMY)): "), KickFromServer.class),
     SERVER_SWAP_SAVE(Pattern.compile("^Saving your player data before switching to WC\\d+"), ServerSwapSave.class),
     FRIEND_LIST(Pattern.compile("(.+)'s friends \\((\\d+)\\): "), FriendList.class),
     FINISH_TRADING(Pattern.compile("^Finished (?:buying|selling) "), TradeFinish.class),
@@ -76,9 +76,11 @@ public enum ChatType {
     QUICK_TRADE(Pattern.compile("^\n(.+) would like to trade!\n"), QuickTrade.class),
     CAVE_COMPLETE_LITERAL(Pattern.compile("^ \\n§2 +\\[Cave Completed]"), CaveCompletedLiteral.class),
 
+    WORLD_EVENT_START(Pattern.compile("The (.+) World Event starts in (\\d+\\w)!"), WorldEventStart.class),
 
     GO_TO_STORE(Pattern.compile("wynncraft\\.com/store"), GoToStore.class),
     ITEM_BOMB_IGNORE(Pattern.compile("^Everybody gets 2 Random Items!"), EatThisText.class),
+    STANDARD_SYSTEM_MESSAGE(Pattern.compile("^\\uDAFF\\uDFFC.\\uDAFF\\uDFFF\\uE002\\uDAFF\\uDFFE |^\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 "), SimpleSystemText.class),
     NO_TYPE(null, SimpleText.class);
 
 
@@ -98,15 +100,19 @@ public enum ChatType {
         return this.regex.matcher(text.getSiblings().get(siblingIndex).getString()).find();
     }
 
-    public static ChatType findType(Text text) {
+    private static ChatType findType(Text text) {
         return Arrays.stream(ChatType.values())
                 .filter(chatType -> Objects.nonNull(chatType.regex))
-                .filter(chatType -> chatType.regex.matcher(text.getString()).find())
+                .filter(chatType -> chatType.regex.matcher(removeTextBox(text)).find())
                 .findFirst().orElse(NO_TYPE);
     }
 
     public static boolean findAndRun(Text text) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         ChatType find = findType(text);
         return find.wct != null && find.wct.cast(find.wct.getConstructor(Text.class, Pattern.class).newInstance(text, find.regex)).print();
+    }
+
+    private static String removeTextBox(Text text) {
+        return text.getString().replaceAll(" ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ");
     }
 }
