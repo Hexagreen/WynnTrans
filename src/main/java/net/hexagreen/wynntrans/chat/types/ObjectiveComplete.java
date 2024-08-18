@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_EXP = Pattern.compile("§7\\+§f(\\d+)§7 Experience Points");
     private static final Pattern REGEX_EME = Pattern.compile("\\+(\\d+) Emeralds");
-    private static final String func = rootKey + dirFunctional;
+    private static final String func = rootKey + "func.";
     private final Style titleStyle;
     private final Style objectiveNameStyle;
     private String keyObjectiveName;

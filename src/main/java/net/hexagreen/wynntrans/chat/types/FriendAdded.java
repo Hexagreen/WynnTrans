@@ -15,7 +15,7 @@ public class FriendAdded extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "friendAdded";
+        return rootKey + "func.friendAdded";
     }
 
     @Override

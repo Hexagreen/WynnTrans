@@ -2,7 +2,7 @@ package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.debugClass;
-import net.minecraft.text.ClickEvent;
+import net.hexagreen.wynntrans.enums.Bombs;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -21,29 +21,31 @@ public class BombStart extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "bombStart";
+        return rootKey + "func.bombStart";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
 
-        if(bomb == null) return;
+        if(bomb == null) throw new UnprocessedChatTypeException("BombStart.class");
+        Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+
         switch(bomb) {
             case COMBAT_XP, PROFESSION_XP, PROFESSION_SPEED, LOOT ->
-                    resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
+                    resultText.append(newTranslate(parentKey, playerName, bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
-                    .append(newTranslate(parentKey + ".durational", bomb.bombDescription, bomb.bombTime)
+                    .append(newTranslate(parentKey + ".durational", bomb.getBombDescription(), bomb.getBombTime())
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
-            case ITEM, INGREDIENT ->
-                    resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
+            case ITEM ->
+                    resultText.append(newTranslate(parentKey, playerName, bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
-                    .append(newTranslate(parentKey + ".instant", bomb.bombDescription, bomb.bombTime)
+                    .append(newTranslate(parentKey + ".instant", bomb.getBombDescription())
                             .setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             case DUNGEON ->
-                    resultText.append(newTranslate(parentKey, playerName, bomb.bombName)
+                    resultText.append(newTranslate(parentKey, playerName, bombName)
                             .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
-                    .append(bomb.bombDescription);
+                    .append(bomb.getBombDescription());
             default -> {
                 debugClass.writeTextAsJSON(inputText, "UnknownBomb");
                 resultText = inputText;
@@ -51,85 +53,4 @@ public class BombStart extends WynnChatText {
         }
     }
 
-    private static final String bombRootKey = rootKey + "bomb.";
-    private enum Bombs {
-        COMBAT_XP(Text.translatable(bombRootKey + "name.combat").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.combat").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.combat").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-        PROFESSION_XP(Text.translatable(bombRootKey + "name.profXp").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.profXp").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.profXp").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-        PROFESSION_SPEED(Text.translatable(bombRootKey + "name.profSpeed").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.profSpeed").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.profSpeed").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-        ITEM(Text.translatable(bombRootKey + "name.item").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.item").setStyle(Style.EMPTY.withColor(Formatting.WHITE)),
-                Text.translatable(bombRootKey + "time.item").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claimitembomb"))
-                        .withUnderline(true))),
-        SOUL_POINT(Text.translatable(bombRootKey + "name.soulPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.soulPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.soulPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-        DUNGEON(Text.translatable(bombRootKey + "name.dungeon").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.dungeon",
-                        Text.translatable(bombRootKey + "time.dungeon").setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
-                    .setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)),
-                null),
-        LOOT(Text.translatable(bombRootKey + "name.loot").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.loot").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.loot").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-        INGREDIENT(Text.translatable(bombRootKey + "name.ingredient").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.ingredient").setStyle(Style.EMPTY.withColor(Formatting.WHITE)),
-                Text.translatable(bombRootKey + "time.ingredient").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claimingredientbomb"))
-                        .withUnderline(true))),
-        PARTY(Text.translatable(bombRootKey + "name.party").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "desc.party").setStyle(Style.EMPTY.withColor(Formatting.AQUA)),
-                Text.translatable(bombRootKey + "time.party").setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
-
-        private final Text bombName;
-        private final Text bombDescription;
-        private final Text bombTime;
-
-        Bombs(Text bombName, Text bombDesc, Text bombTime) {
-            this.bombName = bombName;
-            this.bombDescription = bombDesc;
-            this.bombTime = bombTime;
-        }
-
-        private static Bombs findBomb(String bombName) {
-            switch(bombName) {
-                case "Combat XP Bomb" -> {
-                    return COMBAT_XP;
-                }
-                case "Profession XP Bomb" -> {
-                    return PROFESSION_XP;
-                }
-                case "Profession Speed Bomb" -> {
-                    return PROFESSION_SPEED;
-                }
-                case "Item Bomb" -> {
-                    return ITEM;
-                }
-                case "Soul Point Bomb" -> {
-                    return SOUL_POINT;
-                }
-                case "Dungeon Bomb" -> {
-                    return DUNGEON;
-                }
-                case "Loot Bomb" -> {
-                    return LOOT;
-                }
-                case "Ingredient Bomb" -> {
-                    return INGREDIENT;
-                }
-                case "Party Bomb" -> {
-                    return PARTY;
-                }
-                default -> {
-                    return null;
-                }
-            }
-        }
-    }
 }

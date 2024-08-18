@@ -17,22 +17,23 @@ public class ProfessionLevelAnnounce extends WynnChatText {
         this.level = "§f" + matcher.group(2);
         String profIcon = matcher.group(3) + " ";
         String keyProfName = "wytr.profession." + matcher.group(4).toLowerCase();
-        this.playerName = getPlayerNameFromSibling(4);
+        this.playerName = Text.literal(matcher.group(1));
         this.profession = Text.literal(profIcon).setStyle(Style.EMPTY.withColor(Formatting.WHITE))
                 .append(Text.translatable(keyProfName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        if(!text.getSiblings().isEmpty()) throw new UnprocessedChatTypeException("ProfessionLevelAnnounce.class");
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "levelAnnounce.profession";
+        return rootKey + "func.levelAnnounce.profession";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
-        resultText.append(getSibling(0))
-                .append(getSibling(1))
-                .append(getSibling(2))
-                .append(newTranslate(parentKey, playerName, level, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText.append(Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
+                .append(Text.literal("!"))
+                .append(Text.literal("] ").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
+                .append(newTranslate(parentKey, playerName, level, profession));
     }
 }

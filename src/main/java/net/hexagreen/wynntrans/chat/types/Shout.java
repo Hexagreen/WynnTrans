@@ -16,12 +16,12 @@ public class Shout extends WynnChatText {
         super(text, regex);
         this.name = matcher.group(1);
         this.server = matcher.group(2);
-        this.body = text.getString().replace(regex.pattern(), "");
+        this.body = text.getString().replaceAll(regex.pattern(), "");
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "shout";
+        return rootKey + "func.shout";
     }
 
     @Override

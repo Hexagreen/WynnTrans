@@ -14,8 +14,8 @@ public class SimpleSystemText extends WynnSystemText {
 
     public SimpleSystemText(Text text, Pattern ignore) {
         super(text, null);
-        this.valText = lineFeedReplacer(inputText.getString());
-        this.keyText = parentKey + DigestUtils.sha1Hex(lineFeedRemover(inputText.getString()));
+        this.valText = initValText();
+        this.keyText = initKeyText();
     }
 
     @Override
@@ -30,6 +30,7 @@ public class SimpleSystemText extends WynnSystemText {
             return;
         }
 
+        boolean recorded = false;
         if(inputText.getSiblings().size() > 1) {
             int i = 1;
             for(Text sibling : inputText.getSiblings()) {
@@ -38,18 +39,21 @@ public class SimpleSystemText extends WynnSystemText {
 
                 if(checkTranslationExistWithControl(keyText, valText)) {
                     if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
-                    resultText.append(newTranslate(keyText, splitter).setStyle(sibling.getStyle()));
+                    resultText.append(newTranslateWithSplit(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
                     if(resultText == null) resultText = originText.copy();
-                    debugClass.writeTextAsJSON(inputText, "SystemText");
+                    if(translationRegisterControl && !recorded){
+                        debugClass.writeTextAsJSON(inputText, "SystemText");
+                        recorded = true;
+                    }
                 }
             }
         }
         else {
             if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
             if(checkTranslationExistWithControl(keyText, valText)) {
-                resultText.append(newTranslate(keyText, splitter).setStyle(getStyle()));
+                resultText.append(newTranslateWithSplit(keyText).setStyle(getStyle(0)));
             }
             else {
                 resultText = originText.copy();
@@ -59,6 +63,15 @@ public class SimpleSystemText extends WynnSystemText {
             }
         }
     }
+
+    protected String initValText() {
+        return lineFeedReplacer(inputText.getString());
+    }
+
+    private String initKeyText() {
+        return parentKey + DigestUtils.sha1Hex(replacerRemover(valText));
+    }
+
     public static void setTranslationControl(boolean control) {
         translationRegisterControl = control;
     }

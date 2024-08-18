@@ -20,7 +20,7 @@ public class CrateAlert extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "crateAlert";
+        return rootKey + "func.crateAlert";
     }
 
     @Override

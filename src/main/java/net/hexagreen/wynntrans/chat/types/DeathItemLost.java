@@ -2,7 +2,9 @@ package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -11,21 +13,21 @@ public class DeathItemLost extends WynnChatText {
 
     public DeathItemLost(Text text, Pattern regex) {
         super(text, regex);
-        this.lostItems = getLost();
+        this.lostItems = initLost();
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "itemLost";
+        return rootKey + "func.itemLost";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, lostItems).setStyle(getSibling(0).getSiblings().get(0).getStyle()));
+        resultText.append(newTranslate(parentKey, lostItems).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
     }
 
-    private Text getLost() {
+    private Text initLost() {
         MutableText rewards = Text.empty();
         for(int i = 1; i < inputText.getSiblings().size(); i++) {
             rewards.append("\n").append(getSibling(i));

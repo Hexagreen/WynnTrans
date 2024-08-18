@@ -8,21 +8,23 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class PouchSold extends WynnChatText {
+    private final String amount;
+    private final String emerald;
 
     public PouchSold(Text text, Pattern regex) {
         super(text, regex);
+        this.amount = matcher.group(1);
+        this.emerald = matcher.group(2);
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "pouchSold";
+        return rootKey + "func.pouchSold";
     }
 
     @Override
     protected void build() {
-        Style style = Style.EMPTY.withColor(Formatting.LIGHT_PURPLE);
-
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, getSibling(1), getSibling(3)).setStyle(style));
+        resultText.append(newTranslate(parentKey, amount, emerald).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

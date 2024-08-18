@@ -2,28 +2,23 @@ package net.hexagreen.wynntrans.chat.types.glue;
 
 import net.hexagreen.wynntrans.chat.TextGlue;
 import net.hexagreen.wynntrans.chat.types.QuestCompleted;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
 public class QuestGlue extends TextGlue {
-    private static final Pattern REWARD = Pattern.compile("^ {12,}- \\+.+$");
+    private static final Pattern REWARD = Pattern.compile("^§d {12,}- §.\\+.+$");
     private int count = 0;
 
     public QuestGlue() {
         super(null, QuestCompleted.class);
-        gluedText.append("");
+        gluedText.append(" ");
         count++;
     }
 
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
-        if(count == 1 && !text.getContent().equals(PlainTextContent.EMPTY)) {
-            pop();
-            return false;
-        }
         switch(count) {
             case 1, 2, 3, 4 -> {
                 resetTimer();

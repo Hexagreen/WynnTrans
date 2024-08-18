@@ -24,7 +24,7 @@ public class AreaLeave extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "area.leave";
+        return rootKey + "func.area.leave";
     }
 
     @Override

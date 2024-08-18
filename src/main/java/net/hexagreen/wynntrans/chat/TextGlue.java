@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 public abstract class TextGlue {
     protected static final Logger LOGGER = LogUtils.getLogger();
     private static final byte TIMER_THRESHOLD = 1;
+    protected final Pattern regex;
     protected MutableText gluedText;
-    protected Pattern regex;
     private Class<? extends WynnChatText> wctClass;
     private byte timer;
     private boolean safetyLock;

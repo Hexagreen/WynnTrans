@@ -5,12 +5,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class KickFromServer extends WynnChatText {
-    private static final String lowTPS = "The server you were previously on went down";
-    private static final String restart = "World is restarting!";
     private static final Pattern fallbackRegex = Pattern.compile("You are being moved to (\\w+\\d+)\\.\\.\\.");
     private final String channelNumber;
     private final String fallbackServer;
@@ -25,7 +24,7 @@ public class KickFromServer extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "serverKicked";
+        return rootKey + "func.serverKicked";
     }
 
     @Override
@@ -34,11 +33,32 @@ public class KickFromServer extends WynnChatText {
 
         resultText.append(newTranslate(parentKey, channelNumber).setStyle(Style.EMPTY.withColor(Formatting.RED)));
 
-        if(getSibling(1).getString().contains(lowTPS))
-            resultText.append(newTranslate(parentKey + ".serverDown"));
-        else if(getSibling(1).getString().contains(restart))
-            resultText.append(newTranslate(parentKey + ".restart"));
+        KickReason reason = KickReason.findReason(getSibling(1));
+        if(reason != KickReason.UNKNOWN_REASON) resultText.append(newTranslate(parentKey + reason.langCode));
+        else resultText.append(getSibling(1));
+
 
         resultText.append(newTranslate(parentKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+    }
+
+    private enum KickReason {
+        LOW_TPS("The server you were previously on went down", ".serverDown"),
+        RESTART("World is restarting!", ".restart"),
+        PROXY_LOST("Proxy lost connection to server.", ".proxyLost"),
+        UNKNOWN_REASON(null, null);
+
+        private final String reason;
+        private final String langCode;
+
+        KickReason(String reason, String langCode) {
+            this.reason = reason;
+            this.langCode = langCode;
+        }
+
+        static KickReason findReason(Text text) {
+            return Arrays.stream(KickReason.values())
+                    .filter(kickReason -> text.getString().contains(kickReason.reason))
+                    .findFirst().orElse(UNKNOWN_REASON);
+        }
     }
 }

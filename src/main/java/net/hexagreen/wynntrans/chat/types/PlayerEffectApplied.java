@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -15,12 +17,12 @@ public class PlayerEffectApplied extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "effectApplied";
+        return rootKey + "func.effectApplied";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, skinName).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey, skinName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

@@ -1,11 +1,11 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class Merchants extends WynnChatText {
+public class Merchants extends WynnSystemText {
     private final String keyMerchantName;
     private final String valMerchantName;
 
@@ -18,28 +18,27 @@ public class Merchants extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "merchant";
+        return rootKey + "func.merchant";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append(header).setStyle(getStyle());
 
         if(WTS.checkTranslationExist(keyMerchantName, valMerchantName)) {
-            resultText.append(newTranslate(keyMerchantName).setStyle(getStyle(0)));
-            resultText.append(Text.literal(": ").setStyle(getStyle(0)));
+            resultText.append(newTranslate(keyMerchantName).append(": "));
         }
         else {
-            resultText.append(getSibling(0));
+            resultText.append(getSibling(0)).append(" ");
         }
 
-        if(getContentString(1).contains("Thank you for your business")) {
+        if(lineFeedRemover(getContentString(1)).contains("Thank you for your business")) {
             resultText.append(newTranslate(parentKey + ".confirm").setStyle(getStyle(1)));
         }
-        else if(getContentString(1).contains("cannot afford that")) {
+        else if(lineFeedRemover(getContentString(1)).contains("cannot afford that")) {
             resultText.append(newTranslate(parentKey + ".noEmerald").setStyle(getStyle(1)));
         }
-        else if(getContentString(1).contains("don't have enough space")) {
+        else if(lineFeedRemover(getContentString(1)).contains("don't have enough space")) {
             resultText.append(newTranslate(parentKey + ".noSpace").setStyle(getStyle(1)));
         }
     }

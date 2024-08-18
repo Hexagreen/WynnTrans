@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -17,7 +19,7 @@ public class SkinApplied extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "skinApplied.";
+        return rootKey + "func.skinApplied.";
     }
 
     @Override
@@ -25,6 +27,6 @@ public class SkinApplied extends WynnChatText {
         String key = weaponMode ? parentKey + "weapon" : parentKey + "helmet";
 
         resultText = Text.empty();
-        resultText.append(newTranslate(key, skinName).setStyle(getStyle(0)));
+        resultText.append(newTranslate(key, skinName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

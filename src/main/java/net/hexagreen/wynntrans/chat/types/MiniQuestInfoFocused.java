@@ -5,10 +5,10 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class MiniQuestInfoConfirmable extends MiniQuestInfo implements IFocusText {
+public class MiniQuestInfoFocused extends MiniQuestInfo implements IFocusText {
     private final Text fullText;
 
-    public MiniQuestInfoConfirmable(Text text, Pattern regex) {
+    public MiniQuestInfoFocused(Text text, Pattern regex) {
         super(text.getSiblings().get(2), regex);
         this.fullText = text;
     }

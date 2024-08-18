@@ -72,19 +72,19 @@ public interface IFocusText extends ICenterAligned {
         MutableText textBody = (newTranslate(key + ".1").setStyle(original.get(0).getStyle()))
                 .append(newTranslate(key + ".2").setStyle(original.get(1).getStyle()))
                 .append(newTranslate(key + ".3").setStyle(original.get(2).getStyle()));
-        return Text.literal(getCenterIndent(textBody)).append(textBody);
+        return getCenterIndent(textBody).append(textBody);
     }
 
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
-        List<Text> original = fullText.getSiblings().get(getLastOptionIndex(fullText) + 4).getSiblings();
+        List<Text> original = fullText.getSiblings().get(findLastOptionIndex(fullText) + 4).getSiblings();
         MutableText textBody =(newTranslate(key + ".1").setStyle(original.get(0).getStyle()))
                 .append(newTranslate(key + ".2").setStyle(original.get(1).getStyle()))
                 .append(newTranslate(key + ".3").setStyle(original.get(2).getStyle()));
-        return Text.literal(getCenterIndent(textBody)).append(textBody);
+        return getCenterIndent(textBody).append(textBody);
     }
 
-    private int getLastOptionIndex(Text fullText) {
+    private int findLastOptionIndex(Text fullText) {
         int selTooltipIdx = 9;
         for (int i = fullText.getSiblings().size() - 1; i >= 9; i--) {
             if (FunctionalRegex.SELECTION_END.match(fullText, i)) {
@@ -97,7 +97,7 @@ public interface IFocusText extends ICenterAligned {
 
     private void selectionOptions(MutableText constructingText, Text fullText, String pKeyDialog) {
         List<Text> original = fullText.getSiblings();
-        for(int i = 6; i <= getLastOptionIndex(fullText); i = i + 2) {
+        for(int i = 6; i <= findLastOptionIndex(fullText); i = i + 2) {
             Text textBody = original.get(i).getSiblings().get(2);
             String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
             String valSelOpt = ((PlainTextContent) textBody.getContent()).string();

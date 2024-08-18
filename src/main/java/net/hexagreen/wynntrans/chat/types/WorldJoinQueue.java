@@ -18,7 +18,7 @@ public class WorldJoinQueue extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "joinQueue";
+        return rootKey + "func.worldJoinQueue";
     }
 
     @Override

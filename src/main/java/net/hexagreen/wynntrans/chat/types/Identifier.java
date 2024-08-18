@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.minecraft.text.Text;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class Identifier extends WynnChatText {
+public class Identifier extends WynnSystemText {
     private final MessageType messageType;
 
     public Identifier(Text text, Pattern regex) {
@@ -18,42 +18,32 @@ public class Identifier extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "identifier";
+        return rootKey + "func.identifier";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText.append(newTranslate(parentKey).append(": "));
 
         switch(messageType) {
             case ILLEGAL_ITEM ->
-                resultText.append(newTranslate(parentKey).setStyle(getStyle(0)))
-                        .append(Text.literal(": ").setStyle(getStyle(0)))
-                        .append(newTranslate(parentKey + ".1").setStyle(getStyle(1)))
-                        .append(ItemRarity.UNIQUE.getRarity())
-                        .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
-                        .append(ItemRarity.RARE.getRarity())
-                        .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
-                        .append(ItemRarity.LEGENDARY.getRarity())
-                        .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
-                        .append(ItemRarity.SET.getRarity())
-                        .append(newTranslate(parentKey + ".separator").setStyle(getStyle(1)))
-                        .append(ItemRarity.FABLED.getRarity())
-                        .append(newTranslate(parentKey + ".separator_alt").setStyle(getStyle(1)))
-                        .append(ItemRarity.MYTHIC.getRarity())
-                        .append(newTranslate(parentKey + ".2").setStyle(getStyle(1)));
+                    resultText.append(newTranslateWithSplit(parentKey + ".illegalItem",
+                            ItemRarity.UNIQUE.getRarity(), ItemRarity.RARE.getRarity(),
+                            ItemRarity.LEGENDARY.getRarity(), ItemRarity.SET.getRarity(),
+                            ItemRarity.FABLED.getRarity(), ItemRarity.MYTHIC.getRarity()
+                    ).setStyle(getStyle(1)));
+
             case AUGMENT_FIRST ->
-                resultText.append(newTranslate(parentKey).setStyle(getStyle(0)))
-                        .append(Text.literal(": ").setStyle(getStyle(0)))
-                        .append(newTranslate(parentKey + ".augmentFirst").setStyle(getStyle(1)));
+                    resultText.append(newTranslateWithSplit(parentKey + ".augmentFirst").setStyle(getStyle(1)));
             case NULL ->
                 throw new UnprocessedChatTypeException(this.getClass().getName());
         }
     }
 
     private enum MessageType {
-        ILLEGAL_ITEM(Pattern.compile("I can't identify this item! ")),
-        AUGMENT_FIRST(Pattern.compile("You cannot add an augment without adding an item first!")),
+        ILLEGAL_ITEM(Pattern.compile("I can't identify")),
+        AUGMENT_FIRST(Pattern.compile("You cannot add")),
         NULL(null);
 
         private final Pattern regex;

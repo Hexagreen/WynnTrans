@@ -1,9 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
-import net.hexagreen.wynntrans.enums.ChatType;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
@@ -22,21 +19,14 @@ public class ItemGiveAndTake extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "item";
+        return rootKey + "func.item";
     }
 
     @Override
     protected void build() {
-        if(!inputText.getContent().equals(PlainTextContent.EMPTY)) {
-            processMalformedDialog();
-            return;
-        }
-        resultText = Text.empty().setStyle(getStyle(0));
+        resultText = Text.empty().setStyle(
+                parseStyleCode(getContentString().replaceAll("(§.).+", "$1"))
+        );
         resultText.append("[" + direction + number + " " + item + "]");
-    }
-
-    private void processMalformedDialog() {
-        MutableText corrected = Text.empty().append(inputText);
-        resultText = new ItemGiveAndTake(corrected, ChatType.DIALOG_ITEM.getRegex()).text();
     }
 }

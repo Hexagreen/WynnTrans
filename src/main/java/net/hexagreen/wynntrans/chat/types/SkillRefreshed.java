@@ -18,7 +18,7 @@ public class SkillRefreshed extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "skillRefreshed";
+        return rootKey + "func.skillRefreshed";
     }
 
     @Override

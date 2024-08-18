@@ -1,11 +1,12 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
+import net.hexagreen.wynntrans.enums.Elements;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class PowderMaster extends WynnChatText {
+public class PowderMaster extends WynnSystemText {
 
     public PowderMaster(Text text, Pattern regex) {
         super(text, regex);
@@ -13,13 +14,34 @@ public class PowderMaster extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "powderMaster";
+        return rootKey + "func.powderMaster";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey).setStyle(getStyle(0)).append(": "));
-        resultText.append(newTranslate(parentKey + ".confirm").setStyle(getStyle(1)));
+        resultText = Text.empty().append(header).setStyle(getStyle());
+
+        resultText.append(newTranslate(parentKey).append(": "));
+
+        if(getContentString(1).contains("I can't infuse powders")) {
+            resultText.append(newTranslateWithSplit(parentKey + ".cantInfuse").setStyle(getStyle(1)));
+        }
+        else if(getContentString(1).contains("I can't remove powders")) {
+            resultText.append(newTranslateWithSplit(parentKey + ".cantRemove").setStyle(getStyle(1)));
+        }
+        else if(getContentString(1).contains("You can only upgrade")) {
+            resultText.append(newTranslateWithSplit(parentKey + ".cantUpgrade").setStyle(getStyle(1)));
+        }
+        else if(getContentString(1).contains("An item is required")) {
+            resultText.append(newTranslateWithSplit(parentKey + ".itemFirst").setStyle(getStyle(1)));
+        }
+        else if(getContentString(1).contains("You are attempting to")) {
+            Text powderType = Elements.findElement(
+                    getContentString(1).replaceAll("\n", "")
+                            .replaceAll(".+ upgrade an ", "")
+                            .replaceAll(" powder, so .+", "")).getElement();
+            resultText.append(newTranslateWithSplit(parentKey + ".upgradeIllegal", powderType).setStyle(getStyle(1)));
+        }
+        else throw new UnprocessedChatTypeException("PowderMaster.class");
     }
 }

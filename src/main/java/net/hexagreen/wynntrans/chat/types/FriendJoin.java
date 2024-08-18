@@ -20,7 +20,7 @@ public class FriendJoin extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "friendJoin";
+        return rootKey + "func.friendJoin";
     }
 
     @Override

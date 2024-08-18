@@ -13,7 +13,7 @@ public class CrateGet extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "crateReward";
+        return rootKey + "func.crateReward";
     }
 
     @Override

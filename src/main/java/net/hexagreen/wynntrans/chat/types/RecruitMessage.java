@@ -15,7 +15,7 @@ public class RecruitMessage extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "recruit";
+        return rootKey + "func.recruit";
     }
 
     @Override

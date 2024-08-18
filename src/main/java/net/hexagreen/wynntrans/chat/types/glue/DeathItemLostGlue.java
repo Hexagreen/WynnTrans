@@ -14,13 +14,13 @@ public class DeathItemLostGlue extends TextGlue {
     @Override
     public boolean push(Text text) {
         if(text.getString().equals("\n")) return true;
-        if(count == 0 && text.getString().contains("You've lost:")) {
+        if(count == 0 && text.getString().contains("you've lost:")) {
             resetTimer();
             gluedText.append(text);
             count++;
             return true;
         }
-        else if(text.getString().matches("^- .+$")) {
+        else if(text.getString().matches("^§6- .+$")) {
             safeNow();
             resetTimer();
             gluedText.append(text);

@@ -39,7 +39,7 @@ public class SecretDiscovery extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "secretDiscovery";
+        return rootKey + "func.secretDiscovery";
     }
 
     @Override

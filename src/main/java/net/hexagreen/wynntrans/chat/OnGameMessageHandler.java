@@ -62,6 +62,7 @@ public class OnGameMessageHandler {
             LOGGER.error("Error in sortIncomeText", e);
             debugClass.writeString2File(text.getString(), "exception.txt");
             debugClass.writeTextAsJSON(text, "Exception");
+            removeGlue();
         }
         return false;
     }
@@ -145,7 +146,7 @@ public class OnGameMessageHandler {
             } else if (ChatType.DIALOG_ITEM.match(text, 2)) {
                 new ItemGiveAndTakeFocused(text, ChatType.DIALOG_ITEM.getRegex()).print();
             } else if (FunctionalRegex.MINI_QUEST_DESC.match(text, 2)) {
-                new MiniQuestInfoConfirmable(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
+                new MiniQuestInfoFocused(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
             } else if (FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
                 new GuideAlert(text.getSiblings().get(2), null).print();
             } else {
@@ -249,6 +250,7 @@ public class OnGameMessageHandler {
             if(storage.isEmpty()) return;
             MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
             SimpleText.setTranslationControl(false);
+            SimpleSystemText.setTranslationControl(false);
             for(Text chunk : storage) {
                 for(Text line : chunk.getSiblings()) {
                     if("\n".equals(line.getString())) continue;
@@ -259,6 +261,7 @@ public class OnGameMessageHandler {
                 }
             }
             SimpleText.setTranslationControl(true);
+            SimpleSystemText.setTranslationControl(true);
             clear();
         }
     }

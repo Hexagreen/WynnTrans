@@ -21,7 +21,7 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "levelUp";
+        return rootKey + "func.levelUp";
     }
 
     @Override
@@ -29,12 +29,12 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
         resultText = Text.empty();
 
         Text t1 = newTranslate(parentKey).setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GOLD));
-        resultText.append(Text.literal(getCenterIndent(t1)).append(t1).append("\n"));
+        resultText.append(getCenterIndent(t1).append(t1).append("\n"));
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
         if(m2.find()) {
             Text t2 = newTranslate(parentKey + ".nowOn", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-            resultText.append(Text.literal(getCenterIndent(t2)).append(t2).append("\n"));
+            resultText.append(getCenterIndent(t2).append(t2).append("\n"));
         }
 
         resultText.append("\n");
@@ -43,7 +43,7 @@ public class LevelUp extends WynnChatText implements ICenterAligned {
         if(m3.find()) {
             Text num = Text.literal(m3.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
             Text t3 = newTranslate(parentKey + ".nextAP", num);
-            resultText.append(Text.literal(getCenterIndent(t3)).append(t3).append("\n"));
+            resultText.append(getCenterIndent(t3).append(t3).append("\n"));
         }
 
         resultText.append("\n");

@@ -1,75 +1,71 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Blacksmith extends WynnChatText {
-    private final Matcher soldMatcher;
+public class Blacksmith extends WynnSystemText {
 
     public Blacksmith(Text text, Pattern regex) {
         super(text, regex);
-        this.soldMatcher = Pattern.compile("^You sold me: (\\w+)$").matcher(getContentString(1));
-
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "blacksmith";
+        return rootKey + "func.blacksmith";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append(header).setStyle(getStyle());
 
-        resultText.append(newTranslate(parentKey).setStyle(getStyle(0)))
-                .append(Text.literal(": ").setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey).append(": "));
 
         if(getContentString(1).contains("I can't buy")) {
-            resultText.append(newTranslate(parentKey + ".no").setStyle(getStyle(1)));
+            resultText.append(newTranslateWithSplit(parentKey + ".no").setStyle(getStyle(1)));
         }
-        else if(getContentString(1).contains("I can only")) {
-            resultText.append(newTranslate(parentKey + ".over").setStyle(getStyle(1)));
+        else if(getContentString(1).contains("You have sold")) {
+            Text soldAmount = getSoldAmount();
+            Text earnedEmerald = getEarnedEmerald();
+            resultText.append(newTranslateWithSplit(parentKey + ".sold", soldAmount, earnedEmerald).setStyle(getStyle(1)));
         }
-        else if(getContentString(1).contains("You need more scrap")) {
-            resultText.append(newTranslate(parentKey + ".moreScrap").setStyle(getStyle(1)));
+        else if(getContentString(1).contains("You have repaired")) {
+            Text[] parsed = getRepairing();
+            Text repairedItem = parsed[0];
+            Text repairCost = parsed[1];
+            resultText.append(newTranslateWithSplit(parentKey + ".repair", repairedItem, repairCost).setStyle(getStyle(1)));
         }
-        else if(getContentString(1).contains("I can't scrap that")) {
-            resultText.append(newTranslate(parentKey + ".cantScrap").setStyle(getStyle(1)));
-        }
-        else if(getContentString(1).contains("You sold me")) {
-            String soldItem = soldMatcher.find() ? soldMatcher.group(1) : "";
 
-            resultText.append(newTranslate(parentKey + ".sold.head", soldItem).setStyle(getStyle(1)));
-
-            int lastItemIndex = inputText.getSiblings().size() - 4;
-            for(int index = 2; lastItemIndex >= index; index++) {
-                if(getSibling(index).contains(Text.literal(" and "))) {
-                    resultText.append(newTranslate(parentKey + ".and").setStyle(getStyle(1)));
-                    continue;
-                }
-                resultText.append(getSibling(index));
-            }
-            resultText.append(newTranslate(parentKey + ".total").setStyle(getStyle(1)))
-                    .append(getSibling(lastItemIndex + 2))
-                    .append(newTranslate(parentKey + ".sold.tail").setStyle(getStyle(1)));
-        }
-        else if(getContentString(1).contains("You scrapped")) {
-            resultText.append(newTranslate(parentKey + ".scrap.head").setStyle(getStyle(1)));
-
-            int lastItemIndex = inputText.getSiblings().size() - 4;
-            for(int index = 2; lastItemIndex >= index; index++) {
-                if(getSibling(index).contains(Text.literal(" and "))) {
-                    resultText.append(newTranslate(parentKey + ".and").setStyle(getStyle(1)));
-                    continue;
-                }
-                resultText.append(getSibling(index));
-            }
-            resultText.append(newTranslate(parentKey + ".total").setStyle(getStyle(1)))
-                    .append(getSibling(lastItemIndex + 2))
-                    .append(newTranslate(parentKey + ".scrap.tail").setStyle(getStyle(1)));
-        }
+        else throw new UnprocessedChatTypeException("Blacksmith.class");
     }
+
+    private Text getSoldAmount() {
+        return Text.literal(getContentString(2).replaceAll("\\D", ""))
+                .setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
+    }
+
+    private Text getEarnedEmerald() {
+        return Text.literal(getContentString(4).replaceAll(" ?\\n ?", " "))
+                .setStyle(Style.EMPTY.withColor(Formatting.GREEN));
+    }
+
+    private Text[] getRepairing() {
+        MutableText item = Text.empty();
+        MutableText cost = Text.empty();
+        boolean metFor = false;
+        for(int i = 2; i < inputText.getSiblings().size(); i++) {
+            if(getSibling(i).getString().contains("for ")) {
+                metFor = true;
+                continue;
+            }
+            if(metFor) cost.append(getSibling(i));
+            if(!metFor) item.append(getSibling(i));
+        }
+        return new Text[]{item, cost};
+    }
+
 }

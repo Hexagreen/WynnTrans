@@ -20,7 +20,7 @@ public class PartyJoined extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "partyJoined";
+        return rootKey + "func.partyJoined";
     }
 
     @Override

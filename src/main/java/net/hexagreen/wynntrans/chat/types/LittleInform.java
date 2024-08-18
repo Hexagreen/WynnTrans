@@ -7,10 +7,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class LittleInform extends WynnChatText {
+    private final Text header;
     private final String keyInform;
 
     public LittleInform(Text text, Pattern regex) {
         super(text, regex);
+        this.header = getHeader();
         this.keyInform = DigestUtils.sha1Hex(inputText.getString()).substring(0, 12);
     }
 
@@ -22,17 +24,33 @@ public class LittleInform extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(getSibling(0)).append(getSibling(1)).append(getSibling(2));
+        resultText.append(header);
 
-        for(int i = 3; i < inputText.getSiblings().size(); i++) {
-            String valInform = getSibling(i).getString();
-
-            if(WTS.checkTranslationExist(parentKey + keyInform + "_" + (i - 2), valInform)) {
-                resultText.append(newTranslate(parentKey + keyInform + "_" + (i - 2)).setStyle(getStyle(i)));
+        if(inputText.getSiblings().isEmpty()) {
+            String valInform = getContentString().replaceAll("^§.\\[§.!§.] ", "");
+            if(WTS.checkTranslationExist(parentKey + keyInform, valInform)) {
+                resultText.append(newTranslate(parentKey + keyInform));
             }
             else {
-                resultText.append(getSibling(i));
+                resultText.append(valInform);
             }
         }
+        else {
+            resultText = inputText.copyContentOnly().append(getSibling(0)).append(getSibling(1));
+            for (int i = 2; i < inputText.getSiblings().size(); i++) {
+                String valInform = getSibling(i).getString();
+
+                if (WTS.checkTranslationExist(parentKey + keyInform + "_" + (i - 1), valInform)) {
+                    resultText.append(newTranslate(parentKey + keyInform + "_" + (i - 1)).setStyle(getStyle(i)));
+                } else {
+                    resultText.append(getSibling(i));
+                }
+            }
+        }
+    }
+
+    private Text getHeader() {
+        String head = getContentString().substring(0, 10).split(" ")[0];
+        return Text.literal(head).append(" ");
     }
 }

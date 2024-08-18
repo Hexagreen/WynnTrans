@@ -17,7 +17,7 @@ public class RewardReceived extends WynnChatText {
 
     public RewardReceived(Text text, Pattern regex) {
         super(text, regex);
-        this.rewards = getRewards();
+        this.rewards = initRewards();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class RewardReceived extends WynnChatText {
         resultText.append(newTranslate(parentKey, rewards, STORE).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
     }
 
-    private Text getRewards() {
+    private Text initRewards() {
         MutableText rewards = Text.empty().append("\n");
         for(int i = 1; i < inputText.getSiblings().size() - 1; i++) {
             rewards.append(getSibling(i)).append("\n");

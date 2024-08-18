@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -9,9 +9,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class KeyCollector extends WynnChatText {
+public class KeyCollector extends WynnSystemText {
     private final MessageType messageType;
-    private static final Style TEXT_STYLE = Style.EMPTY.withColor(Formatting.LIGHT_PURPLE);
 
     public KeyCollector(Text text, Pattern regex) {
         super(text, regex);
@@ -20,34 +19,56 @@ public class KeyCollector extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "keyCollector";
+        return rootKey + "func.keyCollector";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append(header).setStyle(getStyle());
 
-        resultText.append(newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)).append(": "));
+        resultText.append(newTranslate(parentKey).append(": "));
 
         switch(messageType) {
             case GIVE_ME_KEY ->
-                    resultText.append(newTranslate(parentKey + ".giveMeKey", getSibling(2))
-                    .setStyle(TEXT_STYLE));
+                    resultText.append(newTranslateWithSplit(parentKey + ".giveMeKey", parseDungeonKey(getSibling(2)))
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case KEY_PASSED ->
-                    resultText.append(newTranslate(parentKey + ".keyPassed")
-                    .setStyle(TEXT_STYLE));
+                    resultText.append(newTranslateWithSplit(parentKey + ".keyPassed")
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case NEED_KEY ->
-                    resultText.append(newTranslate(parentKey + ".needKey", getSibling(2))
-                            .setStyle(TEXT_STYLE));
-            case NEED_QUEST ->
-                    resultText.append(newTranslate(parentKey + ".needQuest", getSibling(2))
-                            .setStyle(TEXT_STYLE));
-            case PARTY_PASS ->
-                    resultText.append(newTranslate(parentKey + ".partyPass", getSibling(1), getSibling(3), parseNumber(getSibling(5)))
-                    .setStyle(TEXT_STYLE));
+                    resultText.append(newTranslateWithSplit(parentKey + ".needKey", parseDungeonKey(getSibling(2)))
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            case PARTY_PASS -> {
+                    if(inputText.getSiblings().size() == 6) {
+                        resultText.append(newTranslateWithSplit(parentKey + ".partyPass",
+                                parsePlayerName(getSibling(0)),
+                                getSibling(2),
+                                parseTimeUnit(getSibling(3)),
+                                parseNumber(getSibling(4)))
+                                .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    }
+                    else {
+                        resultText.append(newTranslateWithSplit(parentKey + ".partyPass",
+                                getSibling(1),
+                                getSibling(3),
+                                parseTimeUnit(getSibling(4)),
+                                parseNumber(getSibling(5)))
+                                .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    }
+            }
             case NULL ->
-                throw new UnprocessedChatTypeException(this.getClass().getName());
+                throw new UnprocessedChatTypeException("KeyCollector.class");
         }
+    }
+
+    private Text parsePlayerName(Text text) {
+        String name = text.getString().substring(15);
+        return Text.literal(name).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
+    }
+
+    private Text parseTimeUnit(Text text) {
+        String unit = text.getString().replaceAll(", ", "");
+        return Text.literal(unit).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
     }
 
     private Text parseNumber(Text text) {
@@ -55,12 +76,16 @@ public class KeyCollector extends WynnChatText {
         return Text.literal(number).setStyle(text.getStyle());
     }
 
+    private Text parseDungeonKey(Text text) {
+        String key = text.getString().replaceAll("\\n", "");
+        return Text.literal(key).setStyle(text.getStyle());
+    }
+
     private enum MessageType {
         GIVE_ME_KEY(Pattern.compile("Bring me")),
         KEY_PASSED(Pattern.compile("You have access")),
         NEED_KEY(Pattern.compile("You cannot enter")),
-        NEED_QUEST(Pattern.compile("You need to complete")),
-        PARTY_PASS(Pattern.compile("has already opened the entrance")),
+        PARTY_PASS(Pattern.compile("has already opened")),
         NULL(null);
 
         private final Pattern regex;
@@ -72,7 +97,7 @@ public class KeyCollector extends WynnChatText {
         private static MessageType getType(Text text) {
             return Arrays.stream(MessageType.values())
                     .filter(messageType -> Objects.nonNull(messageType.regex))
-                    .filter(messageType -> messageType.regex.matcher(text.getString()).find())
+                    .filter(messageType -> messageType.regex.matcher(text.getString().replaceAll("\\n", "")).find())
                     .findFirst().orElse(NULL);
         }
     }

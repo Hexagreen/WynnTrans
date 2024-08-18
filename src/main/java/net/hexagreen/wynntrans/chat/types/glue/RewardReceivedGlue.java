@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class RewardReceivedGlue extends TextGlue {
-    private static final Pattern TAIL = Pattern.compile("^Visit wynncraft\\.com/store to get your own!");
+    private static final Pattern TAIL = Pattern.compile("Visit wynncraft\\.com/store to get your own!");
     private int count = 0;
 
     public RewardReceivedGlue() {
@@ -23,7 +23,7 @@ public class RewardReceivedGlue extends TextGlue {
             count++;
             return true;
         }
-        else if(text.getString().matches("^- .+$")) {
+        else if(text.getString().matches("^§b- §f.+$")) {
             resetTimer();
             gluedText.append(text);
             return true;

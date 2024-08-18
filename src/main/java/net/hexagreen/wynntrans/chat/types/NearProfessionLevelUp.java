@@ -2,7 +2,9 @@ package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
 import net.hexagreen.wynntrans.enums.Profession;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -14,24 +16,24 @@ public class NearProfessionLevelUp extends WynnChatText {
     public NearProfessionLevelUp(Text text, Pattern regex) {
         super(text, regex);
         this.level = matcher.group(2);
-        this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getText().setStyle(getStyle(0));
-        if(inputText.getSiblings().size() == 4) {
-            this.playerName = getPlayerNameFromSibling(0);
+        this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getText()
+                .setStyle(Style.EMPTY.withColor(Formatting.GOLD));
+        if(!inputText.getSiblings().isEmpty()) {
+            throw new UnprocessedChatTypeException("NearProfessionLevelUp.class");
         }
         else {
-            this.playerName = Text.literal(matcher.group(1)).setStyle(getStyle(0));
+            this.playerName = Text.literal(matcher.group(1));
         }
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "levelUp.profession";
+        return rootKey + "func.levelUp.profession";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(playerName)
-                .append(newTranslate(parentKey, level, profession)).setStyle(getStyle(0));
+        resultText.append(newTranslate(parentKey, playerName, level, profession)).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
     }
 }

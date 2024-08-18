@@ -8,28 +8,27 @@ import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class BombThankyou extends WynnChatText {
+public class BombThankful extends WynnChatText {
     private final MutableText playerName;
 
-    public BombThankyou(Text text, Pattern regex) {
+    public BombThankful(Text text, Pattern regex) {
         super(text, regex);
-        if(text.getSiblings().size() == 2) {
-            this.playerName = (MutableText) getPlayerNameFromSibling(1);
+        if(text.getSiblings().size() == 1) {
+            this.playerName = (MutableText) getPlayerNameFromSibling(0);
         }
         else {
             this.playerName = (MutableText) Text.of(matcher.group(1));
         }
-        this.playerName.setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "thankyou";
+        return rootKey + "func.thankyou";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, playerName).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

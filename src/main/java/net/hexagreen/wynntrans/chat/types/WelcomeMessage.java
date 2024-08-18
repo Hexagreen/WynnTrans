@@ -28,7 +28,7 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "welcome";
+        return rootKey + "func.welcome";
     }
 
     @Override

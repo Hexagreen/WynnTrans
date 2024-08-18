@@ -23,7 +23,7 @@ public class InfoEvent extends WynnChatText {
         this.valEName = text.getSiblings().get(1).getString().replace(": ", "");
         String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
         this.keyEName = parentKey + ".eventName." + hash2;
-        this.timer = getTimer(text.getSiblings().get(text.getSiblings().size() - 1));
+        this.timer = initTimer(text.getSiblings().getLast());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class InfoEvent extends WynnChatText {
             resultText.append(original.getSiblings().get(1));
         }
 
-        for (int index = 1; inputText.getSiblings().size() > index; index++) {
+        for(int index = 1; inputText.getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + (index - 1);
             String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
@@ -51,7 +51,7 @@ public class InfoEvent extends WynnChatText {
                 resultText.append(getSibling(index));
                 continue;
             }
-            if (WTS.checkTranslationExist(keySibling, valSibling)) {
+            if(WTS.checkTranslationExist(keySibling, valSibling)) {
                 resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
             }
             else {
@@ -65,14 +65,14 @@ public class InfoEvent extends WynnChatText {
     private static Text cutoffTail(Text text) {
         MutableText result = Text.empty();
         int size = text.getSiblings().size();
-        result.append(text.getSiblings().get(0));
+        result.append(text.getSiblings().getFirst());
         for(int i = 2; size - 2 > i; i++) {
             result.append(text.getSiblings().get(i));
         }
         return result;
     }
 
-    private static Text getTimer(Text text) {
+    private Text initTimer(Text text) {
         String str = text.getString().replace(".", "");
         return Text.literal(str).setStyle(text.getStyle());
     }

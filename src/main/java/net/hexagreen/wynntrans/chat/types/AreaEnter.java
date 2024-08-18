@@ -24,7 +24,7 @@ public class AreaEnter extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "area.enter";
+        return rootKey + "func.area.enter";
     }
 
     @Override

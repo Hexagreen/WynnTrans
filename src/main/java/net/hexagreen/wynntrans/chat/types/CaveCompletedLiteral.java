@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_EXP = Pattern.compile("§7\\+(\\d+) Experience Points");
     private static final Pattern REGEX_EME = Pattern.compile("§7\\+(\\d+) §aEmeralds");
-    private static final String func = rootKey + dirFunctional;
+    private static final String func = rootKey + "func.";
     private final String keyCaveName;
     private final String valCaveName;
 
@@ -31,7 +31,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append("\n");
 
         Text title;
         title = newTranslate(func + "caveCompleted").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN));

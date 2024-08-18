@@ -14,24 +14,19 @@ import java.util.regex.Pattern;
 
 public abstract class WynnChatText {
     protected static final String rootKey = "wytr.";
-    protected static final String dirFunctional = "func.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
     protected final MutableText inputText;
+    protected final String parentKey;
     protected static Text removedCustomNickname = null;
     protected Matcher matcher;
-    protected String parentKey;
     protected MutableText resultText;
-    private final boolean regexMatched;
 
     public WynnChatText(Text text, Pattern regex) {
         this.inputText = (MutableText) text;
         this.parentKey = setParentKey();
         if(regex != null) {
-            this.matcher = regex.matcher(text.getString());
-            this.regexMatched = this.matcher.find();
-        }
-        else {
-            this.regexMatched = true;
+            this.matcher = createMatcher(text, regex);
+            boolean ignore = this.matcher.find();
         }
     }
 
@@ -48,9 +43,6 @@ public abstract class WynnChatText {
 
     @SuppressWarnings("DataFlowIssue")
     public boolean print() {
-        if(!regexMatched) {
-            return false;
-        }
         Text printLine = text();
         if(printLine == null) return true;
         MinecraftClient.getInstance().player.sendMessage(printLine);
@@ -59,10 +51,8 @@ public abstract class WynnChatText {
 
     public MutableText text() {
         try {
-            if(regexMatched) {
-                build();
-                return resultText;
-            }
+            build();
+            return resultText;
         } catch(IndexOutOfBoundsException e) {
             LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
             debugClass.writeTextAsJSON(inputText, "OutOfBound");
@@ -71,6 +61,10 @@ public abstract class WynnChatText {
             return new SimpleText(inputText, null).text();
         }
         return inputText;
+    }
+
+    protected Matcher createMatcher(Text text, Pattern regex) {
+        return regex.matcher(text.getString());
     }
 
     /**
@@ -223,6 +217,11 @@ public abstract class WynnChatText {
     protected String normalizeStringNPCName(String string) {
         return string.replace(" ", "").replace(".", "")
                 .replace("'", "").replace(":", "");
+    }
+
+    protected String normalizeStringWorldEventName(String string) {
+        return string.replace(" ", "").replace("'", "")
+                .replace("%", "").replace("-", "");
     }
 
     public static class UnprocessedChatTypeException extends RuntimeException {

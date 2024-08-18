@@ -28,12 +28,12 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "guildObj";
+        return rootKey + "func.guildObj";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append("\n");
         Text t1 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA)).append("\n");
         Text t2 = newTranslate(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("\n");
         Text t3 = newTranslate(parentKey + ".2").setStyle(

@@ -1,20 +1,17 @@
 package net.hexagreen.wynntrans.enums;
 
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
-import net.minecraft.util.Formatting;
 
 public enum ItemRarity {
-    NORMAL(MutableText.of(new TranslatableTextContent("wytr.rarity.normal", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.WHITE))),
-    UNIQUE(MutableText.of(new TranslatableTextContent("wytr.rarity.unique", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW))),
-    RARE(MutableText.of(new TranslatableTextContent("wytr.rarity.rare", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))),
-    LEGENDARY(MutableText.of(new TranslatableTextContent("wytr.rarity.legendary", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-    FABLED(MutableText.of(new TranslatableTextContent("wytr.rarity.fabled", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.RED))),
-    MYTHIC(MutableText.of(new TranslatableTextContent("wytr.rarity.mythic", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE))),
-    SET(MutableText.of(new TranslatableTextContent("wytr.rarity.set", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.GREEN))),
-    CRAFTED(MutableText.of(new TranslatableTextContent("wytr.rarity.crafted", null, TranslatableTextContent.EMPTY_ARGUMENTS)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))),
+    NORMAL(Text.translatable("wytr.rarity.normal").setStyle(Style.EMPTY.withColor(0xFFFFFF))),
+    UNIQUE(Text.translatable("wytr.rarity.unique").setStyle(Style.EMPTY.withColor(0xFFFF55))),
+    RARE(Text.translatable("wytr.rarity.rare").setStyle(Style.EMPTY.withColor(0xFF55FF))),
+    LEGENDARY(Text.translatable("wytr.rarity.legendary").setStyle(Style.EMPTY.withColor(0x55FFFF))),
+    FABLED(Text.translatable("wytr.rarity.fabled").setStyle(Style.EMPTY.withColor(0xFF5555))),
+    MYTHIC(Text.translatable("wytr.rarity.mythic").setStyle(Style.EMPTY.withColor(0xAA00AA))),
+    SET(Text.translatable("wytr.rarity.set").setStyle(Style.EMPTY.withColor(0x55FF55))),
+    CRAFTED(Text.translatable("wytr.rarity.crafted").setStyle(Style.EMPTY.withColor(0x00AAAA))),
     ;
 
     private final Text rarity;

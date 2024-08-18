@@ -8,20 +8,22 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class EquipmentLevelRequirement extends WynnChatText {
+    private final Text equipName;
+    private final Text level;
+
     public EquipmentLevelRequirement(Text text, Pattern regex) {
         super(text, regex);
+        this.equipName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
+        this.level = Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "equipLevelReq";
+        return rootKey + "func.equipLevelReq";
     }
 
     @Override
     protected void build() {
-        Text equipName = getSibling(0);
-        Text level = getSibling(2);
-
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey, equipName, level).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }

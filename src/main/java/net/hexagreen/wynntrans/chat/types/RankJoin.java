@@ -12,7 +12,7 @@ public class RankJoin extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "rankJoin";
+        return rootKey + "func.rankJoin";
     }
 
     @Override

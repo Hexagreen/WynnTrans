@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -10,38 +10,47 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GuildInfo extends WynnChatText {
+public class GuildInfo extends WynnSystemText {
     private final GuildInformation infoType;
 
-    public GuildInfo(Text text, Pattern regex) {
-        super(text, regex);
-        this.infoType = GuildInformation.findAndGet(text);
+    public GuildInfo(Text text, Pattern ignore) {
+        super(text, null);
+        this.infoType = GuildInformation.findAndGet(inputText);
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "guildInfo";
+        return rootKey + "func.guildInfo";
     }
 
     @Override
     protected void build() {
-        resultText = newTranslate(parentKey);
+        resultText = Text.empty().append(header).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
 
         switch(infoType) {
-            case WEEK_OBJ_COMPLETE -> resultText.append(newTranslate(parentKey + ".weekObj.complete", infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+            case WEEK_OBJ_COMPLETE -> {
+                debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
+                resultText.append(newTranslateWithSplit(parentKey + ".weekObj.complete", infoType.matcher.group(1)));
+            }
             case WEEK_OBJ_EXPIRE -> {
                 Text time = Text.literal(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-                resultText.append(newTranslate(parentKey + ".weekObj.expire", time).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+                resultText.append(newTranslateWithSplit(parentKey + ".weekObj.expire", time));
             }
-            case WEEK_OBJ_NEW -> resultText.append(newTranslate(parentKey + "weekObj.new").setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
-            default -> debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
+            case WEEK_OBJ_NEW -> {
+                debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
+                resultText.append(newTranslateWithSplit(parentKey + "weekObj.new"));
+            }
+            default -> {
+                debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
+                throw new UnprocessedChatTypeException("GuildInfo.class");
+            }
         }
     }
 
     private enum GuildInformation {
-        WEEK_OBJ_COMPLETE(Pattern.compile("^ (.+) has finished their weekly objective")),
-        WEEK_OBJ_EXPIRE(Pattern.compile("^ Only (.+) left to complete the Weekly Guild")),
-        WEEK_OBJ_NEW(Pattern.compile("^ New Weekly Guild Objectives are being assigned"));
+        WEEK_OBJ_COMPLETE(Pattern.compile("(.+) has finished their weekly objective")),
+        WEEK_OBJ_EXPIRE(Pattern.compile("Only (.+) left to complete the Weekly Guild Objectives!")),
+        WEEK_OBJ_NEW(Pattern.compile("New Weekly Guild Objectives are being assigned"));
 
         private final Pattern infoRegex;
         private Matcher matcher;
@@ -52,7 +61,7 @@ public class GuildInfo extends WynnChatText {
         }
 
         private boolean find(Text text) {
-            Matcher m = this.infoRegex.matcher(text.getSiblings().get(0).getString());
+            Matcher m = this.infoRegex.matcher(text.getString().replaceAll("\\n", ""));
             if(m.find()) {
                 this.matcher = m;
                 return true;

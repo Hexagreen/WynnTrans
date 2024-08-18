@@ -31,7 +31,7 @@ public class DungeonComplete extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "dungeonCompleted";
+        return rootKey + "func.dungeonCompleted";
     }
 
     @Override

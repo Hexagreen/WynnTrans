@@ -21,7 +21,7 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "quickTrade";
+        return rootKey + "func.quickTrade";
     }
 
     @Override

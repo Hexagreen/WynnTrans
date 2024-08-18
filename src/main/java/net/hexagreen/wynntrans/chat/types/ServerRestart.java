@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -17,12 +19,12 @@ public class ServerRestart extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "serverRestart";
+        return rootKey + "func.serverRestart";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey + "." + unit, number).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey + "." + unit, number).setStyle(Style.EMPTY.withColor(Formatting.RED)));
     }
 }

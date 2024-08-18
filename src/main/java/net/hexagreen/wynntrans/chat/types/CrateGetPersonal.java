@@ -20,7 +20,7 @@ public class CrateGetPersonal extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "crateReward.personal";
+        return rootKey + "func.crateReward.personal";
     }
 
     @Override
@@ -29,10 +29,10 @@ public class CrateGetPersonal extends WynnChatText {
         resultText.append(grade);
 
         resultText.append("\n\n")
-                .append(getSibling(3));
+                .append(getSibling(2));
 
         resultText.append("\n")
-                .append(RewardDescription.findAndGet(getSibling(4)));
+                .append(RewardDescription.findAndGet(getSibling(3)));
 
         resultText.append("\n");
     }
@@ -58,7 +58,7 @@ public class CrateGetPersonal extends WynnChatText {
         }
 
         private boolean match(String string) {
-            return this.gradeName.equals(string);
+            return string.contains(this.gradeName);
         }
 
         private static CrateGrades find(String string) {
@@ -71,9 +71,9 @@ public class CrateGetPersonal extends WynnChatText {
             CrateGrades grades = find(string);
             if(grades != BLACK_MARKET) {
                 Text text = grades.gradeText.setStyle(grades.gradeStyle);
-                return Text.translatable(rootKey + dirFunctional + "crateReward.personal", text).setStyle(grades.gradeStyle);
+                return Text.translatable(rootKey + "func.crateReward.personal", text).setStyle(grades.gradeStyle);
             }
-            else return Text.translatable(rootKey + dirFunctional + "crateReward.personal", BLACK_MARKET.gradeText).setStyle(grades.gradeStyle);
+            else return Text.translatable(rootKey + "func.crateReward.personal", BLACK_MARKET.gradeText).setStyle(grades.gradeStyle);
         }
     }
 

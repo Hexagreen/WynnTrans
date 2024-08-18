@@ -19,7 +19,7 @@ public class UnusedStatPoint extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "statPointAlert";
+        return rootKey + "func.statPointAlert";
     }
 
     @Override

@@ -1,12 +1,14 @@
 package net.hexagreen.wynntrans.chat.types;
 
-import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.hexagreen.wynntrans.chat.WynnSystemText;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class TradeFinish extends WynnChatText {
+public class TradeFinish extends WynnSystemText {
     private final boolean buyingMode;
     private final Text item;
 
@@ -18,23 +20,28 @@ public class TradeFinish extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "tradeFinish.";
+        return rootKey + "func.tradeFinish.";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = Text.empty().append(header).setStyle(getStyle());
         if(buyingMode) {
-            resultText.append(newTranslate(parentKey + "buy", item));
+            resultText.append(newTranslateWithSplit(parentKey + "buy", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             return;
         }
-        resultText.append(newTranslate(parentKey + "sell", item));
+        resultText.append(newTranslateWithSplit(parentKey + "sell", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 
     private Text parseItem() {
         MutableText item = Text.empty();
-        for(int i = 1; i < inputText.getSiblings().size(); i++) {
-            item.append(getSibling(i));
+        if(inputText.getSiblings().size() == 2) {
+            String content = getContentString(1).replaceAll("\\n|À\\.", "");
+            item.append(Text.literal(content).setStyle(getStyle(1)));
+        }
+        else {
+            String content = getContentString(0).replaceAll("^.+ §5|À\\.", "");
+            item.append(Text.literal(content));
         }
         return item;
     }

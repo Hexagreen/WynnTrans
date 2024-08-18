@@ -33,7 +33,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "areaDiscovered";
+        return rootKey + "func.areaDiscovered";
     }
 
     @Override

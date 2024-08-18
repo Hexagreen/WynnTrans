@@ -12,7 +12,7 @@ public class Disguise extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "disguise";
+        return rootKey + "func.disguise";
     }
 
     @Override

@@ -1,7 +1,6 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
-import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -9,41 +8,28 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class BombExpired extends WynnChatText {
-    private static final Text storeLink =
-            Text.literal("wynncraft.com/store")
-                    .setStyle(Style.EMPTY.withColor(Formatting.AQUA)
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://wynncraft.com/store")));
-    private final Text ownerName;
+    private final Text storeLink;
     private final Text bombName;
 
     public BombExpired(Text text, Pattern regex) {
         super(text, regex);
-        this.ownerName = parsePlayerName();
+        this.storeLink = newTranslate(parentKey + ".store").setStyle(getStyle(0));
         this.bombName = parseBombName(matcher.group(1));
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "bombExpired";
+        return rootKey + "func.bombExpired";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, ownerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)))
-                .append(storeLink);
-    }
-
-    private Text parsePlayerName() {
-        if(getSibling(0).getString().isEmpty()) {
-            return getSibling(1);
-        }
-        String strName = getSibling(0).getString().replace("'s ", "");
-        return Text.literal(strName).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        resultText.append(newTranslate(parentKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
     }
 
     private Text parseBombName(String bombName) {
-        if(bombName.contains("Combat")) {
+        if(bombName.contains("Combat XP")) {
             return Text.translatable(rootKey + "bomb.name.combat");
         }
         else if(bombName.contains("Profession Speed")) {

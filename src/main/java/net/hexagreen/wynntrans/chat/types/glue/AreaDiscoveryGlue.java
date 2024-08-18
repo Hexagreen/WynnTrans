@@ -39,7 +39,7 @@ public class AreaDiscoveryGlue extends TextGlue {
             }
         }
         else {
-            if(text.getString().matches("^ *§.+")) {
+            if(text.getString().matches("^ +§.+")) {
                 resetTimer();
                 safeNow();
                 gluedText.append(text);

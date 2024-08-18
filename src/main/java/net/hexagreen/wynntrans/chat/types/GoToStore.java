@@ -13,7 +13,7 @@ public class GoToStore extends WynnChatText {
 
     public GoToStore(Text text, Pattern regex) {
         super(text, regex);
-        this.linkText = getLinkText();
+        this.linkText = findLinkText();
         this.val = inputText.getString().replaceFirst("wynncraft\\.com/store[\\w/]*", "%s");
         this.key = parentKey + DigestUtils.sha1Hex(val);
     }
@@ -33,7 +33,7 @@ public class GoToStore extends WynnChatText {
         }
     }
 
-    private Text getLinkText() {
+    private Text findLinkText() {
         for(Text sibling : inputText.getSiblings()) {
             if(sibling.getString().contains("wynncraft.com/store")) {
                 return sibling;

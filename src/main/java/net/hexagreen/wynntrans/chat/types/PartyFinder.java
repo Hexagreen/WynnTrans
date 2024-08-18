@@ -21,7 +21,7 @@ public class PartyFinder extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "partyFinder";
+        return rootKey + "func.partyFinder";
     }
 
     @Override

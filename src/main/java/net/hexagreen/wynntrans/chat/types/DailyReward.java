@@ -19,7 +19,7 @@ public class DailyReward extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "dailyReward";
+        return rootKey + "func.dailyReward";
     }
 
     @Override

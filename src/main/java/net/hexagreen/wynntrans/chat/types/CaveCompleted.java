@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 public class CaveCompleted extends WynnChatText implements ICenterAligned {
     private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) Experience Points$");
     private static final Pattern REGEX_EME = Pattern.compile("^ +- \\+(\\d+) Emeralds$");
-    private static final String func = rootKey + dirFunctional;
     private final String keyCaveName;
     private final String valCaveName;
 
@@ -31,8 +30,9 @@ public class CaveCompleted extends WynnChatText implements ICenterAligned {
     @Override
     protected void build() {
         resultText = Text.empty()
-                .append(getCenterIndent(func + "caveCompleted"))
-                .append(newTranslate(func + "caveCompleted").setStyle(getSibling(1).getSiblings().get(0).getStyle())).append("\n");
+                .append("\n")
+                .append(getCenterIndent(rootKey + "func.caveCompleted"))
+                .append(newTranslate(rootKey + "func.caveCompleted").setStyle(getSibling(1).getSiblings().getFirst().getStyle())).append("\n");
 
         Text t0;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
@@ -44,21 +44,21 @@ public class CaveCompleted extends WynnChatText implements ICenterAligned {
 
         resultText.append(getCenterIndent(t0)).append(t0)
                 .append("\n\n")
-                .append(newTranslate(func + "reward").setStyle(getSibling(4).getSiblings().get(0).getStyle())).append("\n");
+                .append(newTranslate(rootKey + "func.reward").setStyle(getSibling(4).getSiblings().getFirst().getStyle())).append("\n");
 
 
         for(int i = 5; inputText.getSiblings().size() > i; i++) {
             Matcher m1 = REGEX_EXP.matcher(getSibling(i).getSiblings().get(1).getString());
             if(m1.find()) {
                 resultText.append(getSibling(i).getSiblings().get(0))
-                        .append(newTranslate(func + "reward.experience", m1.group(1)).setStyle(getSibling(i).getSiblings().get(1).getStyle()))
+                        .append(newTranslate(rootKey + "func.reward.experience", m1.group(1)).setStyle(getSibling(i).getSiblings().get(1).getStyle()))
                         .append("\n");
                 continue;
             }
             Matcher m2 = REGEX_EME.matcher(getSibling(i).getSiblings().get(1).getString());
             if(m2.find()) {
-                resultText.append(getSibling(i).getSiblings().get(0))
-                        .append(newTranslate(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)))
+                resultText.append(getSibling(i).getSiblings().getFirst())
+                        .append(newTranslate(rootKey + "func.reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)))
                         .append("\n");
                 continue;
             }

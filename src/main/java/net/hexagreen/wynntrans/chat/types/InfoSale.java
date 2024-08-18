@@ -16,7 +16,7 @@ public class InfoSale extends WynnChatText {
         super(cutoffTail(text), regex);
         this.original = text;
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
-        this.timer = getTimer(text.getSiblings().get(text.getSiblings().size() - 1));
+        this.timer = initTimer(text.getSiblings().getLast());
     }
 
     @Override
@@ -29,7 +29,7 @@ public class InfoSale extends WynnChatText {
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey).setStyle(getStyle(0)));
 
-        for (int index = 1; inputText.getSiblings().size() > index; index++) {
+        for(int index = 1; inputText.getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + (index - 1);
             String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
@@ -37,7 +37,7 @@ public class InfoSale extends WynnChatText {
                 resultText.append(getSibling(index));
                 continue;
             }
-            if (WTS.checkTranslationExist(keySibling, valSibling)) {
+            if(WTS.checkTranslationExist(keySibling, valSibling)) {
                 resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
             }
             else {
@@ -56,7 +56,7 @@ public class InfoSale extends WynnChatText {
         return result;
     }
 
-    private static Text getTimer(Text text) {
+    private Text initTimer(Text text) {
         String str = text.getString().replace(".", "");
         return Text.literal(str).setStyle(text.getStyle());
     }

@@ -16,7 +16,7 @@ public class SkipTutorial extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "skipTutorial";
+        return rootKey + "func.skipTutorial";
     }
 
     @Override

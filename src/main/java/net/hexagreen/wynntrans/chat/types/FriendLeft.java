@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -20,13 +22,13 @@ public class FriendLeft extends WynnChatText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "friendLeft";
+        return rootKey + "func.friendLeft";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
 
-        resultText.append(newTranslate(parentKey, playerName).setStyle(getStyle(0)));
+        resultText.append(newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

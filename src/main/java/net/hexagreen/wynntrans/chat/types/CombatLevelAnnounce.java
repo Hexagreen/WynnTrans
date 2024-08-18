@@ -14,20 +14,21 @@ public class CombatLevelAnnounce extends WynnChatText {
     public CombatLevelAnnounce(Text text, Pattern regex) {
         super(text, regex);
         this.level = "§f" + matcher.group(2);
-        this.playerName = getPlayerNameFromSibling(4);
+        this.playerName = Text.literal(matcher.group(1));
+        if(!text.getSiblings().isEmpty()) throw new UnprocessedChatTypeException("CombatLevelAnnounce.class");
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "levelAnnounce.combat";
+        return rootKey + "func.levelAnnounce.combat";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty();
-        resultText.append(getSibling(0))
-                .append(getSibling(1))
-                .append(getSibling(2))
-                .append(newTranslate(parentKey, playerName, level).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText.append(Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
+                .append(Text.literal("!"))
+                .append(Text.literal("] ").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)))
+                .append(newTranslate(parentKey, playerName, level));
     }
 }

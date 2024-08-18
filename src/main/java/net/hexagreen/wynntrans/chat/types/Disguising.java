@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.chat.types;
 
 import net.hexagreen.wynntrans.chat.WynnChatText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -13,19 +15,19 @@ public class Disguising extends WynnChatText {
     public Disguising(Text text, Pattern regex) {
         super(text, regex);
         this.apply = matcher.group(1).equals("now");
-        this.target = Text.literal(capitalizeFirstChar(getSibling(1).getString())).setStyle(getStyle(1));
+        this.target = Text.literal(capitalizeFirstChar(matcher.group(2))).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + dirFunctional + "disguise.";
+        return rootKey + "func.disguise.";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty();
+        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
         String key = apply ? parentKey + "on" : parentKey + "off";
-        resultText.append(newTranslate(key, target).setStyle(getStyle(0)));
+        resultText.append(newTranslate(key, target));
     }
 
     private String capitalizeFirstChar(String input) {

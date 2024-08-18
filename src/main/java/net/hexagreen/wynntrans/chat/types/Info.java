@@ -49,7 +49,7 @@ public class Info extends WynnChatText {
                 continue;
             }
 
-            if (WTS.checkTranslationExist(keySibling, valSibling)) {
+            if(WTS.checkTranslationExist(keySibling, valSibling)) {
                 resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
             }
             else {

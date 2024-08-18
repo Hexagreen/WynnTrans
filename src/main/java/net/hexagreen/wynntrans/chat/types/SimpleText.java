@@ -57,16 +57,27 @@ public class SimpleText extends WynnChatText {
                 }
             }
 
+            boolean recorded = false;
             for(Text sibling : inputText.getSiblings()) {
                 String valText = sibling.getString();
                 String keyText = this.keyText + "_" + i++;
 
                 if(resultText == null) resultText = Text.empty().setStyle(getStyle());
+                if(valText.equals("\n")) {
+                    resultText.append("\n");
+                    continue;
+                }
+
                 if(checkTranslationExistWithControl(keyText, valText)) {
                     resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
                     resultText.append(sibling);
+                    if(translationRegisterControl && !recorded) {
+                        debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
+                        debugClass.writeTextAsJSON(inputText, "UnregisteredSimpleText");
+                        recorded = true;
+                    }
                 }
             }
         }
