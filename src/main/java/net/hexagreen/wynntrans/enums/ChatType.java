@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.enums;
 
-import net.hexagreen.wynntrans.chat.ProxySystemText;
-import net.hexagreen.wynntrans.chat.WynnChatText;
-import net.hexagreen.wynntrans.chat.types.*;
+import net.hexagreen.wynntrans.text.chat.ProxySystemText;
+import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.hexagreen.wynntrans.text.chat.types.*;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,38 +12,39 @@ import java.util.regex.Pattern;
 
 public enum ChatType {
     NORMAL_CHAT(Pattern.compile("^\uE056\uE042"), null),
-    PRIVATE_MESSAGE(Pattern.compile("\\[(.+) (?:\\(WC[0-9]+\\) )?➤ (.+)]"), null),
-    DIALOG_NORMAL(Pattern.compile("^\\n?\\[([0-9]+)/([0-9]+)] .+:"), NpcDialog.class),
-    DIALOG_ITEM(Pattern.compile("^§.\\[([+-])([0-9]+) (.+)]$"), ItemGiveAndTake.class),
+    PRIVATE_MESSAGE(Pattern.compile("\\[(.+) (?:\\(WC\\d+\\) )?➤ (.+)]"), null),
+    DIALOG_NORMAL(Pattern.compile("^\\n?\\[(\\d+)/(\\d+)] .+:"), NpcDialog.class),
+    DIALOG_ITEM(Pattern.compile("^§.\\[([+-])(\\d+) (.+)]$"), ItemGiveAndTake.class),
     SKILL_REFRESH(Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$"), SkillRefreshed.class),
     NEW_QUEST(Pattern.compile("^(?:New |Mini-)?Quest(?:line)? Started: "), NewQuestFocused.class),
     INFO(Pattern.compile("^\\[Info] "), Info.class),
     INFO_EVENT(Pattern.compile("^\\[Event] "), InfoEvent.class),
     INFO_SALE(Pattern.compile("^\\[Sale] "), InfoSale.class),
     INFO_UPDATE(Pattern.compile("^\\[Major Update] "), InfoUpdate.class),
-    CLEVEL_ANNOUNCE(Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching combat §flevel ([0-9]+)§7!$"), CombatLevelAnnounce.class),
-    PLEVEL_ANNOUNCE(Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching §flevel ([0-9]+) in §f(.)§7 (.+)§7!$"), ProfessionLevelAnnounce.class),
+    CLEVEL_ANNOUNCE(Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching combat §flevel (\\d+)§7!$"), CombatLevelAnnounce.class),
+    PLEVEL_ANNOUNCE(Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching §flevel (\\d+) in §f(.)§7 (.+)§7!$"), ProfessionLevelAnnounce.class),
     AREA_ENTER(Pattern.compile("^§7\\[You are now entering (.+)]$"), AreaEnter.class),
     AREA_LEAVE(Pattern.compile("^§7\\[You are now leaving (.+)]$"), AreaLeave.class),
     BOMB_START(Pattern.compile("^.+ has thrown an? .+ Bomb"), BombStart.class),
     BOMB_THANK(Pattern.compile("^Want to thank (.+)\\? Click here to thank them!$"), BombThanks.class),
     THANK_YOU(Pattern.compile("^§7You have thanked (.+)$"), BombThankful.class),
     BOMB_EXPIRE(Pattern.compile("^You can buy (.+) [bB]ombs at our store"), BombExpired.class),
-    SHOUT(Pattern.compile("^§5(.+) \\[WC([0-9]+)] shouts: §d"), Shout.class),
+    SHOUT_LITERAL(Pattern.compile("^§5(.+) \\[WC(\\d+)] shouts: §d"), ShoutLiteral.class),
+    SHOUT(Pattern.compile("^(.+) \\[WC(\\d+)] shouts: "), Shout.class),
     CRATE_GET(Pattern.compile("^(.+) has gotten a (.+) from their crate\\. "), CrateGet.class),
     RANKS_LOGIN(Pattern.compile("^. .+ has just logged in!$"), RankJoin.class),
-    COMBAT_LEVELUP(Pattern.compile("^(.+) is now combat level ([0-9]+)$"), NearCombatLevelUp.class),
-    PROFESSION_LEVELUP(Pattern.compile("^§6(.+) is now level ([0-9]+) in §f(.)§6 (.+)$"), NearProfessionLevelUp.class),
-    SERVER_RESTART(Pattern.compile("^§cThis world will restart in ([0-9]+) (minutes?|seconds?)\\.$"), ServerRestart.class),
-    DAILY_REWARD(Pattern.compile("^§7\\[Daily Rewards: (?:§a([0-9]+) emeralds§7)?(?: and )?(?:§b([0-9]+) items§7)?]$"), DailyReward.class),
-    SPEEDBOOST(Pattern.compile("^\\+([0-9]) minutes speed boost\\."), SpeedBoost.class),
+    COMBAT_LEVELUP(Pattern.compile("^(.+) is now combat level (\\d+)$"), NearCombatLevelUp.class),
+    PROFESSION_LEVELUP(Pattern.compile("^§6(.+) is now level (\\d+) in §f(.)§6 (.+)$"), NearProfessionLevelUp.class),
+    SERVER_RESTART(Pattern.compile("^§cThis world will restart in (\\d+) (minutes?|seconds?)\\.$"), ServerRestart.class),
+    DAILY_REWARD(Pattern.compile("^§7\\[Daily Rewards: (?:§a(\\d+) emeralds§7)?(?: and )?(?:§b(\\d+) items§7)?]$"), DailyReward.class),
+    SPEEDBOOST(Pattern.compile("^\\+(\\d) minutes speed boost\\."), SpeedBoost.class),
     RESISTANCE(Pattern.compile("^.+ has given you (\\d+%) resistance(?: and (\\d+%) strength)?"), Resistance.class),
-    PARTYFINDER(Pattern.compile("^§5Party Finder:§d Hey (.+), over here! Join the (§..+)§d queue and match up with §e([0-9]+) other players?§d!$"), PartyFinder.class),
+    PARTYFINDER(Pattern.compile("^§5Party Finder:§d Hey (.+), over here! Join the (§..+)§d queue and match up with §e(\\d+) other players?§d!$"), PartyFinder.class),
     DISGUISE(Pattern.compile("^.+ has disguised as a .+!"), Disguise.class),
     DISGUISING(Pattern.compile("^§3You are (now|no longer) disguised as an? §b(.+)"), Disguising.class),
     FRIEND_JOIN(Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"), FriendJoin.class),
     FRIEND_LEFT(Pattern.compile("^§a(.+) left the game\\.$"), FriendLeft.class),
-    DIALOG_LITERAL(Pattern.compile("^§7\\[([0-9]+)/([0-9]+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
+    DIALOG_LITERAL(Pattern.compile("^§7\\[(\\d+)/(\\d+)] §.(.+: )(.+)"), NpcDialogLiteral.class),
     WELCOME(Pattern.compile("^\\n +....Welcome to Wynncraft!\\n"), WelcomeMessage.class),
     RECRUIT(Pattern.compile("^\\n +§6§lEnjoying Wynncraft\\?"), RecruitMessage.class),
     EQUIP_STAT_REQ(Pattern.compile("^§c(.+)§4 requires your (.+) skill to be at least §c(\\d+)\\."), EquipmentSkillRequirement.class),
@@ -84,12 +85,16 @@ public enum ChatType {
     GUILD_INFO_WEEKLY_EXPIRE(Pattern.compile("Only .+ left to complete the Weekly Guild Objectives"), GuildInfo.class),
     GUILD_INFO_WEEKLY_COMPLETE(Pattern.compile("has finished their weekly objective"), GuildInfo.class),
     GUILD_INFO_WEEKLY_NEW(Pattern.compile("New Weekly Guild Objectives"), GuildInfo.class),
+    GUILD_INFO_SEASON_END(Pattern.compile("The current guild season will end in"), GuildInfo.class),
     WORLD_EVENT_START(Pattern.compile("The (.+) World Event starts in (\\d+\\w)!"), WorldEventStart.class),
     PLAYER_EFFECT_APPLIED(Pattern.compile("You now have the (.+)\\."), PlayerEffectApplied.class),
     FRIEND_LIST(Pattern.compile("(.+)'s friends \\((\\d+)\\): "), FriendList.class),
 
     ANNIHILATION(Pattern.compile("Corruption Portal in .+!$"), ProxySystemText.class),
     BANK_PAGE_ADDED(Pattern.compile("You have unlocked page \\d+ in your bank"), ProxySystemText.class),
+
+    EVENT_BONFIRE_CARRYING_FLAME(Pattern.compile("You are carrying \\d+ hearthflames"), EventBonfireHearthflames.class),
+    EVENT_BONFIRE_RETURN_FLAME(Pattern.compile("Returning \\d+ hearthflames"), EventBonfireHearthflames.class),
 
     GO_TO_STORE(Pattern.compile("wynncraft\\.com/store"), GoToStore.class),
     STANDARD_SYSTEM_MESSAGE(Pattern.compile("^\\uDAFF\\uDFFC.\\uDAFF\\uDFFF\\uE002\\uDAFF\\uDFFE |^\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 "), SimpleSystemText.class),

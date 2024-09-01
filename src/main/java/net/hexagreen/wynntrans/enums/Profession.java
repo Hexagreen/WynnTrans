@@ -7,18 +7,18 @@ import net.minecraft.text.TranslatableTextContent;
 import java.util.Arrays;
 
 public enum Profession {
-    COOKING(Text.literal("§fⒶ "), "cooking"),
-    MINING(Text.literal("Ⓑ "), "mining", MutableText.of(new TranslatableTextContent("wytr.profession.mining.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    WOODCUTTING(Text.literal("Ⓒ "), "woodcutting", MutableText.of(new TranslatableTextContent("wytr.profession.woodcutting.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    JEWELING(Text.literal("§fⒹ "), "jeweling"),
-    SCRIBING(Text.literal("§fⒺ "), "scribing"),
-    TAILORING(Text.literal("§fⒻ "), "tailoring"),
-    WEAPONSMITHING(Text.literal("§fⒼ "), "weaponsmithing"),
-    ARMOURING(Text.literal("§fⒽ "), "armouring"),
-    WOODWORKING(Text.literal("§fⒾ "), "woodworking"),
-    FARMING(Text.literal("Ⓙ "), "farming", MutableText.of(new TranslatableTextContent("wytr.profession.farming.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    FISHING(Text.literal("Ⓚ "), "fishing", MutableText.of(new TranslatableTextContent("wytr.profession.fishing.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    ALCHEMISM(Text.literal("§fⓁ "), "alchemism");
+    COOKING(Text.literal("§fⒶ"), "cooking"),
+    MINING(Text.literal("Ⓑ"), "mining", MutableText.of(new TranslatableTextContent("wytr.profession.mining.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
+    WOODCUTTING(Text.literal("Ⓒ"), "woodcutting", MutableText.of(new TranslatableTextContent("wytr.profession.woodcutting.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
+    JEWELING(Text.literal("§fⒹ"), "jeweling"),
+    SCRIBING(Text.literal("§fⒺ"), "scribing"),
+    TAILORING(Text.literal("§fⒻ"), "tailoring"),
+    WEAPONSMITHING(Text.literal("§fⒼ"), "weaponsmithing"),
+    ARMOURING(Text.literal("§fⒽ"), "armouring"),
+    WOODWORKING(Text.literal("§fⒾ"), "woodworking"),
+    FARMING(Text.literal("Ⓙ"), "farming", MutableText.of(new TranslatableTextContent("wytr.profession.farming.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
+    FISHING(Text.literal("Ⓚ"), "fishing", MutableText.of(new TranslatableTextContent("wytr.profession.fishing.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
+    ALCHEMISM(Text.literal("§fⓁ"), "alchemism");
 
     private final MutableText text;
     private final String key;
@@ -63,10 +63,21 @@ public enum Profession {
                 .findFirst().orElse(null);
     }
 
+    public MutableText getTextWithIcon() {
+        MutableText result = this.text.copy().append(" ");
+        return result.append(Text.translatable("wytr.profession." + this.key));
+    }
+
+    public MutableText getIcon() {
+        return this.text.copy();
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
     public MutableText getText() {
-        MutableText result = this.text.copy();
-        return result.append(MutableText.of(
-                        new TranslatableTextContent("wytr.profession." + this.key, null, TranslatableTextContent.EMPTY_ARGUMENTS)));
+        return Text.translatable("wytr.profession." + this.key);
     }
 
     public MutableText getTool(char tier) {

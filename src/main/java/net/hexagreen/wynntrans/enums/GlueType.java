@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.enums;
 
-import net.hexagreen.wynntrans.chat.TextGlue;
-import net.hexagreen.wynntrans.chat.types.glue.*;
+import net.hexagreen.wynntrans.text.chat.TextGlue;
+import net.hexagreen.wynntrans.text.chat.types.glue.*;
 import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,11 +17,12 @@ public enum GlueType {
     AREA_DISCOVERY(Pattern.compile("^ *§[67]Area Discovered: §[ef]"), AreaDiscoveryGlue.class),
     SECRET_DISCOVERY(Pattern.compile("^ *§3Secret Discovery: "), SecretDiscoveryGlue.class),
     DUNGEON_COMPLETE(Pattern.compile("^§6Great job! You've completed the .+ Dungeon!"), DungeonCompleteGlue.class),
-    REWARD_RECEIVED(Pattern.compile("^§3You have received:"), RewardReceivedGlue.class),
+    REWARD_RECEIVED(Pattern.compile("^§[3b]You have received:"), RewardReceivedGlue.class),
     DEATH_ITEM_LOST(Pattern.compile("^§6By dying, you've lost:"), DeathItemLostGlue.class),
     WORLD_EVENT_FAILED(Pattern.compile("^(?:\uDAFF\uDFFC\uE00D\uDAFF\uDFFF\uE002\uDAFF\uDFFE|\uDAFF\uDFFC\uE001\uDB00\uDC06) You have failed "), WorldEventFailedGlue.class),
     WORLD_EVENT_COMPLETE(Pattern.compile("\uDAFF\uDFBE\uE016\uE00E\uE011\uE00B\uE003 \uE004\uE015\uE004\uE00D\uE013\uDB00\uDC02$"), WorldEventCompleteGlue.class),
     PARTY_INVITED(Pattern.compile("\\n +§eYou have been invited to join .+'s party!"), PartyInvitedGlue.class),
+    STORE_PURCHASED(Pattern.compile("§6§l +Thank you for your purchase!"), StorePurchasedGlue.class),
 
 
     NO_TYPE(null, null);
