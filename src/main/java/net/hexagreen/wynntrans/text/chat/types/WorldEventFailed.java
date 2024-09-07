@@ -43,7 +43,7 @@ public class WorldEventFailed extends WynnSystemText implements ICenterAligned {
 
     private Text initEventName(Text text) {
         String valName = text.getString().replaceAll("You have failed ", "").replaceAll("\\.$", "");
-        String keyName = rootKey + "worldEvent." + normalizeStringWorldEventName(valName);
+        String keyName = rootKey + "worldEvent." + normalizeStringForKey(valName);
         if(WTS.checkTranslationExist(keyName, valName)) {
             return newTranslate(keyName);
         }

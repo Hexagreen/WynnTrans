@@ -24,7 +24,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
         super(text, regex);
         this.valQuestName = getSibling(2).getString()
                 .replaceAll("^§. +§.", "");
-        this.keyQuestName = parentKey + normalizeStringQuestName(valQuestName);
+        this.keyQuestName = parentKey + normalizeStringForKey(valQuestName);
         if(getSibling(1).getString().contains("Mini-Quest")) {
             this.keyTitle = func + "miniQuestCompleted";
         }

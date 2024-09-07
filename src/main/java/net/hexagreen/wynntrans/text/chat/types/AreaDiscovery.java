@@ -23,7 +23,7 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
         super(text, regex);
         Matcher areaMatcher = AREA_NAME.matcher(getSibling(1).getString());
         String areaName = areaMatcher.find() ? areaMatcher.group(1) : "UNKNOWN AREA";
-        this.keyAreaName = rootKey + "area." + normalizeStringAreaName(areaName);
+        this.keyAreaName = rootKey + "area." + normalizeStringForKey(areaName);
         this.valAreaName = areaName;
         this.experience = areaMatcher.group(2);
         this.shortForm = text.getSiblings().size() == 2;

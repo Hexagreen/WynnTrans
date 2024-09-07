@@ -9,6 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class NPCNameLiteral extends WynnDisplayText {
     private final String valNpcName;
     private final String keyNpcName;
+    private final String subKeyNpcName;
     private final Style styleNpcName;
     private final String valNpcTalk;
     private final String keyNpcTalk;
@@ -30,9 +31,10 @@ public class NPCNameLiteral extends WynnDisplayText {
         this.styleNpcTalk = parseStyleCode(npcTalk.replaceAll("((?:§.)+).+", "$1"));
         this.valNpcName = npcName.replaceFirst("(§.)+", "");
         this.valNpcTalk = npcTalk.replaceFirst("(§.)+", "");
-        String npcNameNormalized = normalizeStringNPCName(this.valNpcName);
+        String npcNameNormalized = normalizeStringForKey(this.valNpcName);
         this.keyNpcName = parentKey + npcNameNormalized;
-        this.keyNpcTalk = npcTalk.isEmpty() ? null : rootKey + "talk." + npcNameNormalized + "." + DigestUtils.sha1Hex(npcTalk).substring(0, 4);
+        this.subKeyNpcName = "wytr.mobName." + npcNameNormalized;
+        this.keyNpcTalk = valNpcTalk.isBlank() ? null : rootKey + "talk." + npcNameNormalized + "." + DigestUtils.sha1Hex(valNpcTalk).substring(0, 4);
         this.trailer = inputText.getString().replaceFirst("(?:.|\\n)+§7NPC\\n?", "");
     }
 
@@ -53,7 +55,10 @@ public class NPCNameLiteral extends WynnDisplayText {
             resultText.append("\n");
         }
 
-        if(WTS.checkTranslationExist(keyNpcName, valNpcName)) {
+        if(WTS.checkTranslationDoNotRegister(subKeyNpcName)) {
+            resultText.append(newTranslate(subKeyNpcName).setStyle(styleNpcName));
+        }
+        else if(WTS.checkTranslationExist(keyNpcName, valNpcName)) {
             resultText.append(newTranslate(keyNpcName).setStyle(styleNpcName));
         }
         else resultText.append(Text.literal(valNpcName).setStyle(styleNpcName));

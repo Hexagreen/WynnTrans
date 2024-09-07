@@ -19,7 +19,7 @@ public class GuildBanner extends WynnDisplayText {
         super(text);
         this.lines = inputText.getString().split("\\n");
         this.valAreaName = lines[0].replaceAll("§.", "");
-        this.keyAreaName = rootKey + "area." + normalizeStringAreaName(valAreaName);
+        this.keyAreaName = rootKey + "area." + normalizeStringForKey(valAreaName);
         this.owner = lines[1].replaceFirst("§7Controlled by ", "");
     }
 

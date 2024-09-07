@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.debugClass;
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -30,7 +31,7 @@ public class GuildInfo extends WynnSystemText {
         switch(infoType) {
             case WEEK_OBJ_COMPLETE -> resultText.append(newTranslateWithSplit(parentKey + ".weekObj.complete", infoType.matcher.group(1)));
             case WEEK_OBJ_EXPIRE -> {
-                Text time = Text.literal(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
+                Text time = ITime.translateTime(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
                 resultText.append(newTranslateWithSplit(parentKey + ".weekObj.expire", time));
             }
             case WEEK_OBJ_NEW -> {

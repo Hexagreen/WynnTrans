@@ -31,7 +31,7 @@ public class MobTotemDeployed extends WynnChatText {
     }
 
     private Text getLocation(Text text) {
-        String areaName = normalizeStringAreaName(text.getString());
+        String areaName = normalizeStringForKey(text.getString());
         return newTranslate(parentKey + "area." + areaName);
     }
 }

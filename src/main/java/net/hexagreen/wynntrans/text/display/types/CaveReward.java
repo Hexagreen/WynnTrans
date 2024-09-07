@@ -11,13 +11,13 @@ public class CaveReward extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().contains(" Rewards\\n§7Interact to Open");
+        return text.getString().contains(" Rewards\n§7Interact to Open");
     }
 
     public CaveReward(Text text) {
         super(text);
         this.valCaveName = text.getString().replaceAll("§e§l", "").replaceAll(" Rewards\\n.+", "");
-        this.keyCaveName = "wytr.cave." + normalizeStringCaveName(valCaveName);
+        this.keyCaveName = "wytr.cave." + normalizeStringForKey(valCaveName);
     }
 
     @Override

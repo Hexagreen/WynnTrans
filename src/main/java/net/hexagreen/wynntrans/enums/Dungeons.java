@@ -33,7 +33,10 @@ public enum Dungeons {
             Text.translatable("wytr.dungeon.fallenFactory.fragment")),
     ELDRITCH_OUTLOOK(Text.translatable("wytr.dungeon.eldritchOutlook"),
             Text.translatable("wytr.dungeon.eldritchOutlook.bossReward"),
-            Text.translatable("wytr.dungeon.eldritchOutlook.fragment"));
+            Text.translatable("wytr.dungeon.eldritchOutlook.fragment")),
+    UNKNOWN(Text.literal("Unknown"),
+            Text.literal("Unknown"),
+            Text.literal("Unknown"));
 
     private static final Text corrupted = Text.translatable("wytr.dungeon.corrupted");
     private final Text dungeonName;
@@ -47,7 +50,7 @@ public enum Dungeons {
         this.dungeonFragment = dungeonFragment;
     }
 
-    public Text getDungeonName() {
+    public MutableText getDungeonName() {
         MutableText out = Text.empty();
         if(this.isCorrupted) return out.append(corrupted).append(dungeonName);
         return out.append(dungeonName);
@@ -71,7 +74,6 @@ public enum Dungeons {
                 .replace("À", "").replace("'", "").replace("-", "")
                 .toLowerCase();
         Dungeons dungeons = match(stripped);
-        if (dungeons == null) return null;
         if (isCorrupted) dungeons.setCorrupted();
         return dungeons;
     }
@@ -87,7 +89,7 @@ public enum Dungeons {
         if (name.contains("galleons")) return GALLEONS_GRAVEYARD;
         if (name.contains("fallen")) return FALLEN_FACTORY;
         if (name.contains("eldritch")) return ELDRITCH_OUTLOOK;
-        else return null;
+        else return UNKNOWN;
     }
 
     private void setCorrupted() {

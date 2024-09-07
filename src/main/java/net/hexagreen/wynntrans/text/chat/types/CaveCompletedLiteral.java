@@ -21,7 +21,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned
     public CaveCompletedLiteral(Text text, Pattern ignore) {
         super(splitTextBody(text), null);
         this.valCaveName = getSibling(2).getString().replaceAll("§. +§.", "");
-        this.keyCaveName = parentKey + normalizeStringCaveName(valCaveName);
+        this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned
 
         Text t0;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
-            Style t0Style = parseStyleCode(getSibling(2).getString().replaceAll(" ", "").replace(valCaveName, ""));
+            Style t0Style = parseStyleCode(getSibling(2).getString().replace(valCaveName, "").replaceAll(" ", ""));
             t0 = newTranslate(keyCaveName).setStyle(t0Style);
         }
         else {
@@ -87,6 +87,9 @@ public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned
         MutableText result = Text.empty();
         for(String line : lines) {
             result.append(line);
+        }
+        for(Text sibling : text.getSiblings()) {
+            result.append(sibling);
         }
 
         return result.copy();

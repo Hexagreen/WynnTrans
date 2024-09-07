@@ -108,6 +108,7 @@ public abstract class WynnTransText {
     }
 
     protected Style parseStyleCode(String styleCode) {
+        if(styleCode.isBlank()) return Style.EMPTY;
         char[] codes = styleCode.replace("§", "").toCharArray();
         Formatting[] formatting = new Formatting[codes.length];
         for (int i = 0; i < codes.length; i++) {
@@ -116,35 +117,8 @@ public abstract class WynnTransText {
         return Style.EMPTY.withFormatting(formatting);
     }
 
-    protected String normalizeStringAreaName(String string) {
-        return string.replace(" ", "").replace(".","")
-                .replace("'", "").replace("-", "")
-                .replace("À", "").replace("֎", "")
-                .replace("’", "");
-    }
-
-    protected String normalizeStringCaveName(String string) {
-        return string.replace(" ", "").replace("'", "")
-                .replace("À", "").replace("֎", "")
-                .replace("’", "");
-    }
-
-    protected String normalizeStringQuestName(String string) {
-        return string.replace(" ", "").replace("'", "")
-                .replace("À", "").replace("֎", "")
-                .replace("’", "");
-    }
-
-    protected String normalizeStringNPCName(String string) {
-        return string.replace(" ", "").replace(".", "")
-                .replace("'", "").replace(":", "")
-                .replace("’", "").replace("\"", "");
-    }
-
-    protected String normalizeStringWorldEventName(String string) {
-        return string.replace(" ", "").replace("'", "")
-                .replace("%", "").replace("-", "")
-                .replace("’", "");
+    protected String normalizeStringForKey(String string) {
+        return string.replaceAll("[ .'À֎’:&%\"-]", "");
     }
 
     public static class TextTranslationFailException extends RuntimeException {

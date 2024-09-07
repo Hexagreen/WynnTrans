@@ -5,7 +5,7 @@ import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class Timer extends WynnDisplayText implements ITime {
+public class Timer extends WynnDisplayText {
     public static boolean typeChecker(Text text) {
         return text.getString().matches("§.(\\d+)[ms]");
     }
@@ -23,6 +23,6 @@ public class Timer extends WynnDisplayText implements ITime {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = translateTime(getContentString().replaceAll("§.", "")).setStyle(color);
+        resultText = ITime.translateTime(getContentString().replaceAll("§.", "")).setStyle(color);
     }
 }

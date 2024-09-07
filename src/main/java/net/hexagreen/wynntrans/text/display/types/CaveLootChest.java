@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CaveLootChest extends WynnDisplayText {
-    private static final Pattern regex = Pattern.compile("§c§lSLAY!§r§7 Defeat (§f\\d+/\\d+) ?(.+)$");
+    private static final Pattern regex = Pattern.compile("§c§lSLAY!§r§7 Defeat (an?|§f\\d+/\\d+)(?:§.| )*(.+)$");
     private final Text chest;
     private final Style color;
     private final String progress;
@@ -24,7 +24,7 @@ public class CaveLootChest extends WynnDisplayText {
     public CaveLootChest(Text text) {
         super(text);
         this.chest = new LootChest(
-                Text.literal(text.getString().replaceAll("^..Locked ", "").replaceAll("\\n.+$", ""))
+                Text.literal(text.getString().replaceFirst("^..Locked ", "").replaceFirst("\\n.+$", ""))
         ).text();
         this.color = parseStyleCode(text.getString().substring(0, 2));
         Matcher m = regex.matcher(text.getString());
@@ -49,14 +49,19 @@ public class CaveLootChest extends WynnDisplayText {
         }
         else {
             MutableText target;
-            String keyTarget = "wytr.mobName." + normalizeStringNPCName(valTarget);
+            String keyTarget = "wytr.mobName." + normalizeStringForKey(valTarget);
             if(WTS.checkTranslationExist(keyTarget, valTarget)) {
                 target = newTranslate(keyTarget).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
             }
             else {
                 target = Text.literal(valTarget).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
             }
-            resultText.append(newTranslate(parentKey + ".slayTarget", progress, target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            if(!progress.contains("a")){
+                resultText.append(newTranslate(parentKey + ".slayTarget", progress, target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            }
+            else {
+                resultText.append(newTranslate(parentKey + ".slayHead", target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            }
         }
     }
 }

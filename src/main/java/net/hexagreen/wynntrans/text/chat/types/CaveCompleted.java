@@ -19,7 +19,7 @@ public class CaveCompleted extends WynnChatText implements ICenterAligned {
     public CaveCompleted(Text text, Pattern regex) {
         super(text, regex);
         this.valCaveName = getSibling(2).getSiblings().get(1).getString();
-        this.keyCaveName = parentKey + normalizeStringCaveName(valCaveName);
+        this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
     }
 
     @Override

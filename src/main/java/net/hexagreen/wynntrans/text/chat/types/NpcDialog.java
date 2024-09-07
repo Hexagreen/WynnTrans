@@ -23,7 +23,7 @@ public class NpcDialog extends WynnChatText {
         this.clientPlayerName = MinecraftClient.getInstance().player.getName().getString();
         this.playerName = removedCustomNickname == null ? this.clientPlayerName : removedCustomNickname;
         this.valName = getContentString(0).replace(": ", "");
-        String npcName = normalizeStringNPCName(valName);
+        String npcName = normalizeStringForKey(valName);
         this.keyName = parentKey + "name." + npcName;
         String dialogIdx = matcher.group(1) + ".";
         String dialogLen = matcher.group(2) + ".";

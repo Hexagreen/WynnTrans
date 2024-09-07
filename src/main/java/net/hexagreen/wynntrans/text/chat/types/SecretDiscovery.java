@@ -25,13 +25,13 @@ public class SecretDiscovery extends WynnChatText implements ICenterAligned {
         super(text, regex);
         Matcher discoveryNameMatcher = DISCOVERY_NAME.matcher(getSibling(1).getString());
         String discoveryName = discoveryNameMatcher.find() ? discoveryNameMatcher.group(1) : "UNKNOWN DISCOVERY";
-        this.keyDiscoveryName = rootKey + "discovery." + normalizeStringAreaName(discoveryName);
+        this.keyDiscoveryName = rootKey + "discovery." + normalizeStringForKey(discoveryName);
         this.valDiscoveryName = discoveryName;
         this.experience = discoveryNameMatcher.group(2);
         Matcher m = DISCOVERY_COUNT.matcher(getSibling(2).getString());
         boolean ignore = m.find();
         String areaName = m.group(1);
-        this.keyDiscoveryArea = rootKey + "discovery.area." + normalizeStringAreaName(areaName);
+        this.keyDiscoveryArea = rootKey + "discovery.area." + normalizeStringForKey(areaName);
         this.valDiscoveryArea = m.group(1);
         this.revealed = m.group(2);
         this.total = m.group(3);

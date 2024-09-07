@@ -15,7 +15,7 @@ public class BoothTitle extends WynnDisplayText {
 
     public BoothTitle(Text text) {
         super(text);
-        this.boothOwner = inputText.getString().replaceAll("'s Shop\\n.+", "");
+        this.boothOwner = inputText.getString().replaceAll("'s Shop\\n(.|\\n)+", "").substring(2);
         this.boothDesc = inputText.getString().replaceAll(".+ Shop\\n", "");
     }
 
@@ -26,7 +26,8 @@ public class BoothTitle extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = newTranslate(parentKey, boothOwner).setStyle(Style.EMPTY.withColor(Formatting.AQUA))
+        resultText = Text.empty()
+                .append(newTranslate(parentKey, boothOwner).setStyle(Style.EMPTY.withColor(Formatting.AQUA)))
                 .append("\n")
                 .append(Text.literal(boothDesc).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }

@@ -22,7 +22,7 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
             this.valEName = getSibling(3).getString().replaceAll("\\n +§.§.", "");
             String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
             this.keyEName = "wytr.eventInfo.eventName." + hash2;
-            this.styleEName = getStyle(3);
+            this.styleEName = parseStyleCode(getContentString(3).replaceAll("(.|\\n)+((?:§.)+).+", "$1"));
         }
     }
 
@@ -34,7 +34,7 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
     @Override
     protected void build() {
         resultText = Text.empty().append("\n");
-        Text t1 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA)).append("\n");
+        Text t1 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)).append("\n");
         Text t2 = newTranslate(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("\n");
         Text t3 = newTranslate(parentKey + ".2").setStyle(
                 Style.EMPTY.withColor(Formatting.DARK_AQUA)
@@ -63,7 +63,7 @@ public class WeeklyObjective extends WynnChatText implements ICenterAligned {
     }
 
     private Text getCrateName(Text text) {
-        String string = text.getString().replaceAll("^ +§.", "");
+        String string = text.getString().replaceAll("^\\n +(§.)", "$1");
         return Text.literal(string).setStyle(text.getStyle());
     }
 }

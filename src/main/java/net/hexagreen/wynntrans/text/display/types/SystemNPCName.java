@@ -58,6 +58,10 @@ public class SystemNPCName extends WynnDisplayText {
             npcName.append(newTranslate("wytr.func.keyCollector").setStyle(purple));
             npcDesc.append(newTranslate("wytr.display.keyCollector.desc").setStyle(gray));
         }
+        else if(str.contains("Housing Master")) {
+            npcName.append(newTranslate("wytr.display.housingMaster").setStyle(purple));
+            npcDesc.append(newTranslate("wytr.display.housingMaster.desc").setStyle(gray));
+        }
         else if(str.contains("Trade Market")) {
             npcName.append(newTranslate("wytr.display.tradeMarket").setStyle(Style.EMPTY.withColor(Formatting.RED)));
             npcDesc.append(newTranslate("wytr.display.tradeMarket.desc").setStyle(gray));

@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
 public interface ICenterAligned {
-    int CENTER = 40;
+    int CENTER = 160;
     int SPACE_WIDTH = MinecraftClient.getInstance().textRenderer.getWidth(" ");
     default MutableText getCenterIndent(String alignTargetKey) {
         return getCenterIndent(MutableText.of(new TranslatableTextContent(alignTargetKey, null, TranslatableTextContent.EMPTY_ARGUMENTS)));
@@ -18,8 +18,19 @@ public interface ICenterAligned {
 
     default MutableText getCenterIndent(Text alignTargetText) {
         int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(alignTargetText);
-        int newIndent = CENTER - (int)(0.5 + (textWidth / 2.0) / SPACE_WIDTH);
 
-        return Text.literal(" ".repeat(Math.max(0, newIndent + 1)));
+        StringBuilder spaces = new StringBuilder();
+        for(int pixels = CENTER - (int)(0.5 + textWidth / 2.0); pixels > 0;) {
+            if(pixels >= SPACE_WIDTH) {
+                spaces.append(" ");
+                pixels -= SPACE_WIDTH;
+            }
+            else {
+                spaces.append("À");
+                pixels -= 1;
+            }
+        }
+
+        return Text.literal(spaces.toString());
     }
 }

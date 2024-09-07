@@ -11,13 +11,13 @@ public class CaveTitle extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 3) return false;
-        return text.getString().contains("\uE002\uE000\uE015\uE004\uDB00\uDC02");
+        return text.getString().contains("\uE002\uE000\uE015\uE004") || text.getString().contains("\uE013\uE00E\uE016\uE004\uE011");
     }
 
     public CaveTitle(Text text) {
         super(text);
         this.valCaveName = getSibling(2).getString();
-        this.keyCaveName = "wytr.cave." + normalizeStringCaveName(valCaveName);
+        this.keyCaveName = "wytr.cave." + normalizeStringForKey(valCaveName);
         this.styleCaveName = getStyle(2);
     }
 
@@ -36,7 +36,7 @@ public class CaveTitle extends WynnDisplayText {
             cave = Text.literal(valCaveName).setStyle(styleCaveName);
         }
 
-        resultText = Text.empty();
+        resultText = Text.empty().setStyle(getStyle());
         resultText.append(getSibling(0)).append("\n").append(cave);
     }
 }

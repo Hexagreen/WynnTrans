@@ -14,9 +14,9 @@ public class SimpleDisplay extends WynnDisplayText {
 
     public SimpleDisplay(Text text) {
         super(text);
-        this.valText = inputText.getString().replaceFirst("^(§.)+", "");
+        this.valText = inputText.getString().replaceFirst("^(?:§.)+", "");
         this.keyText = parentKey + DigestUtils.sha1Hex(valText);
-        this.styleText = getStyle();
+        this.styleText = parseStyleCode(inputText.getString().replace(valText, "")).withParent(getStyle());
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SimpleDisplay extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(valText.isEmpty() || valText.matches("(§.)+") || valText.equals("§0À")) {
+        if(valText.isEmpty() || valText.matches("(§.)+") || valText.equals("À") || valText.equals("§0\n§0")) {
             resultText = inputText;
             return;
         }

@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.debugClass;
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.ICenterAligned;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.ClickEvent;
@@ -79,32 +80,30 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
 
     private void appendFestivalMessage(Matcher festival) {
         Matcher color = REGEX_FES_COLOR.matcher(getSibling(2).getString());
-        Formatting colorFormat;
+        Style festDescStyle;
         if(color.find()) {
-            colorFormat = Formatting.byCode(color.group(1).charAt(0));
+            festDescStyle = parseStyleCode(color.group(1));
         }
-        else colorFormat = Formatting.WHITE;
+        else festDescStyle = Style.EMPTY;
 
-        char[] format = festival.group(1).toCharArray();
-        Formatting f1 = Formatting.byCode(format[1]);
-        Formatting f2 = Formatting.byCode(format[3]);
+        Style festTitleStyle = parseStyleCode(festival.group(1));
         String keyFestival = "wytr.eventInfo.eventName." + DigestUtils.sha1Hex(festival.group(2)).substring(0, 4);
         Text textFestival;
         if(WTS.checkTranslationExist(keyFestival, festival.group(2))) {
-            textFestival = newTranslate(keyFestival).setStyle(Style.EMPTY.withFormatting(f1, f2));
+            textFestival = newTranslate(keyFestival).setStyle(festTitleStyle);
         }
         else {
-            textFestival = Text.literal(festival.group(2)).setStyle(Style.EMPTY.withFormatting(f1, f2));
+            textFestival = Text.literal(festival.group(2)).setStyle(festTitleStyle);
         }
         resultText.append(getCenterIndent(textFestival)).append(textFestival).append("\n");
 
-        Text festivalGuide1 = newTranslate(parentKey + ".fesGuide.1").setStyle(Style.EMPTY.withColor(colorFormat));
+        Text festivalGuide1 = newTranslate(parentKey + ".fesGuide.1").setStyle(festDescStyle);
         resultText.append(getCenterIndent(festivalGuide1)).append(festivalGuide1).append("\n");
 
         Matcher crate = REGEX_CRATE.matcher(getSibling(3).getString());
         if(crate.find()) {
             String strCrate = crate.group(1);
-            Text festivalGuide2 = newTranslate(parentKey + ".fesGuide.2", strCrate).setStyle(Style.EMPTY.withColor(colorFormat));
+            Text festivalGuide2 = newTranslate(parentKey + ".fesGuide.2", strCrate).setStyle(festDescStyle);
             resultText.append(getCenterIndent(festivalGuide2)).append(festivalGuide2).append("\n\n");
         }
         else debugClass.writeTextAsJSON(inputText);
@@ -112,13 +111,15 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
         Matcher time = REGEX_TIME.matcher(getSibling(5).getString());
         if(time.find()) {
             String strTime = time.group(1);
-            Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", strTime).setStyle(Style.EMPTY.withColor(colorFormat));
+            Style styleTime = parseStyleCode(strTime.replaceAll("(§.).+", "$1"));
+            Text textTime = ITime.translateTime(strTime.replaceAll("§.", "")).setStyle(styleTime);
+            Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", textTime).setStyle(festTitleStyle.withBold(false));
             resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");
         }
     }
 
     private void appendSaleMessage(Matcher discount) {
-        String duration = discount.group(2);
+        Text duration = ITime.translateTime(discount.group(2));
         Formatting color = Formatting.byCode(discount.group(1).charAt(0));
         Text saleTime = newTranslate(parentKey + ".sale", duration).setStyle(Style.EMPTY.withColor(color));
         resultText.append(getCenterIndent(saleTime)).append(saleTime).append("\n");

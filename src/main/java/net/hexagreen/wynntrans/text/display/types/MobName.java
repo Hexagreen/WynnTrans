@@ -8,11 +8,15 @@ import net.minecraft.util.Identifier;
 public class MobName extends WynnDisplayText {
     private final String keyMobName;
     private final String valMobName;
+    private final String subKeyMobName;
     private final Style styleMobName;
+    private final boolean isRare;
 
     public static boolean typeChecker(Text text){
         try {
-            Text target = text.getSiblings().get(2).getSiblings().getFirst();
+            int index = 2;
+            if(text.getString().substring(0, 1).matches("[\uE02A\uD83D\uDC31]")) index = 4;
+            Text target = text.getSiblings().get(index).getSiblings().getFirst();
             if(target.getString().contains("\uE00B\uE015 ")) {
                 if(target.getStyle().getFont().equals(Identifier.of("minecraft:banner/pill"))) {
                     return true;
@@ -25,9 +29,13 @@ public class MobName extends WynnDisplayText {
 
     public MobName(Text text) {
         super(text);
-        this.valMobName = getContentString(0);
-        this.keyMobName = parentKey + normalizeStringNPCName(valMobName);
-        this.styleMobName = getStyle(0);
+        int index = 0;
+        this.isRare = text.getString().substring(0, 1).matches("[\uE02A\uD83D\uDC31]");
+        if(isRare) index = 2;
+        this.valMobName = getContentString(index);
+        this.keyMobName = parentKey + normalizeStringForKey(valMobName);
+        this.subKeyMobName = "wytr.name." + normalizeStringForKey(valMobName);
+        this.styleMobName = getStyle(index);
     }
 
     @Override
@@ -38,13 +46,19 @@ public class MobName extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        if(WTS.checkTranslationExist(keyMobName, valMobName)) {
+        if(isRare) {
+            resultText.append(getSibling(0)).append(" ");
+        }
+        if(WTS.checkTranslationDoNotRegister(subKeyMobName)) {
+            resultText.append(newTranslate(subKeyMobName).setStyle(styleMobName));
+        }
+        else if(WTS.checkTranslationExist(keyMobName, valMobName)) {
             resultText.append(newTranslate(keyMobName).setStyle(styleMobName));
         }
         else {
-            resultText.append(getSibling(0));
+            resultText.append(Text.literal(valMobName).setStyle(styleMobName));
         }
-        for(int i = 1; i < inputText.getSiblings().size(); i++) {
+        for(int i = isRare ? 3 : 1; i < inputText.getSiblings().size(); i++) {
             resultText.append(getSibling(i));
         }
     }

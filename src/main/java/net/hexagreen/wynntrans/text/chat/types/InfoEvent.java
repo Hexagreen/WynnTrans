@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -74,6 +75,6 @@ public class InfoEvent extends WynnChatText {
 
     private Text initTimer(Text text) {
         String str = text.getString().replace(".", "");
-        return Text.literal(str).setStyle(text.getStyle());
+        return ITime.translateTime(str).setStyle(text.getStyle());
     }
 }

@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat;
 
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.types.SimpleSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -33,7 +34,7 @@ public class ProxySystemText extends SimpleSystemText {
                 text -> {
                     Matcher m = Pattern.compile("in (.+)!$").matcher(text.getString());
                     boolean ignore = m.find();
-                    return m.group(1);
+                    return ITime.translateTime(m.group(1));
                 }),
         BANK_PAGE_ADDED(Pattern.compile("You have unlocked page"),
                 text -> text.getString().replaceAll("\\d+", "%2\\$s"),

@@ -16,7 +16,7 @@ public class NewQuest extends WynnChatText {
         this.questLineMode = getContentString().contains("Questline");
         this.miniQuestMode = getContentString().contains("Mini-Quest");
         this.valQuestName = getContentString(0);
-        this.keyQuestName = parentKey + normalizeStringQuestName(valQuestName);
+        this.keyQuestName = parentKey + normalizeStringForKey(valQuestName);
     }
 
     @Override
