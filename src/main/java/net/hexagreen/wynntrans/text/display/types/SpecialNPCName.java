@@ -41,7 +41,7 @@ public class SpecialNPCName extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text name;
-        if(WTS.checkTranslationExist(keyName, valName)) {
+        if(WTS.checkTranslationDoNotRegister(keyName)) {
             name = newTranslate(keyName).setStyle(styleName);
         }
         else {

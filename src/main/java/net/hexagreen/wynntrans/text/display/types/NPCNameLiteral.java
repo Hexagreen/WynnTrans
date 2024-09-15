@@ -58,7 +58,7 @@ public class NPCNameLiteral extends WynnDisplayText {
         if(WTS.checkTranslationDoNotRegister(subKeyNpcName)) {
             resultText.append(newTranslate(subKeyNpcName).setStyle(styleNpcName));
         }
-        else if(WTS.checkTranslationExist(keyNpcName, valNpcName)) {
+        else if(WTS.checkTranslationDoNotRegister(keyNpcName)) {
             resultText.append(newTranslate(keyNpcName).setStyle(styleNpcName));
         }
         else resultText.append(Text.literal(valNpcName).setStyle(styleNpcName));
