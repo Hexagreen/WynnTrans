@@ -52,7 +52,6 @@ public class SimpleText extends WynnChatText {
                 } else {
                     resultText = Text.literal(valContentText).setStyle(getStyle());
                     if(translationRegisterControl) {
-                        debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
                         debugClass.writeTextAsJSON(inputText, "UnregisteredSimpleText");
                         recorded = true;
                     }
@@ -75,7 +74,6 @@ public class SimpleText extends WynnChatText {
                 else {
                     resultText.append(sibling);
                     if(translationRegisterControl && !recorded) {
-                        debugClass.writeString2File(inputText.getString(), "getString.txt", "Simple");
                         debugClass.writeTextAsJSON(inputText, "UnregisteredSimpleText");
                         recorded = true;
                     }
@@ -89,7 +87,6 @@ public class SimpleText extends WynnChatText {
             else {
                 resultText = inputText;
                 if(translationRegisterControl) {
-                    debugClass.writeString2File(inputText.getString(), "literal.txt");
                     debugClass.writeTextAsJSON(inputText, "Literal");
                 }
             }

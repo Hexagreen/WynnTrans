@@ -26,7 +26,7 @@ public class SimpleDisplay extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(valText.isEmpty() || valText.matches("(§.)+") || valText.equals("À") || valText.equals("§0\n§0")) {
+        if(valText.isBlank() || valText.replaceAll("(§0|\\n|À)", "").isBlank()) {
             resultText = inputText;
             return;
         }
@@ -41,7 +41,6 @@ public class SimpleDisplay extends WynnDisplayText {
                     resultText = newTranslate(keyContentText).setStyle(styleText);
                 } else {
                     resultText = Text.literal(valContentText).setStyle(styleText);
-                    debugClass.writeString2File(inputText.getString(), "getString.txt", "Display");
                     debugClass.writeTextAsJSON(inputText, "Display");
                     recorded = true;
                 }
@@ -63,7 +62,6 @@ public class SimpleDisplay extends WynnDisplayText {
                 else {
                     resultText.append(sibling);
                     if(!recorded) {
-                        debugClass.writeString2File(inputText.getString(), "getString.txt", "Display");
                         debugClass.writeTextAsJSON(inputText, "Display");
                         recorded = true;
                     }
@@ -76,7 +74,6 @@ public class SimpleDisplay extends WynnDisplayText {
             }
             else {
                 resultText = inputText;
-                debugClass.writeString2File(inputText.getString(), "literal.txt");
                 debugClass.writeTextAsJSON(inputText, "Display");
             }
         }

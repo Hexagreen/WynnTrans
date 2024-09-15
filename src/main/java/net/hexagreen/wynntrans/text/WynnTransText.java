@@ -63,7 +63,7 @@ public abstract class WynnTransText {
      * @return {@code MutableText} contains translatable form content.
      */
     protected MutableText newTranslate(String key) {
-        return MutableText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS));
+        return Text.translatable(key, TranslatableTextContent.EMPTY_ARGUMENTS);
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class WynnTransText {
      * @return {@code MutableText} contains translatable form content.
      */
     protected MutableText newTranslate(String key, Object... args) {
-        return MutableText.of(new TranslatableTextContent(key, null, args));
+        return Text.translatable(key, args);
     }
 
     /**

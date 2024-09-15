@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans;
 
+import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
@@ -10,10 +12,8 @@ import org.slf4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class WynnTransFileManager {
@@ -39,12 +39,24 @@ public class WynnTransFileManager {
 
     public static Set<String> readUnregistered() {
         File file = new File(fileName);
-        try {
-            FileReader reader = new FileReader(file);
+        try(FileReader reader = new FileReader(file)) {
             Map<String, String> map = gson.fromJson(new JsonReader(reader), new TypeToken<HashMap<String, String>>() {}.getType());
             return map.keySet();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             LOGGER.warn("[WynnTrans] Failed to read unregistered texts. File doesn't exist.");
+        } catch (JsonSyntaxException e) {
+            String timestamp = new SimpleDateFormat("MMdd_HHmmss").format(new Date());
+            try {
+                Files.move(file, new File("WynnTrans/scannedTexts" + timestamp + ".json"));
+                if(file.createNewFile()) {
+                    FileWriter writer = new FileWriter(file);
+                    writer.write("{\r\n\t\"_comment\":\"Scanned Texts Here\"}");
+                    writer.close();
+                }
+            } catch (IOException ex) {
+                LOGGER.error("[WynnTrans] Failed to backup and read unregistered texts. Restart game.");
+                System.exit(1);
+            }
         }
         return new HashSet<>();
     }

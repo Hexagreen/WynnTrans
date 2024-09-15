@@ -29,11 +29,9 @@ public class WynnTransClient implements ClientModInitializer {
                 writer.write("{\r\n\t\"_comment\":\"Scanned Texts Here\"}");
                 writer.close();
             }
-            File gstr = new File(dir, "getString.txt");
             File json = new File(dir, "json.txt");
             File excp = new File(dir, "exception.txt");
-            File litr = new File(dir, "literal.txt");
-            if(gstr.createNewFile() && json.createNewFile() && excp.createNewFile() && litr.createNewFile()) {
+            if(json.createNewFile() && excp.createNewFile()) {
                 LOGGER.info("[WynnTrans] Text capturing file initialized.");
             }
         } catch (IOException e) {

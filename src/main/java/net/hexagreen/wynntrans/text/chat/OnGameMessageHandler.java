@@ -120,6 +120,10 @@ public class OnGameMessageHandler {
             else return true;
         }
 
+        for(Text sibling : text.getSiblings()) {
+            if(sibling.getString().equals("\n")) return false;
+        }
+
         try {
             return ChatType.findAndRun(text);
         } catch (Exception e) {

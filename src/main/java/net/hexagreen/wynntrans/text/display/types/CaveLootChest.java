@@ -44,7 +44,7 @@ public class CaveLootChest extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey, chest).setStyle(color)).append("\n");
-        if(valTarget.equals("§7 Mobs")) {
+        if(valTarget.contains("Mobs")) {
             resultText.append(newTranslate(parentKey + ".slayMob", progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
         else {

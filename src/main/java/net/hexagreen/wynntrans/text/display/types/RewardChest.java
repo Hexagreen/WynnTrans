@@ -15,9 +15,16 @@ public class RewardChest extends WynnDisplayText {
 
     public RewardChest(Text text) {
         super(text);
-        Text time = getSibling(0).getSiblings().get(2).getSiblings().getFirst();
-        this.timeStyle = time.getStyle();
-        this.lastTime = ITime.translateTime(time.getString()).setStyle(timeStyle);
+        if(text.getSiblings().size() != 2) {
+            Text time = getSibling(0).getSiblings().get(2).getSiblings().getFirst();
+            this.timeStyle = time.getStyle();
+            this.lastTime = ITime.translateTime(time.getString()).setStyle(timeStyle);
+        }
+        else {
+            String time = getContentString(1).replaceAll("\\n.+rewards in |\\n\\n.+", "");
+            this.timeStyle = parseStyleCode(time.replaceAll("((?:§.)+).+", "$1"));
+            this.lastTime = ITime.translateTime(time.replaceAll("§.", ""));
+        }
     }
 
     @Override
@@ -28,7 +35,12 @@ public class RewardChest extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(getStyle(0));
-        resultText.append(getSibling(0).getSiblings().getFirst()).append("\n");
+        if(inputText.getSiblings().size() != 2) {
+            resultText.append(getSibling(0).getSiblings().getFirst()).append("\n");
+        }
+        else {
+            resultText.append(getSibling(0)).append("\n");
+        }
         resultText.append(newTranslate(parentKey, lastTime).setStyle(timeStyle));
     }
 }

@@ -39,10 +39,16 @@ public enum DisplayType {
     TIMER(Timer.class, Timer::typeChecker),
     TOTEM_HEALING(TotemHealing.class, TotemHealing::typeChecker),
     BOSS_ALTAR(BossAltar.class, BossAltar::typeChecker),
+    KILL_COUNTER(SlayCounter.class, SlayCounter::typeChecker),
     DUNGEON_TITLE(DungeonTitle.class, DungeonTitle::typeChecker),
     RAID_TITLE(RaidTitle.class, RaidTitle::typeChecker),
     RAID_KEEPER(RaidKeeper.class, RaidKeeper::typeChecker),
     REWARD_CHEST(RewardChest.class, RewardChest::typeChecker),
+    WORLD_EVENT_NAME(WorldEventName.class, WorldEventName::typeChecker),
+    WORLD_EVENT_TIMER(WorldEventTimer.class, WorldEventTimer::typeChecker),
+    WORLD_EVENT_BANNER(WorldEventBanner.class, WorldEventBanner::typeChecker),
+    SUMMONS_NAME(SummonsName.class, SummonsName::typeChecker),
+    PET_NAME(PetName.class, PetName::typeChecker),
     NO_TYPE(SimpleDisplay.class, null);
 
     private final Class<? extends WynnDisplayText> wdt;

@@ -88,9 +88,6 @@ public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned
         for(String line : lines) {
             result.append(line);
         }
-        for(Text sibling : text.getSiblings()) {
-            result.append(sibling);
-        }
 
         return result.copy();
     }
