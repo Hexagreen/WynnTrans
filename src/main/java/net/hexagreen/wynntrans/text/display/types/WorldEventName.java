@@ -1,20 +1,25 @@
 package net.hexagreen.wynntrans.text.display.types;
 
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class WorldEventName extends WynnDisplayText {
     private final String keyWorldEvent;
+    private final boolean timerMode;
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
+        if(text.getString().equals("Prepare to start")) return false;
         return text.getStyle().equals(Style.EMPTY.withColor(0xEBF7FF));
     }
 
     public WorldEventName(Text text) {
         super(text);
         this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(getContentString());
+        this.timerMode = getContentString().matches("\\d+ (hour|minute|second)s? left");
     }
 
     @Override
@@ -24,6 +29,11 @@ public class WorldEventName extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = newTranslate(keyWorldEvent).setStyle(Style.EMPTY.withColor(0xEBF7FF));
+        Style style = Style.EMPTY.withColor(0xEBF7FF);
+        if(!timerMode) resultText = newTranslate(keyWorldEvent).setStyle(style);
+        else {
+            Text time = ITime.translateTime(getContentString().replaceFirst(" left", ""));
+            resultText = newTranslate("wytr.display.worldEvent.timeLeft", time).setStyle(style);
+        }
     }
 }

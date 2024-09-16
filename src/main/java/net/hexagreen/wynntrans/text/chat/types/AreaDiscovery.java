@@ -54,17 +54,28 @@ public class AreaDiscovery extends WynnChatText implements ICenterAligned {
         if(shortForm) return;
         else resultText.append("\n");
 
-        for(int i = 2; inputText.getSiblings().size() > i; i++) {
-            MutableText line = Text.empty();
-            String keyAreaLore = keyAreaName + "." + (i - 1);
-            String valAreaLore = getSibling(i).getString().replaceAll("^ *§7", "");
-            if(WTS.checkTranslationExist(keyAreaLore, valAreaLore)) {
-                line.append(newTranslate(keyAreaLore).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-            }
-            else {
-                line.append(Text.literal(valAreaLore).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-            }
+        String keyAreaLore = keyAreaName + ".desc";
+        String valAreaLore = concatLore();
+        String[] loreLines;
+        if(WTS.checkTranslationExist(keyAreaLore, valAreaLore)) {
+            loreLines = newTranslate(keyAreaLore).getString().split("\n");
+        }
+        else {
+            loreLines = valAreaLore.split("\n");
+        }
+        for(String str : loreLines) {
+            Text line = Text.literal(str).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
             resultText.append(getCenterIndent(line)).append(line).append("\n");
         }
+    }
+
+    private String concatLore() {
+        StringBuilder lore = new StringBuilder();
+        int i = 2;
+        lore.append(getSibling(i++).getString().replaceAll("^ *§7", ""));
+        while (inputText.getSiblings().size() > i) {
+            lore.append("\n").append(getSibling(i++).getString().replaceAll("^ *§7", ""));
+        }
+        return lore.toString();
     }
 }

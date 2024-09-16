@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -42,16 +43,14 @@ public class KeyCollector extends WynnSystemText {
                     if(inputText.getSiblings().size() == 6) {
                         resultText.append(newTranslateWithSplit(parentKey + ".partyPass",
                                 parsePlayerName(getSibling(0)),
-                                getSibling(2),
-                                parseTimeUnit(getSibling(3)),
+                                parseTimeUnit(getSibling(2), getSibling(3)),
                                 parseNumber(getSibling(4)))
                                 .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
                     }
                     else {
                         resultText.append(newTranslateWithSplit(parentKey + ".partyPass",
                                 getSibling(1),
-                                getSibling(3),
-                                parseTimeUnit(getSibling(4)),
+                                parseTimeUnit(getSibling(3), getSibling(4)),
                                 parseNumber(getSibling(5)))
                                 .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
                     }
@@ -66,9 +65,9 @@ public class KeyCollector extends WynnSystemText {
         return Text.literal(name).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
     }
 
-    private Text parseTimeUnit(Text text) {
+    private Text parseTimeUnit(Text time, Text text) {
         String unit = text.getString().replaceAll(", ", "");
-        return Text.literal(unit).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
+        return ITime.translateTime(time.getString() + unit).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
     }
 
     private Text parseNumber(Text text) {
