@@ -27,7 +27,9 @@ public class WynnTranslationStorage {
             return;
         }
         this.unregisteredTooltipSet.add(text);
+        debugClass.writeString2File("", "json.txt");
         for(Text line : text) debugClass.writeTextAsJSON(line, tag);
+        debugClass.writeString2File("", "json.txt");
     }
 
     public void recordUnregisteredEntity(Text text, String tag) {

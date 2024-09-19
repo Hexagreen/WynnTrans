@@ -13,7 +13,7 @@ public class SummonsName extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("^§b.+'s§7 Puppet\\n§7\\d+[ms]$");
+        return text.getString().matches("^§b.+'s§7 (?:Puppet|Hound)\\n§7\\d+[ms]$");
     }
 
     public SummonsName(Text text) {

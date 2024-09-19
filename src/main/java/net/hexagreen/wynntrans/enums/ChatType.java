@@ -98,6 +98,7 @@ public enum ChatType {
     EVENT_BONFIRE_RETURN_FLAME(Pattern.compile("Returning \\d+ hearthflames"), EventBonfireHearthflames.class),
     EVENT_BONFIRE_REMOVE_FLAME(Pattern.compile("Returned \\d+ hearthflames"), EventBonfireHearthflames.class),
 
+    TRADE_ITEM_REVEAL(Pattern.compile("^§dYou've revealed:"), EatThisText.class),
     GO_TO_STORE(Pattern.compile("wynncraft\\.com/store"), GoToStore.class),
     STANDARD_SYSTEM_MESSAGE(Pattern.compile("^\\uDAFF\\uDFFC.\\uDAFF\\uDFFF\\uE002\\uDAFF\\uDFFE |^\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 "), SimpleSystemText.class),
     NO_TYPE(null, SimpleText.class);
