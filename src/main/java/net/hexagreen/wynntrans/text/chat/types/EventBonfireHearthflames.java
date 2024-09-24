@@ -6,31 +6,32 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class EventBonfireHearthflames extends SimpleSystemText {
-    private final String num;
 
-    public EventBonfireHearthflames(Text text, Pattern ignore) {
-        super(preprocess(text), ignore);
-        this.num = text.getString().replaceAll("\\D", "");
-    }
+	private final String num;
 
-    @Override
-    protected MutableText newTranslateWithSplit(String key) {
-        return newTranslate(key, splitter, num);
-    }
+	public EventBonfireHearthflames(Text text, Pattern ignore) {
+		super(preprocess(text), ignore);
+		this.num = text.getString().replaceAll("\\D", "");
+	}
 
-    private static Text preprocess(Text text) {
-        MutableText result = numToReplacer(text);
-        for(Text sibling : text.getSiblings()) {
-            result.append(preprocess(sibling));
-        }
-        return result;
-    }
+	private static Text preprocess(Text text) {
+		MutableText result = numToReplacer(text);
+		for(Text sibling : text.getSiblings()) {
+			result.append(preprocess(sibling));
+		}
+		return result;
+	}
 
-    private static MutableText numToReplacer(Text text) {
-        String content = text.copyContentOnly().getString();
-        if(content.matches(".*\\d+.*")) {
-            return Text.literal(content.replaceAll("\\d+", "%2\\$s")).setStyle(text.getStyle());
-        }
-        else return text.copyContentOnly().setStyle(text.getStyle());
-    }
+	private static MutableText numToReplacer(Text text) {
+		String content = text.copyContentOnly().getString();
+		if(content.matches(".*\\d+.*")) {
+			return Text.literal(content.replaceAll("\\d+", "%2\\$s")).setStyle(text.getStyle());
+		}
+		else return text.copyContentOnly().setStyle(text.getStyle());
+	}
+
+	@Override
+	protected MutableText newTranslateWithSplit(String key) {
+		return newTranslate(key, splitter, num);
+	}
 }

@@ -10,33 +10,31 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class RewardReceived extends WynnChatText {
-    private final Text rewards;
-    private static final Text STORE = Text.literal("wynncraft.com/store")
-            .setStyle(Style.EMPTY.withColor(Formatting.AQUA)
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://wynncraft.com/store")));
 
-    public RewardReceived(Text text, Pattern regex) {
-        super(text, regex);
-        this.rewards = initRewards();
-    }
+	private static final Text STORE = Text.literal("wynncraft.com/store").setStyle(Style.EMPTY.withColor(Formatting.AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://wynncraft.com/store")));
+	private final Text rewards;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "bomb.reward";
-    }
+	public RewardReceived(Text text, Pattern regex) {
+		super(text, regex);
+		this.rewards = initRewards();
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, rewards, STORE)
-                .setStyle(parseStyleCode(getSibling(0).getString())));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "bomb.reward";
+	}
 
-    private Text initRewards() {
-        MutableText rewards = Text.empty().append("\n");
-        for(int i = 1; i < inputText.getSiblings().size() - 1; i++) {
-            rewards.append(getSibling(i)).append("\n");
-        }
-        return rewards;
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException {
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
+	}
+
+	private Text initRewards() {
+		MutableText rewards = Text.empty().append("\n");
+		for(int i = 1; i < getSiblings().size() - 1; i++) {
+			rewards.append(getSibling(i)).append("\n");
+		}
+		return rewards;
+	}
 }

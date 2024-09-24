@@ -8,23 +8,24 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class SpeedBoost extends WynnChatText {
-    private final String duration;
 
-    public SpeedBoost(Text text, Pattern regex) {
-        super(text, regex);
-        this.duration = matcher.group(1);
-    }
+	private final String duration;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.speedBoost";
-    }
+	public SpeedBoost(Text text, Pattern regex) {
+		super(text, regex);
+		this.duration = matcher.group(1);
+	}
 
-    @Override
-    protected void build() {
-        Text buffTime = newTranslate(parentKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.speedBoost";
+	}
 
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, buffTime).setStyle(getStyle(1)));
-    }
+	@Override
+	protected void build() {
+		Text buffTime = newTranslate(parentKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, buffTime).setStyle(getStyle(1)));
+	}
 }

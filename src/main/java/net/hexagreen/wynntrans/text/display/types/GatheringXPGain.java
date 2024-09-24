@@ -10,49 +10,49 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GatheringXPGain extends WynnDisplayText {
-    private static final Pattern regex = Pattern.compile("^(§.x\\d )§.\\[\\+(§.\\d+)§. (.)§7 .+ XP]( .+)(?:\\n(§..+))?");
-    private final String multiplier;
-    private final String experience;
-    private final Text profession;
-    private final String percent;
-    private final String item;
 
-    public static boolean typeChecker(Text text) {
-        if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().replaceAll("§.", "").matches("^x\\d \\[\\+\\d+ .+ing XP](?:.|\\n)+");
-    }
+	private static final Pattern regex = Pattern.compile("^(§.x\\d )§.\\[\\+(§.\\d+)§. (.)§7 .+ XP]( .+)(?:\\n(§..+))?");
+	private final String multiplier;
+	private final String experience;
+	private final Text profession;
+	private final String percent;
+	private final String item;
 
-    public GatheringXPGain(Text text) {
-        super(text);
-        Matcher matcher = regex.matcher(text.getString());
-        if(matcher.find()) {
-            this.multiplier = matcher.group(1);
-            this.experience = matcher.group(2);
-            this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon()
-                    .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-            this.percent = matcher.group(4);
-            this.item = matcher.group(5);
-        }
-        else throw new TextTranslationFailException("GatheringXPGain.class");
-    }
+	public GatheringXPGain(Text text) {
+		super(text);
+		Matcher matcher = regex.matcher(text.getString());
+		if(matcher.find()) {
+			this.multiplier = matcher.group(1);
+			this.experience = matcher.group(2);
+			this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+			this.percent = matcher.group(4);
+			this.item = matcher.group(5);
+		}
+		else throw new TextTranslationFailException("GatheringXPGain.class");
+	}
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "display.professionXp";
-    }
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().replaceAll("§.", "").matches("^x\\d \\[\\+\\d+ .+ing XP](?:.|\\n)+");
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        resultText.append(multiplier);
+	@Override
+	protected String setParentKey() {
+		return rootKey + "display.professionXp";
+	}
 
-        resultText.append("[");
-        resultText.append(newTranslate(parentKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-        resultText.append("]");
-        resultText.append(percent);
-        if(item != null) {
-            resultText.append("\n");
-            resultText.append(item);
-        }
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+		resultText.append(multiplier);
+
+		resultText.append("[");
+		resultText.append(newTranslate(parentKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+		resultText.append("]");
+		resultText.append(percent);
+		if(item != null) {
+			resultText.append("\n");
+			resultText.append(item);
+		}
+	}
 }

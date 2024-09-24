@@ -4,36 +4,36 @@ import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 public class WorldEventName extends WynnDisplayText {
-    private final String keyWorldEvent;
-    private final boolean timerMode;
 
-    public static boolean typeChecker(Text text) {
-        if(!text.getSiblings().isEmpty()) return false;
-        if(text.getString().equals("Prepare to start")) return false;
-        return text.getStyle().equals(Style.EMPTY.withColor(0xEBF7FF));
-    }
+	private final String keyWorldEvent;
+	private final boolean timerMode;
 
-    public WorldEventName(Text text) {
-        super(text);
-        this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(getContentString());
-        this.timerMode = getContentString().matches("\\d+ (hour|minute|second)s? left");
-    }
+	public WorldEventName(Text text) {
+		super(text);
+		this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(getContentString());
+		this.timerMode = getContentString().matches("\\d+ (hour|minute|second)s? left");
+	}
 
-    @Override
-    protected String setParentKey() {
-        return null;
-    }
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		if(text.getString().equals("Prepare to start")) return false;
+		return text.getStyle().equals(Style.EMPTY.withColor(0xEBF7FF));
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Style style = Style.EMPTY.withColor(0xEBF7FF);
-        if(!timerMode) resultText = newTranslate(keyWorldEvent).setStyle(style);
-        else {
-            Text time = ITime.translateTime(getContentString().replaceFirst(" left", ""));
-            resultText = newTranslate("wytr.display.worldEvent.timeLeft", time).setStyle(style);
-        }
-    }
+	@Override
+	protected String setParentKey() {
+		return null;
+	}
+
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		Style style = Style.EMPTY.withColor(0xEBF7FF);
+		if(!timerMode) resultText = newTranslate(keyWorldEvent).setStyle(style);
+		else {
+			Text time = ITime.translateTime(getContentString().replaceFirst(" left", ""));
+			resultText = newTranslate("wytr.display.worldEvent.timeLeft", time).setStyle(style);
+		}
+	}
 }

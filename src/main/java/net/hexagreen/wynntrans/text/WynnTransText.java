@@ -58,7 +58,7 @@ public abstract class WynnTransText {
 	 * @return Returns empty {@code String} if sibling's content is empty, otherwise some {@code String}
 	 */
 	protected String getContentString(int siblingIndex) {
-		return getContentString(inputText.getSiblings().get(siblingIndex));
+		return getContentString(getSiblings().get(siblingIndex));
 	}
 
 	/**
@@ -108,7 +108,7 @@ public abstract class WynnTransText {
 	 * @return {@code inputText.getStyle()}
 	 */
 	protected Style getStyle(int siblingIndex) {
-		return inputText.getSiblings().get(siblingIndex).getStyle();
+		return getSiblings().get(siblingIndex).getStyle();
 	}
 
 	/**
@@ -118,12 +118,12 @@ public abstract class WynnTransText {
 	 * @return Some sibling that index refers.
 	 */
 	protected Text getSibling(int siblingIndex) {
-		siblingIndex = siblingIndex < 0 ? inputText.getSiblings().size() + siblingIndex : siblingIndex;
-		return inputText.getSiblings().get(siblingIndex);
+		siblingIndex = siblingIndex < 0 ? getSiblings().size() + siblingIndex : siblingIndex;
+		return getSiblings().get(siblingIndex);
 	}
 
 	protected List<Text> getSiblings() {
-		return inputText.getSiblings();
+		return getSiblings();
 	}
 
 	protected String normalizeStringForKey(String string) {

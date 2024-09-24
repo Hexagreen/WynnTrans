@@ -8,26 +8,27 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class BombGlue extends TextGlue {
-    private static final Pattern bombThanks = ChatType.BOMB_THANK.getRegex();
 
-    public BombGlue() {
-        super(null, BombStart.class);
-    }
+	private static final Pattern bombThanks = ChatType.BOMB_THANK.getRegex();
 
-    @Override
-    public boolean push(Text text) {
-        if(gluedText.equals(Text.empty())) {
-            gluedText = text.copy();
-            safeNow();
-            return true;
-        }
-        if(bombThanks.matcher(text.getString()).find()) {
-            pop();
-            return true;
-        }
-        else {
-            pop();
-            return false;
-        }
-    }
+	public BombGlue() {
+		super(null, BombStart.class);
+	}
+
+	@Override
+	public boolean push(Text text) {
+		if(gluedText.equals(Text.empty())) {
+			gluedText = text.copy();
+			safeNow();
+			return true;
+		}
+		if(bombThanks.matcher(text.getString()).find()) {
+			pop();
+			return true;
+		}
+		else {
+			pop();
+			return false;
+		}
+	}
 }

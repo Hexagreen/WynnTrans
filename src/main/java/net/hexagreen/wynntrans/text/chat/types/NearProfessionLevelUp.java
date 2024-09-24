@@ -9,31 +9,31 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class NearProfessionLevelUp extends WynnChatText {
-    private final String level;
-    private final Text playerName;
-    private final Text profession;
 
-    public NearProfessionLevelUp(Text text, Pattern regex) {
-        super(text, regex);
-        this.level = matcher.group(2);
-        this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon()
-                .setStyle(Style.EMPTY.withColor(Formatting.GOLD));
-        if(!inputText.getSiblings().isEmpty()) {
-            throw new TextTranslationFailException("NearProfessionLevelUp.class");
-        }
-        else {
-            this.playerName = Text.literal(matcher.group(1));
-        }
-    }
+	private final String level;
+	private final Text playerName;
+	private final Text profession;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.levelUp.profession";
-    }
+	public NearProfessionLevelUp(Text text, Pattern regex) {
+		super(text, regex);
+		this.level = matcher.group(2);
+		this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon().setStyle(Style.EMPTY.withColor(Formatting.GOLD));
+		if(!getSiblings().isEmpty()) {
+			throw new TextTranslationFailException("NearProfessionLevelUp.class");
+		}
+		else {
+			this.playerName = Text.literal(matcher.group(1));
+		}
+	}
 
-    @Override
-    protected void build() {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, playerName, level, profession)).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.levelUp.profession";
+	}
+
+	@Override
+	protected void build() {
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, playerName, level, profession)).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
+	}
 }

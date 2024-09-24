@@ -9,26 +9,27 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class BombThankful extends WynnChatText {
-    private final MutableText playerName;
 
-    public BombThankful(Text text, Pattern regex) {
-        super(text, regex);
-        if(text.getSiblings().size() == 1) {
-            this.playerName = (MutableText) getPlayerNameFromSibling(0);
-        }
-        else {
-            this.playerName = (MutableText) Text.of(matcher.group(1));
-        }
-    }
+	private final MutableText playerName;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.thankyou";
-    }
+	public BombThankful(Text text, Pattern regex) {
+		super(text, regex);
+		if(text.getSiblings().size() == 1) {
+			this.playerName = (MutableText) getPlayerNameFromSibling(0);
+		}
+		else {
+			this.playerName = (MutableText) Text.of(matcher.group(1));
+		}
+	}
 
-    @Override
-    protected void build() {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.thankyou";
+	}
+
+	@Override
+	protected void build() {
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+	}
 }

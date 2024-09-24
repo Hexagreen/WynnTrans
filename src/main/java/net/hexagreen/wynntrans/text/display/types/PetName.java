@@ -5,22 +5,22 @@ import net.minecraft.text.Text;
 
 public class PetName extends WynnDisplayText {
 
-    public static boolean typeChecker(Text text) {
-        if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("^§7.+'s .+\\n§2Lv\\. §a\\d+");
-    }
+	public PetName(Text text) {
+		super(text);
+	}
 
-    public PetName(Text text) {
-        super(text);
-    }
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().matches("^§7.+'s .+\\n§2Lv\\. §a\\d+");
+	}
 
-    @Override
-    protected String setParentKey() {
-        return null;
-    }
+	@Override
+	protected String setParentKey() {
+		return null;
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = inputText;
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		resultText = inputText;
+	}
 }

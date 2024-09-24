@@ -9,32 +9,31 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class PartyInvited extends WynnChatText implements ICenterAligned {
-    private final Text playerName;
 
-    public PartyInvited(Text text, Pattern regex) {
-        super(text, regex);
-        this.playerName = getPlayerName();
-    }
+	private final Text playerName;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.partyInvited";
-    }
+	public PartyInvited(Text text, Pattern regex) {
+		super(text, regex);
+		this.playerName = getPlayerName();
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text t0 = newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-        Text t1 = newTranslate(parentKey + ".command")
-                .setStyle(getSibling(1).getSiblings().get(1).getStyle().withParent(getStyle(1)));
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.partyInvited";
+	}
 
-        resultText = Text.empty().append("\n");
-        resultText.append(getCenterIndent(t0).append(t0)).append("\n");
-        resultText.append(getCenterIndent(t1).append(t1)).append("\n");
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		Text t0 = newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+		Text t1 = newTranslate(parentKey + ".command").setStyle(getSibling(1).getSiblings().get(1).getStyle().withParent(getStyle(1)));
 
-    private Text getPlayerName() {
-        String str = getSibling(0).getString().replaceAll(".+to join ", "")
-                .replaceAll("'s party!\\n", "");
-        return Text.literal(str);
-    }
+		resultText = Text.empty().append("\n");
+		resultText.append(getCenterIndent(t0).append(t0)).append("\n");
+		resultText.append(getCenterIndent(t1).append(t1)).append("\n");
+	}
+
+	private Text getPlayerName() {
+		String str = getSibling(0).getString().replaceAll(".+to join ", "").replaceAll("'s party!\\n", "");
+		return Text.literal(str);
+	}
 }

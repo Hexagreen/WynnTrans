@@ -9,54 +9,45 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Identifier extends WynnSystemText {
-    private final MessageType messageType;
 
-    public Identifier(Text text, Pattern regex) {
-        super(text, regex);
-        this.messageType = MessageType.getType(text);
-    }
+	private final MessageType messageType;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.identifier";
-    }
+	public Identifier(Text text, Pattern regex) {
+		super(text, regex);
+		this.messageType = MessageType.getType(text);
+	}
 
-    @Override
-    protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
-        resultText.append(newTranslate(parentKey).append(": "));
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.identifier";
+	}
 
-        switch(messageType) {
-            case ILLEGAL_ITEM ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".illegalItem",
-                            ItemRarity.UNIQUE.getRarity(), ItemRarity.RARE.getRarity(),
-                            ItemRarity.LEGENDARY.getRarity(), ItemRarity.SET.getRarity(),
-                            ItemRarity.FABLED.getRarity(), ItemRarity.MYTHIC.getRarity()
-                    ).setStyle(getStyle(1)));
+	@Override
+	protected void build() {
+		resultText = Text.empty().append(header).setStyle(getStyle());
+		resultText.append(newTranslate(parentKey).append(": "));
 
-            case AUGMENT_FIRST ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".augmentFirst").setStyle(getStyle(1)));
-            case NULL ->
-                throw new TextTranslationFailException(this.getClass().getName());
-        }
-    }
+		switch(messageType) {
+			case ILLEGAL_ITEM ->
+					resultText.append(newTranslateWithSplit(parentKey + ".illegalItem", ItemRarity.UNIQUE.getRarity(), ItemRarity.RARE.getRarity(), ItemRarity.LEGENDARY.getRarity(), ItemRarity.SET.getRarity(), ItemRarity.FABLED.getRarity(), ItemRarity.MYTHIC.getRarity()).setStyle(getStyle(1)));
 
-    private enum MessageType {
-        ILLEGAL_ITEM(Pattern.compile("I can't identify")),
-        AUGMENT_FIRST(Pattern.compile("You cannot add")),
-        NULL(null);
+			case AUGMENT_FIRST ->
+					resultText.append(newTranslateWithSplit(parentKey + ".augmentFirst").setStyle(getStyle(1)));
+			case NULL -> throw new TextTranslationFailException(this.getClass().getName());
+		}
+	}
 
-        private final Pattern regex;
+	private enum MessageType {
+		ILLEGAL_ITEM(Pattern.compile("I can't identify")), AUGMENT_FIRST(Pattern.compile("You cannot add")), NULL(null);
 
-        MessageType(Pattern regex) {
-            this.regex = regex;
-        }
+		private final Pattern regex;
 
-        private static Identifier.MessageType getType(Text text) {
-            return Arrays.stream(Identifier.MessageType.values())
-                    .filter(messageType -> Objects.nonNull(messageType.regex))
-                    .filter(messageType -> messageType.regex.matcher(text.getString()).find())
-                    .findFirst().orElse(NULL);
-        }
-    }
+		MessageType(Pattern regex) {
+			this.regex = regex;
+		}
+
+		private static Identifier.MessageType getType(Text text) {
+			return Arrays.stream(Identifier.MessageType.values()).filter(messageType -> Objects.nonNull(messageType.regex)).filter(messageType -> messageType.regex.matcher(text.getString()).find()).findFirst().orElse(NULL);
+		}
+	}
 }

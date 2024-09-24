@@ -11,64 +11,67 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Pattern;
 
 public abstract class TextGlue {
-    protected static final Logger LOGGER = LogUtils.getLogger();
-    private static final byte TIMER_THRESHOLD = 1;
-    protected final Pattern regex;
-    protected MutableText gluedText;
-    private Class<? extends WynnChatText> wctClass;
-    private byte timer;
-    private boolean safetyLock;
 
-    protected TextGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
-        this.gluedText = Text.empty();
-        this.regex = regex;
-        this.wctClass = wctClass;
-        this.safetyLock = false;
-    }
+	protected static final Logger LOGGER = LogUtils.getLogger();
+	private static final byte TIMER_THRESHOLD = 1;
+	protected final Pattern regex;
+	protected MutableText gluedText;
+	private Class<? extends WynnChatText> wctClass;
+	private byte timer;
+	private boolean safetyLock;
 
-    /**
-     * This method must have these routines.<p>
-     * To remove this glue: {@code pop() -> return false}<br>
-     * To append text : {@code resetTimer() -> gluedText.append(text)}<br>
-     * To complete this glue: {@code safeNow() -> pop() -> return true}
-     * @param text Text line for glue
-     * @return Returns {@code true} if this method complete gluing, {@code false} if ignore its text
-     */
-    public abstract boolean push(Text text);
+	protected TextGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
+		this.gluedText = Text.empty();
+		this.regex = regex;
+		this.wctClass = wctClass;
+		this.safetyLock = false;
+	}
 
-    public void timer() {
-        if(!gluedText.equals(Text.empty())) {
-            if (++this.timer >= TIMER_THRESHOLD) {
-                pop();
-            }
-        }
-    }
+	/**
+	 * This method must have these routines.<p>
+	 * To remove this glue: {@code pop() -> return false}<br>
+	 * To append text : {@code resetTimer() -> gluedText.append(text)}<br>
+	 * To complete this glue: {@code safeNow() -> pop() -> return true}
+	 *
+	 * @param text Text line for glue
+	 * @return Returns {@code true} if this method complete gluing, {@code false} if ignore its text
+	 */
+	public abstract boolean push(Text text);
 
-    protected void pop() {
-        reset();
-        if(safetyLock){
-            try {
-                wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
-            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException e) {
-                LOGGER.error("TextGlue Error:", e);
-                debugClass.writeTextAsJSON(gluedText, "GlueError");
-            }
-        }
-    }
+	public void timer() {
+		if(!gluedText.equals(Text.empty())) {
+			if(++this.timer >= TIMER_THRESHOLD) {
+				pop();
+			}
+		}
+	}
 
-    protected void resetTimer() {
-        this.timer = 0;
-    }
+	protected void pop() {
+		reset();
+		if(safetyLock) {
+			try {
+				wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
+			} catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException |
+					InstantiationException e) {
+				LOGGER.error("TextGlue Error:", e);
+				debugClass.writeTextAsJSON(gluedText, "GlueError");
+			}
+		}
+	}
 
-    protected void safeNow(){
-        this.safetyLock = true;
-    }
+	protected void resetTimer() {
+		this.timer = 0;
+	}
 
-    protected void changeWct(Class<? extends WynnChatText> wct) {
-        this.wctClass = wct;
-    }
+	protected void safeNow() {
+		this.safetyLock = true;
+	}
 
-    private void reset() {
-        WynnTrans.onGameMessageHandler.removeGlue();
-    }
+	protected void changeWct(Class<? extends WynnChatText> wct) {
+		this.wctClass = wct;
+	}
+
+	private void reset() {
+		WynnTrans.onGameMessageHandler.removeGlue();
+	}
 }

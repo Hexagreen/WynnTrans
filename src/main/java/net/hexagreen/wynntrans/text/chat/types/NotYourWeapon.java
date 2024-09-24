@@ -9,25 +9,26 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class NotYourWeapon extends WynnChatText {
-    private final Text item;
-    private final Text className;
-    private final Text weapon;
 
-    public NotYourWeapon(Text text, Pattern regex) {
-        super(text, regex);
-        this.item = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
-        this.className = CharacterClass.getClassName(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
-        this.weapon = CharacterClass.getWeapon(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
-    }
+	private final Text item;
+	private final Text className;
+	private final Text weapon;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.illegalWeapon";
-    }
+	public NotYourWeapon(Text text, Pattern regex) {
+		super(text, regex);
+		this.item = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
+		this.className = CharacterClass.getClassName(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
+		this.weapon = CharacterClass.getWeapon(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, item, className, weapon).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.illegalWeapon";
+	}
+
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, item, className, weapon).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+	}
 }

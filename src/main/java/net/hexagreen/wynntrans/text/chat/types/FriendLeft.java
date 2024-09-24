@@ -8,27 +8,28 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class FriendLeft extends WynnChatText {
-    private final Text playerName;
 
-    public FriendLeft(Text text, Pattern regex) {
-        super(text, regex);
-        if(text.getSiblings().size() > 1) {
-            this.playerName = getPlayerNameFromSibling(0);
-        }
-        else {
-            this.playerName = Text.literal(matcher.group(1));
-        }
-    }
+	private final Text playerName;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.friendLeft";
-    }
+	public FriendLeft(Text text, Pattern regex) {
+		super(text, regex);
+		if(text.getSiblings().size() > 1) {
+			this.playerName = getPlayerNameFromSibling(0);
+		}
+		else {
+			this.playerName = Text.literal(matcher.group(1));
+		}
+	}
 
-    @Override
-    protected void build() {
-        resultText = Text.empty();
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.friendLeft";
+	}
 
-        resultText.append(newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
-    }
+	@Override
+	protected void build() {
+		resultText = Text.empty();
+
+		resultText.append(newTranslate(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+	}
 }

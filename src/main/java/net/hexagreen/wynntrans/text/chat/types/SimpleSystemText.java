@@ -8,80 +8,81 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class SimpleSystemText extends WynnSystemText {
-    private static boolean translationRegisterControl = true;
-    private final String keyText;
-    private final String valText;
 
-    public SimpleSystemText(Text text, Pattern ignore) {
-        super(text, null);
-        this.valText = initValText();
-        this.keyText = initKeyText();
-    }
+	private static boolean translationRegisterControl = true;
+	private final String keyText;
+	private final String valText;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "normalText.";
-    }
+	public SimpleSystemText(Text text, Pattern ignore) {
+		super(text, null);
+		this.valText = initValText();
+		this.keyText = initKeyText();
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(valText.isEmpty() || valText.equals(" ")) {
-            resultText = originText.copy();
-            return;
-        }
+	public static void setTranslationControl(boolean control) {
+		translationRegisterControl = control;
+	}
 
-        boolean recorded = false;
-        if(inputText.getSiblings().size() > 1) {
-            int i = 1;
-            for(Text sibling : inputText.getSiblings()) {
-                String valText = lineFeedReplacer(sibling.getString());
-                String keyText = this.keyText + "_" + i++;
+	@Override
+	protected String setParentKey() {
+		return rootKey + "normalText.";
+	}
 
-                if(checkTranslationExistWithControl(keyText, valText)) {
-                    if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
-                    resultText.append(newTranslateWithSplit(keyText).setStyle(sibling.getStyle()));
-                }
-                else {
-                    if(resultText == null) resultText = originText.copy();
-                    if(translationRegisterControl && !recorded){
-                        debugClass.writeTextAsJSON(inputText, "SystemText");
-                        recorded = true;
-                    }
-                }
-            }
-        }
-        else {
-            if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
-            if(checkTranslationExistWithControl(keyText, valText)) {
-                resultText.append(newTranslateWithSplit(keyText).setStyle(getStyle(0)));
-            }
-            else {
-                resultText = originText.copy();
-                if(translationRegisterControl) {
-                    debugClass.writeTextAsJSON(inputText, "SystemLiteral");
-                }
-            }
-        }
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		if(valText.isEmpty() || valText.equals(" ")) {
+			resultText = originText.copy();
+			return;
+		}
 
-    protected String initValText() {
-        return lineFeedReplacer(inputText.getString());
-    }
+		boolean recorded = false;
+		if(getSiblings().size() > 1) {
+			int i = 1;
+			for(Text sibling : getSiblings()) {
+				String valText = lineFeedReplacer(sibling.getString());
+				String keyText = this.keyText + "_" + i++;
 
-    private String initKeyText() {
-        return parentKey + DigestUtils.sha1Hex(replacerRemover(valText));
-    }
+				if(checkTranslationExistWithControl(keyText, valText)) {
+					if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
+					resultText.append(newTranslateWithSplit(keyText).setStyle(sibling.getStyle()));
+				}
+				else {
+					if(resultText == null) resultText = originText.copy();
+					if(translationRegisterControl && !recorded) {
+						debugClass.writeTextAsJSON(inputText, "SystemText");
+						recorded = true;
+					}
+				}
+			}
+		}
+		else {
+			if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
+			if(checkTranslationExistWithControl(keyText, valText)) {
+				resultText.append(newTranslateWithSplit(keyText).setStyle(getStyle(0)));
+			}
+			else {
+				resultText = originText.copy();
+				if(translationRegisterControl) {
+					debugClass.writeTextAsJSON(inputText, "SystemLiteral");
+				}
+			}
+		}
+	}
 
-    public static void setTranslationControl(boolean control) {
-        translationRegisterControl = control;
-    }
+	protected String initValText() {
+		return lineFeedReplacer(inputText.getString());
+	}
 
-    private boolean checkTranslationExistWithControl(String key, String value) {
-        if(translationRegisterControl) {
-            return WTS.checkTranslationExist(key, value);
-        }
-        else {
-            return WTS.checkTranslationDoNotRegister(key);
-        }
-    }
+	private String initKeyText() {
+		return parentKey + DigestUtils.sha1Hex(replacerRemover(valText));
+	}
+
+	private boolean checkTranslationExistWithControl(String key, String value) {
+		if(translationRegisterControl) {
+			return WTS.checkTranslationExist(key, value);
+		}
+		else {
+			return WTS.checkTranslationDoNotRegister(key);
+		}
+	}
 }

@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(SignText.class)
 abstract public class MixinSignText {
-    @ModifyVariable(method = "create", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    private static Text[] mixinCreate(Text[] messages) {
-        if(WynnTrans.translationTargetSignMarker) {
-            WynnTrans.translationTargetSignMarker = false;
-            return WynnSign.get(messages).translate();
-        }
-        return messages;
-    }
+
+	@ModifyVariable(method = "create", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+	private static Text[] mixinCreate(Text[] messages) {
+		if(WynnTrans.translationTargetSignMarker) {
+			WynnTrans.translationTargetSignMarker = false;
+			return WynnSign.get(messages).translate();
+		}
+		return messages;
+	}
 }

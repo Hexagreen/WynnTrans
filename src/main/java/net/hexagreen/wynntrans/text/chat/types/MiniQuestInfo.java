@@ -8,27 +8,26 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class MiniQuestInfo extends WynnChatText {
-    private final boolean gatheringQuest;
 
-    public MiniQuestInfo(Text text, Pattern regex) {
-        super(text, regex);
-        this.gatheringQuest = text.getString().contains("Gathering");
-    }
+	private final boolean gatheringQuest;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.miniQuestInfo";
-    }
+	public MiniQuestInfo(Text text, Pattern regex) {
+		super(text, regex);
+		this.gatheringQuest = text.getString().contains("Gathering");
+	}
 
-    @Override
-    protected void build() {
-        resultText = Text.empty();
-        if(gatheringQuest) {
-            resultText.append(newTranslate(parentKey + ".gathering", getSibling(0), getSibling(2), getSibling(4)))
-                    .setStyle(Style.EMPTY.withColor(Formatting.GREEN));
-            return;
-        }
-        resultText.append(newTranslate(parentKey + ".slaying", getSibling(0), getSibling(2))
-                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.miniQuestInfo";
+	}
+
+	@Override
+	protected void build() {
+		resultText = Text.empty();
+		if(gatheringQuest) {
+			resultText.append(newTranslate(parentKey + ".gathering", getSibling(0), getSibling(2), getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
+			return;
+		}
+		resultText.append(newTranslate(parentKey + ".slaying", getSibling(0), getSibling(2)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+	}
 }

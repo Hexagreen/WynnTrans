@@ -10,28 +10,27 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class QuickTrade extends WynnChatText implements ICommonTooltip {
-    private final String playerName;
-    private final String command;
 
-    public QuickTrade(Text text, Pattern regex) {
-        super(text, regex);
-        this.playerName = matcher.group(1);
-        this.command = "/trade " + playerName;
-    }
+	private final String playerName;
+	private final String command;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.quickTrade";
-    }
+	public QuickTrade(Text text, Pattern regex) {
+		super(text, regex);
+		this.playerName = matcher.group(1);
+		this.command = "/trade " + playerName;
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException {
-        resultText = newTranslate(parentKey, playerName, buildCommand()).setStyle(getStyle());
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.quickTrade";
+	}
 
-    private Text buildCommand() {
-        return Text.literal(command).setStyle(Style.EMPTY.withUnderline(true).withColor(Formatting.GOLD)
-                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
-                .withHoverEvent(getHoverRunCommand()));
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException {
+		resultText = newTranslate(parentKey, playerName, buildCommand()).setStyle(getStyle());
+	}
+
+	private Text buildCommand() {
+		return Text.literal(command).setStyle(Style.EMPTY.withUnderline(true).withColor(Formatting.GOLD).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command)).withHoverEvent(getHoverRunCommand()));
+	}
 }

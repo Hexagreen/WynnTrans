@@ -10,22 +10,21 @@ import java.util.regex.Pattern;
 
 public class StorePurchased extends WynnChatText implements ICenterAligned {
 
-    public StorePurchased(Text text, Pattern regex) {
-        super(text, regex);
-    }
+	public StorePurchased(Text text, Pattern regex) {
+		super(text, regex);
+	}
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.storePurchased";
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.storePurchased";
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text t0 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
-        Text t1 = newTranslate(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		Text t0 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
+		Text t1 = newTranslate(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
 
-        resultText = Text.empty();
-        resultText.append(getCenterIndent(t0).append(t0)).append("\n")
-                .append(getCenterIndent(t1).append(t1));
-    }
+		resultText = Text.empty();
+		resultText.append(getCenterIndent(t0).append(t0)).append("\n").append(getCenterIndent(t1).append(t1));
+	}
 }

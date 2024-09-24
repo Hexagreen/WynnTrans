@@ -7,36 +7,37 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class TradePartial extends WynnSystemText {
-    private final boolean buyingMode;
-    private final String tradeAmount;
-    private final Text item;
 
-    public TradePartial(Text text, Pattern regex) {
-        super(text, regex);
-        this.buyingMode = text.getString().contains(" has been Bought.");
-        this.tradeAmount = matcher.group(1);
-        this.item = parseItem();
-    }
+	private final boolean buyingMode;
+	private final String tradeAmount;
+	private final Text item;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.tradePartial.";
-    }
+	public TradePartial(Text text, Pattern regex) {
+		super(text, regex);
+		this.buyingMode = text.getString().contains(" has been Bought.");
+		this.tradeAmount = matcher.group(1);
+		this.item = parseItem();
+	}
 
-    @Override
-    protected void build() {
-        resultText = Text.empty();
-        if(buyingMode) {
-            resultText.append(newTranslateWithSplit(parentKey + "buy", tradeAmount, item));
-            return;
-        }
-        resultText.append(newTranslateWithSplit(parentKey + "sell", tradeAmount, item));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.tradePartial.";
+	}
 
-    private Text parseItem() {
-        MutableText item = Text.empty().append(header).setStyle(getStyle());
-        String content = getContentString(1).replaceAll("À§d.+?$", "");
-        item.append(Text.literal(content).setStyle(getStyle(1)));
-        return item;
-    }
+	@Override
+	protected void build() {
+		resultText = Text.empty();
+		if(buyingMode) {
+			resultText.append(newTranslateWithSplit(parentKey + "buy", tradeAmount, item));
+			return;
+		}
+		resultText.append(newTranslateWithSplit(parentKey + "sell", tradeAmount, item));
+	}
+
+	private Text parseItem() {
+		MutableText item = Text.empty().append(header).setStyle(getStyle());
+		String content = getContentString(1).replaceAll("À§d.+?$", "");
+		item.append(Text.literal(content).setStyle(getStyle(1)));
+		return item;
+	}
 }

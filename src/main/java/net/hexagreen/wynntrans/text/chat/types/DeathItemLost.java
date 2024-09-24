@@ -9,29 +9,30 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class DeathItemLost extends WynnChatText {
-    private final Text lostItems;
 
-    public DeathItemLost(Text text, Pattern regex) {
-        super(text, regex);
-        this.lostItems = initLost();
-    }
+	private final Text lostItems;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.itemLost";
-    }
+	public DeathItemLost(Text text, Pattern regex) {
+		super(text, regex);
+		this.lostItems = initLost();
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, lostItems).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.itemLost";
+	}
 
-    private Text initLost() {
-        MutableText rewards = Text.empty();
-        for(int i = 1; i < inputText.getSiblings().size(); i++) {
-            rewards.append("\n").append(getSibling(i));
-        }
-        return rewards;
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException {
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, lostItems).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
+	}
+
+	private Text initLost() {
+		MutableText rewards = Text.empty();
+		for(int i = 1; i < getSiblings().size(); i++) {
+			rewards.append("\n").append(getSibling(i));
+		}
+		return rewards;
+	}
 }

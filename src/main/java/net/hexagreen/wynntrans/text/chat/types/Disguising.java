@@ -9,31 +9,32 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Disguising extends WynnChatText {
-    private final boolean apply;
-    private final Text target;
 
-    public Disguising(Text text, Pattern regex) {
-        super(text, regex);
-        this.apply = matcher.group(1).equals("now");
-        this.target = Text.literal(capitalizeFirstChar(matcher.group(2))).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
-    }
+	private final boolean apply;
+	private final Text target;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.disguise.";
-    }
+	public Disguising(Text text, Pattern regex) {
+		super(text, regex);
+		this.apply = matcher.group(1).equals("now");
+		this.target = Text.literal(capitalizeFirstChar(matcher.group(2))).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-        String key = apply ? parentKey + "on" : parentKey + "off";
-        resultText.append(newTranslate(key, target));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.disguise.";
+	}
 
-    private String capitalizeFirstChar(String input) {
-        String body = input.substring(1);
-        char head = input.toUpperCase(Locale.ENGLISH).charAt(0);
+	@Override
+	protected void build() throws IndexOutOfBoundsException {
+		resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
+		String key = apply ? parentKey + "on" : parentKey + "off";
+		resultText.append(newTranslate(key, target));
+	}
 
-        return head + body;
-    }
+	private String capitalizeFirstChar(String input) {
+		String body = input.substring(1);
+		char head = input.toUpperCase(Locale.ENGLISH).charAt(0);
+
+		return head + body;
+	}
 }

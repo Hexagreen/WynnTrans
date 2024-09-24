@@ -5,28 +5,29 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 public class LootChest extends WynnDisplayText {
-    private final Style color;
-    private final String star;
 
-    public static boolean typeChecker(Text text) {
-        if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("^§.Loot Chest §..+");
-    }
+	private final Style color;
+	private final String star;
 
-    public LootChest(Text text) {
-        super(text);
-        this.color = parseStyleCode(text.getString().substring(0, 2));
-        this.star = getContentString().replaceFirst("^§.Loot Chest ", "");
-    }
+	public LootChest(Text text) {
+		super(text);
+		this.color = parseStyleCode(text.getString().substring(0, 2));
+		this.star = getContentString().replaceFirst("^§.Loot Chest ", "");
+	}
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "display.lootChest";
-    }
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().matches("^§.Loot Chest §..+");
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, star).setStyle(color));
-    }
+	@Override
+	protected String setParentKey() {
+		return rootKey + "display.lootChest";
+	}
+
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, star).setStyle(color));
+	}
 }

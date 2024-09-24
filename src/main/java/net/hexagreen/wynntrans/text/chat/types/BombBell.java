@@ -9,34 +9,34 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class BombBell extends WynnChatText {
-    private final Text playerName;
-    private final Bombs bomb;
-    private final Text channel;
 
-    public BombBell(Text text, Pattern regex) {
-        super(text, regex);
-        if(getSibling(1).getString().isEmpty()) {
-            this.playerName = getSibling(2);
-        }
-        else {
-            this.playerName = Text.literal(getSibling(1).getString().replace(" ", ""))
-                    .setStyle(Style.EMPTY.withColor(Formatting.WHITE));
-        }
-        this.bomb = Bombs.findBomb(getSibling(-3).getString());
-        this.channel = getSibling(-1);
-    }
+	private final Text playerName;
+	private final Bombs bomb;
+	private final Text channel;
 
-    @Override
-    protected String setParentKey() {
-        return rootKey + "func.bombBell";
-    }
+	public BombBell(Text text, Pattern regex) {
+		super(text, regex);
+		if(getSibling(1).getString().isEmpty()) {
+			this.playerName = getSibling(2);
+		}
+		else {
+			this.playerName = Text.literal(getSibling(1).getString().replace(" ", "")).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+		}
+		this.bomb = Bombs.findBomb(getSibling(-3).getString());
+		this.channel = getSibling(-1);
+	}
 
-    @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(bomb == null) throw new TextTranslationFailException("BombBell.java");
-        Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+	@Override
+	protected String setParentKey() {
+		return rootKey + "func.bombBell";
+	}
 
-        resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, playerName, bombName, channel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-    }
+	@Override
+	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+		if(bomb == null) throw new TextTranslationFailException("BombBell.java");
+		Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+
+		resultText = Text.empty();
+		resultText.append(newTranslate(parentKey, playerName, bombName, channel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+	}
 }

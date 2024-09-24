@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "WynnTrans",
   "description": "Resource pack based Wynncraft text translation.",
-  "authors": ["Hexagreen329"],
+  "authors": [
+    "Hexagreen329"
+  ],
   "contact": {
     "homepage": "https://github.com/Hexagreen/WynnTrans"
   },
