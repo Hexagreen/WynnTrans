@@ -1,6 +1,5 @@
-package net.hexagreen.wynntrans.enums;
+package net.hexagreen.wynntrans.text.chat;
 
-import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.glue.*;
 import net.minecraft.text.Text;
 

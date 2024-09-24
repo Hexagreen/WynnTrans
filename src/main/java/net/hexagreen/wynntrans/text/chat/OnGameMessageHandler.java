@@ -2,9 +2,7 @@ package net.hexagreen.wynntrans.text.chat;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.debugClass;
-import net.hexagreen.wynntrans.enums.ChatType;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
-import net.hexagreen.wynntrans.enums.GlueType;
 import net.hexagreen.wynntrans.text.chat.types.*;
 import net.hexagreen.wynntrans.text.chat.types.glue.SelectionGlue;
 import net.minecraft.client.MinecraftClient;

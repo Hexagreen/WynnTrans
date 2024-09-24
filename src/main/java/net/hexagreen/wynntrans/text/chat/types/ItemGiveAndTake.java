@@ -25,7 +25,7 @@ public class ItemGiveAndTake extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty().setStyle(
-                parseStyleCode(getContentString().replaceAll("(§.).+", "$1"))
+                parseStyleCode(getContentString())
         );
         resultText.append("[" + direction + number + " " + item + "]");
     }

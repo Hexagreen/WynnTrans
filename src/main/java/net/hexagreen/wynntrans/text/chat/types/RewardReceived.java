@@ -29,7 +29,7 @@ public class RewardReceived extends WynnChatText {
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey, rewards, STORE)
-                .setStyle(parseStyleCode(getSibling(0).getString().replaceAll("(§.).+", "$1"))));
+                .setStyle(parseStyleCode(getSibling(0).getString())));
     }
 
     private Text initRewards() {

@@ -5,16 +5,19 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CaveLootChest extends WynnDisplayText {
-    private static final Pattern regex = Pattern.compile("§c§lSLAY!§r§7 Defeat (an?|§f\\d+/\\d+)(?:§.| )*(.+)$");
+    private static final Pattern slay = Pattern.compile("§c§lSLAY!!?§r ?§7 ?Defeat (an?|§f\\d+/\\d+|)(?:§.| )*(.+)$");
+    private static final Pattern puzzle = Pattern.compile("§c§lPUZZLE!§r §7.+");
     private final Text chest;
     private final Style color;
-    private final String progress;
-    private final String valTarget;
+    private String progress = "";
+    private String valTarget = "";
+    private String other = "";
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
@@ -27,10 +30,13 @@ public class CaveLootChest extends WynnDisplayText {
                 Text.literal(text.getString().replaceFirst("^..Locked ", "").replaceFirst("\\n.+$", ""))
         ).text();
         this.color = parseStyleCode(text.getString().substring(0, 2));
-        Matcher m = regex.matcher(text.getString());
+        Matcher m = slay.matcher(text.getString());
         if(m.find()) {
             this.progress = m.group(1);
             this.valTarget = m.group(2);
+        }
+        else if(puzzle.matcher(text.getString()).find()) {
+            this.other = text.getString().split("\\n")[1];
         }
         else throw new TextTranslationFailException("CaveLootChest.class");
     }
@@ -44,6 +50,14 @@ public class CaveLootChest extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
         resultText.append(newTranslate(parentKey, chest).setStyle(color)).append("\n");
+        if(!other.isBlank()) {
+            String key = parentKey + ".obj." + DigestUtils.sha1Hex(other).substring(0, 4);
+            if(WTS.checkTranslationExist(key, other)) {
+                resultText.append(key);
+                return;
+            }
+        }
+
         if(valTarget.contains("Mobs")) {
             resultText.append(newTranslate(parentKey + ".slayMob", progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
@@ -57,7 +71,7 @@ public class CaveLootChest extends WynnDisplayText {
                 target = Text.literal(valTarget).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
             }
             if(!progress.contains("a")){
-                resultText.append(newTranslate(parentKey + ".slayTarget", progress, target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                resultText.append(newTranslate(parentKey + ".slayTarget", target, progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             }
             else {
                 resultText.append(newTranslate(parentKey + ".slayHead", target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));

@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types.glue;
 
-import net.hexagreen.wynntrans.enums.ChatType;
+import net.hexagreen.wynntrans.text.chat.ChatType;
 import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.BombStart;
 import net.minecraft.text.Text;

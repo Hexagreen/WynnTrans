@@ -41,7 +41,7 @@ public class QuestCompleted extends WynnChatText implements ICenterAligned {
                 .append(getCenterIndent(keyTitle))
                 .append(newTranslate(keyTitle).setStyle(
                         parseStyleCode(
-                                getSibling(1).getString().replaceAll("(§.).+", "$1")
+                                getSibling(1).getString()
                         )))
                 .append("\n");
 

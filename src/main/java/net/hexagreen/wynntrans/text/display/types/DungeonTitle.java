@@ -39,12 +39,12 @@ public class DungeonTitle extends WynnDisplayText {
     }
 
     private Text getDungeonName(String string) {
-        Style style = parseStyleCode(string.replaceFirst("((?:§.)+).+", "$1"));
+        Style style = parseStyleCode(string);
         return Dungeons.getDungeons(string).getDungeonName().setStyle(style);
     }
 
     private Text getDifficulty(String string) {
-        Style style = parseStyleCode(string.replaceFirst("((?:§.)+).+", "$1"));
+        Style style = parseStyleCode(string);
         String diff = string.replaceFirst("(?:§.)+", "").toLowerCase(Locale.ENGLISH);
         return newTranslate("wytr.difficulty." + diff).setStyle(style);
     }

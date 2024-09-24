@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.enums.ChatType;
+import net.hexagreen.wynntrans.text.chat.ChatType;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;

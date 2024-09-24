@@ -35,11 +35,11 @@ public class ObjectiveComplete extends WynnChatText implements ICenterAligned {
         normalizeKeyVal();
 
         if(text.getSiblings().size() == 8) {
-            this.styleEName = parseStyleCode(getSibling(4).getString().replaceAll(" +((?:§.)+).+", "$1"));
+            this.styleEName = parseStyleCode(getSibling(4).getString());
             this.valEName = getSibling(4).getString().replaceAll(" +(§.)+", "");
             String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
             this.keyEName = "wytr.eventInfo.eventName." + hash2;
-            this.styleEReward = parseStyleCode(getSibling(5).getString().replaceAll(" +(§.).+", "$1"));
+            this.styleEReward = parseStyleCode(getSibling(5).getString());
         }
     }
 

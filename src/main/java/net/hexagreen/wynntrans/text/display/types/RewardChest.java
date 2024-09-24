@@ -22,7 +22,7 @@ public class RewardChest extends WynnDisplayText {
         }
         else {
             String time = getContentString(1).replaceAll("\\n.+rewards in |\\n\\n.+", "");
-            this.timeStyle = parseStyleCode(time.replaceAll("((?:§.)+).+", "$1"));
+            this.timeStyle = parseStyleCode(time);
             this.lastTime = ITime.translateTime(time.replaceAll("§.", ""));
         }
     }

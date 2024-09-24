@@ -13,15 +13,7 @@ public class DrawTooltipHandler {
     private static boolean registered = true;
 
     public List<Text> translateTooltipText(List<Text> texts) {
-        long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 0) lever = false;
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1 && !lever) registered = false;
-        if(!registered) {
-            WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(texts, "Tooltip");
-            registered = true;
-            lever = true;
-        }
-        return texts;
+        return TooltipType.findAndRun(texts);
     }
 
     public Text translateTooltipText(Text text) {

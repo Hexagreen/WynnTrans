@@ -1,8 +1,7 @@
-package net.hexagreen.wynntrans.enums;
+package net.hexagreen.wynntrans.text.display;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.debugClass;
-import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.hexagreen.wynntrans.text.display.types.*;
 import net.minecraft.text.Text;
 

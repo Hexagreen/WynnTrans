@@ -1,7 +1,5 @@
-package net.hexagreen.wynntrans.enums;
+package net.hexagreen.wynntrans.text.chat;
 
-import net.hexagreen.wynntrans.text.chat.ProxySystemText;
-import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.hexagreen.wynntrans.text.chat.types.*;
 import net.minecraft.text.Text;
 

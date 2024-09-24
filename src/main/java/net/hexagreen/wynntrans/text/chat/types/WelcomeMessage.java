@@ -111,7 +111,7 @@ public class WelcomeMessage extends WynnChatText implements ICenterAligned {
         Matcher time = REGEX_TIME.matcher(getSibling(5).getString());
         if(time.find()) {
             String strTime = time.group(1);
-            Style styleTime = parseStyleCode(strTime.replaceAll("(§.).+", "$1"));
+            Style styleTime = parseStyleCode(strTime);
             Text textTime = ITime.translateTime(strTime.replaceAll("§.", "")).setStyle(styleTime);
             Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", textTime).setStyle(festTitleStyle.withBold(false));
             resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");

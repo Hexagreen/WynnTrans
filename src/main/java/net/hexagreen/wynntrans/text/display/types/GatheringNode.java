@@ -26,7 +26,7 @@ public class GatheringNode extends WynnDisplayText {
     public GatheringNode(Text text) {
         super(text);
         this.lines = inputText.getString().split("\\n");
-        this.styleResource = parseStyleCode(lines[0].replaceFirst("(§.).+", "$1"));
+        this.styleResource = parseStyleCode(lines[0]);
         this.valResource = lines[0].replaceFirst("§.", "");
         this.keyResource = rootKey + "resource." + valResource.replaceAll(" ", "");
         this.checkCross = lines[1].substring(0, 3);

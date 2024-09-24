@@ -27,8 +27,8 @@ public class NPCNameLiteral extends WynnDisplayText {
         String content = inputText.getString().replaceAll("\\n§7NPC(?:\\n|.)*", "");
         String npcName = content.replaceFirst("(?:.|\\n)+\\n", "");
         String npcTalk = content.replaceFirst("\\n?.+$", "");
-        this.styleNpcName = parseStyleCode(npcName.replaceAll("((?:§.)+).+", "$1"));
-        this.styleNpcTalk = parseStyleCode(npcTalk.replaceAll("((?:§.)+).+", "$1"));
+        this.styleNpcName = parseStyleCode(npcName);
+        this.styleNpcTalk = parseStyleCode(npcTalk);
         this.valNpcName = npcName.replaceFirst("(§.)+", "");
         this.valNpcTalk = npcTalk.replaceFirst("(§.)+", "");
         String npcNameNormalized = normalizeStringForKey(this.valNpcName);

@@ -30,7 +30,7 @@ public class SpecialNPCName extends WynnDisplayText {
                 .getString().split("\\n")[1];
         this.valName = name.replaceAll("§.", "");
         this.keyName = "wytr.name." + normalizeStringForKey(valName);
-        this.styleName = parseStyleCode(name.replaceAll("(§.).+", "$1"));
+        this.styleName = parseStyleCode(name);
     }
 
     @Override

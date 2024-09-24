@@ -22,7 +22,6 @@
   "mixins": [
     "wynntrans.mixins.json"
   ],
-  "accessWidener": "wynntrans.accesswidener",
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
