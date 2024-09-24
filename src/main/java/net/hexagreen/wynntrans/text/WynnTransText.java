@@ -123,7 +123,7 @@ public abstract class WynnTransText {
 	}
 
 	protected List<Text> getSiblings() {
-		return getSiblings();
+		return inputText.getSiblings();
 	}
 
 	protected String normalizeStringForKey(String string) {
