@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
@@ -10,7 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
 
-public class WeeklyObjective extends WynnChatText implements ICenterAligned {
+public class WeeklyObjective extends WynnChatText implements ISpaceProvider {
 
 	private String keyEName = null;
 	private String valEName = null;

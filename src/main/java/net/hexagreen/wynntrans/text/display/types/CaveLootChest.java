@@ -20,6 +20,11 @@ public class CaveLootChest extends WynnDisplayText {
 	private String valTarget = "";
 	private String other = "";
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().matches("^§.Locked §.Loot Chest(.|\\n)+");
+	}
+
 	public CaveLootChest(Text text) {
 		super(text);
 		this.chest = new LootChest(Text.literal(text.getString().replaceFirst("^..Locked ", "").replaceFirst("\\n.+$", ""))).text();
@@ -33,11 +38,6 @@ public class CaveLootChest extends WynnDisplayText {
 			this.other = text.getString().split("\\n")[1];
 		}
 		else throw new TextTranslationFailException("CaveLootChest.class");
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().matches("^§.Locked §.Loot Chest(.|\\n)+");
 	}
 
 	@Override

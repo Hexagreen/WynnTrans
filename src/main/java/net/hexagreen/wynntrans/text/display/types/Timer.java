@@ -9,13 +9,13 @@ public class Timer extends WynnDisplayText {
 
 	private final Style color;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().matches("§.(\\d+)[ms]");
+	}
+
 	public Timer(Text text) {
 		super(text);
 		this.color = parseStyleCode(inputText.getString().substring(0, 2));
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().matches("§.(\\d+)[ms]");
 	}
 
 	@Override

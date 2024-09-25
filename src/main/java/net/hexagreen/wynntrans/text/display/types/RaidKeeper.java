@@ -10,14 +10,14 @@ public class RaidKeeper extends WynnDisplayText {
 	private final Text raidName;
 	private final Text cost;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("\uE011\uE000\uE008\uE003 \uE00A\uE004\uE004\uE00F\uE004\uE011\uDB00\uDC02");
+	}
+
 	public RaidKeeper(Text text) {
 		super(text);
 		this.raidName = getRaidName(getSibling(2));
 		this.cost = getSibling(4).getSiblings().getFirst();
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("\uE011\uE000\uE008\uE003 \uE00A\uE004\uE004\uE00F\uE004\uE011\uDB00\uDC02");
 	}
 
 	@Override

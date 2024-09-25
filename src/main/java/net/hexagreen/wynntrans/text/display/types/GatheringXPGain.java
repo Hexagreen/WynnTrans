@@ -18,6 +18,11 @@ public class GatheringXPGain extends WynnDisplayText {
 	private final String percent;
 	private final String item;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().replaceAll("§.", "").matches("^x\\d \\[\\+\\d+ .+ing XP](?:.|\\n)+");
+	}
+
 	public GatheringXPGain(Text text) {
 		super(text);
 		Matcher matcher = regex.matcher(text.getString());
@@ -29,11 +34,6 @@ public class GatheringXPGain extends WynnDisplayText {
 			this.item = matcher.group(5);
 		}
 		else throw new TextTranslationFailException("GatheringXPGain.class");
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().replaceAll("§.", "").matches("^x\\d \\[\\+\\d+ .+ing XP](?:.|\\n)+");
 	}
 
 	@Override

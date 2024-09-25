@@ -10,11 +10,17 @@ import java.util.regex.Pattern;
 public class Narration extends WynnChatText {
 
 	protected final String pKeyNarration;
+	private boolean addiction = true;
 
 	public Narration(Text text, Pattern regex) {
 		super(text, regex);
 		String hash = DigestUtils.sha1Hex(text.getString());
 		this.pKeyNarration = parentKey + hash;
+	}
+
+	public Narration setNoTranslationAddiction() {
+		this.addiction = false;
+		return this;
 	}
 
 	@Override
@@ -25,7 +31,7 @@ public class Narration extends WynnChatText {
 	@Override
 	protected void build() {
 		if(getSiblings().isEmpty()) {
-			if(WTS.checkTranslationExist(pKeyNarration, getContentString())) {
+			if(checkTranslationExist(pKeyNarration, getContentString())) {
 				resultText = newTranslate(pKeyNarration).setStyle(getStyle());
 			}
 			else {
@@ -35,7 +41,7 @@ public class Narration extends WynnChatText {
 		else {
 			String keyContent = pKeyNarration + "_1";
 			String valContent = getContentString();
-			if(WTS.checkTranslationExist(keyContent, valContent)) {
+			if(checkTranslationExist(keyContent, valContent)) {
 				resultText = newTranslate(keyContent).setStyle(getStyle());
 			}
 			else {
@@ -44,7 +50,7 @@ public class Narration extends WynnChatText {
 			for(int index = 0; getSiblings().size() > index; index++) {
 				String keySibling = pKeyNarration + "_" + (index + 2);
 				String valSibling = getContentString(index);
-				if(WTS.checkTranslationExist(keySibling, valSibling)) {
+				if(checkTranslationExist(keySibling, valSibling)) {
 					resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
 				}
 				else {
@@ -52,5 +58,10 @@ public class Narration extends WynnChatText {
 				}
 			}
 		}
+	}
+
+	private boolean checkTranslationExist(String key, String val) {
+		if(addiction) return WTS.checkTranslationExist(key, val);
+		else return WTS.checkTranslationDoNotRegister(key);
 	}
 }

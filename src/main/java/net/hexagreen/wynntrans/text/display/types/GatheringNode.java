@@ -20,6 +20,10 @@ public class GatheringNode extends WynnDisplayText {
 	private final Text level;
 	private final String[] lines;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("ing Lv. Min: §f");
+	}
+
 	public GatheringNode(Text text) {
 		super(text);
 		this.lines = inputText.getString().split("\\n");
@@ -31,10 +35,6 @@ public class GatheringNode extends WynnDisplayText {
 		boolean ignore = m.find();
 		this.profession = Profession.getProfession(m.group(1));
 		this.level = Text.literal(m.group(2)).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("ing Lv. Min: §f");
 	}
 
 	@Override

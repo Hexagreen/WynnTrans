@@ -15,6 +15,11 @@ public class SlayCounter extends WynnDisplayText {
 	private String num;
 	private String mobName;
 
+	public static boolean typeChecker(Text text) {
+		if(text.getSiblings().size() != 3) return false;
+		return text.getString().contains("\uE012\uE00B\uE000\uE018\uE02A\uDB00\uDC02");
+	}
+
 	public SlayCounter(Text text) {
 		super(text);
 		this.counter = Text.empty();
@@ -30,11 +35,6 @@ public class SlayCounter extends WynnDisplayText {
 			}
 			return Optional.empty();
 		}, text.getStyle());
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(text.getSiblings().size() != 3) return false;
-		return text.getString().contains("\uE012\uE00B\uE000\uE018\uE02A\uDB00\uDC02");
 	}
 
 	@Override

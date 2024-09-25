@@ -16,6 +16,10 @@ public class MiniQuestPost extends WynnDisplayText {
 	private final String level;
 	private final Profession profession;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains(" Post §2[");
+	}
+
 	public MiniQuestPost(Text text) {
 		super(text);
 		this.gather = text.getString().contains("Gathering");
@@ -23,10 +27,6 @@ public class MiniQuestPost extends WynnDisplayText {
 		boolean ignore = m.find();
 		this.level = m.group(2);
 		this.profession = gather ? Profession.getProfession(m.group(1)) : null;
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains(" Post §2[");
 	}
 
 	@Override

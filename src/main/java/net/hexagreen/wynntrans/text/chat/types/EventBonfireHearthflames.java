@@ -9,11 +9,6 @@ public class EventBonfireHearthflames extends SimpleSystemText {
 
 	private final String num;
 
-	public EventBonfireHearthflames(Text text, Pattern ignore) {
-		super(preprocess(text), ignore);
-		this.num = text.getString().replaceAll("\\D", "");
-	}
-
 	private static Text preprocess(Text text) {
 		MutableText result = numToReplacer(text);
 		for(Text sibling : text.getSiblings()) {
@@ -28,6 +23,11 @@ public class EventBonfireHearthflames extends SimpleSystemText {
 			return Text.literal(content.replaceAll("\\d+", "%2\\$s")).setStyle(text.getStyle());
 		}
 		else return text.copyContentOnly().setStyle(text.getStyle());
+	}
+
+	public EventBonfireHearthflames(Text text, Pattern ignore) {
+		super(preprocess(text), ignore);
+		this.num = text.getString().replaceAll("\\D", "");
 	}
 
 	@Override

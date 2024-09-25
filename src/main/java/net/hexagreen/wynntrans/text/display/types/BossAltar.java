@@ -8,14 +8,14 @@ public class BossAltar extends WynnDisplayText {
 
 	private final Text altarName;
 
-	public BossAltar(Text text) {
-		super(text);
-		this.altarName = getAltarName(getSibling(2));
-	}
-
 	public static boolean typeChecker(Text text) {
 		if(text.getSiblings().size() != 5) return false;
 		return text.getString().contains("\uE001\uE00E\uE012\uE012 \uE000\uE00B\uE013\uE000\uE011\uDB00\uDC02");
+	}
+
+	public BossAltar(Text text) {
+		super(text);
+		this.altarName = getAltarName(getSibling(2));
 	}
 
 	@Override

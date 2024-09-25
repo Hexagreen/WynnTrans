@@ -11,11 +11,6 @@ public class SystemNPCName extends WynnDisplayText {
 
 	private final Text icon;
 
-	public SystemNPCName(Text text) {
-		super(text);
-		this.icon = getSibling(0);
-	}
-
 	public static boolean typeChecker(Text text) {
 		try {
 			if(text.getSiblings().getFirst().getStyle().getFont().equals(Identifier.of("minecraft:merchant"))) {
@@ -24,6 +19,11 @@ public class SystemNPCName extends WynnDisplayText {
 		} catch(Exception ignore) {
 		}
 		return false;
+	}
+
+	public SystemNPCName(Text text) {
+		super(text);
+		this.icon = getSibling(0);
 	}
 
 	@Override

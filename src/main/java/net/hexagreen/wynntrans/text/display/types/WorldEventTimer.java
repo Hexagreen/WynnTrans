@@ -9,14 +9,14 @@ public class WorldEventTimer extends WynnDisplayText {
 
 	private final boolean startTimer;
 
-	public WorldEventTimer(Text text) {
-		super(text);
-		this.startTimer = !getContentString().contains("target");
-	}
-
 	public static boolean typeChecker(Text text) {
 		if(!text.getSiblings().isEmpty()) return false;
 		return text.getString().matches("^Starts in \\d+[hms]|^\\d+ targets? remains?");
+	}
+
+	public WorldEventTimer(Text text) {
+		super(text);
+		this.startTimer = !getContentString().contains("target");
 	}
 
 	@Override

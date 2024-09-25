@@ -1,12 +1,11 @@
-package net.hexagreen.wynntrans.text.chat;
+package net.hexagreen.wynntrans.text;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
-public interface ICenterAligned {
-
+public interface ISpaceProvider {
 	int CENTER = 160;
 	int SPACE_WIDTH = MinecraftClient.getInstance().textRenderer.getWidth(" ");
 
@@ -32,6 +31,26 @@ public interface ICenterAligned {
 				pixels -= 1;
 			}
 		}
+
+		return Text.literal(spaces.toString());
+	}
+
+	default MutableText getRearSpace(Text front, Text criteria) {
+		int frontWidth = MinecraftClient.getInstance().textRenderer.getWidth(front);
+		int rearWidth = MinecraftClient.getInstance().textRenderer.getWidth(criteria);
+
+		StringBuilder spaces = new StringBuilder();
+		for(int pixels = rearWidth - frontWidth; pixels > 0; ) {
+			if(pixels >= SPACE_WIDTH) {
+				spaces.append(" ");
+				pixels -= SPACE_WIDTH;
+			}
+			else {
+				spaces.append("À");
+				pixels -= 1;
+			}
+		}
+		spaces.append(" ");
 
 		return Text.literal(spaces.toString());
 	}

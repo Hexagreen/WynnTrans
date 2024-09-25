@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -10,7 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CaveCompleted extends WynnChatText implements ICenterAligned {
+public class CaveCompleted extends WynnChatText implements ISpaceProvider {
 
 	private static final Pattern REGEX_EXP = Pattern.compile("^\\+(\\d+) Experience Points$");
 	private static final Pattern REGEX_EME = Pattern.compile("^ +- \\+(\\d+) Emeralds$");

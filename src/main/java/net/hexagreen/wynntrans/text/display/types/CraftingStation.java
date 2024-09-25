@@ -11,13 +11,13 @@ public class CraftingStation extends WynnDisplayText {
 
 	private final Profession profession;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("\n§7Crafting Station\n§7");
+	}
+
 	public CraftingStation(Text text) {
 		super(text);
 		this.profession = Profession.getProfession(text.getString().replaceFirst("§f. §6§l", "").replaceAll("§r§f(.|\\n)+", ""));
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("\n§7Crafting Station\n§7");
 	}
 
 	@Override

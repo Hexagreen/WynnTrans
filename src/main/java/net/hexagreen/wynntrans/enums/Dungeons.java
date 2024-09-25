@@ -44,12 +44,6 @@ public enum Dungeons {
 	private final Text dungeonFragment;
 	private boolean isCorrupted = false;
 
-	Dungeons(Text dungeonName, Text dungeonBossReward, Text dungeonFragment) {
-		this.dungeonName = dungeonName;
-		this.dungeonBossReward = dungeonBossReward;
-		this.dungeonFragment = dungeonFragment;
-	}
-
 	public static Dungeons getDungeons(String dungeonName) {
 		boolean isCorrupted = dungeonName.contains("Corrupted");
 		String stripped = dungeonName.replace("Corrupted", "").replace("À", "").replace("'", "").replace("-", "").toLowerCase();
@@ -70,6 +64,12 @@ public enum Dungeons {
 		if(name.contains("fallen")) return FALLEN_FACTORY;
 		if(name.contains("eldritch")) return ELDRITCH_OUTLOOK;
 		else return UNKNOWN;
+	}
+
+	Dungeons(Text dungeonName, Text dungeonBossReward, Text dungeonFragment) {
+		this.dungeonName = dungeonName;
+		this.dungeonBossReward = dungeonBossReward;
+		this.dungeonFragment = dungeonFragment;
 	}
 
 	public MutableText getDungeonName() {

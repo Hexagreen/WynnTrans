@@ -9,15 +9,15 @@ public class LootChest extends WynnDisplayText {
 	private final Style color;
 	private final String star;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().matches("^§.Loot Chest §..+");
+	}
+
 	public LootChest(Text text) {
 		super(text);
 		this.color = parseStyleCode(text.getString().substring(0, 2));
 		this.star = getContentString().replaceFirst("^§.Loot Chest ", "");
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().matches("^§.Loot Chest §..+");
 	}
 
 	@Override

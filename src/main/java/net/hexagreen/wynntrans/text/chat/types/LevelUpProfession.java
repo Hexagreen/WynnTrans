@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.enums.Profession;
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -10,7 +10,7 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LevelUpProfession extends WynnChatText implements ICenterAligned {
+public class LevelUpProfession extends WynnChatText implements ISpaceProvider {
 
 	private static final Pattern REGEX_LEVELUP = Pattern.compile("You are now level (\\d+) in §f(.)");
 	private static final Pattern REGEX_NEXTFEATURE = Pattern.compile("^§5Only §d(\\d+) more levels? §5until you can .+?(?:(.) Gathering.+T(\\d+))?$");

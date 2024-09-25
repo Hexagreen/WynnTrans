@@ -15,16 +15,16 @@ public class WynnSign {
 	private static final String rootKey = "wytr.sign.";
 	private final Text[] message;
 
-	private WynnSign(Text[] text) {
-		this.message = text;
-	}
-
 	public static WynnSign get(Text[] text) {
 		return new WynnSign(text);
 	}
 
 	public static WynnSign get(SignText signText) {
 		return new WynnSign(signText.getMessages(false));
+	}
+
+	private WynnSign(Text[] text) {
+		this.message = text;
 	}
 
 	public Text[] translate() {

@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class RecruitMessage extends WynnChatText implements ICenterAligned {
+public class RecruitMessage extends WynnChatText implements ISpaceProvider {
 
 	public RecruitMessage(Text text, Pattern regex) {
 		super(text, regex);

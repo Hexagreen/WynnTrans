@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.chat;
 
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
@@ -12,7 +13,7 @@ import java.util.List;
 
 import static net.hexagreen.wynntrans.WynnTrans.wynnTranslationStorage;
 
-public interface IFocusText extends ICenterAligned {
+public interface IFocusText extends ISpaceProvider {
 
 	default MutableText setToConfirmless(Text text) {
 		MutableText confirmless = Text.empty().append("\n");

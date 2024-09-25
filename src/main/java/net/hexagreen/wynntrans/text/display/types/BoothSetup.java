@@ -9,12 +9,12 @@ public class BoothSetup extends WynnDisplayText {
 
 	private static final Text icon = Text.literal("\uE000").setStyle(Style.EMPTY.withFont(Identifier.of("minecraft:keybind")));
 
-	public BoothSetup(Text text) {
-		super(text);
-	}
-
 	public static boolean typeChecker(Text text) {
 		return text.getString().contains("Click to set up booth");
+	}
+
+	public BoothSetup(Text text) {
+		super(text);
 	}
 
 	@Override

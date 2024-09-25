@@ -18,14 +18,6 @@ public abstract class WynnChatText extends WynnTransText {
 	protected static Text removedCustomNickname = null;
 	protected Matcher matcher;
 
-	public WynnChatText(Text text, Pattern regex) {
-		super(text);
-		if(regex != null) {
-			this.matcher = createMatcher(text, regex);
-			boolean ignore = this.matcher.find();
-		}
-	}
-
 	protected static Text removeCustomNicknameFromDialog(Text text) {
 		MutableText newText = text.copyContentOnly().setStyle(text.getStyle());
 		newText.append(text.getSiblings().get(0));
@@ -58,6 +50,14 @@ public abstract class WynnChatText extends WynnTransText {
 		newText.append(Text.literal(partial).setStyle(style));
 
 		return newText;
+	}
+
+	public WynnChatText(Text text, Pattern regex) {
+		super(text);
+		if(regex != null) {
+			this.matcher = createMatcher(text, regex);
+			boolean ignore = this.matcher.find();
+		}
 	}
 
 	@SuppressWarnings("DataFlowIssue")

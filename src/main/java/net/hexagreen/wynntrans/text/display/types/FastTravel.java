@@ -15,17 +15,17 @@ public class FastTravel extends WynnDisplayText {
 	private final String keyDestination;
 	private final String valDestination;
 
+	public static boolean typeChecker(Text text) {
+		if(text.getSiblings().size() != 3) return false;
+		return text.getString().contains("\uE005\uE000\uE012\uE013 \uE013\uE011\uE000\uE015\uE004\uE00B\uDB00\uDC02");
+	}
+
 	public FastTravel(Text text) {
 		super(text);
 		this.valTravelName = getContentString(2).split("\\n")[0];
 		this.keyTravelName = parentKey + normalizeStringForKey(valTravelName);
 		this.valDestination = getSibling(2).getSiblings().getFirst().getSiblings().get(2).getString();
 		this.keyDestination = keyTravelName + ".dest." + DigestUtils.sha1Hex(valDestination).substring(0, 4);
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(text.getSiblings().size() != 3) return false;
-		return text.getString().contains("\uE005\uE000\uE012\uE013 \uE013\uE011\uE000\uE015\uE004\uE00B\uDB00\uDC02");
 	}
 
 	@Override

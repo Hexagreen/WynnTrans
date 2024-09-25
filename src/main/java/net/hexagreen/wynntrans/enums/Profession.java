@@ -24,18 +24,6 @@ public enum Profession {
 	private final String key;
 	private final MutableText tool;
 
-	Profession(MutableText text, String key) {
-		this.text = text;
-		this.key = key;
-		this.tool = null;
-	}
-
-	Profession(MutableText text, String key, MutableText tool) {
-		this.text = text;
-		this.key = key;
-		this.tool = tool;
-	}
-
 	public static Profession getProfession(char icon) {
 		int index = icon - 'Ⓐ';
 		if(index >= 12) {
@@ -59,6 +47,18 @@ public enum Profession {
 
 	public static Profession getProfession(String profName) {
 		return Arrays.stream(values()).filter(profession -> profession.key.equals(profName.toLowerCase())).findFirst().orElse(null);
+	}
+
+	Profession(MutableText text, String key) {
+		this.text = text;
+		this.key = key;
+		this.tool = null;
+	}
+
+	Profession(MutableText text, String key, MutableText tool) {
+		this.text = text;
+		this.key = key;
+		this.tool = tool;
 	}
 
 	public MutableText getTextWithIcon() {

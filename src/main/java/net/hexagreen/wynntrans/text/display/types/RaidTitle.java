@@ -11,16 +11,16 @@ public class RaidTitle extends WynnDisplayText {
 	private final String levelReq;
 	private final Text questReq;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("\uE011\uE000\uE008\uE003\uDB00\uDC02");
+	}
+
 	public RaidTitle(Text text) {
 		super(text);
 		String[] split = text.getString().split("\\n");
 		this.raidName = getRaidName(split[1]);
 		this.levelReq = split[3].replaceAll(".+: (§.+)$", "$1");
 		this.questReq = getQuestReq(split[4].replaceAll(".+: (§.+)$", "$1"));
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("\uE011\uE000\uE008\uE003\uDB00\uDC02");
 	}
 
 	@Override

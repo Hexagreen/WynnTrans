@@ -17,6 +17,7 @@ public class NpcDialog extends WynnChatText {
 	private final String clientPlayerName;
 	private final String keyName;
 	private final String valName;
+	private boolean addiction = true;
 
 	@SuppressWarnings("DataFlowIssue")
 	public NpcDialog(Text text, Pattern regex) {
@@ -30,6 +31,11 @@ public class NpcDialog extends WynnChatText {
 		String dialogLen = matcher.group(2) + ".";
 		String hash = DigestUtils.sha1Hex(inputText.getString().replace(clientPlayerName, "%1$s")).substring(0, 8);
 		this.keyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
+	}
+
+	public NpcDialog setNoTranslationAddiction() {
+		this.addiction = false;
+		return this;
 	}
 
 	@Override
@@ -47,7 +53,7 @@ public class NpcDialog extends WynnChatText {
 		resultText = MutableText.of(inputText.getContent()).setStyle(inputText.getStyle());
 
 		Text t0 = getSibling(0);
-		if(WTS.checkTranslationExist(keyName, valName)) {
+		if(checkTranslationExist(keyName, valName)) {
 			resultText.append(newTranslate(keyName).setStyle(t0.getStyle()));
 			resultText.append(Text.literal(": ").setStyle(t0.getStyle()));
 		}
@@ -59,7 +65,7 @@ public class NpcDialog extends WynnChatText {
 			String valDialog = getContentString(1).replace(clientPlayerName, "%1$s");
 
 			Text t1 = getSibling(1);
-			if(WTS.checkTranslationExist(keyDialog, valDialog)) {
+			if(checkTranslationExist(keyDialog, valDialog)) {
 				if(valDialog.contains("%1$s")) {
 					resultText.append(newTranslate(keyDialog, playerName).setStyle(t1.getStyle()));
 				}
@@ -77,7 +83,7 @@ public class NpcDialog extends WynnChatText {
 				String valDialog = getContentString(index).replace(clientPlayerName, "%1$s");
 
 				Text ti = getSibling(index);
-				if(WTS.checkTranslationExist(keyDialog, valDialog)) {
+				if(checkTranslationExist(keyDialog, valDialog)) {
 					if(valDialog.contains("%1$s")) {
 						resultText.append(newTranslate(keyDialog, playerName).setStyle(ti.getStyle()));
 					}
@@ -98,5 +104,10 @@ public class NpcDialog extends WynnChatText {
 			corrected.append(getSibling(i));
 		}
 		resultText = new NpcDialog(corrected, ChatType.DIALOG_NORMAL.getRegex()).text();
+	}
+
+	private boolean checkTranslationExist(String key, String val) {
+		if(addiction) return WTS.checkTranslationExist(key, val);
+		else return WTS.checkTranslationDoNotRegister(key);
 	}
 }

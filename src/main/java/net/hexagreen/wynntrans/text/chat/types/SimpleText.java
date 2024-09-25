@@ -16,6 +16,10 @@ public class SimpleText extends WynnChatText {
 	private final String valText;
 	private final Style textStyle;
 
+	public static void setTranslationControl(boolean control) {
+		translationRegisterControl = control;
+	}
+
 	public SimpleText(Text text, Pattern regex) {
 		super(text, regex);
 		if(getSiblings().isEmpty()) {
@@ -30,13 +34,9 @@ public class SimpleText extends WynnChatText {
 		this.keyText = parentKey + DigestUtils.sha1Hex(valText);
 	}
 
-	public static void setTranslationControl(boolean control) {
-		translationRegisterControl = control;
-	}
-
 	@Override
 	protected String setParentKey() {
-		return rootKey + "normalText.";
+		return rootKey + "text.";
 	}
 
 	@Override

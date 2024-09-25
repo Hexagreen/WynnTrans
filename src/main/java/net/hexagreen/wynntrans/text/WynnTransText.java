@@ -15,11 +15,6 @@ public abstract class WynnTransText {
 	protected final MutableText inputText;
 	protected MutableText resultText;
 
-	public WynnTransText(Text text) {
-		this.inputText = (MutableText) text;
-		this.parentKey = setParentKey();
-	}
-
 	protected static Style parseStyleCode(String codeOrTextString) {
 		String styleCode = codeOrTextString.replaceFirst("((?:§.)+).+", "$1");
 		if(styleCode.isBlank()) return Style.EMPTY;
@@ -29,6 +24,11 @@ public abstract class WynnTransText {
 			formatting[i] = Formatting.byCode(codes[i]);
 		}
 		return Style.EMPTY.withFormatting(formatting);
+	}
+
+	public WynnTransText(Text text) {
+		this.inputText = (MutableText) text;
+		this.parentKey = setParentKey();
 	}
 
 	/**

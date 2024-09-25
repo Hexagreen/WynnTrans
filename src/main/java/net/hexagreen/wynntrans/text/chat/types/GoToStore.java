@@ -21,7 +21,7 @@ public class GoToStore extends WynnChatText {
 
 	@Override
 	protected String setParentKey() {
-		return rootKey + "normalText.";
+		return rootKey + "text.";
 	}
 
 	@Override

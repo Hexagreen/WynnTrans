@@ -10,14 +10,14 @@ public class BoothTitle extends WynnDisplayText {
 	private final String boothOwner;
 	private final String boothDesc;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("'s Shop\n");
+	}
+
 	public BoothTitle(Text text) {
 		super(text);
 		this.boothOwner = inputText.getString().replaceAll("'s Shop\\n(.|\\n)+", "").substring(2);
 		this.boothDesc = inputText.getString().replaceAll(".+ Shop\\n", "");
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("'s Shop\n");
 	}
 
 	@Override

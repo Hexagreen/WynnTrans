@@ -54,11 +54,6 @@ public enum DisplayType {
 	private final Class<? extends WynnDisplayText> wdt;
 	private final Predicate<Text> typeChecker;
 
-	DisplayType(Class<? extends WynnDisplayText> wdt, Predicate<Text> typeChecker) {
-		this.wdt = wdt;
-		this.typeChecker = typeChecker;
-	}
-
 	private static DisplayType findType(Text text) {
 		return Arrays.stream(values()).filter(displayType -> Objects.nonNull(displayType.typeChecker)).filter(displayType -> displayType.typeChecker.test(text)).findFirst().orElse(NO_TYPE);
 	}
@@ -73,5 +68,10 @@ public enum DisplayType {
 			debugClass.writeTextAsJSON(text, "DisplayEx");
 			return text;
 		}
+	}
+
+	DisplayType(Class<? extends WynnDisplayText> wdt, Predicate<Text> typeChecker) {
+		this.wdt = wdt;
+		this.typeChecker = typeChecker;
 	}
 }

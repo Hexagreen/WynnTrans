@@ -5,12 +5,12 @@ import net.minecraft.text.Text;
 
 public class WorldEventBanner extends WynnDisplayText {
 
-	public WorldEventBanner(Text text) {
-		super(text);
-	}
-
 	public static boolean typeChecker(Text text) {
 		return text.getString().contains("\uE016\uE00E\uE011\uE00B\uE003 \uE004\uE015\uE004\uE00D\uE013\uDB00\uDC02");
+	}
+
+	public WorldEventBanner(Text text) {
+		super(text);
 	}
 
 	@Override

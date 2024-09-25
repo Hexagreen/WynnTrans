@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -10,7 +10,7 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SecretDiscovery extends WynnChatText implements ICenterAligned {
+public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
 
 	private static final Pattern DISCOVERY_NAME = Pattern.compile(": §b(.+)§d( \\(\\+\\d+ XP\\))");
 	private static final Pattern DISCOVERY_COUNT = Pattern.compile(" +§f(.+) \\[(\\d+)/(\\d+)]");

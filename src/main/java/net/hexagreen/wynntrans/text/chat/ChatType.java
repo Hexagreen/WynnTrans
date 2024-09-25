@@ -105,11 +105,6 @@ public enum ChatType {
 	private final Pattern regex;
 	private final Class<? extends WynnChatText> wct;
 
-	ChatType(Pattern regex, Class<? extends WynnChatText> wct) {
-		this.regex = regex;
-		this.wct = wct;
-	}
-
 	private static ChatType findType(Text text) {
 		return Arrays.stream(ChatType.values()).filter(chatType -> Objects.nonNull(chatType.regex)).filter(chatType -> chatType.regex.matcher(removeTextBox(text)).find()).findFirst().orElse(NO_TYPE);
 	}
@@ -121,6 +116,11 @@ public enum ChatType {
 
 	private static String removeTextBox(Text text) {
 		return text.getString().replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ");
+	}
+
+	ChatType(Pattern regex, Class<? extends WynnChatText> wct) {
+		this.regex = regex;
+		this.wct = wct;
 	}
 
 	public Pattern getRegex() {

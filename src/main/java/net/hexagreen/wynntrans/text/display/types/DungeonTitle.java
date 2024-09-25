@@ -14,17 +14,17 @@ public class DungeonTitle extends WynnDisplayText {
 	private final Text difficulty;
 	private final String level;
 
+	public static boolean typeChecker(Text text) {
+		if(text.getSiblings().size() != 2) return false;
+		return text.getString().contains("\uE003\uE014\uE00D\uE006\uE004\uE00E\uE00D\uDB00\uDC02");
+	}
+
 	public DungeonTitle(Text text) {
 		super(text);
 		String[] split = getSibling(1).getString().split("\\n");
 		this.dungeonName = getDungeonName(split[1]);
 		this.difficulty = getDifficulty(split[3].split(" ")[1]);
 		this.level = split[3].replaceAll(".+: (.+)$", "$1");
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(text.getSiblings().size() != 2) return false;
-		return text.getString().contains("\uE003\uE014\uE00D\uE006\uE004\uE00E\uE00D\uDB00\uDC02");
 	}
 
 	@Override

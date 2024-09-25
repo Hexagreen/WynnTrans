@@ -28,14 +28,13 @@ public abstract class WynnTooltipText extends WynnTransText {
 	private static boolean lever = false;
 	private static boolean registered = true;
 
-	public WynnTooltipText(List<Text> text) {
-		super(siblingsToText(text));
-		resultText = Text.empty();
-	}
-
 	protected static Text colorCodedToStyled(Text text) {
 		if(!text.getString().contains("§")) return text;
-		Matcher matcher = colorParser.matcher(text.getString());
+		return colorCodedToStyled(text.getString());
+	}
+
+	protected static Text colorCodedToStyled(String textAsString) {
+		Matcher matcher = colorParser.matcher(textAsString);
 		List<String> segments = new ArrayList<>();
 		while(matcher.find()) {
 			segments.add(matcher.group());
@@ -61,7 +60,14 @@ public abstract class WynnTooltipText extends WynnTransText {
 		return result;
 	}
 
+	public WynnTooltipText(List<Text> text) {
+		super(siblingsToText(text));
+		resultText = Text.empty();
+	}
+
 	public List<Text> text() {
+		long handle = MinecraftClient.getInstance().getWindow().getHandle();
+		if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_SUBTRACT) == 1) return getSiblings();
 		try {
 			build();
 			return resultText.getSiblings();
@@ -80,20 +86,24 @@ public abstract class WynnTooltipText extends WynnTransText {
 		if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 0) lever = false;
 		if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1 && !lever) registered = false;
 		if(!registered) {
-			WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(getSiblings(), "Tooltip");
+			WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(
+					resultText.getSiblings().isEmpty() ? getSiblings() : resultText.getSiblings(), "Tooltip"
+			);
 			registered = true;
 			lever = true;
 		}
 	}
 
-	protected List<Text> wrapLine(Text text) {
-		List<StringVisitable> svs = handler.wrapLines(text, 128, Style.EMPTY);
+	protected List<Text> wrapLine(Text text, int length) {
+		List<StringVisitable> svs = handler.wrapLines(text, length, Style.EMPTY);
 		List<Text> wrapped = new ArrayList<>();
 		for(StringVisitable sv : svs) {
+			MutableText tmp = Text.empty();
 			sv.visit((style, string) -> {
-				wrapped.add(Text.literal(string).setStyle(style));
+				tmp.append(Text.literal(string).setStyle(style));
 				return Optional.empty();
 			}, Style.EMPTY);
+			wrapped.add(tmp);
 		}
 		return wrapped;
 	}
@@ -116,12 +126,14 @@ public abstract class WynnTooltipText extends WynnTransText {
 					newBody.set(new StringBuilder());
 					newStyle.set(style);
 				}
-				newBody.get().append(string);
+				string = string.replaceFirst(" $", "");
+				newBody.get().append(string).append(" ");
 				return Optional.empty();
 			}, Style.EMPTY);
 		}
 		if(!newBody.get().isEmpty()) {
-			result.append(Text.literal(newBody.get().toString()).setStyle(newStyle.get()));
+			String done = newBody.get().toString().replaceFirst(" $", "");
+			result.append(Text.literal(done).setStyle(newStyle.get()));
 		}
 		return result;
 	}

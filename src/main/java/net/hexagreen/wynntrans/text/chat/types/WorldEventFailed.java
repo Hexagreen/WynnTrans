@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -8,7 +8,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class WorldEventFailed extends WynnSystemText implements ICenterAligned {
+public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
 
 	private final Text eventName;
 	private final String keyFailGuide;

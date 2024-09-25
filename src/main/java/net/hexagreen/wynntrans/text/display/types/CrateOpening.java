@@ -9,14 +9,14 @@ public class CrateOpening extends WynnDisplayText {
 
 	private final Text crateName;
 
-	public CrateOpening(Text text) {
-		super(text);
-		this.crateName = new SimpleDisplay(Text.literal(text.getString().split("\\n")[0])).text();
-	}
-
 	public static boolean typeChecker(Text text) {
 		if(!text.getSiblings().isEmpty()) return false;
 		return text.getString().matches("^.+Crate.+\\n§7Click to Open");
+	}
+
+	public CrateOpening(Text text) {
+		super(text);
+		this.crateName = new SimpleDisplay(Text.literal(text.getString().split("\\n")[0])).text();
 	}
 
 	@Override

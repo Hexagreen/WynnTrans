@@ -57,13 +57,13 @@ public class GuildInfo extends WynnSystemText {
 		private final Pattern infoRegex;
 		private Matcher matcher;
 
+		private static GuildInformation findAndGet(Text text) {
+			return Arrays.stream(GuildInformation.values()).filter(guildInformation -> guildInformation.find(text)).findFirst().orElse(null);
+		}
+
 		GuildInformation(Pattern infoRegex) {
 			this.infoRegex = infoRegex;
 			this.matcher = null;
-		}
-
-		private static GuildInformation findAndGet(Text text) {
-			return Arrays.stream(GuildInformation.values()).filter(guildInformation -> guildInformation.find(text)).findFirst().orElse(null);
 		}
 
 		private boolean find(Text text) {

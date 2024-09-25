@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.debugClass;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
@@ -13,7 +13,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WelcomeMessage extends WynnChatText implements ICenterAligned {
+public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 
 	private static final Pattern REGEX_FES_COLOR = Pattern.compile("^ +§(.)");
 	private static final Pattern REGEX_FES = Pattern.compile("^ +(....)(Festival.+)\\n");

@@ -40,14 +40,14 @@ public class ProxySystemText extends SimpleSystemText {
 		private final Function<Text, String> mutator;
 		private final Function<Text, Object> argumentParser;
 
+		private static Templates findTemplate(Text text) {
+			return Arrays.stream(Templates.values()).filter(templates -> templates.template.matcher(text.getString()).find()).findFirst().orElse(null);
+		}
+
 		Templates(Pattern template, Function<Text, String> mutator, Function<Text, Object> argumentParser) {
 			this.template = template;
 			this.mutator = mutator;
 			this.argumentParser = argumentParser;
-		}
-
-		private static Templates findTemplate(Text text) {
-			return Arrays.stream(Templates.values()).filter(templates -> templates.template.matcher(text.getString()).find()).findFirst().orElse(null);
 		}
 	}
 }

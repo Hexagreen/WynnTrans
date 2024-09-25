@@ -17,6 +17,12 @@ public class NPCNameLiteral extends WynnDisplayText {
 	private final Style styleNpcTalk;
 	private final String trailer;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		if(text.getString().contains(" Post §2[")) return false;
+		return text.getString().contains("\n§7NPC");
+	}
+
 	public NPCNameLiteral(Text text) {
 		super(text);
 		String content = inputText.getString().replaceAll("\\n§7NPC(?:\\n|.)*", "");
@@ -31,12 +37,6 @@ public class NPCNameLiteral extends WynnDisplayText {
 		this.subKeyNpcName = "wytr.mobName." + npcNameNormalized;
 		this.keyNpcTalk = valNpcTalk.isBlank() ? null : rootKey + "talk." + npcNameNormalized + "." + DigestUtils.sha1Hex(valNpcTalk).substring(0, 4);
 		this.trailer = inputText.getString().replaceFirst("(?:.|\\n)+§7NPC\\n?", "");
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		if(text.getString().contains(" Post §2[")) return false;
-		return text.getString().contains("\n§7NPC");
 	}
 
 	@Override

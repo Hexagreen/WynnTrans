@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -11,7 +11,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LevelUp extends WynnChatText implements ICenterAligned {
+public class LevelUp extends WynnChatText implements ISpaceProvider {
 
 	private static final Pattern REGEX_LEVELUP = Pattern.compile("You are now combat level (\\d+)");
 	private static final Pattern REGEX_NEXTAP = Pattern.compile("^ +§6Only §e(\\d+) more levels?§6 until your next§e Ability Point");

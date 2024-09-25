@@ -20,20 +20,6 @@ public abstract class WynnSystemText extends WynnChatText {
 	protected final MutableText header;
 	protected final Text splitter;
 
-	public WynnSystemText(Text text, Pattern regex) {
-		super(preprocessSystemChat(text, false), regex);
-		this.originText = text;
-		this.header = extractHeader(text.getSiblings().getFirst());
-		this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
-	}
-
-	public WynnSystemText(Text text, Pattern regex, boolean isGlued) {
-		super(preprocessSystemChat(text, isGlued), regex);
-		this.originText = text;
-		this.header = extractHeader(text.getSiblings().getFirst().getSiblings().getFirst());
-		this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
-	}
-
 	protected static Text preprocessSystemChat(Text text, boolean isGlued) {
 		if(isGlued) {
 			MutableText glued = Text.empty();
@@ -106,6 +92,20 @@ public abstract class WynnSystemText extends WynnChatText {
 		content = content.replaceFirst("^ ", "").replaceFirst(" ?\\n$", "\n ");
 
 		return Text.literal(content).setStyle(style);
+	}
+
+	public WynnSystemText(Text text, Pattern regex) {
+		super(preprocessSystemChat(text, false), regex);
+		this.originText = text;
+		this.header = extractHeader(text.getSiblings().getFirst());
+		this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
+	}
+
+	public WynnSystemText(Text text, Pattern regex, boolean isGlued) {
+		super(preprocessSystemChat(text, isGlued), regex);
+		this.originText = text;
+		this.header = extractHeader(text.getSiblings().getFirst().getSiblings().getFirst());
+		this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
 	}
 
 	@Override

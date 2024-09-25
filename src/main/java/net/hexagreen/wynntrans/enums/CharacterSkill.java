@@ -15,10 +15,6 @@ public enum CharacterSkill {
 
 	private final Text stat;
 
-	CharacterSkill(Text stat) {
-		this.stat = stat;
-	}
-
 	public static Text getSkill(String name) {
 		switch(name) {
 			case "strength" -> {
@@ -38,6 +34,10 @@ public enum CharacterSkill {
 			}
 		}
 		return null;
+	}
+
+	CharacterSkill(Text stat) {
+		this.stat = stat;
 	}
 
 	public Text getSkill() {

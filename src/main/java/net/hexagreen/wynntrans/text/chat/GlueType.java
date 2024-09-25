@@ -28,11 +28,6 @@ public enum GlueType {
 	private final Pattern regex;
 	private final Class<? extends TextGlue> glue;
 
-	GlueType(Pattern regex, Class<? extends TextGlue> glue) {
-		this.regex = regex;
-		this.glue = glue;
-	}
-
 	public static GlueType findType(Text text) {
 		return Arrays.stream(GlueType.values()).filter(glueType -> glueType.matchFullText(text)).findFirst().orElse(NO_TYPE);
 	}
@@ -40,6 +35,11 @@ public enum GlueType {
 	public static TextGlue findAndGet(Text text) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
 		GlueType find = findType(text);
 		return find == NO_TYPE ? null : find.glue.cast(find.glue.getConstructor().newInstance());
+	}
+
+	GlueType(Pattern regex, Class<? extends TextGlue> glue) {
+		this.regex = regex;
+		this.glue = glue;
 	}
 
 	public boolean matchFullText(Text text) {

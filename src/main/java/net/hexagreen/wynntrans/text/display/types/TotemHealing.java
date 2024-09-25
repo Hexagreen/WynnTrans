@@ -8,16 +8,16 @@ public class TotemHealing extends WynnDisplayText {
 	private final Text timer;
 	private final String heal;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().matches("§c\\d+s\\n§c\\+\\d+❤§7/s");
+	}
+
 	public TotemHealing(Text text) {
 		super(text);
 		String[] split = text.getString().split("\\n");
 		this.timer = new Timer(Text.literal(split[0])).text();
 		this.heal = split[1];
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().matches("§c\\d+s\\n§c\\+\\d+❤§7/s");
 	}
 
 	@Override

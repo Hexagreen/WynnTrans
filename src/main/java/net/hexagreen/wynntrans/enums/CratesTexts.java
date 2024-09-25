@@ -26,14 +26,14 @@ public class CratesTexts {
 		private final MutableText gradeText;
 		private final Style gradeStyle;
 
+		public static Crates find(String string) {
+			return Arrays.stream(Crates.values()).filter(crateGrades -> crateGrades.match(string)).findFirst().orElse(COMMON);
+		}
+
 		Crates(String gradeName, MutableText gradeText) {
 			this.gradeName = gradeName;
 			this.gradeText = gradeText;
 			this.gradeStyle = gradeText.getStyle();
-		}
-
-		public static Crates find(String string) {
-			return Arrays.stream(Crates.values()).filter(crateGrades -> crateGrades.match(string)).findFirst().orElse(COMMON);
 		}
 
 		public MutableText getGradeText() {
@@ -59,13 +59,13 @@ public class CratesTexts {
 		private final String typeName;
 		private final Text typeText;
 
+		public static RewardType find(String string) {
+			return Arrays.stream(values()).filter(rewardType -> string.contains(rewardType.typeName)).findFirst().orElse(GEAR_SKIN);
+		}
+
 		RewardType(String typeName, Text typeText) {
 			this.typeName = typeName;
 			this.typeText = typeText;
-		}
-
-		public static RewardType find(String string) {
-			return Arrays.stream(values()).filter(rewardType -> string.contains(rewardType.typeName)).findFirst().orElse(GEAR_SKIN);
 		}
 
 		public Text getTypeText() {
@@ -93,11 +93,6 @@ public class CratesTexts {
 		private final Pattern descRegex;
 		private final Text translatedText;
 
-		RewardDescription(Pattern descRegex, Text translatedText) {
-			this.descRegex = descRegex;
-			this.translatedText = translatedText;
-		}
-
 		private static RewardDescription find(Text text) {
 			return Arrays.stream(RewardDescription.values()).filter(rewardDescription -> rewardDescription.descRegex.matcher(text.getString()).find()).findFirst().orElse(NULL);
 		}
@@ -106,6 +101,11 @@ public class CratesTexts {
 			RewardDescription rewardDescription = find(text);
 			if(rewardDescription != NULL) return rewardDescription.translatedText;
 			else return text;
+		}
+
+		RewardDescription(Pattern descRegex, Text translatedText) {
+			this.descRegex = descRegex;
+			this.translatedText = translatedText;
 		}
 	}
 }

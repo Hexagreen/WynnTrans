@@ -13,19 +13,19 @@ public class InfoSale extends WynnChatText {
 	private final Text original;
 	private final Text timer;
 
-	public InfoSale(Text text, Pattern regex) {
-		super(cutoffTail(text), regex);
-		this.original = text;
-		this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
-		this.timer = initTimer(text.getSiblings().getLast());
-	}
-
 	private static Text cutoffTail(Text text) {
 		MutableText result = Text.empty();
 		for(int i = 0; text.getSiblings().size() - 2 > i; i++) {
 			result.append(text.getSiblings().get(i));
 		}
 		return result;
+	}
+
+	public InfoSale(Text text, Pattern regex) {
+		super(cutoffTail(text), regex);
+		this.original = text;
+		this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
+		this.timer = initTimer(text.getSiblings().getLast());
 	}
 
 	@Override

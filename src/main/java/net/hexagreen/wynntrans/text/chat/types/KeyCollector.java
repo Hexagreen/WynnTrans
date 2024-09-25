@@ -74,12 +74,12 @@ public class KeyCollector extends WynnSystemText {
 
 		private final Pattern regex;
 
-		MessageType(Pattern regex) {
-			this.regex = regex;
-		}
-
 		private static MessageType getType(Text text) {
 			return Arrays.stream(MessageType.values()).filter(messageType -> Objects.nonNull(messageType.regex)).filter(messageType -> messageType.regex.matcher(text.getString().replaceAll("\\n", "")).find()).findFirst().orElse(NULL);
+		}
+
+		MessageType(Pattern regex) {
+			this.regex = regex;
 		}
 	}
 }

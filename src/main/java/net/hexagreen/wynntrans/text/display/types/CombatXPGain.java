@@ -16,6 +16,11 @@ public class CombatXPGain extends WynnDisplayText {
 	private final String owner;
 	private final boolean shared;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().replaceAll("§.", "").matches("^(?:x\\d )?\\[\\+\\d+ Combat XP](?:.|\\n)+");
+	}
+
 	public CombatXPGain(Text text) {
 		super(text);
 		Matcher matcher = regex.matcher(text.getString());
@@ -26,11 +31,6 @@ public class CombatXPGain extends WynnDisplayText {
 			this.shared = owner.contains("[Shared]");
 		}
 		else throw new TextTranslationFailException("CombatXPGain.class");
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().replaceAll("§.", "").matches("^(?:x\\d )?\\[\\+\\d+ Combat XP](?:.|\\n)+");
 	}
 
 	@Override

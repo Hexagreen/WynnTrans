@@ -10,6 +10,10 @@ public class RewardChest extends WynnDisplayText {
 	private final Text lastTime;
 	private final Style timeStyle;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("\uE011\uE004\uE016\uE000\uE011\uE003 \uE002\uE007\uE004\uE012\uE013\uDB00\uDC02");
+	}
+
 	public RewardChest(Text text) {
 		super(text);
 		if(text.getSiblings().size() != 2) {
@@ -22,10 +26,6 @@ public class RewardChest extends WynnDisplayText {
 			this.timeStyle = parseStyleCode(time);
 			this.lastTime = ITime.translateTime(time.replaceAll("§.", ""));
 		}
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("\uE011\uE004\uE016\uE000\uE011\uE003 \uE002\uE007\uE004\uE012\uE013\uDB00\uDC02");
 	}
 
 	@Override

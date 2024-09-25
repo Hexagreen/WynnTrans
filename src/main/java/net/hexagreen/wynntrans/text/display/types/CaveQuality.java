@@ -9,13 +9,13 @@ public class CaveQuality extends WynnDisplayText {
 
 	private final String bar;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().matches("^§7Loot Quality\\n.+");
+	}
+
 	public CaveQuality(Text text) {
 		super(text);
 		this.bar = text.getString().split("\\n")[1];
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().matches("^§7Loot Quality\\n.+");
 	}
 
 	@Override

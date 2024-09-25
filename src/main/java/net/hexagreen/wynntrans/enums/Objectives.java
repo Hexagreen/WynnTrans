@@ -14,15 +14,15 @@ public enum Objectives {
 	private final String normalizedVal;
 	private Object normalizedArg;
 
+	public static Objectives findNormalized(String string) {
+		return Arrays.stream(Objectives.values()).filter(objectives -> objectives.isMatch(string)).findFirst().orElse(NO_TYPE);
+	}
+
 	Objectives(Pattern regex, String normalizedKey, String normalizedVal) {
 		this.regex = regex;
 		this.normalizedKey = normalizedKey;
 		this.normalizedVal = normalizedVal;
 		this.normalizedArg = null;
-	}
-
-	public static Objectives findNormalized(String string) {
-		return Arrays.stream(Objectives.values()).filter(objectives -> objectives.isMatch(string)).findFirst().orElse(NO_TYPE);
 	}
 
 	public String getNormalizedKey() {

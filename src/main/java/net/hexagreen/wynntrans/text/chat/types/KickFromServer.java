@@ -48,13 +48,13 @@ public class KickFromServer extends WynnChatText {
 		private final String reason;
 		private final String langCode;
 
+		static KickReason findReason(Text text) {
+			return Arrays.stream(KickReason.values()).filter(kickReason -> text.getString().contains(kickReason.reason)).findFirst().orElse(UNKNOWN_REASON);
+		}
+
 		KickReason(String reason, String langCode) {
 			this.reason = reason;
 			this.langCode = langCode;
-		}
-
-		static KickReason findReason(Text text) {
-			return Arrays.stream(KickReason.values()).filter(kickReason -> text.getString().contains(kickReason.reason)).findFirst().orElse(UNKNOWN_REASON);
 		}
 	}
 }

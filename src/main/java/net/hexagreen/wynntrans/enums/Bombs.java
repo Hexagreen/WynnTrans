@@ -43,12 +43,6 @@ public enum Bombs {
 	private final Text bombDescription;
 	private final Text bombTime;
 
-	Bombs(Text bombName, Text bombDesc, Text bombTime) {
-		this.bombName = bombName;
-		this.bombDescription = bombDesc;
-		this.bombTime = bombTime;
-	}
-
 	public static Bombs findBomb(String bombName) {
 		if(bombName.contains("Combat XP")) {
 			return COMBAT_XP;
@@ -78,6 +72,12 @@ public enum Bombs {
 			return PARTY;
 		}
 		return null;
+	}
+
+	Bombs(Text bombName, Text bombDesc, Text bombTime) {
+		this.bombName = bombName;
+		this.bombDescription = bombDesc;
+		this.bombTime = bombTime;
 	}
 
 	public MutableText getBombName() {

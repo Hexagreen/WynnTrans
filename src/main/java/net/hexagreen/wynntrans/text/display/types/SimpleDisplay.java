@@ -22,7 +22,7 @@ public class SimpleDisplay extends WynnDisplayText {
 
 	@Override
 	protected String setParentKey() {
-		return rootKey + "normalDisplay.";
+		return rootKey + "display.";
 	}
 
 	@Override

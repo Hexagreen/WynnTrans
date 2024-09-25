@@ -10,15 +10,15 @@ public class CaveReward extends WynnDisplayText {
 	private final String keyCaveName;
 	private final String valCaveName;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().contains(" Rewards\n§7Interact to Open");
+	}
+
 	public CaveReward(Text text) {
 		super(text);
 		this.valCaveName = text.getString().replaceAll("§e§l", "").replaceAll(" Rewards\\n.+", "");
 		this.keyCaveName = "wytr.cave." + normalizeStringForKey(valCaveName);
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().contains(" Rewards\n§7Interact to Open");
 	}
 
 	@Override

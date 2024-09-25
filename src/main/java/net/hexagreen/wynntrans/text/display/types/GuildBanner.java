@@ -12,16 +12,16 @@ public class GuildBanner extends WynnDisplayText {
 	private final String owner;
 	private final String[] lines;
 
+	public static boolean typeChecker(Text text) {
+		return text.getString().contains("\n§7Controlled by ");
+	}
+
 	public GuildBanner(Text text) {
 		super(text);
 		this.lines = inputText.getString().split("\\n");
 		this.valAreaName = lines[0].replaceAll("§.", "");
 		this.keyAreaName = rootKey + "area." + normalizeStringForKey(valAreaName);
 		this.owner = lines[1].replaceFirst("§7Controlled by ", "");
-	}
-
-	public static boolean typeChecker(Text text) {
-		return text.getString().contains("\n§7Controlled by ");
 	}
 
 	@Override

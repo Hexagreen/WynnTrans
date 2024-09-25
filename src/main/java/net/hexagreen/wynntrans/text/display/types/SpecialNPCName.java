@@ -14,16 +14,6 @@ public class SpecialNPCName extends WynnDisplayText {
 	private final String valName;
 	private final Style styleName;
 
-	public SpecialNPCName(Text text) {
-		super(reformPackedText(text));
-		this.icon = getSibling(0);
-		this.banner = getSibling(2).getSiblings().getFirst().copy();
-		String name = getSibling(2).getSiblings().getLast().getString().split("\\n")[1];
-		this.valName = name.replaceAll("§.", "");
-		this.keyName = "wytr.name." + normalizeStringForKey(valName);
-		this.styleName = parseStyleCode(name);
-	}
-
 	public static boolean typeChecker(Text text) {
 		try {
 			return text.getString().substring(0, 3).contains("\uE009") && text.getString().contains("\n§7NPC");
@@ -41,6 +31,16 @@ public class SpecialNPCName extends WynnDisplayText {
 			return result;
 		}
 		return text;
+	}
+
+	public SpecialNPCName(Text text) {
+		super(reformPackedText(text));
+		this.icon = getSibling(0);
+		this.banner = getSibling(2).getSiblings().getFirst().copy();
+		String name = getSibling(2).getSiblings().getLast().getString().split("\\n")[1];
+		this.valName = name.replaceAll("§.", "");
+		this.keyName = "wytr.name." + normalizeStringForKey(valName);
+		this.styleName = parseStyleCode(name);
 	}
 
 	@Override

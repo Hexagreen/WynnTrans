@@ -1,12 +1,12 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class JoinQueue extends WynnChatText implements ICenterAligned {
+public class JoinQueue extends WynnChatText implements ISpaceProvider {
 
 	public JoinQueue(Text text, Pattern regex) {
 		super(text, regex);

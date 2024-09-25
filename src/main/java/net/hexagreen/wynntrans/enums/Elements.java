@@ -16,10 +16,6 @@ public enum Elements {
 
 	private final Text element;
 
-	Elements(Text element) {
-		this.element = element;
-	}
-
 	public static Elements findElement(String string) {
 		switch(string.toLowerCase(Locale.ENGLISH)) {
 			case "earth" -> {
@@ -41,6 +37,10 @@ public enum Elements {
 				return NEUTRAL;
 			}
 		}
+	}
+
+	Elements(Text element) {
+		this.element = element;
 	}
 
 	public Text getElement() {

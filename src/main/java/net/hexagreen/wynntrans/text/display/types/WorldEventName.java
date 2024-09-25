@@ -10,16 +10,16 @@ public class WorldEventName extends WynnDisplayText {
 	private final String keyWorldEvent;
 	private final boolean timerMode;
 
-	public WorldEventName(Text text) {
-		super(text);
-		this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(getContentString());
-		this.timerMode = getContentString().matches("\\d+ (hour|minute|second)s? left");
-	}
-
 	public static boolean typeChecker(Text text) {
 		if(!text.getSiblings().isEmpty()) return false;
 		if(text.getString().equals("Prepare to start")) return false;
 		return text.getStyle().equals(Style.EMPTY.withColor(0xEBF7FF));
+	}
+
+	public WorldEventName(Text text) {
+		super(text);
+		this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(getContentString());
+		this.timerMode = getContentString().matches("\\d+ (hour|minute|second)s? left");
 	}
 
 	@Override

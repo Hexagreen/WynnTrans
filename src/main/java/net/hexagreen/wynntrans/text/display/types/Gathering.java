@@ -14,6 +14,11 @@ public class Gathering extends WynnDisplayText {
 	private final double progress;
 	private final String profession;
 
+	public static boolean typeChecker(Text text) {
+		if(!text.getSiblings().isEmpty()) return false;
+		return text.getString().replaceAll("§.", "").matches("\\n*\\[\\|\\|\\|.+\\|\\|\\|]");
+	}
+
 	public Gathering(Text text) {
 		super(text);
 		this.lineFeed = inputText.getString().replaceAll("[^\\n]", "");
@@ -26,11 +31,6 @@ public class Gathering extends WynnDisplayText {
 		int gray = split.length == 2 ? split[1].length() : 0;
 		this.progress = (double) color / (color + gray);
 		this.profession = bar.replaceAll("§.", "").replaceAll("\\W", "").toLowerCase(Locale.ENGLISH);
-	}
-
-	public static boolean typeChecker(Text text) {
-		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().replaceAll("§.", "").matches("\\n*\\[\\|\\|\\|.+\\|\\|\\|]");
 	}
 
 	@Override

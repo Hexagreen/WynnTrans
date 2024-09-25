@@ -12,13 +12,6 @@ public class MerchantName extends WynnDisplayText {
 	private final String keyMerchant;
 	private final String valMerchant;
 
-	public MerchantName(Text text) {
-		super(text);
-		this.icon = getSibling(0);
-		this.valMerchant = getSibling(1).getString().replaceFirst("^\\n§d", "").replaceFirst("\\n§7NPC$", "");
-		this.keyMerchant = valMerchant.replaceFirst(" Merchant", "").replaceAll(" ", "");
-	}
-
 	public static boolean typeChecker(Text text) {
 		try {
 			if(text.getSiblings().getFirst().getStyle().getFont().equals(Identifier.of("minecraft:merchant"))) {
@@ -27,6 +20,13 @@ public class MerchantName extends WynnDisplayText {
 		} catch(Exception ignore) {
 		}
 		return false;
+	}
+
+	public MerchantName(Text text) {
+		super(text);
+		this.icon = getSibling(0);
+		this.valMerchant = getSibling(1).getString().replaceFirst("^\\n§d", "").replaceFirst("\\n§7NPC$", "");
+		this.keyMerchant = valMerchant.replaceFirst(" Merchant", "").replaceAll(" ", "");
 	}
 
 	@Override

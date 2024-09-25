@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -8,7 +8,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class PartyInvited extends WynnChatText implements ICenterAligned {
+public class PartyInvited extends WynnChatText implements ISpaceProvider {
 
 	private final Text playerName;
 

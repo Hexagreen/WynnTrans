@@ -21,16 +21,16 @@ public enum CharacterClass {
 	private final MutableText className;
 	private final MutableText weapon;
 
-	CharacterClass(MutableText className, MutableText weapon) {
-		this.className = className;
-		this.weapon = weapon;
-	}
-
 	public static MutableText getClassName(String className) {
 		return valueOf(className.toUpperCase(Locale.ENGLISH).replace(" ", "_")).className;
 	}
 
 	public static MutableText getWeapon(String className) {
 		return valueOf(className.toUpperCase(Locale.ENGLISH).replace(" ", "_")).weapon;
+	}
+
+	CharacterClass(MutableText className, MutableText weapon) {
+		this.className = className;
+		this.weapon = weapon;
 	}
 }

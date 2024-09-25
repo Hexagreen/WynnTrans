@@ -13,19 +13,19 @@ public class SimpleSystemText extends WynnSystemText {
 	private final String keyText;
 	private final String valText;
 
+	public static void setTranslationControl(boolean control) {
+		translationRegisterControl = control;
+	}
+
 	public SimpleSystemText(Text text, Pattern ignore) {
 		super(text, null);
 		this.valText = initValText();
 		this.keyText = initKeyText();
 	}
 
-	public static void setTranslationControl(boolean control) {
-		translationRegisterControl = control;
-	}
-
 	@Override
 	protected String setParentKey() {
-		return rootKey + "normalText.";
+		return rootKey + "text.";
 	}
 
 	@Override

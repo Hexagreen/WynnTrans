@@ -42,12 +42,12 @@ public class Identifier extends WynnSystemText {
 
 		private final Pattern regex;
 
-		MessageType(Pattern regex) {
-			this.regex = regex;
-		}
-
 		private static Identifier.MessageType getType(Text text) {
 			return Arrays.stream(Identifier.MessageType.values()).filter(messageType -> Objects.nonNull(messageType.regex)).filter(messageType -> messageType.regex.matcher(text.getString()).find()).findFirst().orElse(NULL);
+		}
+
+		MessageType(Pattern regex) {
+			this.regex = regex;
 		}
 	}
 }

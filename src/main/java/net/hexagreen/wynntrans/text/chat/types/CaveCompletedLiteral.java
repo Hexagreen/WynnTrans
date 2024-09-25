@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ICenterAligned;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -11,19 +11,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned {
+public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider {
 
 	private static final Pattern REGEX_EXP = Pattern.compile("§7\\+(\\d+) Experience Points");
 	private static final Pattern REGEX_EME = Pattern.compile("§7\\+(\\d+) §aEmeralds");
 	private static final String func = rootKey + "func.";
 	private final String keyCaveName;
 	private final String valCaveName;
-
-	public CaveCompletedLiteral(Text text, Pattern ignore) {
-		super(splitTextBody(text), null);
-		this.valCaveName = getSibling(2).getString().replaceAll("§. +§.", "");
-		this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
-	}
 
 	private static Text splitTextBody(Text text) {
 		String[] lines = text.getString().split("\\n");
@@ -33,6 +27,12 @@ public class CaveCompletedLiteral extends WynnChatText implements ICenterAligned
 		}
 
 		return result.copy();
+	}
+
+	public CaveCompletedLiteral(Text text, Pattern ignore) {
+		super(splitTextBody(text), null);
+		this.valCaveName = getSibling(2).getString().replaceAll("§. +§.", "");
+		this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
 	}
 
 	@Override
