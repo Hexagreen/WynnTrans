@@ -20,7 +20,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 	private static final Pattern REGEX_CRATE = Pattern.compile(" (§.[A-z]+) Crates");
 	private static final Pattern REGEX_TIME = Pattern.compile("doors in (.+)\\.");
 	private static final Pattern REGEX_TRADE = Pattern.compile("^ +§d§l(\\d+)§5 of your items sold");
-	private static final Pattern REGEX_SALE_TIME = Pattern.compile("§(.)The sale ends in (.+)\\.");
+	private static final Pattern REGEX_PROMOTION_TIME = Pattern.compile(".+ in (.+ (?:days|day|hours|hour|minutes|minute))\\.");
 	private static final Text LINK = Text.literal("§fplay.wynncraft.com §7-/-§f wynncraft.com").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://wynncraft.com")));
 
 	public WelcomeMessage(Text text, Pattern regex) {
@@ -54,9 +54,9 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 		}
 
 		for(int i = 1; getSiblings().size() - 1 > i; i++) {
-			Matcher discountEvent = REGEX_SALE_TIME.matcher(getSibling(i).getString());
+			Matcher discountEvent = REGEX_PROMOTION_TIME.matcher(getSibling(i).getString());
 			if(discountEvent.find()) {
-				appendSaleMessage(discountEvent);
+				appendPromotionMessage(discountEvent);
 				continue;
 			}
 
@@ -118,10 +118,21 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 		}
 	}
 
-	private void appendSaleMessage(Matcher discount) {
-		Text duration = ITime.translateTime(discount.group(2));
-		Formatting color = Formatting.byCode(discount.group(1).charAt(0));
-		Text saleTime = newTranslate(parentKey + ".sale", duration).setStyle(Style.EMPTY.withColor(color));
-		resultText.append(getCenterIndent(saleTime)).append(saleTime).append("\n");
+	private void appendPromotionMessage(Matcher discount) {
+		Style timeStyle = parseStyleCode(discount.group(1));
+		Text duration = ITime.translateTime(discount.group(1)).setStyle(timeStyle);
+
+		String body = discount.group().replaceFirst("^ +", "");
+		Style textStyle = parseStyleCode(body);
+		String valPromotion = body.replaceFirst("(§.)+", "")
+				.replaceFirst(discount.group(1), "%1\\$s");
+		String keyPromotion = "wytr.welcome." + DigestUtils.sha1Hex(valPromotion).substring(0, 6);
+		if(WTS.checkTranslationExist(keyPromotion, valPromotion)) {
+			Text guide = newTranslate(keyPromotion, duration).setStyle(textStyle);
+			resultText.append(getCenterIndent(guide)).append(guide).append("\n");
+		}
+		else {
+			resultText.append(getCenterIndent(body)).append(body);
+		}
 	}
 }

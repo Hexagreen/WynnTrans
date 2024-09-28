@@ -1,7 +1,8 @@
 package net.hexagreen.wynntrans.text.tooltip;
 
 import com.mojang.logging.LogUtils;
-import net.hexagreen.wynntrans.text.tooltip.types.ContentBookFilter;
+import net.hexagreen.wynntrans.text.tooltip.types.ContentBookFilterAndSort;
+import net.hexagreen.wynntrans.text.tooltip.types.ContentBookProgress;
 import net.hexagreen.wynntrans.text.tooltip.types.DialogHistory;
 import net.hexagreen.wynntrans.text.tooltip.types.SimpleTooltip;
 import net.minecraft.text.Text;
@@ -14,7 +15,8 @@ import java.util.function.Predicate;
 
 public enum TooltipType {
 	DIALOG_HISTORY(DialogHistory.class, DialogHistory::typeChecker),
-	CONTENT_BOOK_FILTER(ContentBookFilter.class, ContentBookFilter::typeChecker),
+	CONTENT_BOOK_FILTER_AND_SORT(ContentBookFilterAndSort.class, ContentBookFilterAndSort::typeChecker),
+	CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress.class, ContentBookProgress::typeChecker),
 
 	NO_TYPE(SimpleTooltip.class, null);
 	private final Class<? extends WynnTooltipText> wtt;

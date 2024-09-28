@@ -2,7 +2,9 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -28,10 +30,10 @@ public class TradePartial extends WynnSystemText {
 	protected void build() {
 		resultText = Text.empty();
 		if(buyingMode) {
-			resultText.append(newTranslateWithSplit(parentKey + "buy", tradeAmount, item));
+			resultText.append(newTranslateWithSplit(parentKey + "buy", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
 			return;
 		}
-		resultText.append(newTranslateWithSplit(parentKey + "sell", tradeAmount, item));
+		resultText.append(newTranslateWithSplit(parentKey + "sell", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
 	}
 
 	private Text parseItem() {

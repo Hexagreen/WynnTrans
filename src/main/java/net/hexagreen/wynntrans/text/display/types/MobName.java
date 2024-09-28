@@ -16,7 +16,7 @@ public class MobName extends WynnDisplayText {
 	public static boolean typeChecker(Text text) {
 		try {
 			int index = 2;
-			if(text.getString().substring(0, 1).matches("\uE02A|\uD83D\uDC31")) index = 4;
+			if(text.getString().substring(0, 2).matches("\uE02A |\uD83D\uDC31")) index = 4;
 			Text target = text.getSiblings().get(index).getSiblings().getFirst();
 			if(target.getString().contains("\uE00B\uE015 ")) {
 				if(target.getStyle().getFont().equals(Identifier.of("minecraft:banner/pill"))) {
@@ -31,7 +31,7 @@ public class MobName extends WynnDisplayText {
 	public MobName(Text text) {
 		super(text);
 		int index = 0;
-		this.isRare = text.getString().substring(0, 1).matches("\uE02A|\uD83D\uDC31");
+		this.isRare = text.getString().substring(0, 1).matches("\uE02A |\uD83D\uDC31");
 		if(isRare) index = 2;
 		this.valMobName = getContentString(index);
 		this.keyMobName = parentKey + normalizeStringForKey(valMobName);

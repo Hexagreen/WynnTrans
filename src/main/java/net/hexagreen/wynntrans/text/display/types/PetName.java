@@ -7,7 +7,9 @@ public class PetName extends WynnDisplayText {
 
 	public static boolean typeChecker(Text text) {
 		if(!text.getSiblings().isEmpty()) return false;
-		return text.getString().matches("^§7.+'s .+\\n§2Lv\\. §a\\d+");
+		if(text.getString().matches("^§7.+'s .+\\n§2Lv\\. §a\\d+")) return true;
+		if(text.getString().matches("^§2Lv\\. §a\\d+§f .+\\n§7\\[.+]")) return true;
+		else return false;
 	}
 
 	public PetName(Text text) {

@@ -58,11 +58,13 @@ public class DialogHistory extends WynnTooltipText {
 		DialogParser parser = new DialogParser();
 		for(Text text : getSiblings().subList(2, getSiblings().size() - 5)) {
 			if(text.getString().contains("• Dialogue")) {
+				parser.flushNarration();
 				parser.runParser();
 				parser.addToResult(text);
 				continue;
 			}
 			if(npcDialogPattern.matcher(text.getString()).find()) {
+				parser.flushNarration();
 				parser.runParser();
 				parser.addToParser(text);
 				continue;
@@ -75,6 +77,7 @@ public class DialogHistory extends WynnTooltipText {
 			}
 			parser.addToParser(text);
 		}
+		parser.flushNarration();
 		parser.runParser();
 		return parser.getResult();
 	}
@@ -90,9 +93,11 @@ public class DialogHistory extends WynnTooltipText {
 			for(Text text : storage) {
 				if(text.getString().matches("• Dialogue Start")) {
 					result.add(newTranslate(parentKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+					continue;
 				}
 				else if(text.getString().matches("• Dialogue End")) {
 					result.add(newTranslate(parentKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+					continue;
 				}
 				else if(npcDialogPattern.matcher(text.getString()).find()) {
 					text = translateNpcDialog(text);
@@ -129,6 +134,11 @@ public class DialogHistory extends WynnTooltipText {
 				storage.add(tmpText);
 				narration.clear();
 			}
+		}
+
+		private void flushNarration() {
+			storage.addAll(narration);
+			narration.clear();
 		}
 
 		private boolean isNarration(Text text) {

@@ -81,14 +81,30 @@ public abstract class WynnTooltipText extends WynnTransText {
 		return getSiblings();
 	}
 
-	protected void textRecorder() {
+	public MutableText textRaw() {
+		try {
+			build();
+			return resultText;
+		} catch(IndexOutOfBoundsException e) {
+			LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
+			debugClass.writeTextAsJSON(inputText, "OOB - Tooltip");
+		} catch(TextTranslationFailException e) {
+			LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
+		}
+		return inputText;
+	}
+
+	protected void textRecorder(List<Text> texts) {
+		boolean rawMode = false;
 		long handle = MinecraftClient.getInstance().getWindow().getHandle();
 		if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 0) lever = false;
 		if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1 && !lever) registered = false;
+		if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_LEFT_ALT) == 1) rawMode = true;
+		List<Text> target = texts.isEmpty() ? getSiblings() : texts;
+		if(!rawMode) target = colorCodedToStyledBatch(target);
+
 		if(!registered) {
-			WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(
-					resultText.getSiblings().isEmpty() ? getSiblings() : resultText.getSiblings(), "Tooltip"
-			);
+			WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(target, "Tooltip");
 			registered = true;
 			lever = true;
 		}

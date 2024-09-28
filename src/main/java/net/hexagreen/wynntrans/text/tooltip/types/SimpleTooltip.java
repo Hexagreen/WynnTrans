@@ -9,6 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SimpleTooltip extends WynnTooltipText {
 
@@ -31,14 +32,23 @@ public class SimpleTooltip extends WynnTooltipText {
 				resultText = inputText;
 			}
 		}
-		textRecorder();
+		textRecorder(resultText.getSiblings());
 	}
 
 	private boolean hasTranslation(Text text) {
 		String hash = DigestUtils.sha1Hex(text.getString());
 		String key = parentKey + hash;
+		if(WTS.checkTranslationDoNotRegister(key)) return true;
 
-		return WTS.checkTranslationDoNotRegister(key) || WTS.checkTranslationDoNotRegister(key + "_" + 1);
+		int index = 0;
+		List<Text> siblings = text.getSiblings();
+		for(int i = 0; i < siblings.size(); i++) {
+			if(Pattern.compile("[A-z]").matcher(siblings.get(i).getString()).find()) {
+				index = i;
+				break;
+			}
+		}
+		return WTS.checkTranslationDoNotRegister(key + "_" + (index + 1));
 	}
 
 	private boolean pressedAddTranslationKey() {
@@ -58,7 +68,12 @@ public class SimpleTooltip extends WynnTooltipText {
 			String content = sibling.getString();
 			Style style = sibling.getStyle();
 			String key = parentKey + hash;
-			if(siblings.size() != 1) key = key + "_" + i;
+			if(siblings.size() != 1) key = key + "_" + (i + 1);
+
+			if(!Pattern.compile("[A-z]").matcher(content).find()) {
+				result.append(sibling);
+				continue;
+			}
 
 			if(WTS.checkTranslationExist(key, content)) {
 				result.append(newTranslate(key).setStyle(style));
