@@ -9,24 +9,23 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class TrinketCooldown extends WynnSystemText {
+    private final Text item;
+    private final Text time;
 
-	private final Text item;
-	private final Text time;
+    public TrinketCooldown(Text text, Pattern regex) {
+        super(text, regex);
+        this.item = getSibling(0);
+        this.time = ITime.translateTime(getContentString(2)).setStyle(getStyle(2));
+    }
 
-	public TrinketCooldown(Text text, Pattern regex) {
-		super(text, regex);
-		this.item = getSibling(0);
-		this.time = ITime.translateTime(getContentString(2)).setStyle(getStyle(2));
-	}
+    @Override
+    protected String setParentKey() {
+        return rootKey + "func.trinketCooldown";
+    }
 
-	@Override
-	protected String setParentKey() {
-		return rootKey + "func.trinketCooldown";
-	}
-
-	@Override
-	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-		resultText = Text.empty().append(header);
-		resultText.append(newTranslateWithSplit(parentKey, item, time).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-	}
+    @Override
+    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+        resultText = Text.empty().append(header);
+        resultText.append(newTranslateWithSplit(parentKey, item, time).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+    }
 }

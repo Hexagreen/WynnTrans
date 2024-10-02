@@ -7,29 +7,28 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class CrateGetPersonal extends WynnChatText {
+    private static final Pattern headRegex = Pattern.compile("You've gotten a(?: \\|\\|\\|)? (.+) (?:\\|\\|\\| )?reward!");
+    private final CratesTexts.Crates grade;
 
-	private static final Pattern headRegex = Pattern.compile("You've gotten a(?: \\|\\|\\|)? (.+) (?:\\|\\|\\| )?reward!");
-	private final CratesTexts.Crates grade;
+    public CrateGetPersonal(Text text, Pattern ignoredRegex) {
+        super(text, headRegex);
+        this.grade = CratesTexts.Crates.find(matcher.group(1));
+    }
 
-	public CrateGetPersonal(Text text, Pattern ignoredRegex) {
-		super(text, headRegex);
-		this.grade = CratesTexts.Crates.find(matcher.group(1));
-	}
+    @Override
+    protected String setParentKey() {
+        return rootKey + "func.crateReward.personal";
+    }
 
-	@Override
-	protected String setParentKey() {
-		return rootKey + "func.crateReward.personal";
-	}
+    @Override
+    protected void build() {
+        resultText = Text.empty();
+        resultText.append(newTranslate("wytr.func.crateReward.personal", grade.getGradeText()).setStyle(grade.getGradeStyle().withBold(true)));
 
-	@Override
-	protected void build() {
-		resultText = Text.empty();
-		resultText.append(newTranslate("wytr.func.crateReward.personal", grade.getGradeText()).setStyle(grade.getGradeStyle().withBold(true)));
+        resultText.append("\n\n").append(getSibling(2));
 
-		resultText.append("\n\n").append(getSibling(2));
+        resultText.append("\n").append(CratesTexts.RewardDescription.findAndGet(getSibling(3)));
 
-		resultText.append("\n").append(CratesTexts.RewardDescription.findAndGet(getSibling(3)));
-
-		resultText.append("\n");
-	}
+        resultText.append("\n");
+    }
 }

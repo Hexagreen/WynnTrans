@@ -9,22 +9,21 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class CharacterClassChange extends WynnChatText {
+    private final Text className;
 
-	private final Text className;
+    public CharacterClassChange(Text text, Pattern regex) {
+        super(text, regex);
+        this.className = CharacterClass.getClassName(getContentString().replaceAll(".+§c", "")).setStyle(Style.EMPTY.withColor(Formatting.RED));
+    }
 
-	public CharacterClassChange(Text text, Pattern regex) {
-		super(text, regex);
-		this.className = CharacterClass.getClassName(getContentString().replaceAll(".+§c", "")).setStyle(Style.EMPTY.withColor(Formatting.RED));
-	}
+    @Override
+    protected String setParentKey() {
+        return rootKey + "func.classChange";
+    }
 
-	@Override
-	protected String setParentKey() {
-		return rootKey + "func.classChange";
-	}
-
-	@Override
-	protected void build() throws IndexOutOfBoundsException {
-		resultText = Text.empty();
-		resultText.append(newTranslate(parentKey, className).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
-	}
+    @Override
+    protected void build() throws IndexOutOfBoundsException {
+        resultText = Text.empty();
+        resultText.append(newTranslate(parentKey, className).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+    }
 }

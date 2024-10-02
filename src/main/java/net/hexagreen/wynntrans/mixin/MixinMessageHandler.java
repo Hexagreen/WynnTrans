@@ -10,12 +10,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = MessageHandler.class, priority = 900)
 abstract public class MixinMessageHandler {
-
-	@Inject(method = "onGameMessage", at = @At("HEAD"), cancellable = true)
-	public void mixinOnGameMessage(Text text, boolean bl, CallbackInfo ci) {
-		if(text != null && !bl) {
-			boolean confirm = WynnTrans.onGameMessageHandler.translateChatText(text);
-			if(confirm) ci.cancel();
-		}
-	}
+    @Inject(method = "onGameMessage", at = @At("HEAD"), cancellable = true)
+    public void mixinOnGameMessage(Text text, boolean bl, CallbackInfo ci) {
+        if(text != null && !bl) {
+            boolean confirm = WynnTrans.onGameMessageHandler.translateChatText(text);
+            if(confirm) ci.cancel();
+        }
+    }
 }

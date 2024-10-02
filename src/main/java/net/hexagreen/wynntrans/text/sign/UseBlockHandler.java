@@ -12,17 +12,16 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
 
 public class UseBlockHandler implements UseBlockCallback {
+    @Override
+    public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        if(player == MinecraftClient.getInstance().player && player.isHolding(Items.COMPASS) && hand == Hand.MAIN_HAND && world.isClient()) {
+            BlockEntity blockEntity = world.getBlockEntity(hitResult.getBlockPos());
+            if(blockEntity instanceof SignBlockEntity) {
+                WynnSign.get(((SignBlockEntity) blockEntity).getFrontText()).registerTranslation();
+                return ActionResult.FAIL;
+            }
+        }
 
-	@Override
-	public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-		if(player == MinecraftClient.getInstance().player && player.isHolding(Items.COMPASS) && hand == Hand.MAIN_HAND && world.isClient()) {
-			BlockEntity blockEntity = world.getBlockEntity(hitResult.getBlockPos());
-			if(blockEntity instanceof SignBlockEntity) {
-				WynnSign.get(((SignBlockEntity) blockEntity).getFrontText()).registerTranslation();
-				return ActionResult.FAIL;
-			}
-		}
-
-		return ActionResult.PASS;
-	}
+        return ActionResult.PASS;
+    }
 }

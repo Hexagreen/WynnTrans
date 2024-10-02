@@ -8,60 +8,59 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class Narration extends WynnChatText {
+    protected final String pKeyNarration;
+    private boolean addiction = true;
 
-	protected final String pKeyNarration;
-	private boolean addiction = true;
+    public Narration(Text text, Pattern regex) {
+        super(text, regex);
+        String hash = DigestUtils.sha1Hex(text.getString());
+        this.pKeyNarration = parentKey + hash;
+    }
 
-	public Narration(Text text, Pattern regex) {
-		super(text, regex);
-		String hash = DigestUtils.sha1Hex(text.getString());
-		this.pKeyNarration = parentKey + hash;
-	}
+    public Narration setNoTranslationAddiction() {
+        this.addiction = false;
+        return this;
+    }
 
-	public Narration setNoTranslationAddiction() {
-		this.addiction = false;
-		return this;
-	}
+    @Override
+    protected String setParentKey() {
+        return rootKey + "narration.";
+    }
 
-	@Override
-	protected String setParentKey() {
-		return rootKey + "narration.";
-	}
+    @Override
+    protected void build() {
+        if(getSiblings().isEmpty()) {
+            if(checkTranslationExist(pKeyNarration, getContentString())) {
+                resultText = newTranslate(pKeyNarration).setStyle(getStyle());
+            }
+            else {
+                resultText = inputText;
+            }
+        }
+        else {
+            String keyContent = pKeyNarration + "_1";
+            String valContent = getContentString();
+            if(checkTranslationExist(keyContent, valContent)) {
+                resultText = newTranslate(keyContent).setStyle(getStyle());
+            }
+            else {
+                resultText = MutableText.of(inputText.getContent()).setStyle(getStyle());
+            }
+            for(int index = 0; getSiblings().size() > index; index++) {
+                String keySibling = pKeyNarration + "_" + (index + 2);
+                String valSibling = getContentString(index);
+                if(checkTranslationExist(keySibling, valSibling)) {
+                    resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
+                }
+                else {
+                    resultText.append(getSiblings().get(index));
+                }
+            }
+        }
+    }
 
-	@Override
-	protected void build() {
-		if(getSiblings().isEmpty()) {
-			if(checkTranslationExist(pKeyNarration, getContentString())) {
-				resultText = newTranslate(pKeyNarration).setStyle(getStyle());
-			}
-			else {
-				resultText = inputText;
-			}
-		}
-		else {
-			String keyContent = pKeyNarration + "_1";
-			String valContent = getContentString();
-			if(checkTranslationExist(keyContent, valContent)) {
-				resultText = newTranslate(keyContent).setStyle(getStyle());
-			}
-			else {
-				resultText = MutableText.of(inputText.getContent()).setStyle(getStyle());
-			}
-			for(int index = 0; getSiblings().size() > index; index++) {
-				String keySibling = pKeyNarration + "_" + (index + 2);
-				String valSibling = getContentString(index);
-				if(checkTranslationExist(keySibling, valSibling)) {
-					resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
-				}
-				else {
-					resultText.append(getSiblings().get(index));
-				}
-			}
-		}
-	}
-
-	private boolean checkTranslationExist(String key, String val) {
-		if(addiction) return WTS.checkTranslationExist(key, val);
-		else return WTS.checkTranslationDoNotRegister(key);
-	}
+    private boolean checkTranslationExist(String key, String val) {
+        if(addiction) return WTS.checkTranslationExist(key, val);
+        else return WTS.checkTranslationDoNotRegister(key);
+    }
 }

@@ -8,27 +8,27 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class Shout extends WynnChatText {
+    private final String name;
+    private final String server;
 
-	private final String name;
-	private final String server;
+    public Shout(Text text, Pattern regex) {
+        super(text, regex);
+        this.name = matcher.group(1);
+        this.server = matcher.group(2);
+    }
 
-	public Shout(Text text, Pattern regex) {
-		super(text, regex);
-		this.name = matcher.group(1);
-		this.server = matcher.group(2);
-	}
+    @Override
+    protected String setParentKey() {
+        return rootKey + "func.shout";
+    }
 
-	@Override
-	protected String setParentKey() {
-		return rootKey + "func.shout";
-	}
-
-	@Override
-	protected void build() {
-		resultText = Text.empty();
-		resultText.append(newTranslate(parentKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
-		for(int i = 1; i < getSiblings().size(); i++) {
-			resultText.append(getSibling(i));
-		}
-	}
+    @Override
+    protected void build() {
+        resultText = Text.empty();
+        resultText.append(newTranslate(parentKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
+        for(int i = 0; i < getSiblings().size(); i++) {
+            if(getSibling(i).getString().contains("] shouts: ")) continue;
+            resultText.append(getSibling(i));
+        }
+    }
 }

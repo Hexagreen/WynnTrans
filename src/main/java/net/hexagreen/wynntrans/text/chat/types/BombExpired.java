@@ -8,49 +8,48 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class BombExpired extends WynnChatText {
+    private final Text storeLink;
+    private final Text bombName;
 
-	private final Text storeLink;
-	private final Text bombName;
+    public BombExpired(Text text, Pattern regex) {
+        super(text, regex);
+        this.storeLink = newTranslate(parentKey + ".store").setStyle(getStyle(0));
+        this.bombName = parseBombName(matcher.group(1));
+    }
 
-	public BombExpired(Text text, Pattern regex) {
-		super(text, regex);
-		this.storeLink = newTranslate(parentKey + ".store").setStyle(getStyle(0));
-		this.bombName = parseBombName(matcher.group(1));
-	}
+    @Override
+    protected String setParentKey() {
+        return rootKey + "func.bombExpired";
+    }
 
-	@Override
-	protected String setParentKey() {
-		return rootKey + "func.bombExpired";
-	}
+    @Override
+    protected void build() {
+        resultText = Text.empty();
+        resultText.append(newTranslate(parentKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
+    }
 
-	@Override
-	protected void build() {
-		resultText = Text.empty();
-		resultText.append(newTranslate(parentKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
-	}
+    private Text parseBombName(String bombName) {
+        if(bombName.contains("Combat XP")) {
+            return Text.translatable(rootKey + "bomb.name.combat");
+        }
+        else if(bombName.contains("Profession Speed")) {
+            return Text.translatable(rootKey + "bomb.name.profSpeed");
 
-	private Text parseBombName(String bombName) {
-		if(bombName.contains("Combat XP")) {
-			return Text.translatable(rootKey + "bomb.name.combat");
-		}
-		else if(bombName.contains("Profession Speed")) {
-			return Text.translatable(rootKey + "bomb.name.profSpeed");
+        }
+        else if(bombName.contains("Profession XP")) {
+            return Text.translatable(rootKey + "bomb.name.profXp");
 
-		}
-		else if(bombName.contains("Profession XP")) {
-			return Text.translatable(rootKey + "bomb.name.profXp");
+        }
+        else if(bombName.contains("Dungeon")) {
+            return Text.translatable(rootKey + "bomb.name.dungeon");
 
-		}
-		else if(bombName.contains("Dungeon")) {
-			return Text.translatable(rootKey + "bomb.name.dungeon");
+        }
+        else if(bombName.contains("Loot")) {
+            return Text.translatable(rootKey + "bomb.name.loot");
 
-		}
-		else if(bombName.contains("Loot")) {
-			return Text.translatable(rootKey + "bomb.name.loot");
-
-		}
-		else {
-			return Text.translatable(rootKey + "bomb.name.party");
-		}
-	}
+        }
+        else {
+            return Text.translatable(rootKey + "bomb.name.party");
+        }
+    }
 }

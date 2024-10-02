@@ -12,12 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SignBlockEntity.class)
 abstract public class MixinSignBlockEntity {
-
-	@Inject(method = "readNbt", at = @At("HEAD"))
-	public void mixinReadNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup, CallbackInfo ci) {
-		BlockPos pos = ((SignBlockEntity) (Object) this).getPos();
-		if(pos.getY() > 15) {
-			WynnTrans.translationTargetSignMarker = true;
-		}
-	}
+    @Inject(method = "readNbt", at = @At("HEAD"))
+    public void mixinReadNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup, CallbackInfo ci) {
+        BlockPos pos = ((SignBlockEntity) (Object) this).getPos();
+        if(pos.getY() > 15) {
+            WynnTrans.translationTargetSignMarker = true;
+        }
+    }
 }

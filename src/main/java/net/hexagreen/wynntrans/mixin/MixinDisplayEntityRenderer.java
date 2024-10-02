@@ -9,9 +9,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(DisplayEntityRenderer.TextDisplayEntityRenderer.class)
 abstract public class MixinDisplayEntityRenderer {
-
-	@ModifyVariable(method = "getLines", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-	private Text mixinGetLines(Text text) {
-		return WynnTrans.displayEntityHandler.translateDisplayText(text);
-	}
+    @ModifyVariable(method = "getLines", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private Text mixinGetLines(Text text) {
+        return WynnTrans.displayEntityHandler.translateDisplayText(text);
+    }
 }

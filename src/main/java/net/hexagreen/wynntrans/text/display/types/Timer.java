@@ -6,25 +6,24 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 public class Timer extends WynnDisplayText {
+    private final Style color;
 
-	private final Style color;
+    public static boolean typeChecker(Text text) {
+        return text.getString().matches("§.(\\d+)[ms]");
+    }
 
-	public static boolean typeChecker(Text text) {
-		return text.getString().matches("§.(\\d+)[ms]");
-	}
+    public Timer(Text text) {
+        super(text);
+        this.color = parseStyleCode(inputText.getString().substring(0, 2));
+    }
 
-	public Timer(Text text) {
-		super(text);
-		this.color = parseStyleCode(inputText.getString().substring(0, 2));
-	}
+    @Override
+    protected String setParentKey() {
+        return null;
+    }
 
-	@Override
-	protected String setParentKey() {
-		return null;
-	}
-
-	@Override
-	protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-		resultText = ITime.translateTime(getContentString().replaceAll("§.", "")).setStyle(color);
-	}
+    @Override
+    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+        resultText = ITime.translateTime(getContentString().replaceAll("§.", "")).setStyle(color);
+    }
 }
