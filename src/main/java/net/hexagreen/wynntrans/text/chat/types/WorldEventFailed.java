@@ -26,11 +26,11 @@ public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().append(header).setStyle(getStyle(0));
-        resultText.append(newTranslate("wytr.func.worldEvent.failedOne", eventName));
+        resultText.append(Text.translatable("wytr.func.worldEvent.failedOne", eventName));
 
         Text t2 = Text.empty().append(getSibling(2).getSiblings().get(1)).append(getSibling(2).getSiblings().get(2));
-        Text t3 = newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
-        Text t5 = newTranslate(keyFailGuide).setStyle(Style.EMPTY.withColor(0xAEB8BF));
+        Text t3 = Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+        Text t5 = Text.translatable(keyFailGuide).setStyle(Style.EMPTY.withColor(0xAEB8BF));
 
         resultText.append(splitter).append(splitter).append(getCenterIndent(t2).append(t2)).append(splitter).append(getCenterIndent(t3).append(t3)).append(splitter).append(splitter).append(getCenterIndent(t5).append(t5)).append(splitter);
     }
@@ -39,7 +39,7 @@ public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
         String valName = text.getString().replaceAll("You have failed ", "").replaceAll("\\.$", "");
         String keyName = rootKey + "worldEvent." + normalizeStringForKey(valName);
         if(WTS.checkTranslationExist(keyName, valName)) {
-            return newTranslate(keyName);
+            return Text.translatable(keyName);
         }
         else {
             return Text.literal(valName);

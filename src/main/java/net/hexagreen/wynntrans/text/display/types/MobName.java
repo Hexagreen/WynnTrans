@@ -51,10 +51,10 @@ public class MobName extends WynnDisplayText {
             resultText.append(getSibling(0)).append(" ");
         }
         if(WTS.checkTranslationDoNotRegister(subKeyMobName)) {
-            resultText.append(newTranslate(subKeyMobName).setStyle(styleMobName));
+            resultText.append(Text.translatable(subKeyMobName).setStyle(styleMobName));
         }
         else if(WTS.checkTranslationExist(keyMobName, valMobName)) {
-            resultText.append(newTranslate(keyMobName).setStyle(styleMobName));
+            resultText.append(Text.translatable(keyMobName).setStyle(styleMobName));
         }
         else {
             resultText.append(Text.literal(valMobName).setStyle(styleMobName));

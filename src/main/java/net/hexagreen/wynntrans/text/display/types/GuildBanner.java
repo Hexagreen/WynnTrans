@@ -32,12 +32,12 @@ public class GuildBanner extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
         if(WTS.checkTranslationExist(keyAreaName, valAreaName)) {
-            resultText.append(newTranslate(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.WHITE).withBold(true)));
+            resultText.append(Text.translatable(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.WHITE).withBold(true)));
         }
         else {
             resultText.append(Text.literal(valAreaName).setStyle(Style.EMPTY.withColor(Formatting.WHITE).withBold(true)));
         }
 
-        resultText.append("\n").append(newTranslate(parentKey + ".controlBy", owner).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(lines[2]).append("\n").append(newTranslate(rootKey + "func.clickForOptions").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        resultText.append("\n").append(Text.translatable(parentKey + ".controlBy", owner).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(lines[2]).append("\n").append(Text.translatable(rootKey + "func.clickForOptions").setStyle(Style.EMPTY.withColor(Formatting.RED)));
     }
 }

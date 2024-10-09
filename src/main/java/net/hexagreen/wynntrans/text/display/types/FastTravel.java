@@ -36,13 +36,13 @@ public class FastTravel extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text travel;
         if(WTS.checkTranslationExist(keyTravelName, valTravelName)) {
-            travel = newTranslate(keyTravelName).setStyle(getStyle(2));
+            travel = Text.translatable(keyTravelName).setStyle(getStyle(2));
         }
         else travel = Text.literal(valTravelName).setStyle(getStyle(2));
 
         Text dest;
         if(WTS.checkTranslationExist(keyDestination, valDestination)) {
-            dest = newTranslate(keyDestination).setStyle(Style.EMPTY.withItalic(true));
+            dest = Text.translatable(keyDestination).setStyle(Style.EMPTY.withItalic(true));
         }
         else {
             dest = Text.literal(valDestination).setStyle(Style.EMPTY.withItalic(true));

@@ -35,7 +35,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.literal("\n");
 
-        Text welcome = newTranslate(parentKey);
+        Text welcome = Text.translatable(parentKey);
         resultText.append(getCenterIndent(welcome)).append(welcome).append("\n");
 
         resultText.append(getCenterIndent(LINK)).append(LINK).append("\n\n");
@@ -62,7 +62,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
             String valGuide = getSibling(i).getString().replaceAll("^ +", "");
             String keyGuide = "wytr.welcome." + DigestUtils.sha1Hex(valGuide).substring(0, 6);
             if(WTS.checkTranslationExist(keyGuide, valGuide)) {
-                Text guide = newTranslate(keyGuide).setStyle(getStyle(i));
+                Text guide = Text.translatable(keyGuide).setStyle(getStyle(i));
                 resultText.append(getCenterIndent(guide)).append(guide).append("\n");
             }
             else {
@@ -73,7 +73,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 
     private void appendTradeMessage(Matcher trade) {
         Text num = Text.literal(trade.group(1)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE).withBold(true));
-        Text textTrade = newTranslate(parentKey + ".tradeAlarm", num).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
+        Text textTrade = Text.translatable(parentKey + ".tradeAlarm", num).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
         resultText.append(getCenterIndent(textTrade)).append(textTrade).append("\n");
     }
 
@@ -89,20 +89,20 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
         String keyFestival = "wytr.eventInfo.eventName." + DigestUtils.sha1Hex(festival.group(2)).substring(0, 4);
         Text textFestival;
         if(WTS.checkTranslationExist(keyFestival, festival.group(2))) {
-            textFestival = newTranslate(keyFestival).setStyle(festTitleStyle);
+            textFestival = Text.translatable(keyFestival).setStyle(festTitleStyle);
         }
         else {
             textFestival = Text.literal(festival.group(2)).setStyle(festTitleStyle);
         }
         resultText.append(getCenterIndent(textFestival)).append(textFestival).append("\n");
 
-        Text festivalGuide1 = newTranslate(parentKey + ".fesGuide.1").setStyle(festDescStyle);
+        Text festivalGuide1 = Text.translatable(parentKey + ".fesGuide.1").setStyle(festDescStyle);
         resultText.append(getCenterIndent(festivalGuide1)).append(festivalGuide1).append("\n");
 
         Matcher crate = REGEX_CRATE.matcher(getSibling(3).getString());
         if(crate.find()) {
             String strCrate = crate.group(1);
-            Text festivalGuide2 = newTranslate(parentKey + ".fesGuide.2", strCrate).setStyle(festDescStyle);
+            Text festivalGuide2 = Text.translatable(parentKey + ".fesGuide.2", strCrate).setStyle(festDescStyle);
             resultText.append(getCenterIndent(festivalGuide2)).append(festivalGuide2).append("\n\n");
         }
         else debugClass.writeTextAsJSON(inputText);
@@ -112,7 +112,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
             String strTime = time.group(1);
             Style styleTime = parseStyleCode(strTime);
             Text textTime = ITime.translateTime(strTime.replaceAll("§.", "")).setStyle(styleTime);
-            Text festivalGuide3 = newTranslate(parentKey + ".fesGuide.3", textTime).setStyle(festTitleStyle.withBold(false));
+            Text festivalGuide3 = Text.translatable(parentKey + ".fesGuide.3", textTime).setStyle(festTitleStyle.withBold(false));
             resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");
         }
     }
@@ -127,7 +127,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
                 .replaceFirst(discount.group(1), "%1\\$s");
         String keyPromotion = "wytr.welcome." + DigestUtils.sha1Hex(valPromotion).substring(0, 6);
         if(WTS.checkTranslationExist(keyPromotion, valPromotion)) {
-            Text guide = newTranslate(keyPromotion, duration).setStyle(textStyle);
+            Text guide = Text.translatable(keyPromotion, duration).setStyle(textStyle);
             resultText.append(getCenterIndent(guide)).append(guide).append("\n");
         }
         else {

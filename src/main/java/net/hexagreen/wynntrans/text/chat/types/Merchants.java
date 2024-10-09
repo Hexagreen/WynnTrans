@@ -26,20 +26,20 @@ public class Merchants extends WynnSystemText {
         resultText = Text.empty().append(header).setStyle(getStyle());
 
         if(WTS.checkTranslationExist(keyMerchantName, valMerchantName)) {
-            resultText.append(newTranslate(keyMerchantName).append(": "));
+            resultText.append(Text.translatable(keyMerchantName).append(": "));
         }
         else {
             resultText.append(getSibling(0)).append(" ");
         }
 
         if(lineFeedRemover(getContentString(1)).contains("Thank you for your business")) {
-            resultText.append(newTranslate(parentKey + ".confirm").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(parentKey + ".confirm").setStyle(getStyle(1)));
         }
         else if(lineFeedRemover(getContentString(1)).contains("cannot afford that")) {
-            resultText.append(newTranslate(parentKey + ".noEmerald").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(parentKey + ".noEmerald").setStyle(getStyle(1)));
         }
         else if(lineFeedRemover(getContentString(1)).contains("don't have enough space")) {
-            resultText.append(newTranslate(parentKey + ".noSpace").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(parentKey + ".noSpace").setStyle(getStyle(1)));
         }
     }
 }

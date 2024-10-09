@@ -29,10 +29,10 @@ public class WorldEventName extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Style style = Style.EMPTY.withColor(0xEBF7FF);
-        if(!timerMode) resultText = newTranslate(keyWorldEvent).setStyle(style);
+        if(!timerMode) resultText = Text.translatable(keyWorldEvent).setStyle(style);
         else {
             Text time = ITime.translateTime(getContentString().replaceFirst(" left", ""));
-            resultText = newTranslate("wytr.display.worldEvent.timeLeft", time).setStyle(style);
+            resultText = Text.translatable("wytr.display.worldEvent.timeLeft", time).setStyle(style);
         }
     }
 }

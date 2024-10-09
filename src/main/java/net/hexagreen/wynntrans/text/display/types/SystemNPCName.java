@@ -40,32 +40,32 @@ public class SystemNPCName extends WynnDisplayText {
         Style purple = Style.EMPTY.withColor(Formatting.LIGHT_PURPLE);
         Style gray = Style.EMPTY.withColor(Formatting.GRAY);
         if(str.contains("Blacksmith")) {
-            npcName.append(newTranslate("wytr.func.blacksmith").setStyle(purple));
-            npcDesc.append(newTranslate("wytr.display.blacksmith.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.func.blacksmith").setStyle(purple));
+            npcDesc.append(Text.translatable("wytr.display.blacksmith.desc").setStyle(gray));
         }
         else if(str.contains("Identifier")) {
-            npcName.append(newTranslate("wytr.func.identifier").setStyle(purple));
-            npcDesc.append(newTranslate("wytr.display.identifier.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.func.identifier").setStyle(purple));
+            npcDesc.append(Text.translatable("wytr.display.identifier.desc").setStyle(gray));
         }
         else if(str.contains("Powder Master")) {
-            npcName.append(newTranslate("wytr.func.powderMaster").setStyle(purple));
-            npcDesc.append(newTranslate("wytr.display.powderMaster.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.func.powderMaster").setStyle(purple));
+            npcDesc.append(Text.translatable("wytr.display.powderMaster.desc").setStyle(gray));
         }
         else if(str.contains("Party Finder")) {
-            npcName.append(newTranslate("wytr.func.partyFinder").setStyle(purple));
-            npcDesc.append(newTranslate("wytr.display.partyFinder.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.func.partyFinder").setStyle(purple));
+            npcDesc.append(Text.translatable("wytr.display.partyFinder.desc").setStyle(gray));
         }
         else if(str.contains("Key Collector")) {
-            npcName.append(newTranslate("wytr.func.keyCollector").setStyle(purple));
-            npcDesc.append(newTranslate("wytr.display.keyCollector.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.func.keyCollector").setStyle(purple));
+            npcDesc.append(Text.translatable("wytr.display.keyCollector.desc").setStyle(gray));
         }
         else if(str.contains("Housing Master")) {
-            npcName.append(newTranslate("wytr.display.housingMaster").setStyle(purple));
-            npcDesc.append(newTranslate("wytr.display.housingMaster.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.display.housingMaster").setStyle(purple));
+            npcDesc.append(Text.translatable("wytr.display.housingMaster.desc").setStyle(gray));
         }
         else if(str.contains("Trade Market")) {
-            npcName.append(newTranslate("wytr.display.tradeMarket").setStyle(Style.EMPTY.withColor(Formatting.RED)));
-            npcDesc.append(newTranslate("wytr.display.tradeMarket.desc").setStyle(gray));
+            npcName.append(Text.translatable("wytr.display.tradeMarket").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+            npcDesc.append(Text.translatable("wytr.display.tradeMarket.desc").setStyle(gray));
         }
         else throw new TextTranslationFailException("SystemNPCName");
 

@@ -30,7 +30,7 @@ public class RaidKeeper extends WynnDisplayText {
         resultText.append(getSibling(0)).append("\n");
         resultText.append(raidName);
         resultText.append("\n\n");
-        resultText.append(newTranslate(parentKey, cost).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey, cost).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     private Text getRaidName(Text text) {
@@ -38,7 +38,7 @@ public class RaidKeeper extends WynnDisplayText {
         String valName = text.getString();
         String keyName = "wytr.raid." + normalizeStringForKey(valName);
         if(WTS.checkTranslationExist(keyName, valName)) {
-            return newTranslate(keyName).setStyle(style);
+            return Text.translatable(keyName).setStyle(style);
         }
         else {
             return Text.literal(valName).setStyle(style);

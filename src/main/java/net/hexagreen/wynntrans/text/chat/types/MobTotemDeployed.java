@@ -27,11 +27,11 @@ public class MobTotemDeployed extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-        resultText.append(newTranslate(parentKey, playerName, location, coordinate));
+        resultText.append(Text.translatable(parentKey, playerName, location, coordinate));
     }
 
     private Text getLocation(Text text) {
         String areaName = normalizeStringForKey(text.getString());
-        return newTranslate(parentKey + "area." + areaName);
+        return Text.translatable(parentKey + "area." + areaName);
     }
 }

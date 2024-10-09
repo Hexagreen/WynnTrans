@@ -39,10 +39,10 @@ public class Gathering extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        StringBuilder bar = new StringBuilder(newTranslate(parentKey + "." + profession).getString());
+        StringBuilder bar = new StringBuilder(Text.translatable(parentKey + "." + profession).getString());
         bar.insert((int) (progress * bar.length()), "§8");
 
         resultText = Text.empty().append(lineFeed);
-        resultText.append(newTranslate(parentKey, barStyle + bar).setStyle(bracketStyle));
+        resultText.append(Text.translatable(parentKey, barStyle + bar).setStyle(bracketStyle));
     }
 }

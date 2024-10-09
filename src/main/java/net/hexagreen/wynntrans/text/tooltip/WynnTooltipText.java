@@ -14,7 +14,6 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class WynnTooltipText extends WynnTransText {
+
     private static final Pattern colorParser = Pattern.compile("(?:§.)+[^§]+");
     private static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     private static boolean lever = false;
@@ -29,20 +29,30 @@ public abstract class WynnTooltipText extends WynnTransText {
 
     protected static Text colorCodedToStyled(Text text) {
         if(!text.getString().contains("§")) return text;
-        return colorCodedToStyled(text.getString());
+        List<Text> list = colorCodedToStyled(text.getContent().toString());
+        text.visit((style, asString) -> {
+            if(!asString.contains("§")) {
+                list.add(Text.literal(asString).setStyle(style));
+                return Optional.empty();
+            }
+            list.addAll(colorCodedToStyled(asString));
+            return Optional.empty();
+        }, Style.EMPTY);
+
+        return siblingsToText(list);
     }
 
-    protected static Text colorCodedToStyled(String textAsString) {
+    private static List<Text> colorCodedToStyled(String textAsString) {
         Matcher matcher = colorParser.matcher(textAsString);
         List<String> segments = new ArrayList<>();
         while(matcher.find()) {
             segments.add(matcher.group());
         }
-        MutableText result = Text.empty();
+        List<Text> result = new ArrayList<>();
         for(String segment : segments) {
             String content = segment.replaceFirst("(?:§.)+", "");
             Style style = parseStyleCode(segment);
-            result.append(Text.literal(content).setStyle(style));
+            result.add(Text.literal(content).setStyle(style));
         }
         return result;
     }
@@ -127,13 +137,11 @@ public abstract class WynnTooltipText extends WynnTransText {
         return wrapped;
     }
 
-    protected Text mergeTextStyleSide(Text text, Text... texts) {
-        List<Text> list = Arrays.stream(texts).toList();
-        list.addFirst(text);
-        return mergeTextStyleSide(list.toArray(Text[]::new));
+    protected Text mergeTextStyleSide(Text text) {
+        return mergeTextStyleSide(new Text[]{text});
     }
 
-    protected Text mergeTextStyleSide(Text... texts) {
+    protected Text mergeTextStyleSide(Text[] texts) {
         MutableText result = Text.empty();
         AtomicReference<StringBuilder> newBody = new AtomicReference<>(new StringBuilder());
         AtomicReference<Style> newStyle = new AtomicReference<>(texts[0].getSiblings().getFirst().getStyle());
@@ -145,15 +153,31 @@ public abstract class WynnTooltipText extends WynnTransText {
                     newBody.set(new StringBuilder());
                     newStyle.set(style);
                 }
-                string = string.replaceFirst(" $", "");
-                newBody.get().append(string).append(" ");
+                newBody.get().append(string);
                 return Optional.empty();
             }, Style.EMPTY);
+            newBody.get().append(" ");
         }
         if(!newBody.get().isEmpty()) {
-            String done = newBody.get().toString().replaceFirst(" $", "");
+            String done = newBody.get().toString().replaceFirst(" +$", "");
             result.append(Text.literal(done).setStyle(newStyle.get()));
         }
         return result;
+    }
+
+    protected int getLongestWidth(List<Text> lines) {
+        return getLongestWidth(lines, Text.literal(" "));
+    }
+
+    protected int getLongestWidth(List<Text> lines, Text criteria) {
+        return getLongestWidth(lines, MinecraftClient.getInstance().textRenderer.getWidth(criteria));
+    }
+
+    protected int getLongestWidth(List<Text> lines, int criteria) {
+        int max = criteria;
+        for(Text line : lines) {
+            max = Math.max(max, MinecraftClient.getInstance().textRenderer.getWidth(line));
+        }
+        return max;
     }
 }

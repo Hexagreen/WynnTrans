@@ -50,10 +50,10 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n").append(getCenterIndent(func + "objCompleted")).append(newTranslate(func + "objCompleted").setStyle(titleStyle)).append("\n");
+        resultText = Text.empty().append("\n").append(getCenterIndent(func + "objCompleted")).append(Text.translatable(func + "objCompleted").setStyle(titleStyle)).append("\n");
 
         if(WTS.checkTranslationExist(keyObjectiveName, valObjectiveName)) {
-            resultText.append(getCenterIndent(keyObjectiveName, argObjectiveName)).append(newTranslate(keyObjectiveName, argObjectiveName).setStyle(objectiveNameStyle));
+            resultText.append(getCenterIndent(keyObjectiveName, argObjectiveName)).append(Text.translatable(keyObjectiveName, argObjectiveName).setStyle(objectiveNameStyle));
         }
         else {
             resultText.append(getCenterIndent(Text.literal(valObjectiveName))).append(Text.literal(valObjectiveName).setStyle(objectiveNameStyle));
@@ -62,17 +62,17 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
         resultText.append("\n\n");
 
         if(titleStyle.equals(Style.EMPTY.withColor(Formatting.DARK_GREEN))) {
-            resultText.append(newTranslate(func + "info").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
+            resultText.append("     ").append(Text.translatable(func + "info").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
 
             for(int i = 4; getSiblings().size() > i; i++) {
                 Matcher m1 = REGEX_EXP.matcher(getSibling(i).getString());
                 if(m1.find()) {
-                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(newTranslate(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                     continue;
                 }
                 Matcher m2 = REGEX_EME.matcher(getSibling(i).getString());
                 if(m2.find()) {
-                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(newTranslate(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                     continue;
                 }
                 resultText.append(getSibling(i));
@@ -84,7 +84,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
 
         if(keyEName != null) {
             if(WTS.checkTranslationExist(keyEName, valEName)) {
-                Text text = newTranslate(keyEName).setStyle(styleEName);
+                Text text = Text.translatable(keyEName).setStyle(styleEName);
                 resultText.append(getCenterIndent(text)).append(text);
             }
             else {
@@ -95,7 +95,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
             resultText.append("\n").append(getCenterIndent(origin)).append(origin).append("\n\n");
         }
 
-        resultText.append(getCenterIndent(func + "objReward")).append(newTranslate(func + "objReward").setStyle(getSibling(-1).getSiblings().get(1).getStyle())).append("\n");
+        resultText.append(getCenterIndent(func + "objReward")).append(Text.translatable(func + "objReward").setStyle(getSibling(-1).getSiblings().get(1).getStyle())).append("\n");
     }
 
     private void normalizeKeyVal() {

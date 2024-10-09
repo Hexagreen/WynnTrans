@@ -33,7 +33,7 @@ public class BossAltar extends WynnDisplayText {
         String valName = text.getString();
         String keyName = "wytr.bossAltar." + normalizeStringForKey(valName);
         if(WTS.checkTranslationExist(keyName, valName)) {
-            return newTranslate(keyName).setStyle(style);
+            return Text.translatable(keyName).setStyle(style);
         }
         else {
             return Text.literal(valName).setStyle(style);

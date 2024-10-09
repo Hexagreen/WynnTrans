@@ -39,7 +39,7 @@ public class MerchantName extends WynnDisplayText {
         resultText = Text.empty();
         resultText.append(icon).append("\n");
         if(WTS.checkTranslationExist(parentKey + keyMerchant, valMerchant)) {
-            resultText.append(newTranslate(parentKey + keyMerchant).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            resultText.append(Text.translatable(parentKey + keyMerchant).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
         else {
             resultText.append(Text.literal(valMerchant).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));

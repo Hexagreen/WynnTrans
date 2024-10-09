@@ -31,14 +31,14 @@ public class KickFromServer extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
-        resultText.append(newTranslate(parentKey, channelNumber).setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        resultText.append(Text.translatable(parentKey, channelNumber).setStyle(Style.EMPTY.withColor(Formatting.RED)));
 
         KickReason reason = KickReason.findReason(getSibling(1));
-        if(reason != KickReason.UNKNOWN_REASON) resultText.append(newTranslate(parentKey + reason.langCode));
+        if(reason != KickReason.UNKNOWN_REASON) resultText.append(Text.translatable(parentKey + reason.langCode));
         else resultText.append(getSibling(1));
 
 
-        resultText.append(newTranslate(parentKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     private enum KickReason {

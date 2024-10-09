@@ -30,7 +30,7 @@ public class CaveTitle extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text cave;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
-            cave = newTranslate(keyCaveName).setStyle(styleCaveName);
+            cave = Text.translatable(keyCaveName).setStyle(styleCaveName);
         }
         else {
             cave = Text.literal(valCaveName).setStyle(styleCaveName);

@@ -47,13 +47,13 @@ public class SlayCounter extends WynnDisplayText {
         Text t1;
         String key = "wytr.mobName." + normalizeStringForKey(mobName);
         if(WTS.checkTranslationExist(key, mobName)) {
-            t1 = newTranslate(key).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+            t1 = Text.translatable(key).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
         }
         else {
             t1 = Text.literal(mobName).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
         }
 
         resultText = Text.empty().setStyle(getStyle());
-        resultText.append(getSibling(0)).append("\n\n").append(newTranslate(parentKey, t0, t1).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n\n").append(counter);
+        resultText.append(getSibling(0)).append("\n\n").append(Text.translatable(parentKey, t0, t1).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n\n").append(counter);
     }
 }

@@ -25,11 +25,11 @@ public class MobTotemRunning extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-        resultText.append(newTranslate(parentKey, playerName, link));
+        resultText.append(Text.translatable(parentKey, playerName, link));
     }
 
     private Text getPlayerName(String string) {
         String name = string + "'s";
-        return newTranslate(name).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        return Text.translatable(name).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 }

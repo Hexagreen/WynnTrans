@@ -45,8 +45,8 @@ public enum Dungeons {
     private boolean isCorrupted = false;
 
     public static Dungeons getDungeons(String dungeonName) {
-        boolean isCorrupted = dungeonName.contains("Corrupted");
-        String stripped = dungeonName.replace("Corrupted", "").replace("À", "").replace("'", "").replace("-", "").toLowerCase();
+        boolean isCorrupted = dungeonName.contains("Corrupted") || dungeonName.contains("corrupted");
+        String stripped = dungeonName.replaceFirst("[Cc]orrupted", "").replace("À", "").replace("'", "").replace("-", "").toLowerCase();
         Dungeons dungeons = match(stripped);
         if(isCorrupted) dungeons.setCorrupted();
         return dungeons;

@@ -25,6 +25,6 @@ public class PouchSold extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, amount, emerald).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(parentKey, amount, emerald).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

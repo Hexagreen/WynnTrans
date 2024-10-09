@@ -31,8 +31,7 @@ public class WynnTransClient implements ClientModInitializer {
                 writer.close();
             }
             File json = new File(dir, "json.txt");
-            File excp = new File(dir, "exception.txt");
-            if(json.createNewFile() && excp.createNewFile()) {
+            if(json.createNewFile()) {
                 LOGGER.info("[WynnTrans] Text capturing file initialized.");
             }
         }

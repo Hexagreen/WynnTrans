@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
 public interface ISpaceProvider {
-    int CENTER = 160;
+    int CENTER = MinecraftClient.getInstance().inGameHud.getChatHud().getWidth() / 2 + 40;
     int SPACE_WIDTH = MinecraftClient.getInstance().textRenderer.getWidth(" ");
 
     default MutableText getCenterIndent(String alignTargetKey) {
@@ -42,7 +42,7 @@ public interface ISpaceProvider {
 
     default MutableText getCenterIndent(Text target, int criteriaWidth) {
         int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(target);
-        if(textWidth == criteriaWidth) return Text.empty();
+        if(textWidth >= criteriaWidth) return Text.empty();
 
         StringBuilder spaces = new StringBuilder();
         for(int pixels = (criteriaWidth / 2) - (int) (0.5 + textWidth / 2.0); pixels > 0; ) {

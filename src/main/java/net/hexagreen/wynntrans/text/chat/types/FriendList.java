@@ -25,7 +25,7 @@ public class FriendList extends WynnSystemText {
     @Override
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
-        resultText.append(newTranslate(parentKey, playerName, friendNumber));
+        resultText.append(Text.translatable(parentKey, playerName, friendNumber));
 
         String[] friends = getSibling(0).getString().replaceFirst("^.+'s friends \\(\\d+\\): ", "").split("\\n ");
 

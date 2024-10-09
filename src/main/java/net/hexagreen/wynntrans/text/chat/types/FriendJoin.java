@@ -26,6 +26,6 @@ public class FriendJoin extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, playerName, worldChannel, charClass));
+        resultText.append(Text.translatable(parentKey, playerName, worldChannel, charClass));
     }
 }

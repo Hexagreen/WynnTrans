@@ -24,6 +24,6 @@ public class ServerSwapSave extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

@@ -29,7 +29,7 @@ public class LittleInform extends WynnChatText {
         if(getSiblings().isEmpty()) {
             String valInform = getContentString().replaceAll("^§.\\[§.!§.] ", "");
             if(WTS.checkTranslationExist(parentKey + keyInform, valInform)) {
-                resultText.append(newTranslate(parentKey + keyInform));
+                resultText.append(Text.translatable(parentKey + keyInform));
             }
             else {
                 resultText.append(valInform);
@@ -41,7 +41,7 @@ public class LittleInform extends WynnChatText {
                 String valInform = getSibling(i).getString();
 
                 if(WTS.checkTranslationExist(parentKey + keyInform + "_" + (i - 1), valInform)) {
-                    resultText.append(newTranslate(parentKey + keyInform + "_" + (i - 1)).setStyle(getStyle(i)));
+                    resultText.append(Text.translatable(parentKey + keyInform + "_" + (i - 1)).setStyle(getStyle(i)));
                 }
                 else {
                     resultText.append(getSibling(i));

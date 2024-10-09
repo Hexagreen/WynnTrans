@@ -8,6 +8,7 @@ import net.minecraft.util.Formatting;
 import java.util.List;
 
 public abstract class WynnTransText {
+
     protected static final String rootKey = "wytr.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
     protected final String parentKey;
@@ -15,7 +16,8 @@ public abstract class WynnTransText {
     protected MutableText resultText;
 
     protected static Style parseStyleCode(String codeOrTextString) {
-        String styleCode = codeOrTextString.replaceFirst("((?:§.)+).+", "$1");
+        String styleCode = codeOrTextString.replaceFirst("((?:§.)+).+", "$1")
+                .replaceAll("§0", "");
         if(styleCode.isBlank()) return Style.EMPTY;
         char[] codes = styleCode.replace("§", "").toCharArray();
         Formatting[] formatting = new Formatting[codes.length];
@@ -71,27 +73,6 @@ public abstract class WynnTransText {
     }
 
     /**
-     * Makes {@code MutableText} contains translatable form content.
-     *
-     * @param key Translation key
-     * @return {@code MutableText} contains translatable form content.
-     */
-    protected MutableText newTranslate(String key) {
-        return Text.translatable(key, TranslatableTextContent.EMPTY_ARGUMENTS);
-    }
-
-    /**
-     * Makes {@code MutableText} contains translatable form content.
-     *
-     * @param key  Translation key
-     * @param args Translation arguments
-     * @return {@code MutableText} contains translatable form content.
-     */
-    protected MutableText newTranslate(String key, Object... args) {
-        return Text.translatable(key, args);
-    }
-
-    /**
      * Get {@code Style} from {@code inputText}'s content.
      *
      * @return {@code inputText.getStyle()}
@@ -130,6 +111,7 @@ public abstract class WynnTransText {
     }
 
     public static class TextTranslationFailException extends RuntimeException {
+
         public TextTranslationFailException(String className) {
             super(className + " has thrown Exception.");
         }

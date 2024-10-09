@@ -24,6 +24,6 @@ public class BoothSetup extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(icon).append(" ").append(newTranslate(parentKey));
+        resultText.append(icon).append(" ").append(Text.translatable(parentKey));
     }
 }

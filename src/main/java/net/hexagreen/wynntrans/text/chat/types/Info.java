@@ -22,7 +22,7 @@ public class Info extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + index;
@@ -38,21 +38,21 @@ public class Info extends WynnChatText {
             }
             switch(valSibling) {
                 case "For more information, visit " -> {
-                    resultText.append(newTranslate(parentKey + ".moreInfo").setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(parentKey + ".moreInfo").setStyle(getStyle(index)));
                     continue;
                 }
                 case "Visit " -> {
-                    resultText.append(newTranslate(parentKey + ".moreInfo_alt1").setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(parentKey + ".moreInfo_alt1").setStyle(getStyle(index)));
                     continue;
                 }
                 case " for more!" -> {
-                    resultText.append(newTranslate(parentKey + ".moreInfo_alt2").setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(parentKey + ".moreInfo_alt2").setStyle(getStyle(index)));
                     continue;
                 }
             }
 
             if(WTS.checkTranslationExist(keySibling, valSibling)) {
-                resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
+                resultText.append(Text.translatable(keySibling).setStyle(getStyle(index)));
             }
             else {
                 resultText.append(getSibling(index));

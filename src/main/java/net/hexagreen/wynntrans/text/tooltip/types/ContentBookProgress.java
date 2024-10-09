@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ContentBookProgress extends WynnTooltipText implements ISpaceProvider {
+
     private final boolean isSecretDiscovery;
 
     public static boolean typeChecker(List<Text> text) {
@@ -33,22 +34,22 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = new SimpleTooltip(getSiblings().subList(0, 3)).textRaw();
         int tooltipLength = getSiblings().size();
-        anonymous1(getSiblings().subList(3, tooltipLength - 3));
+        translateAndAlignText(getSiblings().subList(3, tooltipLength - 3));
 
-        Text progressBar = getSibling(tooltipLength - 2);
+        Text progressBar = getProgressBar(tooltipLength - 2);
         Text completionCount = getCompletionCount();
 
-        int width = getLongestWidthWithCriteria(resultText.getSiblings(), progressBar);
+        int width = getLongestWidth(resultText.getSiblings(), progressBar);
         resultText.append(" ")
                 .append(getCenterIndent(progressBar, width).append(progressBar))
                 .append(getCenterIndent(completionCount, width).append(completionCount));
     }
 
-    private void anonymous1(List<Text> list) {
-        appendAlignment(list.parallelStream().map(isSecretDiscovery ? this::anonymous3 : this::anonymous2).toList());
+    private void translateAndAlignText(List<Text> list) {
+        appendAlignment(list.parallelStream().map(isSecretDiscovery ? this::translateDiscoveryAreaCategory : this::translateLevelRangeCategory).toList());
     }
 
-    private List<Text> anonymous2(Text text) {
+    private List<Text> translateLevelRangeCategory(Text text) {
         MutableText text1 = Text.empty();
         MutableText text2 = Text.empty();
         List<Text> siblings = text.getSiblings();
@@ -56,7 +57,7 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
         Matcher matcher = Pattern.compile("Lv\\. (\\d+) to (\\d+)").matcher(siblings.get(1).getString());
         boolean ignore = matcher.find();
         text1.append(siblings.getFirst())
-                .append(newTranslate(parentKey + ".lvRange", matcher.group(1), matcher.group(2)).setStyle(siblings.get(1).getStyle()));
+                .append(Text.translatable(parentKey + ".lvRange", matcher.group(1), matcher.group(2)).setStyle(siblings.get(1).getStyle()));
         for(int i = 2; i < siblings.size(); i++) {
             text2.append(siblings.get(i));
         }
@@ -66,14 +67,14 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
         return textList;
     }
 
-    private List<Text> anonymous3(Text text) {
+    private List<Text> translateDiscoveryAreaCategory(Text text) {
         MutableText text1 = Text.empty();
         MutableText text2 = Text.empty();
         List<Text> siblings = text.getSiblings();
 
         String discoveryAreaKey = rootKey + "discovery.area." + normalizeStringForKey(siblings.get(1).getString());
         text1.append(siblings.getFirst())
-                .append(newTranslate(discoveryAreaKey).setStyle(siblings.get(1).getStyle()));
+                .append(Text.translatable(discoveryAreaKey).setStyle(siblings.get(1).getStyle()));
         for(int i = 2; i < siblings.size(); i++) {
             text2.append(siblings.get(i));
         }
@@ -98,18 +99,19 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
         }
     }
 
-    private int getLongestWidthWithCriteria(List<Text> lines, Text criteria) {
-        int max = MinecraftClient.getInstance().textRenderer.getWidth(criteria);
-        for(Text line : lines) {
-            max = Math.max(max, MinecraftClient.getInstance().textRenderer.getWidth(line));
+    private Text getProgressBar(int index) {
+        MutableText result = Text.empty();
+        List<Text> siblings = getSibling(index).getSiblings();
+        for(int i = 1; i < siblings.size(); i++) {
+            result.append(siblings.get(i));
         }
-        return max;
+        return result;
     }
 
     private Text getCompletionCount() {
-        Text completionCount = getSibling(getSiblings().size() - 1).getSiblings().getFirst();
+        Text completionCount = getSibling(getSiblings().size() - 1).getSiblings().getLast();
         Matcher matcher = Pattern.compile("(\\d+) of (\\d+) completed").matcher(completionCount.getString());
         boolean ignore = matcher.find();
-        return newTranslate(parentKey + ".completionCount", matcher.group(1), matcher.group(2)).setStyle(completionCount.getStyle());
+        return Text.translatable(parentKey + ".completionCount", matcher.group(1), matcher.group(2)).setStyle(completionCount.getStyle());
     }
 }

@@ -28,11 +28,11 @@ public class WorldEventTimer extends WynnDisplayText {
         Style style = Style.EMPTY.withColor(0xAEB8BF);
         if(startTimer) {
             Text timer = ITime.translateTime(getContentString().replaceAll("Starts in ", ""));
-            resultText = newTranslate(parentKey, timer).setStyle(style);
+            resultText = Text.translatable(parentKey, timer).setStyle(style);
         }
         else {
             String num = getContentString().replaceAll("\\D", "");
-            resultText = newTranslate("wytr.display.worldEvent.leftTarget", num).setStyle(style);
+            resultText = Text.translatable("wytr.display.worldEvent.leftTarget", num).setStyle(style);
         }
     }
 }

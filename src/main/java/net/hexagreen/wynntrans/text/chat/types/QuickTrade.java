@@ -26,7 +26,7 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = newTranslate(parentKey, playerName, buildCommand()).setStyle(getStyle());
+        resultText = Text.translatable(parentKey, playerName, buildCommand()).setStyle(getStyle());
     }
 
     private Text buildCommand() {

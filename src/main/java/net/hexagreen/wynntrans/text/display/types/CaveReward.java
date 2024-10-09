@@ -29,13 +29,13 @@ public class CaveReward extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text cave;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
-            cave = newTranslate(keyCaveName);
+            cave = Text.translatable(keyCaveName);
         }
         else {
             cave = Text.literal(valCaveName);
         }
 
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, cave).setStyle(Style.EMPTY.withColor(Formatting.YELLOW).withBold(true)));
+        resultText.append(Text.translatable(parentKey, cave).setStyle(Style.EMPTY.withColor(Formatting.YELLOW).withBold(true)));
     }
 }

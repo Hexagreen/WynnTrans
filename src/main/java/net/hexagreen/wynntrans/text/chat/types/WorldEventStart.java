@@ -32,7 +32,7 @@ public class WorldEventStart extends WynnSystemText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().append(header).setStyle(getStyle(0));
         if(WTS.checkTranslationExist(keyWorldEventName, valWorldEventName)) {
-            Text worldEvent = newTranslate(keyWorldEventName);
+            Text worldEvent = Text.translatable(keyWorldEventName);
             resultText.append(newTranslateWithSplit(rootKey + "func.worldEvent.start", worldEvent, leftTime, distance, CLICK2TRACK));
         }
         else {
@@ -42,6 +42,6 @@ public class WorldEventStart extends WynnSystemText {
 
     private Text initDistanceText() {
         String distance = getSibling(1).getString().replaceAll("\\D", "");
-        return newTranslate(rootKey + "func.worldEvent.distance", distance).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        return Text.translatable(rootKey + "func.worldEvent.distance", distance).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
     }
 }

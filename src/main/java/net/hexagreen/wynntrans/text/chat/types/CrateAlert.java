@@ -25,6 +25,6 @@ public class CrateAlert extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, command, crateName).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(parentKey, command, crateName).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

@@ -25,7 +25,7 @@ public class ProxySystemText extends SimpleSystemText {
 
     @Override
     protected MutableText newTranslateWithSplit(String key) {
-        return newTranslate(key, splitter, template.argumentParser.apply(inputText));
+        return Text.translatable(key, splitter, template.argumentParser.apply(inputText));
     }
 
     private enum Templates {

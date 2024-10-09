@@ -36,10 +36,10 @@ public class QuestCompleted extends WynnChatText implements ISpaceProvider {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n").append(getCenterIndent(keyTitle)).append(newTranslate(keyTitle).setStyle(parseStyleCode(getSibling(1).getString()))).append("\n");
+        resultText = Text.empty().append("\n").append(getCenterIndent(keyTitle)).append(Text.translatable(keyTitle).setStyle(parseStyleCode(getSibling(1).getString()))).append("\n");
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
-            Text questName = newTranslate(keyQuestName).setStyle(parseStyleCode(getSibling(2).getString().replaceAll("(§.) +(§.).+", "$1$2")));
+            Text questName = Text.translatable(keyQuestName).setStyle(parseStyleCode(getSibling(2).getString().replaceAll("(§.) +(§.).+", "$1$2")));
             resultText.append(getCenterIndent(questName)).append(questName);
         }
         else {
@@ -47,34 +47,34 @@ public class QuestCompleted extends WynnChatText implements ISpaceProvider {
             resultText.append(getCenterIndent(origin)).append(origin);
         }
 
-        resultText.append("\n\n").append(newTranslate(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
+        resultText.append("\n\n").append("            ").append(Text.translatable(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
 
         for(int i = 5; getSiblings().size() > i; i++) {
             Matcher m1 = REGEX_EXP.matcher(getSibling(i).getString());
             if(m1.find()) {
-                resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append(newTranslate(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append(Text.translatable(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                 continue;
             }
 
             Matcher m2 = REGEX_EME.matcher(getSibling(i).getString());
             if(m2.find()) {
-                resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append(newTranslate(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append(Text.translatable(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                 continue;
             }
 
             Matcher m3 = REGEX_PROF.matcher(getSibling(i).getString());
             if(m3.find()) {
                 Text profText = Profession.getProfession(m3.group(2)).getTextWithIcon();
-                resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append(newTranslate(func + "reward.pExperience", m3.group(1), profText).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append(Text.translatable(func + "reward.profExperience", m3.group(1), profText).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                 continue;
             }
 
             String valExclusiveReward = getSibling(i).getString().replaceAll(".+\\+", "+");
             String hash = DigestUtils.sha1Hex(valExclusiveReward).substring(0, 4);
-            String keyExclusiveReward = keyQuestName + ".reward_" + hash;
+            String keyExclusiveReward = keyQuestName + ".reward." + hash;
             if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
                 resultText.append(Text.literal("            - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
-                resultText.append(newTranslate(keyExclusiveReward).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append(Text.translatable(keyExclusiveReward).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
             }
             else {
                 resultText.append(getSibling(i)).append("\n");

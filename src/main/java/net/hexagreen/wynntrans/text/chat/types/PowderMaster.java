@@ -20,7 +20,7 @@ public class PowderMaster extends WynnSystemText {
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty().append(header).setStyle(getStyle());
 
-        resultText.append(newTranslate(parentKey).append(": "));
+        resultText.append(Text.translatable(parentKey).append(": "));
 
         if(getContentString(1).contains("I can't infuse powders")) {
             resultText.append(newTranslateWithSplit(parentKey + ".cantInfuse").setStyle(getStyle(1)));

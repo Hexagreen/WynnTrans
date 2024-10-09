@@ -26,7 +26,7 @@ public class GoToStore extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException {
         if(WTS.checkTranslationExist(key, val)) {
-            resultText = newTranslate(key, linkText).setStyle(getStyle());
+            resultText = Text.translatable(key, linkText).setStyle(getStyle());
         }
         else {
             resultText = inputText;

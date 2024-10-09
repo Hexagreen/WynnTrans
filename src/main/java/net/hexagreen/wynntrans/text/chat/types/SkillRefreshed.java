@@ -24,6 +24,6 @@ public class SkillRefreshed extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.literal(icon);
-        resultText.append(newTranslate(parentKey, skillName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+        resultText.append(Text.translatable(parentKey, skillName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
     }
 }

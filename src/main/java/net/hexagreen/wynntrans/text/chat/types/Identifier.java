@@ -24,7 +24,7 @@ public class Identifier extends WynnSystemText {
     @Override
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
-        resultText.append(newTranslate(parentKey).append(": "));
+        resultText.append(Text.translatable(parentKey).append(": "));
 
         switch(messageType) {
             case ILLEGAL_ITEM ->

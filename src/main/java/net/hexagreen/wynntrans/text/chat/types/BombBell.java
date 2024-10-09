@@ -36,6 +36,6 @@ public class BombBell extends WynnChatText {
         Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
 
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, playerName, bombName, channel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey, playerName, bombName, channel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

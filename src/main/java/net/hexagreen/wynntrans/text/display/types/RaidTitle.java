@@ -24,16 +24,18 @@ public class RaidTitle extends WynnDisplayText {
 
     @Override
     protected String setParentKey() {
-        return rootKey + "display.raid";
+        return null;
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().setStyle(getStyle());
-        resultText.append(getSibling(0));
-        resultText.append("\n");
-        resultText.append(newTranslate(parentKey, raidName, levelReq, questReq).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
-
+        Text level = Text.translatable("wytr.requirement.combat", levelReq).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text quest = Text.translatable("wytr.requirement.quest", questReq).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.empty().setStyle(getStyle())
+                .append(getSibling(0)).append("\n")
+                .append(raidName).append("\n\n")
+                .append(level).append("\n")
+                .append(quest).append("\n");
     }
 
     private Text getRaidName(String string) {
@@ -41,7 +43,7 @@ public class RaidTitle extends WynnDisplayText {
         String valName = string.replaceAll("^(?:§.)+", "");
         String keyName = "wytr.raid." + normalizeStringForKey(valName);
         if(WTS.checkTranslationExist(keyName, valName)) {
-            return newTranslate(keyName).setStyle(style);
+            return Text.translatable(keyName).setStyle(style);
         }
         else {
             return Text.literal(valName).setStyle(style);
@@ -53,7 +55,7 @@ public class RaidTitle extends WynnDisplayText {
         String valName = string.replaceAll("^(?:§.)+", "");
         String keyName = "wytr.quest" + normalizeStringForKey(valName);
         if(WTS.checkTranslationExist(keyName, valName)) {
-            return newTranslate(keyName).setStyle(style);
+            return Text.translatable(keyName).setStyle(style);
         }
         else {
             return Text.literal(valName).setStyle(style);

@@ -45,10 +45,10 @@ public class InfoEvent extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
 
         if(WTS.checkTranslationExist(keyEName, valEName)) {
-            resultText.append(newTranslate(keyEName).setStyle(original.getSiblings().get(1).getStyle()).append(": "));
+            resultText.append(Text.translatable(keyEName).setStyle(original.getSiblings().get(1).getStyle()).append(": "));
         }
         else {
             resultText.append(original.getSiblings().get(1));
@@ -63,14 +63,14 @@ public class InfoEvent extends WynnChatText {
                 continue;
             }
             if(WTS.checkTranslationExist(keySibling, valSibling)) {
-                resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
+                resultText.append(Text.translatable(keySibling).setStyle(getStyle(index)));
             }
             else {
                 resultText.append(getSibling(index));
             }
         }
 
-        resultText.append(newTranslate(parentKey + ".end", timer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey + ".end", timer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     private Text initTimer(Text text) {

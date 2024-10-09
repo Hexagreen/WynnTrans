@@ -15,7 +15,7 @@ public class AreaEnter extends WynnChatText {
         String areaName = matcher.group(1);
         String keyAreaName = rootKey + "area." + normalizeStringForKey(areaName);
         if(WTS.checkTranslationExist(keyAreaName, areaName)) {
-            this.areaText = newTranslate(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            this.areaText = Text.translatable(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
         }
         else {
             this.areaText = Text.literal(areaName);
@@ -30,6 +30,6 @@ public class AreaEnter extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, areaText).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey, areaText).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

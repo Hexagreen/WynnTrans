@@ -7,13 +7,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface ITime {
-    Pattern timePattern = Pattern.compile("(?:(\\d+)(?:hours|hour|h))?(?:(\\d+)(?:minutes|minute|min|m))?(?:(\\d+)(?:seconds|second|sec|s))?(?:(\\d+)(?:days|day|d))?");
+    Pattern timePattern = Pattern.compile("(?:(\\d+)(?:days|day|d))?(?:(\\d+)(?:hours|hour|h))?(?:(\\d+)(?:minutes|minute|min|m))?(?:(\\d+)(?:seconds|second|sec|s))?");
 
     static MutableText translateTime(String string) {
         Matcher matcher = timePattern.matcher(string.replaceAll(" ", ""));
         MutableText result = Text.empty();
         if(matcher.find()) {
-            String h = matcher.group(1), m = matcher.group(2), s = matcher.group(3), d = matcher.group(4);
+            String d = matcher.group(1), h = matcher.group(2), m = matcher.group(3), s = matcher.group(4);
+            if(d != null) {
+                result.append(Text.translatable("wytr.time.day", d));
+            }
             if(h != null) {
                 result.append(Text.translatable("wytr.time.hour", h));
             }
@@ -22,9 +25,6 @@ public interface ITime {
             }
             if(s != null) {
                 result.append(Text.translatable("wytr.time.second", s));
-            }
-            if(d != null) {
-                result.append(Text.translatable("wytr.time.day", d));
             }
         }
         return result;

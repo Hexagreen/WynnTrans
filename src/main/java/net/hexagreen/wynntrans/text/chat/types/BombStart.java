@@ -33,11 +33,11 @@ public class BombStart extends WynnChatText {
 
         switch(bomb) {
             case COMBAT_XP, PROFESSION_XP, PROFESSION_SPEED, LOOT ->
-                    resultText.append(newTranslate(parentKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(newTranslate(parentKey + ".durational", bomb.getBombDescription(), bomb.getBombTime()).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
+                    resultText.append(Text.translatable(parentKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(Text.translatable(parentKey + ".durational", bomb.getBombDescription(), bomb.getBombTime()).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
             case ITEM ->
-                    resultText.append(newTranslate(parentKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(newTranslate(parentKey + ".instant", bomb.getBombDescription()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                    resultText.append(Text.translatable(parentKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(Text.translatable(parentKey + ".instant", bomb.getBombDescription()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             case DUNGEON ->
-                    resultText.append(newTranslate(parentKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(bomb.getBombDescription());
+                    resultText.append(Text.translatable(parentKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(bomb.getBombDescription());
             default -> {
                 debugClass.writeTextAsJSON(inputText, "UnknownBomb");
                 resultText = inputText;

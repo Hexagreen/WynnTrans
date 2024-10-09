@@ -34,7 +34,7 @@ public class DungeonTitle extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(getStyle());
-        resultText.append(getSibling(0)).append("\n").append(newTranslate(parentKey, dungeonName, difficulty, level).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(getSibling(0)).append("\n").append(Text.translatable(parentKey, dungeonName, difficulty, level).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     private Text getDungeonName(String string) {
@@ -45,6 +45,6 @@ public class DungeonTitle extends WynnDisplayText {
     private Text getDifficulty(String string) {
         Style style = parseStyleCode(string);
         String diff = string.replaceFirst("(?:§.)+", "").toLowerCase(Locale.ENGLISH);
-        return newTranslate("wytr.difficulty." + diff).setStyle(style);
+        return Text.translatable("wytr.difficulty", Text.translatable("wytr.difficulty." + diff).setStyle(style));
     }
 }

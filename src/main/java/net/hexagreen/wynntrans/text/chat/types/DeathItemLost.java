@@ -24,7 +24,7 @@ public class DeathItemLost extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, lostItems).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
+        resultText.append(Text.translatable(parentKey, lostItems).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
     }
 
     private Text initLost() {

@@ -27,6 +27,6 @@ public class LootChest extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, star).setStyle(color));
+        resultText.append(Text.translatable(parentKey, star).setStyle(color));
     }
 }

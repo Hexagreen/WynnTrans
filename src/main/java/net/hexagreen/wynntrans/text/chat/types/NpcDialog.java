@@ -53,7 +53,7 @@ public class NpcDialog extends WynnChatText {
 
         Text t0 = getSibling(0);
         if(checkTranslationExist(keyName, valName)) {
-            resultText.append(newTranslate(keyName).setStyle(t0.getStyle()));
+            resultText.append(Text.translatable(keyName).setStyle(t0.getStyle()));
             resultText.append(Text.literal(": ").setStyle(t0.getStyle()));
         }
         else {
@@ -66,10 +66,10 @@ public class NpcDialog extends WynnChatText {
             Text t1 = getSibling(1);
             if(checkTranslationExist(keyDialog, valDialog)) {
                 if(valDialog.contains("%1$s")) {
-                    resultText.append(newTranslate(keyDialog, playerName).setStyle(t1.getStyle()));
+                    resultText.append(Text.translatable(keyDialog, playerName).setStyle(t1.getStyle()));
                 }
                 else {
-                    resultText.append(newTranslate(keyDialog).setStyle(t1.getStyle()));
+                    resultText.append(Text.translatable(keyDialog).setStyle(t1.getStyle()));
                 }
             }
             else {
@@ -84,10 +84,10 @@ public class NpcDialog extends WynnChatText {
                 Text ti = getSibling(index);
                 if(checkTranslationExist(keyDialog, valDialog)) {
                     if(valDialog.contains("%1$s")) {
-                        resultText.append(newTranslate(keyDialog, playerName).setStyle(ti.getStyle()));
+                        resultText.append(Text.translatable(keyDialog, playerName).setStyle(ti.getStyle()));
                     }
                     else {
-                        resultText.append(newTranslate(keyDialog).setStyle(ti.getStyle()));
+                        resultText.append(Text.translatable(keyDialog).setStyle(ti.getStyle()));
                     }
                 }
                 else {

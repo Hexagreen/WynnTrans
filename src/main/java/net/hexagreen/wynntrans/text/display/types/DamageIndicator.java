@@ -25,7 +25,7 @@ public class DamageIndicator extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(dodge) resultText = newTranslate(parentKey);
+        if(dodge) resultText = Text.translatable(parentKey);
         else resultText = inputText;
     }
 }

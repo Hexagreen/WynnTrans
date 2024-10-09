@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class CratesTexts {
+
     private static final Text BAR = Text.literal("|||").setStyle(Style.EMPTY.withObfuscated(true).withBold(false).withColor(Formatting.BLACK));
 
     public enum Crates {
@@ -93,7 +94,10 @@ public class CratesTexts {
         private final Text translatedText;
 
         private static RewardDescription find(Text text) {
-            return Arrays.stream(RewardDescription.values()).filter(rewardDescription -> rewardDescription.descRegex.matcher(text.getString()).find()).findFirst().orElse(NULL);
+            return Arrays.stream(RewardDescription.values())
+                    .filter(rewardDescription -> rewardDescription.descRegex != null)
+                    .filter(rewardDescription -> rewardDescription.descRegex.matcher(text.getString()).find())
+                    .findFirst().orElse(NULL);
         }
 
         public static Text findAndGet(Text text) {

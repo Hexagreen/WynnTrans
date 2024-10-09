@@ -34,7 +34,7 @@ public class DialogHistory extends WynnTooltipText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText.append(newTranslate(parentKey))
+        resultText.append(Text.translatable(parentKey))
                 .append(" ");
         for(Text text : parseDialog()) {
             resultText.append(text);
@@ -42,8 +42,8 @@ public class DialogHistory extends WynnTooltipText {
         resultText.append(" ")
                 .append(getPageCounter())
                 .append(" ")
-                .append(newTranslate("wytr.tooltip.nextPage"))
-                .append(newTranslate("wytr.tooltip.previousPage"));
+                .append(Text.translatable("wytr.tooltip.nextPage"))
+                .append(Text.translatable("wytr.tooltip.previousPage"));
     }
 
     private Text getPageCounter() {
@@ -51,7 +51,7 @@ public class DialogHistory extends WynnTooltipText {
         boolean ignore = m.find();
         String n1 = m.group(1);
         String n2 = m.group(2);
-        return newTranslate("wytr.tooltip.pageCounter", n1, n2).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY));
+        return Text.translatable("wytr.tooltip.pageCounter", n1, n2).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY));
     }
 
     private List<Text> parseDialog() {
@@ -91,11 +91,11 @@ public class DialogHistory extends WynnTooltipText {
             List<Text> result = new ArrayList<>();
             for(Text text : storage) {
                 if(text.getString().matches("• Dialogue Start")) {
-                    result.add(newTranslate(parentKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                    result.add(Text.translatable(parentKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
                     continue;
                 }
                 else if(text.getString().matches("• Dialogue End")) {
-                    result.add(newTranslate(parentKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                    result.add(Text.translatable(parentKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
                     continue;
                 }
                 else if(npcDialogPattern.matcher(text.getString()).find()) {

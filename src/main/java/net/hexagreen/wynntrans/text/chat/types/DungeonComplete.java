@@ -37,10 +37,10 @@ public class DungeonComplete extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, dungeon.getDungeonName()).setStyle(Style.EMPTY.withColor(Formatting.GOLD))).append("\n");
-        if(gainedXp != null) resultText.append(attachBox(newTranslate(parentKey + ".exp", gainedXp))).append("\n");
+        resultText.append(Text.translatable(parentKey, dungeon.getDungeonName()).setStyle(Style.EMPTY.withColor(Formatting.GOLD))).append("\n");
+        if(gainedXp != null) resultText.append(attachBox(Text.translatable(parentKey + ".exp", gainedXp))).append("\n");
         if(gainedEmerald != null)
-            resultText.append(attachBox(newTranslate(parentKey + ".emerald", gainedEmerald))).append("\n");
+            resultText.append(attachBox(Text.translatable(parentKey + ".emerald", gainedEmerald))).append("\n");
         resultText.append(attachBox(dungeon.getDungeonBossReward())).append("\n");
         resultText.append(attachBox(dungeon.getDungeonFragment()));
     }

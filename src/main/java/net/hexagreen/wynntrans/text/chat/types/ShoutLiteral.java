@@ -27,7 +27,7 @@ public class ShoutLiteral extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
+        resultText.append(Text.translatable(parentKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
         resultText.append(body).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
     }
 }

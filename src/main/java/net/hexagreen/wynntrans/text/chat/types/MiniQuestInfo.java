@@ -24,9 +24,9 @@ public class MiniQuestInfo extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
         if(gatheringQuest) {
-            resultText.append(newTranslate(parentKey + ".gathering", getSibling(0), getSibling(2), getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
+            resultText.append(Text.translatable(parentKey + ".gathering", getSibling(0), getSibling(2), getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
             return;
         }
-        resultText.append(newTranslate(parentKey + ".slaying", getSibling(0), getSibling(2)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        resultText.append(Text.translatable(parentKey + ".slaying", getSibling(0), getSibling(2)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

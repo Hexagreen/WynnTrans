@@ -40,9 +40,9 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.empty();
 
-        MutableText t0 = Text.empty().append(newTranslate(parentKey).setStyle(styleTitle));
+        MutableText t0 = Text.empty().append(Text.translatable(parentKey).setStyle(styleTitle));
         if(WTS.checkTranslationExist(keyAreaName, valAreaName)) {
-            t0.append(newTranslate(keyAreaName).setStyle(styleAreaName)).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            t0.append(Text.translatable(keyAreaName).setStyle(styleAreaName)).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
         else {
             t0.append(Text.literal(valAreaName).setStyle(styleAreaName)).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
@@ -56,7 +56,7 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
         String valAreaLore = concatLore();
         String[] loreLines;
         if(WTS.checkTranslationExist(keyAreaLore, valAreaLore)) {
-            loreLines = newTranslate(keyAreaLore).getString().split("\n");
+            loreLines = Text.translatable(keyAreaLore).getString().split("\n");
         }
         else {
             loreLines = valAreaLore.split("\n");

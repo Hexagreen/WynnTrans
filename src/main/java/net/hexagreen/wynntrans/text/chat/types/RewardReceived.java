@@ -26,7 +26,7 @@ public class RewardReceived extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
+        resultText.append(Text.translatable(parentKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
     }
 
     private Text initRewards() {

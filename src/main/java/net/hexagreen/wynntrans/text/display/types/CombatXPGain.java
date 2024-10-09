@@ -44,10 +44,10 @@ public class CombatXPGain extends WynnDisplayText {
             resultText.append(multiplier);
         }
         resultText.append("[");
-        resultText.append(newTranslate(parentKey, experience).setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+        resultText.append(Text.translatable(parentKey, experience).setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
         resultText.append("]\n");
         if(shared) {
-            resultText.append(newTranslate(parentKey + ".shared"));
+            resultText.append(Text.translatable(parentKey + ".shared"));
         }
         else {
             resultText.append(owner);

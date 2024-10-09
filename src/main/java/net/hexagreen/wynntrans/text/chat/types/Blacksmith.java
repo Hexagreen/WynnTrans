@@ -22,7 +22,7 @@ public class Blacksmith extends WynnSystemText {
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
 
-        resultText.append(newTranslate(parentKey).append(": "));
+        resultText.append(Text.translatable(parentKey).append(": "));
 
         if(getContentString(1).contains("I can't buy")) {
             resultText.append(newTranslateWithSplit(parentKey + ".no").setStyle(getStyle(1)));

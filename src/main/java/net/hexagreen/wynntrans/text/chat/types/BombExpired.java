@@ -13,7 +13,7 @@ public class BombExpired extends WynnChatText {
 
     public BombExpired(Text text, Pattern regex) {
         super(text, regex);
-        this.storeLink = newTranslate(parentKey + ".store").setStyle(getStyle(0));
+        this.storeLink = Text.translatable(parentKey + ".store").setStyle(getStyle(0));
         this.bombName = parseBombName(matcher.group(1));
     }
 
@@ -25,7 +25,7 @@ public class BombExpired extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
+        resultText.append(Text.translatable(parentKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
     }
 
     private Text parseBombName(String bombName) {

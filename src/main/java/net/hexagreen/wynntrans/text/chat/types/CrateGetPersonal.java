@@ -23,7 +23,7 @@ public class CrateGetPersonal extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(newTranslate("wytr.func.crateReward.personal", grade.getGradeText()).setStyle(grade.getGradeStyle().withBold(true)));
+        resultText.append(Text.translatable("wytr.func.crateReward.personal", grade.getGradeText()).setStyle(grade.getGradeStyle().withBold(true)));
 
         resultText.append("\n\n").append(getSibling(2));
 

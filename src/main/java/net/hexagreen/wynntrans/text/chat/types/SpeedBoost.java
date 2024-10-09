@@ -22,9 +22,9 @@ public class SpeedBoost extends WynnChatText {
 
     @Override
     protected void build() {
-        Text buffTime = newTranslate(parentKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        Text buffTime = Text.translatable(parentKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
 
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, buffTime).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(parentKey, buffTime).setStyle(getStyle(1)));
     }
 }

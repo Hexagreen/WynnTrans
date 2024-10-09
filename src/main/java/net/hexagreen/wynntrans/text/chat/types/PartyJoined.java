@@ -27,6 +27,6 @@ public class PartyJoined extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
-        resultText.append(newTranslate(parentKey, playerName).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(parentKey, playerName).setStyle(getStyle(0)));
     }
 }

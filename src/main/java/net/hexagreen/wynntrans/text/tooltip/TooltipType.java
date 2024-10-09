@@ -1,25 +1,23 @@
 package net.hexagreen.wynntrans.text.tooltip;
 
-import com.mojang.logging.LogUtils;
-import net.hexagreen.wynntrans.text.tooltip.types.ContentBookFilterAndSort;
-import net.hexagreen.wynntrans.text.tooltip.types.ContentBookProgress;
-import net.hexagreen.wynntrans.text.tooltip.types.DialogHistory;
-import net.hexagreen.wynntrans.text.tooltip.types.SimpleTooltip;
+import net.hexagreen.wynntrans.text.tooltip.types.*;
 import net.minecraft.text.Text;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public enum TooltipType {
-    DIALOG_HISTORY(DialogHistory.class, DialogHistory::typeChecker),
-    CONTENT_BOOK_FILTER_AND_SORT(ContentBookFilterAndSort.class, ContentBookFilterAndSort::typeChecker),
-    CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress.class, ContentBookProgress::typeChecker),
+    DIALOG_HISTORY(DialogHistory::new, DialogHistory::typeChecker),
+    CONTENT_BOOK_FILTER_AND_SORT(ContentBookFilterAndSort::new, ContentBookFilterAndSort::typeChecker),
+    CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress::new, ContentBookProgress::typeChecker),
+    CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
 
-    NO_TYPE(SimpleTooltip.class, null);
-    private final Class<? extends WynnTooltipText> wtt;
+    NO_TYPE(SimpleTooltip::new, null);
+
+    private final Function<List<Text>, WynnTooltipText> wtt;
     private final Predicate<List<Text>> typeChecker;
 
     private static TooltipType findType(List<Text> text) {
@@ -32,17 +30,11 @@ public enum TooltipType {
     public static List<Text> findAndRun(List<Text> text) {
         TooltipType find = findType(text);
         if(find == null) return text;
-        try {
-            return find.wtt.cast(find.wtt.getConstructor(List.class).newInstance(text)).text();
-        }
-        catch(InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            LogUtils.getLogger().warn("TooltipType.findAndRun has thrown exception.", e);
-            return text;
-        }
+        return find.wtt.apply(text).text();
     }
 
-    TooltipType(Class<? extends WynnTooltipText> wdt, Predicate<List<Text>> typeChecker) {
-        this.wtt = wdt;
+    TooltipType(Function<List<Text>, WynnTooltipText> wtt, Predicate<List<Text>> typeChecker) {
+        this.wtt = wtt;
         this.typeChecker = typeChecker;
     }
 }

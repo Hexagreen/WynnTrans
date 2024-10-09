@@ -27,17 +27,17 @@ public class NewQuest extends WynnChatText {
     @Override
     protected void build() {
         if(questLineMode) {
-            resultText = newTranslate(rootKey + "func.newQuestline").setStyle(getStyle()).append(": ");
+            resultText = Text.translatable(rootKey + "func.newQuestline").setStyle(getStyle()).append(": ");
         }
         else if(miniQuestMode) {
-            resultText = newTranslate(rootKey + "func.newMiniQuest").setStyle(getStyle()).append(": ");
+            resultText = Text.translatable(rootKey + "func.newMiniQuest").setStyle(getStyle()).append(": ");
         }
         else {
-            resultText = newTranslate(rootKey + "func.newQuest").setStyle(getStyle()).append(": ");
+            resultText = Text.translatable(rootKey + "func.newQuest").setStyle(getStyle()).append(": ");
         }
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
-            resultText.append(newTranslate(keyQuestName).setStyle(getSibling(0).getStyle()));
+            resultText.append(Text.translatable(keyQuestName).setStyle(getSibling(0).getStyle()));
         }
         else {
             resultText.append(getSibling(0));

@@ -35,7 +35,7 @@ public class InfoSale extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
             String keySibling = parentKey + "." + hash + "_" + (index - 1);
@@ -46,14 +46,14 @@ public class InfoSale extends WynnChatText {
                 continue;
             }
             if(WTS.checkTranslationExist(keySibling, valSibling)) {
-                resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
+                resultText.append(Text.translatable(keySibling).setStyle(getStyle(index)));
             }
             else {
                 resultText.append(getSibling(index));
             }
         }
 
-        resultText.append(newTranslate(parentKey + ".end", timer).setStyle(original.getSiblings().get(original.getSiblings().size() - 2).getStyle()));
+        resultText.append(Text.translatable(parentKey + ".end", timer).setStyle(original.getSiblings().get(original.getSiblings().size() - 2).getStyle()));
     }
 
     private Text initTimer(Text text) {

@@ -28,6 +28,6 @@ public class CrateReward extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, tier.getGradeText()).setStyle(tier.getGradeStyle())).append("\n").append(type);
+        resultText.append(Text.translatable(parentKey, tier.getGradeText()).setStyle(tier.getGradeStyle())).append("\n").append(type);
     }
 }

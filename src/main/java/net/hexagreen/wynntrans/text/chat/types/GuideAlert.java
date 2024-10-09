@@ -28,7 +28,7 @@ public class GuideAlert extends WynnChatText {
             String keySibling = pKeyGnA + "_" + (index - 1);
             String valSibling = getContentString(index);
             if(WTS.checkTranslationExist(keySibling, valSibling)) {
-                resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
+                resultText.append(Text.translatable(keySibling).setStyle(getStyle(index)));
             }
             else {
                 resultText.append(getSiblings().get(index));

@@ -31,6 +31,6 @@ public class SummonsName extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = newTranslate(parentKey, owner, summons, timer).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        resultText = Text.translatable(parentKey, owner, summons, timer).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 }

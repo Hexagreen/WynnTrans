@@ -23,13 +23,13 @@ public class Resistance extends WynnChatText {
 
     @Override
     protected void build() {
-        MutableText buffs = Text.empty().append(newTranslate(parentKey + ".res", resValue).setStyle(getStyle(2)));
+        MutableText buffs = Text.empty().append(Text.translatable(parentKey + ".res", resValue).setStyle(getStyle(2)));
         if(getSiblings().size() == 6) {
-            buffs.append(newTranslate(parentKey + ".and").setStyle(getStyle(3))).append(newTranslate(parentKey + ".str", strValue).setStyle(getStyle(4)));
+            buffs.append(Text.translatable(parentKey + ".and").setStyle(getStyle(3))).append(Text.translatable(parentKey + ".str", strValue).setStyle(getStyle(4)));
         }
 
         resultText = Text.empty();
 
-        resultText.append(newTranslate(parentKey, getSibling(0), buffs).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(parentKey, getSibling(0), buffs).setStyle(getStyle(1)));
     }
 }

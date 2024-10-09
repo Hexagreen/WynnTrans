@@ -30,6 +30,6 @@ public class ProfessionLevelAnnounce extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        resultText.append(Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append(Text.literal("!")).append(Text.literal("] ").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append(newTranslate(parentKey, playerName, level, profession));
+        resultText.append(Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append(Text.literal("!")).append(Text.literal("] ").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append(Text.translatable(parentKey, playerName, level, profession));
     }
 }

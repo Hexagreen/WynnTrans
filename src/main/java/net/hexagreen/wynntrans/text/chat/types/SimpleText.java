@@ -52,7 +52,7 @@ public class SimpleText extends WynnChatText {
                 String valContentText = ((PlainTextContent) inputText.getContent()).string();
                 String keyContentText = this.keyText + "_0";
                 if(checkTranslationExistWithControl(keyContentText, valContentText)) {
-                    resultText = newTranslate(keyContentText).setStyle(getStyle());
+                    resultText = Text.translatable(keyContentText).setStyle(getStyle());
                 }
                 else {
                     resultText = Text.literal(valContentText).setStyle(getStyle());
@@ -74,7 +74,7 @@ public class SimpleText extends WynnChatText {
                 }
 
                 if(checkTranslationExistWithControl(keyText, valText)) {
-                    resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
+                    resultText.append(Text.translatable(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
                     resultText.append(sibling);
@@ -87,7 +87,7 @@ public class SimpleText extends WynnChatText {
         }
         else {
             if(checkTranslationExistWithControl(keyText, valText)) {
-                resultText = newTranslate(keyText).setStyle(textStyle);
+                resultText = Text.translatable(keyText).setStyle(textStyle);
             }
             else {
                 resultText = inputText;

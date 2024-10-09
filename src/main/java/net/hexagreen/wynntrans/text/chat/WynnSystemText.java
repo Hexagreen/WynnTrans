@@ -137,7 +137,7 @@ public abstract class WynnSystemText extends WynnChatText {
      * @return {@code MutableText} contains translatable form content.
      */
     protected MutableText newTranslateWithSplit(String key) {
-        return newTranslate(key, splitter);
+        return Text.translatable(key, splitter);
     }
 
     /**

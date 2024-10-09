@@ -38,7 +38,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 String valContentText = ((PlainTextContent) inputText.getContent()).string();
                 String keyContentText = this.keyText + "_0";
                 if(WTS.checkTranslationExist(keyContentText, valContentText)) {
-                    resultText = newTranslate(keyContentText).setStyle(styleText);
+                    resultText = Text.translatable(keyContentText).setStyle(styleText);
                 }
                 else {
                     resultText = Text.literal(valContentText).setStyle(styleText);
@@ -58,7 +58,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 }
 
                 if(WTS.checkTranslationExist(keyText, valText)) {
-                    resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
+                    resultText.append(Text.translatable(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
                     resultText.append(sibling);
@@ -71,7 +71,7 @@ public class SimpleDisplay extends WynnDisplayText {
         }
         else {
             if(WTS.checkTranslationExist(keyText, valText)) {
-                resultText = newTranslate(keyText).setStyle(styleText);
+                resultText = Text.translatable(keyText).setStyle(styleText);
             }
             else {
                 resultText = inputText;

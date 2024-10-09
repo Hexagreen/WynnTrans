@@ -27,6 +27,6 @@ public class SkinApplied extends WynnChatText {
         String key = weaponMode ? parentKey + "weapon" : parentKey + "helmet";
 
         resultText = Text.empty();
-        resultText.append(newTranslate(key, skinName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(key, skinName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

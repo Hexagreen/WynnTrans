@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class SimpleTooltip extends WynnTooltipText {
+
     public SimpleTooltip(List<Text> text) {
         super(text);
     }
@@ -75,7 +76,7 @@ public class SimpleTooltip extends WynnTooltipText {
             }
 
             if(WTS.checkTranslationExist(key, content)) {
-                result.append(newTranslate(key).setStyle(style));
+                result.append(Text.translatable(key).setStyle(style));
             }
             else {
                 result.append(sibling);

@@ -44,7 +44,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
         resultText = Text.empty().append("\n");
 
         Text title;
-        title = newTranslate(func + "caveCompleted").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN));
+        title = Text.translatable(func + "caveCompleted").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN));
 
         resultText.append(getCenterIndent(title)).append(title).append("\n");
 
@@ -52,32 +52,32 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
         Text t0;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {
             Style t0Style = parseStyleCode(getSibling(2).getString().replace(valCaveName, "").replaceAll(" ", ""));
-            t0 = newTranslate(keyCaveName).setStyle(t0Style);
+            t0 = Text.translatable(keyCaveName).setStyle(t0Style);
         }
         else {
             t0 = Text.literal(getSibling(2).getString().replaceAll(" +(?=§)", ""));
         }
 
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n\n").append(newTranslate(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
+        resultText.append(getCenterIndent(t0)).append(t0).append("\n\n").append("           ").append(Text.translatable(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
 
 
         for(int i = 5; getSiblings().size() > i; i++) {
             Matcher m1 = REGEX_EXP.matcher(getSibling(i).getString());
             if(m1.find()) {
-                resultText.append("           - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(newTranslate(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append("           - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                 continue;
             }
             Matcher m2 = REGEX_EME.matcher(getSibling(i).getString());
             if(m2.find()) {
-                resultText.append("           - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(newTranslate(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append("\n");
+                resultText.append("           - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append("\n");
                 continue;
             }
             String valExclusiveReward = getSibling(i).getString().replaceAll("§d +- §7", "");
             String hash = DigestUtils.sha1Hex(valExclusiveReward).substring(0, 4);
-            String keyExclusiveReward = keyCaveName + ".reward_" + hash;
+            String keyExclusiveReward = keyCaveName + ".reward." + hash;
             if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
                 resultText.append("           - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
-                resultText.append(newTranslate(keyExclusiveReward).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                resultText.append(Text.translatable(keyExclusiveReward).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             }
             else {
                 resultText.append(getSibling(i));

@@ -46,7 +46,7 @@ public class GatheringXPGain extends WynnDisplayText {
         resultText.append(multiplier);
 
         resultText.append("[");
-        resultText.append(newTranslate(parentKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(parentKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         resultText.append("]");
         resultText.append(percent);
         if(item != null) {

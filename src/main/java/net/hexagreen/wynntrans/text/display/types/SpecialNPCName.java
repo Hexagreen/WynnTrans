@@ -52,7 +52,7 @@ public class SpecialNPCName extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text name;
         if(WTS.checkTranslationDoNotRegister(keyName)) {
-            name = newTranslate(keyName).setStyle(styleName);
+            name = Text.translatable(keyName).setStyle(styleName);
         }
         else {
             name = Text.literal(valName).setStyle(styleName);

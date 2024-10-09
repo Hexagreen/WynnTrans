@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
@@ -70,14 +69,14 @@ public interface IFocusText extends ISpaceProvider {
     private Text pressShiftToContinue(Text fullText) {
         String key = "wytr.func.pressShift";
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
-        MutableText textBody = (newTranslate(key + ".1").setStyle(original.get(0).getStyle())).append(newTranslate(key + ".2").setStyle(original.get(1).getStyle())).append(newTranslate(key + ".3").setStyle(original.get(2).getStyle()));
+        MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(2).getStyle()));
         return getCenterIndent(textBody).append(textBody);
     }
 
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
         List<Text> original = fullText.getSiblings().get(findLastOptionIndex(fullText) + 4).getSiblings();
-        MutableText textBody = (newTranslate(key + ".1").setStyle(original.get(0).getStyle())).append(newTranslate(key + ".2").setStyle(original.get(1).getStyle())).append(newTranslate(key + ".3").setStyle(original.get(2).getStyle()));
+        MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(2).getStyle()));
         return getCenterIndent(textBody).append(textBody);
     }
 
@@ -100,17 +99,13 @@ public interface IFocusText extends ISpaceProvider {
             String valSelOpt = ((PlainTextContent) textBody.getContent()).string();
             MutableText selection = MutableText.of(original.get(i).getContent()).setStyle(original.get(i).getStyle()).append(original.get(i).getSiblings().get(0)).append(original.get(i).getSiblings().get(1));
             if(wynnTranslationStorage.checkTranslationExist(keySelOpt, valSelOpt)) {
-                selection.append(newTranslate(keySelOpt).setStyle(textBody.getStyle()));
+                selection.append(Text.translatable(keySelOpt).setStyle(textBody.getStyle()));
             }
             else {
                 selection.append(textBody);
             }
             constructingText.append(selection).append("\n");
         }
-    }
-
-    private MutableText newTranslate(String key) {
-        return MutableText.of(new TranslatableTextContent(key, null, TranslatableTextContent.EMPTY_ARGUMENTS));
     }
 
     enum FocusType {

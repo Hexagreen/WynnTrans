@@ -48,7 +48,7 @@ public class NPCNameLiteral extends WynnDisplayText {
         resultText = Text.empty();
         if(keyNpcTalk != null) {
             if(WTS.checkTranslationExist(keyNpcTalk, valNpcTalk)) {
-                resultText.append(newTranslate(keyNpcTalk).setStyle(styleNpcTalk));
+                resultText.append(Text.translatable(keyNpcTalk).setStyle(styleNpcTalk));
             }
             else resultText.append(Text.literal(valNpcTalk).setStyle(styleNpcTalk));
 
@@ -56,10 +56,10 @@ public class NPCNameLiteral extends WynnDisplayText {
         }
 
         if(WTS.checkTranslationDoNotRegister(subKeyNpcName)) {
-            resultText.append(newTranslate(subKeyNpcName).setStyle(styleNpcName));
+            resultText.append(Text.translatable(subKeyNpcName).setStyle(styleNpcName));
         }
         else if(WTS.checkTranslationDoNotRegister(keyNpcName)) {
-            resultText.append(newTranslate(keyNpcName).setStyle(styleNpcName));
+            resultText.append(Text.translatable(keyNpcName).setStyle(styleNpcName));
         }
         else resultText.append(Text.literal(valNpcName).setStyle(styleNpcName));
 

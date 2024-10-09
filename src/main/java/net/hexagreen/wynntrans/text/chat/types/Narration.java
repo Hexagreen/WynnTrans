@@ -31,7 +31,7 @@ public class Narration extends WynnChatText {
     protected void build() {
         if(getSiblings().isEmpty()) {
             if(checkTranslationExist(pKeyNarration, getContentString())) {
-                resultText = newTranslate(pKeyNarration).setStyle(getStyle());
+                resultText = Text.translatable(pKeyNarration).setStyle(getStyle());
             }
             else {
                 resultText = inputText;
@@ -41,7 +41,7 @@ public class Narration extends WynnChatText {
             String keyContent = pKeyNarration + "_1";
             String valContent = getContentString();
             if(checkTranslationExist(keyContent, valContent)) {
-                resultText = newTranslate(keyContent).setStyle(getStyle());
+                resultText = Text.translatable(keyContent).setStyle(getStyle());
             }
             else {
                 resultText = MutableText.of(inputText.getContent()).setStyle(getStyle());
@@ -50,7 +50,7 @@ public class Narration extends WynnChatText {
                 String keySibling = pKeyNarration + "_" + (index + 2);
                 String valSibling = getContentString(index);
                 if(checkTranslationExist(keySibling, valSibling)) {
-                    resultText.append(newTranslate(keySibling).setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(keySibling).setStyle(getStyle(index)));
                 }
                 else {
                     resultText.append(getSiblings().get(index));

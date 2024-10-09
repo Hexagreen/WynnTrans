@@ -24,6 +24,6 @@ public class CharacterClassChange extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey, className).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+        resultText.append(Text.translatable(parentKey, className).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }
 }

@@ -85,7 +85,6 @@ public class OnGameMessageHandler {
         }
         catch(Exception e) {
             LOGGER.error("Error in sortIncomeText", e);
-            debugClass.writeString2File(text.getString(), "exception.txt");
             debugClass.writeTextAsJSON(text, "Exception");
             backgroundText.clear();
             removeGlue();

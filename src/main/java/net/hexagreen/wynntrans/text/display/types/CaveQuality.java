@@ -25,6 +25,6 @@ public class CaveQuality extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(bar);
+        resultText.append(Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(bar);
     }
 }

@@ -46,9 +46,9 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.empty();
 
-        MutableText t0 = Text.empty().append(newTranslate(parentKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
+        MutableText t0 = Text.empty().append(Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
         if(WTS.checkTranslationExist(keyDiscoveryName, valDiscoveryName)) {
-            t0.append(newTranslate(keyDiscoveryName).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            t0.append(Text.translatable(keyDiscoveryName).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
         else {
             t0.append(Text.literal(valDiscoveryName).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
@@ -57,24 +57,35 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
 
         MutableText area = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
         if(WTS.checkTranslationExist(keyDiscoveryArea, valDiscoveryArea)) {
-            area.append(newTranslate(keyDiscoveryArea)).append(Text.of(" [" + revealed + "/" + total + "]"));
+            area.append(Text.translatable(keyDiscoveryArea)).append(Text.of(" [" + revealed + "/" + total + "]"));
         }
         else {
             area.append(getSibling(2).getString().replaceAll("^ *", ""));
         }
         resultText.append(getCenterIndent(area)).append(area).append("\n\n");
 
-        for(int i = 3; getSiblings().size() > i; i++) {
-            MutableText line = Text.empty();
-            String keyAreaLore = keyDiscoveryName + "_" + (i - 2);
-            String valAreaLore = getSibling(i).getString().replaceAll(" *§.", "");
-            if(WTS.checkTranslationExist(keyAreaLore, valAreaLore)) {
-                line.append(newTranslate(keyAreaLore).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-            }
-            else {
-                line.append(getSibling(i).getString().replaceAll("^ *", ""));
-            }
+        String keyAreaLore = keyDiscoveryName + ".desc";
+        String valAreaLore = concatLore();
+        String[] loreLines;
+        if(WTS.checkTranslationExist(keyAreaLore, valAreaLore)) {
+            loreLines = Text.translatable(keyAreaLore).getString().split("\n");
+        }
+        else {
+            loreLines = valAreaLore.split("\n");
+        }
+        for(String str : loreLines) {
+            Text line = Text.literal(str).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
             resultText.append(getCenterIndent(line)).append(line).append("\n");
         }
+    }
+
+    private String concatLore() {
+        StringBuilder lore = new StringBuilder();
+        int i = 3;
+        lore.append(getSibling(i++).getString().replaceAll("^ *§7", ""));
+        while(getSiblings().size() > i) {
+            lore.append("\n").append(getSibling(i++).getString().replaceAll("^ *§7", ""));
+        }
+        return lore.toString();
     }
 }
