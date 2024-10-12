@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public enum ChatType {
     NORMAL_CHAT(null, Pattern.compile("^\uE056\uE042")),
     PRIVATE_MESSAGE(null, Pattern.compile("\\[(.+) (?:\\(WC\\d+\\) )?➤ (.+)]")),
+    PRIVATE_MESSAGE_SAME_SERVER(null, Pattern.compile("(.+)\uE003(.+):")),
     DIALOG_NORMAL(NpcDialog.class, Pattern.compile("^\\n?\\[(\\d+)/(\\d+)] .+:")),
     DIALOG_ITEM(ItemGiveAndTake.class, Pattern.compile("^§.\\[([+-])(\\d+%?) (.+)]$")),
     SKILL_REFRESH(SkillRefreshed.class, Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$")),

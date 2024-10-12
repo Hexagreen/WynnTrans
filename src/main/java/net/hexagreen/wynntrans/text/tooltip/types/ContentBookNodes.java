@@ -44,7 +44,6 @@ public class ContentBookNodes extends WynnTooltipText {
         for(Text line : processTextChunk()) {
             resultText.append(line);
         }
-        textRecorder(inputText.getSiblings());
     }
 
     private List<Text> processTextChunk() {
@@ -154,6 +153,7 @@ public class ContentBookNodes extends WynnTooltipText {
             contentName.append(categoryText);
 
             result.add(contentName);
+            result.add(name.copy().fillStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
         }
 
         private void nameSectionStatus(Text line) {
@@ -248,7 +248,7 @@ public class ContentBookNodes extends WynnTooltipText {
             else {
                 carrierText = descText;
             }
-            String carrier = carrierText.getString().replaceAll("\n", "");
+            String carrier = carrierText.getString().replaceAll("\n", " ");
             desc = Text.literal(carrier).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
         }
 
@@ -330,6 +330,7 @@ public class ContentBookNodes extends WynnTooltipText {
             }
             int textsWidth = getLongestWidth(result);
             wrapWidth = getLongestWidth(infos, textsWidth);
+            wrapWidth = Math.max(wrapWidth, 180);
             postProcessDescSection();
             result.add(Text.literal(" "));
             result.addAll(infos);
@@ -507,8 +508,10 @@ public class ContentBookNodes extends WynnTooltipText {
             if(message.getString().contains("UN")) key = "wytr.func.CLICK_TO_UNTRACK";
             else key = "wytr.func.CLICK_TO_TRACK";
             Text ctt = Text.translatable(key).setStyle(message.getStyle());
+
+            int totalWidth = getLongestWidth(result);
             result.add(Text.literal(" "));
-            result.add(getCenterIndent(ctt, wrapWidth).append(ctt));
+            result.add(getCenterIndent(ctt, totalWidth).append(ctt));
         }
 
         private Text getIndentation(Text infoText) {

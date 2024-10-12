@@ -24,3 +24,8 @@ bin/
 
 run/
 /remappedSrc/
+
+# python venv
+
+patcher/venv
+patcher/src/__pycache__
