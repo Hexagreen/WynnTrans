@@ -71,7 +71,7 @@ def task_T(added_items):
         
         # type을 문자열로 변환
         strType = {v: k for k, v in type_mapping.items()}.get(type_int)
-        keyName = re.sub(r" ", "", name)
+        keyName = re.sub(r"[ ’'-]", "", name)
         
         # JSON 생성
         json_result[f"wytr.item.{strType}.{keyName}"] = name
