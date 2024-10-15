@@ -5,6 +5,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 public class SpecialNPCName extends WynnDisplayText {
     private final Text icon;
@@ -15,7 +16,8 @@ public class SpecialNPCName extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         try {
-            return text.getString().substring(0, 3).contains("\uE009") && text.getString().contains("\n§7NPC");
+            return text.getSiblings().get(2).getSiblings().getFirst().getStyle().getFont().equals(Identifier.of("minecraft:banner/pill"))
+                    && text.getString().contains("\n§7NPC");
         }
         catch(Exception ignore) {
             return false;

@@ -50,7 +50,7 @@ public class LevelUpProfession extends WynnChatText implements ISpaceProvider {
             }
             if(getSibling(i).getString().contains("+ New Tool")) {
                 String strToolName = getSibling(i).getString().substring(15);
-                Text toolName = Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append(Profession.getProfession(strToolName.charAt(1)).getTool(strToolName.charAt(strToolName.length() - 2))).append("]");
+                Text toolName = Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append(Profession.getProfession(strToolName.charAt(1)).getTool(strToolName.replaceFirst(".+ T(\\d+)", "$1"))).append("]");
                 resultText.append(Text.translatable(parentKey + ".newTool").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append(toolName).append("\n");
                 continue;
             }
@@ -76,7 +76,7 @@ public class LevelUpProfession extends WynnChatText implements ISpaceProvider {
                 resultText.append("\n");
                 Text moreLevel = Text.translatable(parentKey + ".moreLevel", m3.group(1)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
                 if(m3.group(3) != null) {
-                    Text toolName = Profession.getProfession(m3.group(2).charAt(0)).getTool(m3.group(3).charAt(0)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+                    Text toolName = Profession.getProfession(m3.group(2).charAt(0)).getTool(m3.group(3)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
                     Text nextTool = Text.translatable(parentKey + ".nextTool", moreLevel, toolName).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
                     resultText.append(getCenterIndent(nextTool)).append(nextTool);
                 }

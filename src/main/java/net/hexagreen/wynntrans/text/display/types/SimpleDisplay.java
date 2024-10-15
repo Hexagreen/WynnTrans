@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -14,9 +15,9 @@ public class SimpleDisplay extends WynnDisplayText {
 
     public SimpleDisplay(Text text) {
         super(text);
-        this.valText = inputText.getString().replaceFirst("^(?:§.)+", "");
+        this.valText = initValText();
         this.keyText = parentKey + DigestUtils.sha1Hex(valText);
-        this.styleText = parseStyleCode(inputText.getString().replace(valText, "")).withParent(getStyle());
+        this.styleText = parseStyleCode(inputText.getString()).withParent(getStyle());
     }
 
     @Override
@@ -38,7 +39,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 String valContentText = ((PlainTextContent) inputText.getContent()).string();
                 String keyContentText = this.keyText + "_0";
                 if(WTS.checkTranslationExist(keyContentText, valContentText)) {
-                    resultText = Text.translatable(keyContentText).setStyle(styleText);
+                    resultText = newTranslate(keyContentText).setStyle(styleText);
                 }
                 else {
                     resultText = Text.literal(valContentText).setStyle(styleText);
@@ -58,7 +59,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 }
 
                 if(WTS.checkTranslationExist(keyText, valText)) {
-                    resultText.append(Text.translatable(keyText).setStyle(sibling.getStyle()));
+                    resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
                     resultText.append(sibling);
@@ -71,12 +72,20 @@ public class SimpleDisplay extends WynnDisplayText {
         }
         else {
             if(WTS.checkTranslationExist(keyText, valText)) {
-                resultText = Text.translatable(keyText).setStyle(styleText);
+                resultText = newTranslate(keyText).setStyle(styleText);
             }
             else {
                 resultText = inputText;
                 debugClass.writeTextAsJSON(inputText, "Display");
             }
         }
+    }
+
+    protected String initValText() {
+        return inputText.getString().replaceFirst("^(?:§.)+", "");
+    }
+
+    protected MutableText newTranslate(String key) {
+        return Text.translatable(key);
     }
 }

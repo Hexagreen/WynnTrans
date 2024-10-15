@@ -16,7 +16,7 @@ public class SlayCounter extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 3) return false;
-        return text.getString().contains("\uE012\uE00B\uE000\uE018\uE02A\uDB00\uDC02");
+        return text.getString().contains("\uE012\uE00B\uE000\uE018\uE02A\uDB00\uDC02") || text.getString().contains("\uE007\uE014\uE00D\uE013\uE02A\uDB00\uDC02");
     }
 
     public SlayCounter(Text text) {

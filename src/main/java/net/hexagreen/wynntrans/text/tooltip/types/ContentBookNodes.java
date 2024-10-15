@@ -478,27 +478,39 @@ public class ContentBookNodes extends WynnTooltipText {
                 return line.append(Text.translatable("wytr.tooltip.contentReward.various"));
             }
             else {
-                String hash = DigestUtils.sha1Hex(reward).substring(0, 4);
+                String val = text.getString().replaceFirst("^- ", "");
+                String hash = DigestUtils.sha1Hex(val).substring(0, 4);
                 String key;
-                switch(category) {
-                    case "Quest", "Mini-Quest", "Cave" -> key = baseKey + normalizedName + ".reward." + hash;
-                    case "World Event", "Raid" -> key = baseKey + "reward." + hash;
-                    case "Dungeon" -> {
-                        String num = reward.replaceAll("\\D", "");
-                        Dungeons dungeon = Dungeons.getDungeons(normalizedName);
-                        Text item;
-                        if(reward.contains("Fragments")) item = dungeon.getDungeonFragment();
-                        else item = dungeon.getDungeonBossReward();
-                        return line.append(Text.translatable("wytr.tooltip.contentReward.dungeon", num, item));
+                for(int i = 1, size = text.getSiblings().size(); i < size; i++) {
+                    String subKey;
+                    if(size == 2) subKey = "";
+                    else {
+                        subKey = "_" + i;
+                        val = text.getSiblings().get(i).getString();
                     }
-                    default -> key = "wytr.tooltip.contentReward." + hash;
+
+                    switch(category) {
+                        case "Quest", "Mini-Quest", "Cave" ->
+                                key = baseKey + normalizedName + ".reward." + hash + subKey;
+                        case "World Event", "Raid" -> key = baseKey + "reward." + hash + subKey;
+                        case "Dungeon" -> {
+                            String num = val.replaceAll("\\D", "");
+                            Dungeons dungeon = Dungeons.getDungeons(normalizedName);
+                            Text item;
+                            if(val.contains("Fragments")) item = dungeon.getDungeonFragment();
+                            else item = dungeon.getDungeonBossReward();
+                            return line.append(Text.translatable("wytr.tooltip.contentReward.dungeon", num, item));
+                        }
+                        default -> key = "wytr.tooltip.contentReward." + hash + subKey;
+                    }
+                    if(WTS.checkTranslationExist(key, val)) {
+                        line.append(Text.translatable(key));
+                    }
+                    else {
+                        line.append(val);
+                    }
                 }
-                if(WTS.checkTranslationExist(key, reward)) {
-                    return line.append(Text.translatable(key));
-                }
-                else {
-                    return line.append(reward);
-                }
+                return line;
             }
         }
 

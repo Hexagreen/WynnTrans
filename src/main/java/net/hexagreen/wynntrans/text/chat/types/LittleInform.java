@@ -7,12 +7,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.regex.Pattern;
 
 public class LittleInform extends WynnChatText {
-    private final Text header;
     private final String keyInform;
 
     public LittleInform(Text text, Pattern regex) {
         super(text, regex);
-        this.header = getHeader();
         this.keyInform = DigestUtils.sha1Hex(inputText.getString()).substring(0, 12);
     }
 
@@ -23,10 +21,9 @@ public class LittleInform extends WynnChatText {
 
     @Override
     protected void build() {
-        resultText = Text.empty();
-        resultText.append(header);
-
         if(getSiblings().isEmpty()) {
+            resultText = Text.empty();
+            resultText.append(getHeader());
             String valInform = getContentString().replaceAll("^§.\\[§.!§.] ", "");
             if(WTS.checkTranslationExist(parentKey + keyInform, valInform)) {
                 resultText.append(Text.translatable(parentKey + keyInform));
@@ -36,7 +33,8 @@ public class LittleInform extends WynnChatText {
             }
         }
         else {
-            resultText = inputText.copyContentOnly().append(getSibling(0)).append(getSibling(1));
+            resultText = inputText.copyContentOnly().setStyle(getStyle())
+                    .append(getSibling(0)).append(getSibling(1));
             for(int i = 2; i < getSiblings().size(); i++) {
                 String valInform = getSibling(i).getString();
 

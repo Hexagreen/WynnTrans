@@ -2,7 +2,10 @@ package net.hexagreen.wynntrans.text;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
-import net.minecraft.text.*;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
@@ -16,10 +19,9 @@ public abstract class WynnTransText {
     protected MutableText resultText;
 
     protected static Style parseStyleCode(String codeOrTextString) {
-        String styleCode = codeOrTextString.replaceFirst("((?:§.)+).+", "$1")
-                .replaceAll("§0", "");
+        String styleCode = codeOrTextString.replaceFirst(".*((?:§.)+).+", "$1");
         if(styleCode.isBlank()) return Style.EMPTY;
-        char[] codes = styleCode.replace("§", "").toCharArray();
+        char[] codes = styleCode.replace("§", "").replaceAll("[^0123456789abcdefklmnor]", "").toCharArray();
         Formatting[] formatting = new Formatting[codes.length];
         for(int i = 0; i < codes.length; i++) {
             formatting[i] = Formatting.byCode(codes[i]);
@@ -107,7 +109,7 @@ public abstract class WynnTransText {
     }
 
     protected String normalizeStringForKey(String string) {
-        return string.replaceAll("[ .'À֎’:&%\"-]", "");
+        return string.replaceAll("[ .,'À֎’:&%\"-]", "");
     }
 
     public static class TextTranslationFailException extends RuntimeException {

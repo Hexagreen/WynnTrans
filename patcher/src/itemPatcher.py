@@ -41,6 +41,12 @@ def create_dataframe(api_response):
             # 이름에서 숫자 제거
             name = re.sub(r" \d$", "", name)
 
+        if type_value == "tome":
+            name = re.sub(r" [IV]+$", "", name)
+
+        if type_value == "tool":
+            continue
+
         # 중복된 항목은 추가하지 않음
         if not any(df['name'] == name):
             type_int = type_mapping.get(type_value, 0)  # 매핑되지 않으면 0으로 처리
@@ -83,7 +89,7 @@ import os
 
 # 작업 R 함수
 def task_R(added_items_json, removed_items):
-    old_folder = "./lang"  # old 폴더 경로
+    old_folder = "./lang/items"  # old 폴더 경로
     json_files = [f for f in os.listdir(old_folder) if f.endswith('.json')]
 
     removed_items_json = {}

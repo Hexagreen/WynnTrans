@@ -29,17 +29,26 @@ public class ProxySystemText extends SimpleSystemText {
     }
 
     private enum Templates {
-        ANNIHILATION(Pattern.compile("^Prepare to defend the province at"), text -> text.getString().replaceAll("in .+!$", "in %2\\$s!"), text -> {
-            Matcher m = Pattern.compile("in (.+)!$").matcher(text.getString());
-            boolean ignore = m.find();
-            return ITime.translateTime(m.group(1));
-        }), BANK_PAGE_ADDED(Pattern.compile("You have unlocked page"), text -> text.getString().replaceAll("\\d+", "%2\\$s"), text -> text.getString().replaceAll("\\D", ""));
+        ANNIHILATION(Pattern.compile("^Prepare to defend the province at"),
+                text -> text.getString().replaceAll("in .+!$", "in %2\\$s!"),
+                text -> {
+                    Matcher m = Pattern.compile("in (.+)!$").matcher(text.getString());
+                    boolean ignore = m.find();
+                    return ITime.translateTime(m.group(1));
+                }),
+        BANK_PAGE_ADDED(Pattern.compile("You have unlocked page"),
+                text -> text.getString().replaceAll("\\d+", "%2\\$s"),
+                text -> text.getString().replaceAll("\\D", ""));
+
         private final Pattern template;
         private final Function<Text, String> mutator;
         private final Function<Text, Object> argumentParser;
 
         private static Templates findTemplate(Text text) {
-            return Arrays.stream(Templates.values()).filter(templates -> templates.template.matcher(text.getString()).find()).findFirst().orElse(null);
+            return Arrays.stream(Templates.values())
+                    .filter(templates -> templates.template.matcher(text.getString()).find())
+                    .findFirst()
+                    .orElse(null);
         }
 
         Templates(Pattern template, Function<Text, String> mutator, Function<Text, Object> argumentParser) {

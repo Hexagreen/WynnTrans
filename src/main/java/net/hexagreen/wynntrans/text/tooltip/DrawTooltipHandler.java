@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.tooltip;
 
+import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -12,7 +13,16 @@ public class DrawTooltipHandler {
     private static boolean registered = true;
 
     public List<Text> translateTooltipText(List<Text> texts) {
-        return TooltipType.findAndRun(texts);
+        try {
+            return TooltipType.findAndRun(texts);
+        }
+        catch(Exception e) {
+            for(Text text : texts) {
+                debugClass.writeTextAsJSON(text, "TooltipException");
+            }
+            LogUtils.getLogger().error("[WynnTrans] Exception thrown in translating tooltip texts\n", e);
+            return texts;
+        }
     }
 
     public Text translateTooltipText(Text text) {

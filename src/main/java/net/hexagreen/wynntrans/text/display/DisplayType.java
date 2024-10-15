@@ -47,6 +47,8 @@ public enum DisplayType {
     SUMMONS_NAME(SummonsName::new, SummonsName::typeChecker),
     PET_NAME(PetName::new, PetName::typeChecker),
 
+    SPIRITS_WEEKLY_BOON(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.DRAWING_OF_THE_SPIRITS_TIMER.getTypeChecker()),
+
     NO_TYPE(SimpleDisplay::new, null);
 
     private final Function<Text, WynnDisplayText> wdt;

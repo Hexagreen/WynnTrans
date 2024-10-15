@@ -1,3 +1,5 @@
-import patcher
+import itemPatcher
+import abilityPatcher
 
-patcher.run_update()
+itemPatcher.run_update()
+abilityPatcher.run_update()

@@ -2,22 +2,21 @@ package net.hexagreen.wynntrans.enums;
 
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 
 import java.util.Arrays;
 
 public enum Profession {
     COOKING(Text.literal("§fⒶ"), "cooking"),
-    MINING(Text.literal("Ⓑ"), "mining", MutableText.of(new TranslatableTextContent("wytr.profession.mining.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    WOODCUTTING(Text.literal("Ⓒ"), "woodcutting", MutableText.of(new TranslatableTextContent("wytr.profession.woodcutting.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
+    MINING(Text.literal("Ⓑ"), "mining", Text.translatable("wytr.profession.mining.tool")),
+    WOODCUTTING(Text.literal("Ⓒ"), "woodcutting", Text.translatable("wytr.profession.woodcutting.tool")),
     JEWELING(Text.literal("§fⒹ"), "jeweling"),
     SCRIBING(Text.literal("§fⒺ"), "scribing"),
     TAILORING(Text.literal("§fⒻ"), "tailoring"),
     WEAPONSMITHING(Text.literal("§fⒼ"), "weaponsmithing"),
     ARMOURING(Text.literal("§fⒽ"), "armouring"),
     WOODWORKING(Text.literal("§fⒾ"), "woodworking"),
-    FARMING(Text.literal("Ⓙ"), "farming", MutableText.of(new TranslatableTextContent("wytr.profession.farming.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    FISHING(Text.literal("Ⓚ"), "fishing", MutableText.of(new TranslatableTextContent("wytr.profession.fishing.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
+    FARMING(Text.literal("Ⓙ"), "farming", Text.translatable("wytr.profession.farming.tool")),
+    FISHING(Text.literal("Ⓚ"), "fishing", Text.translatable("wytr.profession.fishing.tool")),
     ALCHEMISM(Text.literal("§fⓁ"), "alchemism");
 
     private final MutableText text;
@@ -78,7 +77,7 @@ public enum Profession {
         return Text.translatable("wytr.profession." + this.key);
     }
 
-    public MutableText getTool(char tier) {
+    public MutableText getTool(String tier) {
         if(this.tool != null) {
             MutableText result = this.tool.copy();
             return result.append(" T" + tier);
