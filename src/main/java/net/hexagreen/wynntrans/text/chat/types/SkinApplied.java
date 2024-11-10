@@ -11,8 +11,12 @@ public class SkinApplied extends WynnChatText {
     private final boolean weaponMode;
     private final String skinName;
 
-    public SkinApplied(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§7You have set your (weapon|helmet) skin to (.+)$").matcher(text.getString()).find();
+    }
+
+    public SkinApplied(Text text) {
+        super(text, Pattern.compile("^§7You have set your (weapon|helmet) skin to (.+)$"));
         this.weaponMode = matcher.group(1).matches("weapon");
         this.skinName = matcher.group(2);
     }

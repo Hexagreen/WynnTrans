@@ -4,11 +4,17 @@ import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.WorldEventFailed;
 import net.minecraft.text.Text;
 
+import java.util.regex.Pattern;
+
 public class WorldEventFailedGlue extends TextGlue {
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(?:\uDAFF\uDFFC\uE00D\uDAFF\uDFFF\uE002\uDAFF\uDFFE|\uDAFF\uDFFC\uE001\uDB00\uDC06) You have failed ").matcher(text.getString()).find();
+    }
+
     public WorldEventFailedGlue() {
-        super(null, WorldEventFailed.class);
+        super(WorldEventFailed::new);
     }
 
     @Override

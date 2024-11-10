@@ -32,7 +32,7 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = new SimpleTooltip(getSiblings().subList(0, 3)).textRaw();
+        resultText = new SimpleTooltip(getSiblings().subList(0, 3)).textAsMutable();
         int tooltipLength = getSiblings().size();
         translateAndAlignText(getSiblings().subList(3, tooltipLength - 3));
 

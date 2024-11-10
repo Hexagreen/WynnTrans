@@ -7,14 +7,12 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class RewardReceived extends WynnChatText {
     private static final Text STORE = Text.literal("wynncraft.com/store").setStyle(Style.EMPTY.withColor(Formatting.AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://wynncraft.com/store")));
     private final Text rewards;
 
-    public RewardReceived(Text text, Pattern regex) {
-        super(text, regex);
+    public RewardReceived(Text text) {
+        super(text);
         this.rewards = initRewards();
     }
 

@@ -11,8 +11,12 @@ public class MobTotemRunOut extends WynnChatText {
     private final Text playerName;
     private final Text link;
 
-    public MobTotemRunOut(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("(.+)'s Mob Totem has run out").matcher(text.getString()).find();
+    }
+
+    public MobTotemRunOut(Text text) {
+        super(text, Pattern.compile("(.+)'s Mob Totem has run out"));
         this.playerName = getPlayerName(matcher.group(1));
         this.link = getSibling(1);
     }

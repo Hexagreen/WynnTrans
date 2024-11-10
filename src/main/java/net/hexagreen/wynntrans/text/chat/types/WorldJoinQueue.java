@@ -11,8 +11,12 @@ import java.util.regex.Pattern;
 public class WorldJoinQueue extends WynnChatText implements ISpaceProvider {
     private final String worldChannel;
 
-    public WorldJoinQueue(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\n +§b§lYou are in world WC(\\d+)!").matcher(text.getString()).find();
+    }
+
+    public WorldJoinQueue(Text text) {
+        super(text, Pattern.compile("^\\n +§b§lYou are in world WC(\\d+)!"));
         this.worldChannel = matcher.group(1);
     }
 

@@ -10,8 +10,12 @@ import java.util.regex.Pattern;
 public class ItemLevelRequirement extends WynnSystemText {
     private final Text level;
 
-    public ItemLevelRequirement(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("This (?:item|potion) is for Combat Lv\\. (\\d+)\\+ only\\.").matcher(text.getString()).find();
+    }
+
+    public ItemLevelRequirement(Text text) {
+        super(text, Pattern.compile("This (?:item|potion) is for Combat Lv\\. (\\d+)\\+ only\\."));
         this.level = Text.literal(matcher.group(1));
     }
 

@@ -12,8 +12,12 @@ public class TrinketOnActive extends WynnSystemText {
     private final Text item;
     private final Text time;
 
-    public TrinketOnActive(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("is active for ").matcher(removeTextBox(text)).find();
+    }
+
+    public TrinketOnActive(Text text) {
+        super(text, null);
         this.item = getSibling(0);
         this.time = ITime.translateTime(getContentString(2)).setStyle(getStyle(2));
     }

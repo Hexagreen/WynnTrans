@@ -11,8 +11,12 @@ public class ServerRestart extends WynnChatText {
     private final String number;
     private final String unit;
 
-    public ServerRestart(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§cThis world will restart in (\\d+) (minutes?|seconds?)\\.$").matcher(text.getString()).find();
+    }
+
+    public ServerRestart(Text text) {
+        super(text, Pattern.compile("^§cThis world will restart in (\\d+) (minutes?|seconds?)\\.$"));
         this.number = matcher.group(1);
         this.unit = matcher.group(2);
     }

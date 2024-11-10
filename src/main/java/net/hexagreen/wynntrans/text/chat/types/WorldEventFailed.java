@@ -6,14 +6,12 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
     private final Text eventName;
     private final String keyFailGuide;
 
-    public WorldEventFailed(Text text, Pattern regex) {
-        super(text, regex, true);
+    public WorldEventFailed(Text text) {
+        super(text, true);
         this.eventName = initEventName(getSibling(0));
         this.keyFailGuide = initKeyGuide(getSibling(5));
     }

@@ -19,7 +19,7 @@ public abstract class WynnTransText {
     protected MutableText resultText;
 
     protected static Style parseStyleCode(String codeOrTextString) {
-        String styleCode = codeOrTextString.replaceFirst(".*((?:§.)+).+", "$1");
+        String styleCode = codeOrTextString.replaceFirst("(?s).*?((?:§[0123456789abcdefklnmor])+).*", "$1");
         if(styleCode.isBlank()) return Style.EMPTY;
         char[] codes = styleCode.replace("§", "").replaceAll("[^0123456789abcdefklmnor]", "").toCharArray();
         Formatting[] formatting = new Formatting[codes.length];
@@ -109,7 +109,7 @@ public abstract class WynnTransText {
     }
 
     protected String normalizeStringForKey(String string) {
-        return string.replaceAll("[ .,'À֎’:&%\"-]", "");
+        return string.replaceAll("[ .,'À֎’:&%()\"-]", "");
     }
 
     public static class TextTranslationFailException extends RuntimeException {

@@ -10,6 +10,7 @@
     "MixinDisplayEntityRenderer",
     "MixinDrawContext",
     "MixinEntityRenderer",
+    "MixinItemStack",
     "MixinMessageHandler",
     "MixinSignBlockEntity",
     "MixinSignText",

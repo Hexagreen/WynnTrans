@@ -15,8 +15,12 @@ public class WeeklyObjective extends WynnChatText implements ISpaceProvider {
     private String valEName = null;
     private Style styleEName = null;
 
-    public WeeklyObjective(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^ \n +§lObjective Finished").matcher(text.getString()).find();
+    }
+
+    public WeeklyObjective(Text text) {
+        super(text);
 
         if(text.getSiblings().size() == 8) {
             this.valEName = getSibling(3).getString().replaceAll("\\n +§.§.", "");

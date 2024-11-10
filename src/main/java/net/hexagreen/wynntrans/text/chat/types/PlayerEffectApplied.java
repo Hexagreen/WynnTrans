@@ -10,8 +10,12 @@ import java.util.regex.Pattern;
 public class PlayerEffectApplied extends WynnSystemText {
     private final String skinName;
 
-    public PlayerEffectApplied(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("You now have the (.+)\\.").matcher(removeTextBox(text)).find();
+    }
+
+    public PlayerEffectApplied(Text text) {
+        super(text, Pattern.compile("You now have the (.+)\\."));
         this.skinName = matcher.group(1);
     }
 

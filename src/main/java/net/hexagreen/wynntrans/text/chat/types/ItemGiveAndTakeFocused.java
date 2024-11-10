@@ -3,14 +3,12 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.IFocusText;
 import net.minecraft.text.Text;
 
-import java.util.regex.Pattern;
-
 public class ItemGiveAndTakeFocused extends ItemGiveAndTake implements IFocusText {
     private final Text fullText;
     private final FocusType focusType;
 
-    public ItemGiveAndTakeFocused(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
+    public ItemGiveAndTakeFocused(Text text) {
+        super(text.getSiblings().get(2));
         this.fullText = text;
         this.focusType = detectFocusType(text);
     }

@@ -11,8 +11,12 @@ import java.util.regex.Pattern;
 public class BombThankful extends WynnChatText {
     private final MutableText playerName;
 
-    public BombThankful(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§7You have thanked (.+)$").matcher(text.getString()).find();
+    }
+
+    public BombThankful(Text text) {
+        super(text, Pattern.compile("^§7You have thanked (.+)$"));
         if(text.getSiblings().size() == 1) {
             this.playerName = (MutableText) getPlayerNameFromSibling(0);
         }

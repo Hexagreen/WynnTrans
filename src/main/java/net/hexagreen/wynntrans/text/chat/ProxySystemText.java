@@ -13,8 +13,12 @@ import java.util.regex.Pattern;
 public class ProxySystemText extends SimpleSystemText {
     private final Templates template;
 
-    public ProxySystemText(Text text, Pattern ignore) {
-        super(text, ignore);
+    public static boolean typeChecker(Text text) {
+        return Templates.findTemplate(text) != null;
+    }
+
+    public ProxySystemText(Text text) {
+        super(text);
         this.template = Templates.findTemplate(inputText);
     }
 

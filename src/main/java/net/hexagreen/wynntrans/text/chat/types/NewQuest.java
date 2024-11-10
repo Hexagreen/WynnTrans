@@ -3,16 +3,14 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Text;
 
-import java.util.regex.Pattern;
-
 public class NewQuest extends WynnChatText {
     private final String keyQuestName;
     private final String valQuestName;
     private final boolean questLineMode;
     private final boolean miniQuestMode;
 
-    public NewQuest(Text text, Pattern regex) {
-        super(text, regex);
+    public NewQuest(Text text) {
+        super(text);
         this.questLineMode = getContentString().contains("Questline");
         this.miniQuestMode = getContentString().contains("Mini-Quest");
         this.valQuestName = getContentString(0);

@@ -9,8 +9,12 @@ import java.util.regex.Pattern;
 public class LittleInform extends WynnChatText {
     private final String keyInform;
 
-    public LittleInform(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(?:§.)?\\[(?:§.)?!(?:§.)?] .+").matcher(text.getString()).find();
+    }
+
+    public LittleInform(Text text) {
+        super(text);
         this.keyInform = DigestUtils.sha1Hex(inputText.getString()).substring(0, 12);
     }
 

@@ -11,8 +11,12 @@ public class UnusedStatPoint extends WynnChatText {
     private final String skillPoint;
     private final String abilityPoint;
 
-    public UnusedStatPoint(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§4You have (?:§c§l(\\d+) unused Skill Points?)?(?:§4 and )?(?:§b§l(\\d+) unused Ability Points?)?! §4Right-Click").matcher(text.getString()).find();
+    }
+
+    public UnusedStatPoint(Text text) {
+        super(text, Pattern.compile("^§4You have (?:§c§l(\\d+) unused Skill Points?)?(?:§4 and )?(?:§b§l(\\d+) unused Ability Points?)?! §4Right-Click"));
         this.skillPoint = matcher.group(1);
         this.abilityPoint = matcher.group(2);
     }

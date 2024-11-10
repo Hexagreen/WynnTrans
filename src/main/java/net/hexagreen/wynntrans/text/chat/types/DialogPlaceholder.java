@@ -4,13 +4,11 @@ import net.hexagreen.wynntrans.text.chat.IFocusText;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Text;
 
-import java.util.regex.Pattern;
-
 public class DialogPlaceholder extends WynnChatText implements IFocusText {
     private final int lines;
 
-    public DialogPlaceholder(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
+    public DialogPlaceholder(Text text) {
+        super(text.getSiblings().get(2));
         this.lines = text.getString().length() - text.getString().replace("\n", "").length();
     }
 

@@ -15,8 +15,12 @@ public class LevelUpGlue extends TextGlue {
     private int count = 0;
     private boolean isProfession = false;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§6 {32}§lLevel Up!$").matcher(text.getString()).find();
+    }
+
     public LevelUpGlue() {
-        super(null, LevelUp.class);
+        super(LevelUp::new);
         gluedText.append(" ");
         count++;
     }
@@ -55,7 +59,7 @@ public class LevelUpGlue extends TextGlue {
             }
         }
         else {
-            this.changeWct(LevelUpProfession.class);
+            this.changeWct(LevelUpProfession::new);
             if(count == 3) {
                 resetTimer();
                 gluedText.append(text);

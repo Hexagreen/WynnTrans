@@ -18,7 +18,7 @@ public class DungeonComplete extends WynnChatText {
     private final String gainedXp;
     private final String gainedEmerald;
 
-    public DungeonComplete(Text text, Pattern ignoredRegex) {
+    public DungeonComplete(Text text) {
         super(text, HEAD);
         this.dungeon = Dungeons.getDungeons(matcher.group(1));
         Matcher m1 = EXP.matcher(getSibling(1).getString());

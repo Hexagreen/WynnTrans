@@ -11,8 +11,12 @@ public class GoToStore extends WynnChatText {
     private final String key;
     private final String val;
 
-    public GoToStore(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("wynncraft\\.com/store").matcher(text.getString()).find();
+    }
+
+    public GoToStore(Text text) {
+        super(text);
         this.linkText = findLinkText();
         this.val = inputText.getString().replaceFirst("wynncraft\\.com/store[\\w/]*", "%s");
         this.key = parentKey + DigestUtils.sha1Hex(val);

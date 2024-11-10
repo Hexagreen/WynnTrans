@@ -10,8 +10,12 @@ public class ItemGiveAndTake extends WynnChatText {
     private final String number;
     private final String item;
 
-    public ItemGiveAndTake(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§.\\[([+-])(\\d+%?) (.+)]$").matcher(text.getString()).find();
+    }
+
+    public ItemGiveAndTake(Text text) {
+        super(text, Pattern.compile("^§.\\[([+-])(\\d+%?) (.+)]$"));
         this.direction = matcher.group(1);
         this.number = matcher.group(2);
         this.item = matcher.group(3);

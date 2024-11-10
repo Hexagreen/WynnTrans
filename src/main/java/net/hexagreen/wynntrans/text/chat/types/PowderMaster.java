@@ -7,8 +7,13 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class PowderMaster extends WynnSystemText {
-    public PowderMaster(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("Powder Master: ").matcher(text.getString()).find();
+    }
+
+    public PowderMaster(Text text) {
+        super(text, null);
     }
 
     @Override

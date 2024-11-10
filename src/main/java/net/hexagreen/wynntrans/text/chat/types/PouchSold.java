@@ -11,8 +11,12 @@ public class PouchSold extends WynnChatText {
     private final String amount;
     private final String emerald;
 
-    public PouchSold(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§dYou have sold (§7\\d+)§d ingredients for a total of (§a.+)§d").matcher(text.getString()).find();
+    }
+
+    public PouchSold(Text text) {
+        super(text, Pattern.compile("^§dYou have sold (§7\\d+)§d ingredients for a total of (§a.+)§d"));
         this.amount = matcher.group(1);
         this.emerald = matcher.group(2);
     }

@@ -3,14 +3,12 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.IFocusText;
 import net.minecraft.text.Text;
 
-import java.util.regex.Pattern;
-
 public class NarrationFocused extends Narration implements IFocusText {
     private final Text fullText;
     private final FocusType focusType;
 
-    public NarrationFocused(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
+    public NarrationFocused(Text text) {
+        super(text.getSiblings().get(2));
         this.fullText = text;
         this.focusType = detectFocusType(text);
     }

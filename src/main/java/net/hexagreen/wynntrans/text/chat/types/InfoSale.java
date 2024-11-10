@@ -12,6 +12,10 @@ public class InfoSale extends WynnChatText {
     private final Text original;
     private final Text timer;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\[Sale] ").matcher(text.getString()).find();
+    }
+
     private static Text cutoffTail(Text text) {
         MutableText result = Text.empty();
         for(int i = 0; text.getSiblings().size() - 2 > i; i++) {
@@ -20,8 +24,8 @@ public class InfoSale extends WynnChatText {
         return result;
     }
 
-    public InfoSale(Text text, Pattern regex) {
-        super(cutoffTail(text), regex);
+    public InfoSale(Text text) {
+        super(cutoffTail(text));
         this.original = text;
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
         this.timer = initTimer(text.getSiblings().getLast());

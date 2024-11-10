@@ -11,8 +11,12 @@ import java.util.regex.Pattern;
 public class CharacterClassChange extends WynnChatText {
     private final Text className;
 
-    public CharacterClassChange(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§4Your character's class has been successfully changed to ").matcher(text.getString()).find();
+    }
+
+    public CharacterClassChange(Text text) {
+        super(text);
         this.className = CharacterClass.getClassName(getContentString().replaceAll(".+§c", "")).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }
 

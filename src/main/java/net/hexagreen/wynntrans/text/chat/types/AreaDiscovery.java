@@ -19,8 +19,8 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
     private final Style styleAreaName;
     private final boolean shortForm;
 
-    public AreaDiscovery(Text text, Pattern regex) {
-        super(text, regex);
+    public AreaDiscovery(Text text) {
+        super(text);
         Matcher areaMatcher = AREA_NAME.matcher(getSibling(1).getString());
         String areaName = areaMatcher.find() ? areaMatcher.group(1) : "UNKNOWN AREA";
         this.keyAreaName = rootKey + "area." + normalizeStringForKey(areaName);

@@ -12,11 +12,15 @@ public class ShoutLiteral extends WynnChatText {
     private final String server;
     private final String body;
 
-    public ShoutLiteral(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§5(.+) \\[WC(\\d+)] shouts: §d").matcher(text.getString()).find();
+    }
+
+    public ShoutLiteral(Text text) {
+        super(text, Pattern.compile("^§5(.+) \\[WC(\\d+)] shouts: §d"));
         this.name = matcher.group(1);
         this.server = matcher.group(2);
-        this.body = text.getString().replaceAll(regex.pattern(), "");
+        this.body = text.getString().replaceAll("^§5(.+) \\[WC(\\d+)] shouts: §d", "");
     }
 
     @Override

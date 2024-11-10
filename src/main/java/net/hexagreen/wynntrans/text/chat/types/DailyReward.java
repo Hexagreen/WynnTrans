@@ -11,8 +11,12 @@ public class DailyReward extends WynnChatText {
     private final String emeralds;
     private final String items;
 
-    public DailyReward(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§7\\[Daily Rewards: (?:§a(\\d+) emeralds§7)?(?: and )?(?:§b(\\d+) items§7)?]$").matcher(text.getString()).find();
+    }
+
+    public DailyReward(Text text) {
+        super(text, Pattern.compile("^§7\\[Daily Rewards: (?:§a(\\d+) emeralds§7)?(?: and )?(?:§b(\\d+) items§7)?]$"));
         this.emeralds = matcher.group(1);
         this.items = matcher.group(2);
     }

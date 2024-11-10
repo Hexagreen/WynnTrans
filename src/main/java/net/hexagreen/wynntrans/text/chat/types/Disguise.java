@@ -6,8 +6,13 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class Disguise extends WynnChatText {
-    public Disguise(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^.+ has disguised as a .+!").matcher(text.getString()).find();
+    }
+
+    public Disguise(Text text) {
+        super(text);
     }
 
     @Override

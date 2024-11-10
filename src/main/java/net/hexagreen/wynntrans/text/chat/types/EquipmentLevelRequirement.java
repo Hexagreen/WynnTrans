@@ -11,8 +11,12 @@ public class EquipmentLevelRequirement extends WynnChatText {
     private final Text equipName;
     private final Text level;
 
-    public EquipmentLevelRequirement(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§c(.+)§4 is for combat level §c(\\d+)§4\\+ only\\.").matcher(text.getString()).find();
+    }
+
+    public EquipmentLevelRequirement(Text text) {
+        super(text, Pattern.compile("^§c(.+)§4 is for combat level §c(\\d+)§4\\+ only\\."));
         this.equipName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.level = Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }

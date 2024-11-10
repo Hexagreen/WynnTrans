@@ -10,8 +10,12 @@ public class DungeonCompleteGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^§7\\[\\+.+]");
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§6Great job! You've completed the .+ Dungeon!").matcher(text.getString()).find();
+    }
+
     public DungeonCompleteGlue() {
-        super(null, DungeonComplete.class);
+        super(DungeonComplete::new);
     }
 
     @Override

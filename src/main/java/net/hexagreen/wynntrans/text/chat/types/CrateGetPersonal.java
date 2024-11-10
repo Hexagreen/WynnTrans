@@ -10,7 +10,7 @@ public class CrateGetPersonal extends WynnChatText {
     private static final Pattern headRegex = Pattern.compile("You've gotten a(?: \\|\\|\\|)? (.+) (?:\\|\\|\\| )?reward!");
     private final CratesTexts.Crates grade;
 
-    public CrateGetPersonal(Text text, Pattern ignoredRegex) {
+    public CrateGetPersonal(Text text) {
         super(text, headRegex);
         this.grade = CratesTexts.Crates.find(matcher.group(1));
     }

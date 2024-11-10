@@ -5,13 +5,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class MiniQuestInfo extends WynnChatText {
     private final boolean gatheringQuest;
 
-    public MiniQuestInfo(Text text, Pattern regex) {
-        super(text, regex);
+    public MiniQuestInfo(Text text) {
+        super(text);
         this.gatheringQuest = text.getString().contains("Gathering");
     }
 

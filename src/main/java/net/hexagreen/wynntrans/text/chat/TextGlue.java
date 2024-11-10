@@ -2,27 +2,23 @@ package net.hexagreen.wynntrans.text.chat;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
-import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.regex.Pattern;
+import java.util.function.Function;
 
 public abstract class TextGlue {
     protected static final Logger LOGGER = LogUtils.getLogger();
     private static final byte TIMER_THRESHOLD = 1;
-    protected final Pattern regex;
     protected MutableText gluedText;
-    private Class<? extends WynnChatText> wctClass;
+    private Function<Text, WynnChatText> wct;
     private byte timer;
     private boolean safetyLock;
 
-    protected TextGlue(Pattern regex, Class<? extends WynnChatText> wctClass) {
+    protected TextGlue(Function<Text, WynnChatText> wct) {
         this.gluedText = Text.empty();
-        this.regex = regex;
-        this.wctClass = wctClass;
+        this.wct = wct;
         this.safetyLock = false;
     }
 
@@ -48,14 +44,7 @@ public abstract class TextGlue {
     protected void pop() {
         reset();
         if(safetyLock) {
-            try {
-                wctClass.cast(wctClass.getConstructor(Text.class, Pattern.class).newInstance(gluedText, regex)).print();
-            }
-            catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException |
-                  InstantiationException e) {
-                LOGGER.error("TextGlue Error:", e);
-                debugClass.writeTextAsJSON(gluedText, "GlueError");
-            }
+            wct.apply(gluedText).print();
         }
     }
 
@@ -67,8 +56,8 @@ public abstract class TextGlue {
         this.safetyLock = true;
     }
 
-    protected void changeWct(Class<? extends WynnChatText> wct) {
-        this.wctClass = wct;
+    protected void changeWct(Function<Text, WynnChatText> wct) {
+        this.wct = wct;
     }
 
     private void reset() {

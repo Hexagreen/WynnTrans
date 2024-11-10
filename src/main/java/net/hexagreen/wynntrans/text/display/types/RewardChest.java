@@ -34,7 +34,7 @@ public class RewardChest extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().setStyle(getStyle(0));
+        resultText = Text.empty().setStyle(getStyle());
         if(getSiblings().size() != 2) {
             resultText.append(getSibling(0).getSiblings().getFirst()).append("\n");
         }

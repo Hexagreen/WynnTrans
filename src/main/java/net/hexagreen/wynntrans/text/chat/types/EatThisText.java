@@ -9,8 +9,13 @@ import java.util.regex.Pattern;
  * This class will destroy income text
  */
 public class EatThisText extends WynnChatText {
-    public EatThisText(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§dYou've revealed:").matcher(text.getString()).find();
+    }
+
+    public EatThisText(Text text) {
+        super(text);
     }
 
     @Override

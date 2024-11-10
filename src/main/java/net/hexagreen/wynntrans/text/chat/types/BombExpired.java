@@ -11,8 +11,12 @@ public class BombExpired extends WynnChatText {
     private final Text storeLink;
     private final Text bombName;
 
-    public BombExpired(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^You can buy (.+) [bB]ombs at our store").matcher(text.getString()).find();
+    }
+
+    public BombExpired(Text text) {
+        super(text, Pattern.compile("^You can buy (.+) [bB]ombs at our store"));
         this.storeLink = Text.translatable(parentKey + ".store").setStyle(getStyle(0));
         this.bombName = parseBombName(matcher.group(1));
     }

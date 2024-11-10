@@ -20,8 +20,8 @@ public class QuestCompleted extends WynnChatText implements ISpaceProvider {
     private final String valQuestName;
     private String keyTitle = func + "questCompleted";
 
-    public QuestCompleted(Text text, Pattern regex) {
-        super(text, regex);
+    public QuestCompleted(Text text) {
+        super(text);
         this.valQuestName = getSibling(2).getString().replaceAll("^§. +§.", "");
         this.keyQuestName = parentKey + normalizeStringForKey(valQuestName);
         if(getSibling(1).getString().contains("Mini-Quest")) {

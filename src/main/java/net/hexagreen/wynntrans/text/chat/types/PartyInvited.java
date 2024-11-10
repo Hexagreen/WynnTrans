@@ -6,13 +6,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class PartyInvited extends WynnChatText implements ISpaceProvider {
     private final Text playerName;
 
-    public PartyInvited(Text text, Pattern regex) {
-        super(text, regex);
+    public PartyInvited(Text text) {
+        super(text);
         this.playerName = getPlayerName();
     }
 

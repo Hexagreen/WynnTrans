@@ -9,8 +9,13 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class Blacksmith extends WynnSystemText {
-    public Blacksmith(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("Blacksmith: ").matcher(text.getString()).find();
+    }
+
+    public Blacksmith(Text text) {
+        super(text, null);
     }
 
     @Override

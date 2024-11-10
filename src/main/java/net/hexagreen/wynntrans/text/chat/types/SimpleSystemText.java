@@ -12,11 +12,15 @@ public class SimpleSystemText extends WynnSystemText {
     private final String keyText;
     private final String valText;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\uDAFF\\uDFFC.\\uDAFF\\uDFFF\\uE002\\uDAFF\\uDFFE |^\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ").matcher(removeTextBox(text)).find();
+    }
+
     public static void setTranslationControl(boolean control) {
         translationRegisterControl = control;
     }
 
-    public SimpleSystemText(Text text, Pattern ignore) {
+    public SimpleSystemText(Text text) {
         super(text, null);
         this.valText = initValText();
         this.keyText = initKeyText();

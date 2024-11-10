@@ -22,8 +22,12 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
     private static final Pattern REGEX_PROMOTION_TIME = Pattern.compile(".+ in (.+ (?:days|day|hours|hour|minutes|minute))\\.");
     private static final Text LINK = Text.literal("§fplay.wynncraft.com §7-/-§f wynncraft.com").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://wynncraft.com")));
 
-    public WelcomeMessage(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\n +....Welcome to Wynncraft!\\n").matcher(text.getString()).find();
+    }
+
+    public WelcomeMessage(Text text) {
+        super(text);
     }
 
     @Override

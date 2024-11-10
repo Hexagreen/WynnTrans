@@ -11,8 +11,12 @@ public class CombatLevelAnnounce extends WynnChatText {
     private final String level;
     private final Text playerName;
 
-    public CombatLevelAnnounce(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching combat §flevel (\\d+)§7!$").matcher(text.getString()).find();
+    }
+
+    public CombatLevelAnnounce(Text text) {
+        super(text, Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching combat §flevel (\\d+)§7!$"));
         this.level = "§f" + matcher.group(2);
         this.playerName = Text.literal(matcher.group(1));
         if(!text.getSiblings().isEmpty()) throw new TextTranslationFailException("CombatLevelAnnounce.class");

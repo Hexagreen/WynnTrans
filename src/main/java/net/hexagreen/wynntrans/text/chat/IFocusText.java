@@ -76,7 +76,7 @@ public interface IFocusText extends ISpaceProvider {
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
         List<Text> original = fullText.getSiblings().get(findLastOptionIndex(fullText) + 4).getSiblings();
-        MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(2).getStyle()));
+        MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(1).getStyle()));
         return getCenterIndent(textBody).append(textBody);
     }
 
@@ -94,15 +94,32 @@ public interface IFocusText extends ISpaceProvider {
     private void selectionOptions(MutableText constructingText, Text fullText, String pKeyDialog) {
         List<Text> original = fullText.getSiblings();
         for(int i = 6; i <= findLastOptionIndex(fullText); i = i + 2) {
-            Text textBody = original.get(i).getSiblings().get(2);
-            String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getString()).substring(0, 4);
-            String valSelOpt = ((PlainTextContent) textBody.getContent()).string();
+            List<Text> textBody = original.get(i).getSiblings().subList(2, original.get(i).getSiblings().size());
             MutableText selection = MutableText.of(original.get(i).getContent()).setStyle(original.get(i).getStyle()).append(original.get(i).getSiblings().get(0)).append(original.get(i).getSiblings().get(1));
-            if(wynnTranslationStorage.checkTranslationExist(keySelOpt, valSelOpt)) {
-                selection.append(Text.translatable(keySelOpt).setStyle(textBody.getStyle()));
+            if(textBody.size() <= 1) {
+                String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getFirst().getString()).substring(0, 4);
+                String valSelOpt = ((PlainTextContent) textBody.getFirst().getContent()).string();
+                if(wynnTranslationStorage.checkTranslationExist(keySelOpt, valSelOpt)) {
+                    selection.append(Text.translatable(keySelOpt).setStyle(textBody.getFirst().getStyle()));
+                }
+                else {
+                    selection.append(textBody.getFirst());
+                }
             }
             else {
-                selection.append(textBody);
+                String stringBody = original.get(i).getString().replaceFirst(" +\\[\\d+] ", "");
+                String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(stringBody).substring(0, 4);
+                for(int j = 0; j < textBody.size(); j++) {
+                    Text sibling = textBody.get(j);
+                    String valSelOpt = sibling.getString();
+                    String key = keySelOpt + "_" + (j + 1);
+                    if(wynnTranslationStorage.checkTranslationExist(key, valSelOpt)) {
+                        selection.append(Text.translatable(key).setStyle(sibling.getStyle()));
+                    }
+                    else {
+                        selection.append(sibling);
+                    }
+                }
             }
             constructingText.append(selection).append("\n");
         }

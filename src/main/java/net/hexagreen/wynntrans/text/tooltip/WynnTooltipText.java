@@ -22,27 +22,26 @@ import java.util.regex.Pattern;
 
 public abstract class WynnTooltipText extends WynnTransText {
 
-    private static final Pattern colorParser = Pattern.compile("(?:§.)+[^§]+");
+    private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
     private static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     private static boolean lever = false;
     private static boolean registered = true;
 
     protected static Text colorCodedToStyled(Text text) {
-        if(!text.getString().contains("§")) return text;
-        List<Text> list = colorCodedToStyled(text.getContent().toString());
+        List<Text> list = new ArrayList<>();
         text.visit((style, asString) -> {
             if(!asString.contains("§")) {
                 list.add(Text.literal(asString).setStyle(style));
                 return Optional.empty();
             }
-            list.addAll(colorCodedToStyled(asString));
+            list.addAll(colorCodedToStyled(asString, style));
             return Optional.empty();
         }, Style.EMPTY);
 
         return siblingsToText(list);
     }
 
-    private static List<Text> colorCodedToStyled(String textAsString) {
+    private static List<Text> colorCodedToStyled(String textAsString, Style parentStyle) {
         Matcher matcher = colorParser.matcher(textAsString);
         List<String> segments = new ArrayList<>();
         while(matcher.find()) {
@@ -51,7 +50,7 @@ public abstract class WynnTooltipText extends WynnTransText {
         List<Text> result = new ArrayList<>();
         for(String segment : segments) {
             String content = segment.replaceFirst("(?:§.)+", "");
-            Style style = parseStyleCode(segment);
+            Style style = parseStyleCode(segment).withParent(parentStyle);
             result.add(Text.literal(content).setStyle(style));
         }
         return result;
@@ -79,6 +78,7 @@ public abstract class WynnTooltipText extends WynnTransText {
         if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_SUBTRACT) == 1) return getSiblings();
         try {
             build();
+            textRecorder(resultText.getSiblings());
             return resultText.getSiblings();
         }
         catch(IndexOutOfBoundsException e) {
@@ -89,10 +89,11 @@ public abstract class WynnTooltipText extends WynnTransText {
             LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
             return new SimpleTooltip(getSiblings()).text();
         }
+        textRecorder(inputText.getSiblings());
         return getSiblings();
     }
 
-    public MutableText textRaw() {
+    public MutableText textAsMutable() {
         try {
             build();
             return resultText;

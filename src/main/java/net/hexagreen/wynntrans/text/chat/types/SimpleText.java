@@ -7,8 +7,6 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.regex.Pattern;
-
 public class SimpleText extends WynnChatText {
     private static boolean translationRegisterControl = true;
     private final String keyText;
@@ -19,8 +17,8 @@ public class SimpleText extends WynnChatText {
         translationRegisterControl = control;
     }
 
-    public SimpleText(Text text, Pattern regex) {
-        super(text, regex);
+    public SimpleText(Text text) {
+        super(text);
         if(getSiblings().isEmpty()) {
             this.valText = inputText.getString().replaceFirst("^(?:§.)+", "");
             String styleCode = inputText.getString().replace(valText, "");

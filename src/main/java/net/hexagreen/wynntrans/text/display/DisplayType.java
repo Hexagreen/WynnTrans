@@ -47,6 +47,9 @@ public enum DisplayType {
     SUMMONS_NAME(SummonsName::new, SummonsName::typeChecker),
     PET_NAME(PetName::new, PetName::typeChecker),
 
+    GUILD_LEADERBOARD(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.GUILD_LEADERBOARD.getTypeChecker()),
+    GUILD_NEXT_REWARD(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.GUILD_NEXT_REWARD.getTypeChecker()),
+    GUILD_SEASON_REWARD(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.GUILD_SEASON_REWARD.getTypeChecker()),
     SPIRITS_WEEKLY_BOON(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.DRAWING_OF_THE_SPIRITS_TIMER.getTypeChecker()),
 
     NO_TYPE(SimpleDisplay::new, null);

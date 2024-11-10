@@ -13,8 +13,12 @@ public class TradePartial extends WynnSystemText {
     private final String tradeAmount;
     private final Text item;
 
-    public TradePartial(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("(\\d+)x .+ has been (?:Bought|Sold)\\.$").matcher(text.getString()).find();
+    }
+
+    public TradePartial(Text text) {
+        super(text, Pattern.compile("(\\d+)x .+ has been (?:Bought|Sold)\\.$"));
         this.buyingMode = text.getString().contains(" has been Bought.");
         this.tradeAmount = matcher.group(1);
         this.item = parseItem();

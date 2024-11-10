@@ -10,8 +10,12 @@ import java.util.regex.Pattern;
 public class AreaEnter extends WynnChatText {
     private final Text areaText;
 
-    public AreaEnter(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§7\\[You are now entering (.+)]$").matcher(text.getString()).find();
+    }
+
+    public AreaEnter(Text text) {
+        super(text, Pattern.compile("^§7\\[You are now entering (.+)]$"));
         String areaName = matcher.group(1);
         String keyAreaName = rootKey + "area." + normalizeStringForKey(areaName);
         if(WTS.checkTranslationExist(keyAreaName, areaName)) {

@@ -11,8 +11,12 @@ public class Shout extends WynnChatText {
     private final String name;
     private final String server;
 
-    public Shout(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(.+) \\[WC(\\d+)] shouts: ").matcher(text.getString()).find();
+    }
+
+    public Shout(Text text) {
+        super(text, Pattern.compile("^(.+) \\[WC(\\d+)] shouts: "));
         this.name = matcher.group(1);
         this.server = matcher.group(2);
     }

@@ -51,12 +51,17 @@ public abstract class WynnChatText extends WynnTransText {
         return newText;
     }
 
+    @Deprecated
     public WynnChatText(Text text, Pattern regex) {
         super(text);
         if(regex != null) {
             this.matcher = createMatcher(text, regex);
             boolean ignore = this.matcher.find();
         }
+    }
+
+    public WynnChatText(Text text) {
+        super(text);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -78,7 +83,7 @@ public abstract class WynnChatText extends WynnTransText {
         }
         catch(TextTranslationFailException e) {
             LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
-            return new SimpleText(inputText, null).text();
+            return new SimpleText(inputText).text();
         }
         return inputText;
     }

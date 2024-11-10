@@ -11,8 +11,12 @@ public class FriendList extends WynnSystemText {
     private final String playerName;
     private final String friendNumber;
 
-    public FriendList(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("(.+)'s friends \\((\\d+)\\): ").matcher(removeTextBox(text)).find();
+    }
+
+    public FriendList(Text text) {
+        super(text, Pattern.compile("(.+)'s friends \\((\\d+)\\): "));
         this.playerName = matcher.group(1);
         this.friendNumber = matcher.group(2);
     }

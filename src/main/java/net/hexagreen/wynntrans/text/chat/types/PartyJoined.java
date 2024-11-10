@@ -8,8 +8,12 @@ import java.util.regex.Pattern;
 public class PartyJoined extends WynnChatText {
     private final Text playerName;
 
-    public PartyJoined(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(.+) has joined your party, say hello!$").matcher(text.getString()).find();
+    }
+
+    public PartyJoined(Text text) {
+        super(text, Pattern.compile("^(.+) has joined your party, say hello!$"));
         if(text.getSiblings().size() > 1) {
             this.playerName = getPlayerNameFromSibling(0);
         }

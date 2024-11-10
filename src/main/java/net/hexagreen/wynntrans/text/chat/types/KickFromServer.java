@@ -12,19 +12,29 @@ import java.util.regex.Pattern;
 public class KickFromServer extends WynnChatText {
     private static final Pattern fallbackRegex = Pattern.compile("You are being moved to (\\w+\\d+)\\.\\.\\.");
     private final String channelNumber;
-    private final String fallbackServer;
+    private final boolean kickWhileConnect;
+    private String fallbackServer;
 
-    public KickFromServer(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^Kicked (?:from|whilst connecting to) (?:(WC\\d+)|(DUMMY)): ").matcher(text.getString()).find();
+    }
+
+    public KickFromServer(Text text) {
+        super(text, Pattern.compile("^Kicked (?:from|whilst connecting to) (?:(WC\\d+)|(DUMMY)): "));
         this.channelNumber = matcher.group(1);
-        Matcher m = fallbackRegex.matcher(getSibling(2).getString());
-        boolean ignore = m.find();
-        this.fallbackServer = m.group(1);
+        this.kickWhileConnect = text.getString().contains("Kicked whilst connecting");
+        try {
+            Matcher m = fallbackRegex.matcher(getSibling(2).getString());
+            boolean ignore = m.find();
+            this.fallbackServer = m.group(1);
+        }
+        catch(IndexOutOfBoundsException ignore) {
+        }
     }
 
     @Override
     protected String setParentKey() {
-        return rootKey + "func.serverKicked";
+        return inputText.getString().contains("Kicked whilst connecting") ? rootKey + "func.serverKickedOnConnection" : rootKey + "func.serverKicked";
     }
 
     @Override
@@ -37,12 +47,17 @@ public class KickFromServer extends WynnChatText {
         if(reason != KickReason.UNKNOWN_REASON) resultText.append(Text.translatable(parentKey + reason.langCode));
         else resultText.append(getSibling(1));
 
-
-        resultText.append(Text.translatable(parentKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        if(!kickWhileConnect) {
+            resultText.append(Text.translatable(parentKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        }
     }
 
     private enum KickReason {
-        LOW_TPS("The server you were previously on went down", ".serverDown"), RESTART("World is restarting!", ".restart"), PROXY_LOST("Proxy lost connection to server.", ".proxyLost"), UNKNOWN_REASON(null, null);
+        LOW_TPS("The server you were previously on went down", ".serverDown"),
+        RESTART("World is restarting!", ".restart"),
+        PROXY_LOST("Proxy lost connection to server.", ".proxyLost"),
+        FAST_SWAP("You're rejoining too quickly! Give us a moment to save your data.", ".fastRejoin"),
+        UNKNOWN_REASON(null, null);
         private final String reason;
         private final String langCode;
 

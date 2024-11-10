@@ -8,6 +8,13 @@ import java.util.regex.Pattern;
 public class EventBonfireHearthflames extends SimpleSystemText {
     private final String num;
 
+    public static boolean typeChecker(Text text) {
+        String input = removeTextBox(text);
+        return Pattern.compile("You are carrying \\d+ hearthflames").matcher(input).find()
+                || Pattern.compile("Returning \\d+ hearthflames").matcher(input).find()
+                || Pattern.compile("Returned \\d+ hearthflames").matcher(input).find();
+    }
+
     private static Text preprocess(Text text) {
         MutableText result = numToReplacer(text);
         for(Text sibling : text.getSiblings()) {
@@ -24,8 +31,8 @@ public class EventBonfireHearthflames extends SimpleSystemText {
         else return text.copyContentOnly().setStyle(text.getStyle());
     }
 
-    public EventBonfireHearthflames(Text text, Pattern ignore) {
-        super(preprocess(text), ignore);
+    public EventBonfireHearthflames(Text text) {
+        super(preprocess(text));
         this.num = text.getString().replaceAll("\\D", "");
     }
 

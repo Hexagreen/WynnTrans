@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.ChatType;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
@@ -18,9 +17,13 @@ public class NpcDialog extends WynnChatText {
     private final String valName;
     private boolean addiction = true;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\n?\\[(\\d+)/(\\d+)] .+:").matcher(text.getString()).find();
+    }
+
     @SuppressWarnings("DataFlowIssue")
-    public NpcDialog(Text text, Pattern regex) {
-        super(removeCustomNicknameFromDialog(text), regex);
+    public NpcDialog(Text text) {
+        super(removeCustomNicknameFromDialog(text), Pattern.compile("^\\n?\\[(\\d+)/(\\d+)] .+:"));
         this.clientPlayerName = MinecraftClient.getInstance().player.getName().getString();
         this.playerName = removedCustomNickname == null ? this.clientPlayerName : removedCustomNickname;
         this.valName = getContentString(0).replace(": ", "");
@@ -102,7 +105,7 @@ public class NpcDialog extends WynnChatText {
         for(int i = 1; getSiblings().size() > i; i++) {
             corrected.append(getSibling(i));
         }
-        resultText = new NpcDialog(corrected, ChatType.DIALOG_NORMAL.getRegex()).text();
+        resultText = new NpcDialog(corrected).text();
     }
 
     private boolean checkTranslationExist(String key, String val) {

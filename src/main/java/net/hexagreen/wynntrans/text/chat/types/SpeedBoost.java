@@ -10,8 +10,12 @@ import java.util.regex.Pattern;
 public class SpeedBoost extends WynnChatText {
     private final String duration;
 
-    public SpeedBoost(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\+(\\d) minutes speed boost\\.").matcher(text.getString()).find();
+    }
+
+    public SpeedBoost(Text text) {
+        super(text, Pattern.compile("^\\+(\\d) minutes speed boost\\."));
         this.duration = matcher.group(1);
     }
 

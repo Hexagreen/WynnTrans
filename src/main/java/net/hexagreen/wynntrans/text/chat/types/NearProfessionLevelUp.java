@@ -13,8 +13,12 @@ public class NearProfessionLevelUp extends WynnChatText {
     private final Text playerName;
     private final Text profession;
 
-    public NearProfessionLevelUp(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§6(.+) is now level (\\d+) in §f(.)§6 (.+)$").matcher(text.getString()).find();
+    }
+
+    public NearProfessionLevelUp(Text text) {
+        super(text, Pattern.compile("^§6(.+) is now level (\\d+) in §f(.)§6 (.+)$"));
         this.level = matcher.group(2);
         this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon().setStyle(Style.EMPTY.withColor(Formatting.GOLD));
         if(!getSiblings().isEmpty()) {

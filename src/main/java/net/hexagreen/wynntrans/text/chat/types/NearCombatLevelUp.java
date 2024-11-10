@@ -11,8 +11,12 @@ public class NearCombatLevelUp extends WynnChatText {
     private final Text level;
     private final Text playerName;
 
-    public NearCombatLevelUp(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(.+) is now combat level (\\d+)$").matcher(text.getString()).find();
+    }
+
+    public NearCombatLevelUp(Text text) {
+        super(text, Pattern.compile("^(.+) is now combat level (\\d+)$"));
         this.level = Text.literal(matcher.group(2));
         if(!getSiblings().isEmpty()) {
             this.playerName = getPlayerNameFromSibling(0);

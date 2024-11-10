@@ -23,8 +23,9 @@ public class ContentBookNodes extends WynnTooltipText {
             .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.DARK_PURPLE)));
 
     public static boolean typeChecker(List<Text> text) {
-        if(text.getFirst().getSiblings().size() != 2) return false;
-        return text.getFirst().getSiblings().get(1).getString()
+        Text reformed = colorCodedToStyled(text.getFirst());
+        if(reformed.getSiblings().size() != 2) return false;
+        return reformed.getSiblings().get(1).getString()
                 .matches("\\[Quest]|\\[Mini-Quest]|\\[World Event]" +
                         "|\\[Secret Discovery]|\\[World Discovery]|\\[Territorial Discovery]" +
                         "|\\[Cave]|\\[Dungeon]|\\[Raid]|\\[Boss Altar]|\\[Lootrun Camp]");
@@ -209,16 +210,66 @@ public class ContentBookNodes extends WynnTooltipText {
         }
 
         private void descSectionQuest(Text descText) {
-            String hash = DigestUtils.sha1Hex(descText.getString()).substring(0, 4);
-            List<Text> siblings = descText.getSiblings();
-            StringBuilder key = new StringBuilder().append(baseKey).append(normalizedName).append(".step.").append(hash);
-            MutableText questDesc;
-            if(siblings.size() == 1) {
-                if(WTS.checkTranslationExist(key.toString(), descText.getString())) {
-                    questDesc = Text.translatable(key.toString()).setStyle(siblings.getFirst().getStyle());
+            MutableText reformed = Text.empty();
+            List<Text> coordinates = new ArrayList<>();
+            AtomicReference<StringBuilder> body = new AtomicReference<>(new StringBuilder());
+            AtomicReference<Style> currentStyle = new AtomicReference<>(Style.EMPTY);
+            descText.visit((style, string) -> {
+                if(string.isEmpty()) return Optional.empty();
+                if(string.matches("\\[-?\\d+, -?\\d+, -?\\d+]")) {
+                    coordinates.add(Text.literal(string).setStyle(style));
+                    body.get().append("%s");
+                    return Optional.empty();
+                }
+                if(!currentStyle.get().equals(style) && !body.get().isEmpty()) {
+                    reformed.append(Text.literal(body.toString()).setStyle(currentStyle.get()));
+                    body.set(new StringBuilder());
+                }
+                currentStyle.set(style);
+                body.get().append(string);
+                return Optional.empty();
+            }, Style.EMPTY);
+            if(!body.get().isEmpty()) {
+                reformed.append(Text.literal(body.toString()).setStyle(currentStyle.get()));
+            }
+
+            if(category.equals("Mini-Quest")) {
+                List<Text> siblings = reformed.getSiblings();
+                if(siblings.size() == 5) {
+                    Text postName = Text.translatable("wytr.display.post.slay.req", siblings.get(3).getString().replaceAll("\\D", ""))
+                            .setStyle(siblings.get(3).getStyle());
+                    desc = Text.translatable("wytr.tooltip.miniQuestDesc.slay", siblings.get(1), postName, coordinates.getFirst())
+                            .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
                 }
                 else {
-                    questDesc = descText.copy();
+                    String postString = siblings.get(5).getString();
+                    Text profession = Profession.getProfession(postString.replaceFirst("\\[(\\w+ing).+", "$1")).getText();
+                    Text postName = Text.translatable("wytr.display.post.gather.req", profession, postString.replaceAll("\\D", ""))
+                            .setStyle(siblings.get(5).getStyle());
+                    desc = Text.translatable("wytr.tooltip.miniQuestDesc.gather", siblings.get(1), siblings.get(3), postName, coordinates.getFirst())
+                            .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                }
+                return;
+            }
+
+
+            boolean translateSuccess = true;
+            String hash = DigestUtils.sha1Hex(reformed.getString()).substring(0, 4);
+            List<Text> siblings = reformed.getSiblings();
+            StringBuilder key = new StringBuilder().append(baseKey).append(normalizedName).append(".step.").append(hash);
+            MutableText questDesc = Text.empty();
+            Object[] args = coordinates.toArray(Text[]::new);
+            if(siblings.size() == 1) {
+                if(WTS.checkTranslationExist(key.toString(), reformed.getString())) {
+                    if(coordinates.isEmpty()) {
+                        questDesc = Text.translatable(key.toString()).setStyle(siblings.getFirst().getStyle());
+                    }
+                    else {
+                        questDesc = Text.translatable(key.toString(), args).setStyle(siblings.getFirst().getStyle());
+                    }
+                }
+                else {
+                    translateSuccess = false;
                 }
             }
             else {
@@ -229,14 +280,19 @@ public class ContentBookNodes extends WynnTooltipText {
                     String valDesc = sibling.getString();
                     Style styleDesc = sibling.getStyle();
                     if(WTS.checkTranslationExist(keyDesc, valDesc)) {
-                        questDesc.append(Text.translatable(keyDesc).setStyle(styleDesc));
+                        if(coordinates.isEmpty()) {
+                            questDesc.append(Text.translatable(keyDesc).setStyle(styleDesc));
+                        }
+                        else {
+                            questDesc.append(Text.translatable(keyDesc, args).setStyle(styleDesc));
+                        }
                     }
                     else {
-                        questDesc.append(sibling);
+                        translateSuccess = false;
                     }
                 }
             }
-            desc = questDesc;
+            desc = translateSuccess ? questDesc : descText.copy();
         }
 
         private void descSectionDiscovery(Text descText) {
@@ -352,7 +408,7 @@ public class ContentBookNodes extends WynnTooltipText {
 
         private Text infoSectionGetDistance(Text infoText) {
             Text dist = infoText.getSiblings().get(2);
-            String strDist = dist.getString().toLowerCase(Locale.ENGLISH);
+            String strDist = dist.getString().toLowerCase(Locale.ENGLISH).replace(" ", "");
             Style styleDist = dist.getStyle();
             Text distTranslated = Text.translatable("wytr.distance." + strDist).setStyle(styleDist);
 

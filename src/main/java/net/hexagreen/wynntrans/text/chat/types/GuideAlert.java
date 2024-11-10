@@ -5,13 +5,11 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.regex.Pattern;
-
 public class GuideAlert extends WynnChatText {
     private final String pKeyGnA;
 
-    public GuideAlert(Text text, Pattern regex) {
-        super(text, regex);
+    public GuideAlert(Text text) {
+        super(text);
         String hash = DigestUtils.sha1Hex(text.getString());
         this.pKeyGnA = parentKey + hash;
     }

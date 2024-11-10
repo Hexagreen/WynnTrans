@@ -9,10 +9,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class OnGameMessageHandler {
@@ -49,13 +49,7 @@ public class OnGameMessageHandler {
 
     public void attachGlue(Text text) {
         if(this.textGlue == null) {
-            try {
-                this.textGlue = GlueType.findAndGet(text);
-            }
-            catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException |
-                  InstantiationException ignore) {
-                LOGGER.warn("GlueType.findAndGet Error.");
-            }
+            this.textGlue = GlueType.findAndGet(text);
         }
     }
 
@@ -70,12 +64,14 @@ public class OnGameMessageHandler {
 
     public boolean translateChatText(Text text) {
         if(recordAll) debugClass.writeTextAsJSON(text, "Record");
+        if(text.getContent() instanceof TranslatableTextContent) return false;
         try {
             if(PlainTextContent.EMPTY.equals(text.getContent())) {
                 if(!text.contains(Text.of("\n"))) {
                     return this.analyseSinglelineText(text);
                 }
                 else {
+                    if(text.getString().matches("\\n")) return true;
                     return this.analyseMultilineText(text);
                 }
             }
@@ -92,7 +88,7 @@ public class OnGameMessageHandler {
         return false;
     }
 
-    private boolean analyseLiteralText(Text text) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private boolean analyseLiteralText(Text text) {
         attachGlue(text);
         if(this.textGlue != null) {
             if(!this.textGlue.push(text)) {
@@ -116,7 +112,7 @@ public class OnGameMessageHandler {
         }
     }
 
-    private boolean analyseSinglelineText(Text text) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private boolean analyseSinglelineText(Text text) {
         attachGlue(text);
         if(this.textGlue != null) {
             if(!this.textGlue.push(text)) {
@@ -142,13 +138,13 @@ public class OnGameMessageHandler {
     private boolean analyseMultilineText(Text text) {
         if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2) || FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 1)) {
             this.backgroundText.clear();
-            return new DialogPlaceholder(text, FunctionalRegex.DIALOG_PLACEHOLDER.getRegex()).print();
+            return new DialogPlaceholder(text).print();
         }
         if(FunctionalRegex.QUEST_COMPLETE.match(text, 1)) {
-            return new QuestCompleted(editMultilineQuestComplete(text), null).print();
+            return new QuestCompleted(editMultilineQuestComplete(text)).print();
         }
         if(FunctionalRegex.QUEST_COMPLETE.match(text, 0)) {
-            return new QuestCompleted(editMultilineQuestCompleteNoHeader(text), null).print();
+            return new QuestCompleted(editMultilineQuestCompleteNoHeader(text)).print();
         }
         if(textGlue instanceof SelectionGlue) {
             this.backgroundText.clear();
@@ -169,22 +165,22 @@ public class OnGameMessageHandler {
         else if(text.getSiblings().getFirst().equals(text.getSiblings().get(4)) && text.getSiblings().getFirst().equals(text.getSiblings().getLast()) && text.getSiblings().getFirst().equals(Text.empty()) && (text.getSiblings().size() == 5 || text.getSiblings().size() == 9)) {
             this.backgroundText.clear();
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
-                new NpcDialogFocused(text, ChatType.DIALOG_NORMAL.getRegex()).print();
+                new NpcDialogFocused(text).print();
             }
             else if(ChatType.NEW_QUEST.match(text, 2)) {
-                new NewQuestFocused(text, ChatType.NEW_QUEST.getRegex()).print();
+                new NewQuestFocused(text).print();
             }
             else if(ChatType.DIALOG_ITEM.match(text, 2)) {
-                new ItemGiveAndTakeFocused(text, ChatType.DIALOG_ITEM.getRegex()).print();
+                new ItemGiveAndTakeFocused(text).print();
             }
             else if(FunctionalRegex.MINI_QUEST_DESC.match(text, 2)) {
-                new MiniQuestInfoFocused(text, FunctionalRegex.MINI_QUEST_DESC.getRegex()).print();
+                new MiniQuestInfoFocused(text).print();
             }
             else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
-                new GuideAlert(text.getSiblings().get(2), null).print();
+                new GuideAlert(text.getSiblings().get(2)).print();
             }
             else {
-                new NarrationFocused(text, null).print();
+                new NarrationFocused(text).print();
             }
             return true;
         }

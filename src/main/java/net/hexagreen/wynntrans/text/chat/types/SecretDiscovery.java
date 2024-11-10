@@ -21,8 +21,8 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
     private final String revealed;
     private final String total;
 
-    public SecretDiscovery(Text text, Pattern regex) {
-        super(text, regex);
+    public SecretDiscovery(Text text) {
+        super(text);
         Matcher discoveryNameMatcher = DISCOVERY_NAME.matcher(getSibling(1).getString());
         String discoveryName = discoveryNameMatcher.find() ? discoveryNameMatcher.group(1) : "UNKNOWN DISCOVERY";
         this.keyDiscoveryName = rootKey + "discovery." + normalizeStringForKey(discoveryName);

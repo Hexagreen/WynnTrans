@@ -6,13 +6,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class DeathItemLost extends WynnChatText {
     private final Text lostItems;
 
-    public DeathItemLost(Text text, Pattern regex) {
-        super(text, regex);
+    public DeathItemLost(Text text) {
+        super(text);
         this.lostItems = initLost();
     }
 

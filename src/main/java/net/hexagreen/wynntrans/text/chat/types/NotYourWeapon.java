@@ -13,8 +13,12 @@ public class NotYourWeapon extends WynnChatText {
     private final Text className;
     private final Text weapon;
 
-    public NotYourWeapon(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("§c(.+)§4 is not a §c(.+)§4 weapon\\. You must use a §c.+\\.").matcher(text.getString()).find();
+    }
+
+    public NotYourWeapon(Text text) {
+        super(text, Pattern.compile("§c(.+)§4 is not a §c(.+)§4 weapon\\. You must use a §c.+\\."));
         this.item = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.className = CharacterClass.getClassName(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.weapon = CharacterClass.getWeapon(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));

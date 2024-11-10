@@ -11,8 +11,12 @@ public class MobTotemRunning extends WynnChatText {
     private final Text playerName;
     private final Text link;
 
-    public MobTotemRunning(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("You are inside of (.+)'s mob totem").matcher(text.getString()).find();
+    }
+
+    public MobTotemRunning(Text text) {
+        super(text, Pattern.compile("You are inside of (.+)'s mob totem"));
         this.playerName = getPlayerName(matcher.group(1));
         this.link = getSibling(3);
     }

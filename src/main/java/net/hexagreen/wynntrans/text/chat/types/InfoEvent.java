@@ -17,6 +17,10 @@ public class InfoEvent extends WynnChatText {
     private final Text original;
     private final Text timer;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\[Event] ").matcher(text.getString()).find();
+    }
+
     private static Text cutoffTail(Text text) {
         MutableText result = Text.empty();
         int size = text.getSiblings().size();
@@ -27,8 +31,8 @@ public class InfoEvent extends WynnChatText {
         return result;
     }
 
-    public InfoEvent(Text text, Pattern regex) {
-        super(cutoffTail(text), regex);
+    public InfoEvent(Text text) {
+        super(cutoffTail(text));
         this.original = text;
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
         this.valEName = text.getSiblings().get(1).getString().replace(": ", "");

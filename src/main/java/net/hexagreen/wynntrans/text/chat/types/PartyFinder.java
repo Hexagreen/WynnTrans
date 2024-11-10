@@ -12,8 +12,12 @@ public class PartyFinder extends WynnChatText {
     private final String partyName;
     private final String players;
 
-    public PartyFinder(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§5Party Finder:§d Hey (.+), over here! Join the (§..+)§d queue and match up with §e(\\d+) other players?§d!$").matcher(text.getString()).find();
+    }
+
+    public PartyFinder(Text text) {
+        super(text, Pattern.compile("^§5Party Finder:§d Hey (.+), over here! Join the (§..+)§d queue and match up with §e(\\d+) other players?§d!$"));
         this.playerName = matcher.group(1);
         this.partyName = matcher.group(2);
         this.players = matcher.group(3);

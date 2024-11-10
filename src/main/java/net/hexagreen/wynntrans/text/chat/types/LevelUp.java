@@ -15,8 +15,8 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
     private static final Pattern REGEX_LEVELUP = Pattern.compile("You are now combat level (\\d+)");
     private static final Pattern REGEX_NEXTAP = Pattern.compile("^ +§6Only §e(\\d+) more levels?§6 until your next§e Ability Point");
 
-    public LevelUp(Text text, Pattern regex) {
-        super(text, regex);
+    public LevelUp(Text text) {
+        super(text);
     }
 
     @Override

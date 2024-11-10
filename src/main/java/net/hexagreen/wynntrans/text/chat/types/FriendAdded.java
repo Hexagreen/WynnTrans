@@ -8,8 +8,12 @@ import java.util.regex.Pattern;
 public class FriendAdded extends WynnChatText {
     private final String playerName;
 
-    public FriendAdded(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(.+) has added you as a friend!$").matcher(text.getString()).find();
+    }
+
+    public FriendAdded(Text text) {
+        super(text, Pattern.compile("^(.+) has added you as a friend!$"));
         this.playerName = matcher.group(1);
     }
 

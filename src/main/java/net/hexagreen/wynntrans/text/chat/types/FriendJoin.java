@@ -11,8 +11,12 @@ public class FriendJoin extends WynnChatText {
     private final Text worldChannel;
     private final Text charClass;
 
-    public FriendJoin(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$").matcher(text.getString()).find();
+    }
+
+    public FriendJoin(Text text) {
+        super(text, Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"));
         this.playerName = getSibling(0);
         this.worldChannel = getSibling(2);
         this.charClass = CharacterClass.getClassName(matcher.group(1)).setStyle(getStyle(4));

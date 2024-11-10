@@ -18,6 +18,10 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
     private final String keyCaveName;
     private final String valCaveName;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^ \\n§2 +\\[Cave Completed]").matcher(text.getString()).find();
+    }
+
     private static Text splitTextBody(Text text) {
         String[] lines = text.getString().split("\\n");
         MutableText result = Text.empty();
@@ -28,8 +32,8 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
         return result.copy();
     }
 
-    public CaveCompletedLiteral(Text text, Pattern ignore) {
-        super(splitTextBody(text), null);
+    public CaveCompletedLiteral(Text text) {
+        super(splitTextBody(text));
         this.valCaveName = getSibling(2).getString().replaceAll("§. +§.", "");
         this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
     }

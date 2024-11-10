@@ -9,8 +9,12 @@ public class NewQuestFocused extends NewQuest implements IFocusText {
     private final Text fullText;
     private final FocusType focusType;
 
-    public NewQuestFocused(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(?:New |Mini-)?Quest(?:line)? Started: ").matcher(text.getString()).find();
+    }
+
+    public NewQuestFocused(Text text) {
+        super(text.getSiblings().get(2));
         this.fullText = text;
         this.focusType = detectFocusType(text);
     }

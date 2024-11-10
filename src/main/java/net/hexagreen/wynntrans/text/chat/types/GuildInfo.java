@@ -14,7 +14,15 @@ import java.util.regex.Pattern;
 public class GuildInfo extends WynnSystemText {
     private final GuildInformation infoType;
 
-    public GuildInfo(Text text, Pattern ignore) {
+    public static boolean typeChecker(Text text) {
+        String input = removeTextBox(text);
+        return Pattern.compile("Only .+ left to complete the Weekly Guild Objectives").matcher(input).find()
+                || Pattern.compile("has finished their weekly objective").matcher(input).find()
+                || Pattern.compile("New Weekly Guild Objectives").matcher(input).find()
+                || Pattern.compile("The current guild season will end in").matcher(input).find();
+    }
+
+    public GuildInfo(Text text) {
         super(text, null);
         this.infoType = GuildInformation.findAndGet(inputText);
     }

@@ -12,8 +12,12 @@ public class ProfessionLevelAnnounce extends WynnChatText {
     private final Text playerName;
     private final Text profession;
 
-    public ProfessionLevelAnnounce(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching §flevel (\\d+) in §f(.)§7 (.+)§7!$").matcher(text.getString()).find();
+    }
+
+    public ProfessionLevelAnnounce(Text text) {
+        super(text, Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching §flevel (\\d+) in §f(.)§7 (.+)§7!$"));
         this.level = "§f" + matcher.group(2);
         String profIcon = matcher.group(3) + " ";
         String keyProfName = "wytr.profession." + matcher.group(4).toLowerCase();

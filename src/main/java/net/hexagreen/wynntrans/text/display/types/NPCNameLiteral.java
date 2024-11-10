@@ -17,6 +17,7 @@ public class NPCNameLiteral extends WynnDisplayText {
     private final String trailer;
 
     public static boolean typeChecker(Text text) {
+        if(text.getSiblings().size() == 1 && text.getString().contains("\n§7NPC")) return true;
         if(!text.getSiblings().isEmpty()) return false;
         if(text.getString().contains(" Post §2[")) return false;
         return text.getString().contains("\n§7NPC");
@@ -45,6 +46,10 @@ public class NPCNameLiteral extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+        if(valNpcName.contains("\uE060")) {
+            resultText = inputText;
+            return;
+        }
         resultText = Text.empty();
         if(keyNpcTalk != null) {
             if(WTS.checkTranslationExist(keyNpcTalk, valNpcTalk)) {

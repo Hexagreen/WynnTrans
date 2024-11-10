@@ -11,8 +11,12 @@ public class CaveGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^ {11}- \\+.+$");
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^ +\\[Cave Completed]$").matcher(text.getString()).find();
+    }
+
     public CaveGlue() {
-        super(null, CaveCompleted.class);
+        super(CaveCompleted::new);
         gluedText.append("");
         count++;
     }

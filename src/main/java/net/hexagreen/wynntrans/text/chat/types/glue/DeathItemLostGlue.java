@@ -4,11 +4,17 @@ import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.DeathItemLost;
 import net.minecraft.text.Text;
 
+import java.util.regex.Pattern;
+
 public class DeathItemLostGlue extends TextGlue {
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§6By dying, you've lost:").matcher(text.getString()).find();
+    }
+
     public DeathItemLostGlue() {
-        super(null, DeathItemLost.class);
+        super(DeathItemLost::new);
     }
 
     @Override

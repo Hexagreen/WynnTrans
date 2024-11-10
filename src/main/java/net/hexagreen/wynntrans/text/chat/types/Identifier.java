@@ -11,8 +11,12 @@ import java.util.regex.Pattern;
 public class Identifier extends WynnSystemText {
     private final MessageType messageType;
 
-    public Identifier(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("Item Identifier: ").matcher(text.getString()).find();
+    }
+
+    public Identifier(Text text) {
+        super(text, null);
         this.messageType = MessageType.getType(text);
     }
 

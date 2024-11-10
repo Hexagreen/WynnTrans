@@ -10,8 +10,12 @@ import java.util.regex.Pattern;
 public class FriendLeft extends WynnChatText {
     private final Text playerName;
 
-    public FriendLeft(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§a(.+) left the game\\.$").matcher(text.getString()).find();
+    }
+
+    public FriendLeft(Text text) {
+        super(text, Pattern.compile("^§a(.+) left the game\\.$"));
         if(text.getSiblings().size() > 1) {
             this.playerName = getPlayerNameFromSibling(0);
         }

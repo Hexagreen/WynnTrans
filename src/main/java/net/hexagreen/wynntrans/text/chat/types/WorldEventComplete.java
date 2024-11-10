@@ -6,13 +6,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class WorldEventComplete extends WynnSystemText implements ISpaceProvider {
     private final String experience;
 
-    public WorldEventComplete(Text text, Pattern regex) {
-        super(text, regex, true);
+    public WorldEventComplete(Text text) {
+        super(text, true);
         this.experience = initExperience(getSibling(3));
     }
 

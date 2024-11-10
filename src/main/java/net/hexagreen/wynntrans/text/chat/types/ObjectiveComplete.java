@@ -25,8 +25,8 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
     private Style styleEName = null;
     private Style styleEReward = null;
 
-    public ObjectiveComplete(Text text, Pattern regex) {
-        super(text, regex);
+    public ObjectiveComplete(Text text) {
+        super(text);
         this.titleStyle = parseStyleCode(getSibling(1).getString().replaceAll("\\[.+]", "").replaceAll(" ", ""));
 
         this.objectiveNameStyle = parseStyleCode(getSibling(2).getString().replaceAll("(?!§.) +.+", ""));

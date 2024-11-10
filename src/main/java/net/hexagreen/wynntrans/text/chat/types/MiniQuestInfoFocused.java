@@ -3,13 +3,11 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.IFocusText;
 import net.minecraft.text.Text;
 
-import java.util.regex.Pattern;
-
 public class MiniQuestInfoFocused extends MiniQuestInfo implements IFocusText {
     private final Text fullText;
 
-    public MiniQuestInfoFocused(Text text, Pattern regex) {
-        super(text.getSiblings().get(2), regex);
+    public MiniQuestInfoFocused(Text text) {
+        super(text.getSiblings().get(2));
         this.fullText = text;
     }
 

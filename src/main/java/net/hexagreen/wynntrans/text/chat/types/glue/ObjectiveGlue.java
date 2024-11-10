@@ -12,8 +12,12 @@ public class ObjectiveGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^§d {5}- §7\\+.+$");
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^ +§[24]\\[Objective Completed]$").matcher(text.getString()).find();
+    }
+
     public ObjectiveGlue() {
-        super(null, ObjectiveComplete.class);
+        super(ObjectiveComplete::new);
         gluedText.append(" ");
         count++;
     }

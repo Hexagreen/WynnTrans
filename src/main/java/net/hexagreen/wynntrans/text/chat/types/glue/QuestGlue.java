@@ -10,8 +10,12 @@ public class QuestGlue extends TextGlue {
     private static final Pattern REWARD = Pattern.compile("^§d {12,}- §.\\+.+$");
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§. +\\[(?:Mini-)?Quest Completed]$").matcher(text.getString()).find();
+    }
+
     public QuestGlue() {
-        super(null, QuestCompleted.class);
+        super(QuestCompleted::new);
         gluedText.append(" ");
         count++;
     }

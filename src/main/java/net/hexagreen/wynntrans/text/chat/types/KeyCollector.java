@@ -13,8 +13,12 @@ import java.util.regex.Pattern;
 public class KeyCollector extends WynnSystemText {
     private final MessageType messageType;
 
-    public KeyCollector(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("Key Collector:").matcher(text.getString()).find();
+    }
+
+    public KeyCollector(Text text) {
+        super(text, null);
         this.messageType = MessageType.getType(text);
     }
 

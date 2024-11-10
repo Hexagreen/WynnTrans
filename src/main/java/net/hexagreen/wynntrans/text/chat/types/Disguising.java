@@ -12,8 +12,12 @@ public class Disguising extends WynnChatText {
     private final boolean apply;
     private final Text target;
 
-    public Disguising(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§3You are (now|no longer) disguised as an? §b(.+)").matcher(text.getString()).find();
+    }
+
+    public Disguising(Text text) {
+        super(text, Pattern.compile("^§3You are (now|no longer) disguised as an? §b(.+)"));
         this.apply = matcher.group(1).equals("now");
         this.target = Text.literal(capitalizeFirstChar(matcher.group(2))).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }

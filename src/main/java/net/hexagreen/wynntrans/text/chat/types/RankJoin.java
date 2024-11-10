@@ -6,8 +6,13 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class RankJoin extends WynnChatText {
-    public RankJoin(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^. .+ has just logged in!$").matcher(text.getString()).find();
+    }
+    
+    public RankJoin(Text text) {
+        super(text);
     }
 
     @Override

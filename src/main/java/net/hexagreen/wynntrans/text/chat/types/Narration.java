@@ -5,14 +5,12 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.regex.Pattern;
-
 public class Narration extends WynnChatText {
     protected final String pKeyNarration;
     private boolean addiction = true;
 
-    public Narration(Text text, Pattern regex) {
-        super(text, regex);
+    public Narration(Text text) {
+        super(text);
         String hash = DigestUtils.sha1Hex(text.getString());
         this.pKeyNarration = parentKey + hash;
     }

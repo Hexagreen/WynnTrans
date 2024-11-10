@@ -13,8 +13,12 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
     private final String playerName;
     private final String command;
 
-    public QuickTrade(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\n(.+) would like to trade!\n").matcher(text.getString()).find();
+    }
+
+    public QuickTrade(Text text) {
+        super(text, Pattern.compile("^\n(.+) would like to trade!\n"));
         this.playerName = matcher.group(1);
         this.command = "/trade " + playerName;
     }

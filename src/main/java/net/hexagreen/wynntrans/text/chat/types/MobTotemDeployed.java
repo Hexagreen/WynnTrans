@@ -12,8 +12,12 @@ public class MobTotemDeployed extends WynnChatText {
     private final Text location;
     private final Text coordinate;
 
-    public MobTotemDeployed(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile(" has placed a mob totem in ").matcher(text.getString()).find();
+    }
+
+    public MobTotemDeployed(Text text) {
+        super(text);
         this.playerName = getSibling(0);
         this.location = getLocation(getSibling(2));
         this.coordinate = getSibling(4);

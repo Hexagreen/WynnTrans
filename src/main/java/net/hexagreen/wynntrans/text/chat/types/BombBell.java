@@ -13,8 +13,12 @@ public class BombBell extends WynnChatText {
     private final Bombs bomb;
     private final Text channel;
 
-    public BombBell(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\[Bomb Bell] ").matcher(text.getString()).find();
+    }
+
+    public BombBell(Text text) {
+        super(text);
         if(getSibling(1).getString().isEmpty()) {
             this.playerName = getSibling(2);
         }

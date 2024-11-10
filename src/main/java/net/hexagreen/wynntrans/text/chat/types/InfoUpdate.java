@@ -9,8 +9,12 @@ import java.util.regex.Pattern;
 public class InfoUpdate extends WynnChatText {
     private final String hash;
 
-    public InfoUpdate(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\[Major Update] ").matcher(text.getString()).find();
+    }
+
+    public InfoUpdate(Text text) {
+        super(text);
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
     }
 

@@ -13,8 +13,12 @@ public class BombStart extends WynnChatText {
     private final Text playerName;
     private final Bombs bomb;
 
-    public BombStart(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^.+ has thrown an? .+ Bomb").matcher(text.getString()).find();
+    }
+
+    public BombStart(Text text) {
+        super(text);
         this.playerName = getSibling(0);
         this.bomb = Bombs.findBomb(getSibling(2).getString());
     }

@@ -15,8 +15,12 @@ public class WorldEventStart extends WynnSystemText {
     private final Text leftTime;
     private final Text distance;
 
-    public WorldEventStart(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("The (.+) World Event starts in (\\d+\\w)!").matcher(removeTextBox(text)).find();
+    }
+
+    public WorldEventStart(Text text) {
+        super(text, Pattern.compile("The (.+) World Event starts in (\\d+\\w)!"));
         this.valWorldEventName = matcher.group(1);
         this.keyWorldEventName = parentKey + normalizeStringForKey(valWorldEventName);
         this.leftTime = ITime.translateTime(matcher.group(2));

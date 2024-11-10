@@ -10,8 +10,12 @@ public class Resistance extends WynnChatText {
     private final String resValue;
     private final String strValue;
 
-    public Resistance(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^.+ has given you (\\d+%) resistance(?: and (\\d+%) strength)?").matcher(text.getString()).find();
+    }
+
+    public Resistance(Text text) {
+        super(text, Pattern.compile("^.+ has given you (\\d+%) resistance(?: and (\\d+%) strength)?"));
         this.resValue = matcher.group(1);
         this.strValue = matcher.group(2);
     }

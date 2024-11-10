@@ -12,8 +12,12 @@ public class TrinketCooldown extends WynnSystemText {
     private final Text item;
     private final Text time;
 
-    public TrinketCooldown(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("is on cooldown for ").matcher(removeTextBox(text)).find();
+    }
+
+    public TrinketCooldown(Text text) {
+        super(text, null);
         this.item = getSibling(0);
         this.time = ITime.translateTime(getContentString(2)).setStyle(getStyle(2));
     }

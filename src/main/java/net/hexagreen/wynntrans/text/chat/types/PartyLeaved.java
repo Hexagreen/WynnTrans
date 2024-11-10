@@ -1,20 +1,24 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class PartyLeaved extends WynnChatText {
+public class PartyLeaved extends WynnSystemText {
     private final Text playerName;
 
-    public PartyLeaved(Text text, Pattern regex) {
-        super(text, regex);
-        if(text.getSiblings().size() > 1) {
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(.+) has left the party.$").matcher(text.getString()).find();
+    }
+
+    public PartyLeaved(Text text) {
+        super(text, Pattern.compile("^(.+) has left the party.$"));
+        if(text.getSiblings().size() > 3) {
             this.playerName = getPlayerNameFromSibling(0);
         }
         else {
-            this.playerName = Text.literal(matcher.group(1)).setStyle(getStyle(0));
+            this.playerName = getSibling(2);
         }
     }
 
@@ -25,8 +29,8 @@ public class PartyLeaved extends WynnChatText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty();
+        resultText = Text.empty().setStyle(getStyle()).append(header);
 
-        resultText.append(Text.translatable(parentKey, playerName).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(parentKey, playerName));
     }
 }

@@ -6,11 +6,9 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class StorePurchased extends WynnChatText implements ISpaceProvider {
-    public StorePurchased(Text text, Pattern regex) {
-        super(text, regex);
+    public StorePurchased(Text text) {
+        super(text);
     }
 
     @Override

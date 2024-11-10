@@ -6,7 +6,8 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
 public interface ISpaceProvider {
-    int CENTER = MinecraftClient.getInstance().inGameHud.getChatHud().getWidth() / 2 + 40;
+    int CENTER = (int) ((double) MinecraftClient.getInstance().inGameHud.getChatHud().getWidth() / 2
+            / MinecraftClient.getInstance().inGameHud.getChatHud().getChatScale());
     int SPACE_WIDTH = MinecraftClient.getInstance().textRenderer.getWidth(" ");
 
     default MutableText getCenterIndent(String alignTargetKey) {
@@ -16,6 +17,10 @@ public interface ISpaceProvider {
     default MutableText getCenterIndent(String alignTargetKey, Object... args) {
         return getCenterIndent(MutableText.of(new TranslatableTextContent(alignTargetKey, null, args)));
     }
+
+//    default MutableText getSystemTextCenterIndent(Text alignTargetText) {
+//
+//    }
 
     default MutableText getCenterIndent(Text alignTargetText) {
         int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(alignTargetText);

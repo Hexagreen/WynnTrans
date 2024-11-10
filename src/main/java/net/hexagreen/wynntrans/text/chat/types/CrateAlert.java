@@ -12,8 +12,12 @@ public class CrateAlert extends WynnChatText {
     private final Text crateName;
     private final Text command = Text.literal("/crates").setStyle(Style.EMPTY.withColor(Formatting.YELLOW).withUnderline(true).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/crates")));
 
-    public CrateAlert(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^Use /crates to open your (.+ Crate)!$").matcher(text.getString()).find();
+    }
+
+    public CrateAlert(Text text) {
+        super(text, Pattern.compile("^Use /crates to open your (.+ Crate)!$"));
         this.crateName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
     }
 

@@ -2,11 +2,27 @@ package net.hexagreen.wynntrans.text.display;
 
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.debugClass;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 public class DisplayEntityHandler {
+    private boolean recordAll;
+
+    public DisplayEntityHandler() {
+        this.recordAll = false;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public void toggleRecordMode() {
+        this.recordAll = !recordAll;
+        if(recordAll)
+            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.displayForceRecordMode.enable"));
+        else
+            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.displayForceRecordMode.disable"));
+    }
 
     public Text translateDisplayText(Text text) {
+        if(recordAll) debugClass.writeTextAsJSON(text, "DisplayRecord");
         try {
             return DisplayType.findAndRun(text);
         }

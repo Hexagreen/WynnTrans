@@ -4,11 +4,17 @@ import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.PartyInvited;
 import net.minecraft.text.Text;
 
+import java.util.regex.Pattern;
+
 public class PartyInvitedGlue extends TextGlue {
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("\\n +§eYou have been invited to join .+'s party!").matcher(text.getString()).find();
+    }
+
     public PartyInvitedGlue() {
-        super(null, PartyInvited.class);
+        super(PartyInvited::new);
     }
 
     @Override

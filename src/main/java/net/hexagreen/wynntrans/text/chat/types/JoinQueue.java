@@ -7,8 +7,13 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class JoinQueue extends WynnChatText implements ISpaceProvider {
-    public JoinQueue(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\n +§b§lYou are in queue to join!").matcher(text.getString()).find();
+    }
+
+    public JoinQueue(Text text) {
+        super(text);
     }
 
     @Override

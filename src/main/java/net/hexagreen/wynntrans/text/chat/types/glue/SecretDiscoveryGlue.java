@@ -11,8 +11,12 @@ public class SecretDiscoveryGlue extends TextGlue {
     private static final Pattern DISCOVERY_AREA = Pattern.compile(" +§f.+ \\[\\d+/\\d+]");
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^ *§3Secret Discovery: ").matcher(text.getString()).find();
+    }
+
     public SecretDiscoveryGlue() {
-        super(null, SecretDiscovery.class);
+        super(SecretDiscovery::new);
         gluedText.append(" ");
         count++;
     }

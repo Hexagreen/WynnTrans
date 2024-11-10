@@ -32,7 +32,6 @@ public class SimpleTooltip extends WynnTooltipText {
                 resultText.append(text);
             }
         }
-        textRecorder(resultText.getSiblings());
     }
 
     private boolean hasTranslation(Text text) {

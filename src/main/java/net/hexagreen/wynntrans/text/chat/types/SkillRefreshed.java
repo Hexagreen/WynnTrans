@@ -11,8 +11,12 @@ public class SkillRefreshed extends WynnChatText {
     private static final String icon = "§8[§7⬤§8] ";
     private final String skillName;
 
-    public SkillRefreshed(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$").matcher(text.getString()).find();
+    }
+
+    public SkillRefreshed(Text text) {
+        super(text, Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$"));
         this.skillName = "§7" + matcher.group(1);
     }
 

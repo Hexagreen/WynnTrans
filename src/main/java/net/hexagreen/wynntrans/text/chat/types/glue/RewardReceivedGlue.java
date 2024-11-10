@@ -10,8 +10,12 @@ public class RewardReceivedGlue extends TextGlue {
     private static final Pattern TAIL = Pattern.compile("Visit wynncraft\\.com/store to get your own!");
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§[3b]You have received:").matcher(text.getString()).find();
+    }
+
     public RewardReceivedGlue() {
-        super(null, RewardReceived.class);
+        super(RewardReceived::new);
     }
 
     @Override

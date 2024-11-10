@@ -14,8 +14,8 @@ public class LevelUpProfession extends WynnChatText implements ISpaceProvider {
     private static final Pattern REGEX_LEVELUP = Pattern.compile("You are now level (\\d+) in §f(.)");
     private static final Pattern REGEX_NEXTFEATURE = Pattern.compile("^§5Only §d(\\d+) more levels? §5until you can .+?(?:(.) Gathering.+T(\\d+))?$");
 
-    public LevelUpProfession(Text text, Pattern regex) {
-        super(text, regex);
+    public LevelUpProfession(Text text) {
+        super(text);
     }
 
     @Override

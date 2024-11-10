@@ -9,8 +9,12 @@ public class Merchants extends WynnSystemText {
     private final String keyMerchantName;
     private final String valMerchantName;
 
-    public Merchants(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("([\\w ]+) Merchant:").matcher(text.getString()).find();
+    }
+
+    public Merchants(Text text) {
+        super(text, Pattern.compile("([\\w ]+) Merchant:"));
         String merchantName = matcher.group(1);
         this.keyMerchantName = "wytr.merchant." + merchantName.replace(" ", "");
         this.valMerchantName = merchantName + " Merchant";

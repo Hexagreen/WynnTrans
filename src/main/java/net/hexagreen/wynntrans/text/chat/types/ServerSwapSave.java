@@ -10,8 +10,12 @@ import java.util.regex.Pattern;
 public class ServerSwapSave extends WynnChatText {
     private final Text worldChannel;
 
-    public ServerSwapSave(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^§7Saving your player data before switching to §fWC\\d+").matcher(text.getString()).find();
+    }
+
+    public ServerSwapSave(Text text) {
+        super(text);
         String channelNum = getContentString().replaceAll(".+ switching to ", "").replace("§7...", "");
         this.worldChannel = Text.literal(channelNum);
     }

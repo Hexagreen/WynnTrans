@@ -19,6 +19,10 @@ public abstract class WynnSystemText extends WynnChatText {
     protected final MutableText header;
     protected final Text splitter;
 
+    protected static String removeTextBox(Text text) {
+        return text.getString().replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ");
+    }
+
     protected static Text preprocessSystemChat(Text text, boolean isGlued) {
         if(isGlued) {
             MutableText glued = Text.empty();
@@ -93,6 +97,7 @@ public abstract class WynnSystemText extends WynnChatText {
         return Text.literal(content).setStyle(style);
     }
 
+    @Deprecated
     public WynnSystemText(Text text, Pattern regex) {
         super(preprocessSystemChat(text, false), regex);
         this.originText = text;
@@ -100,8 +105,8 @@ public abstract class WynnSystemText extends WynnChatText {
         this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
     }
 
-    public WynnSystemText(Text text, Pattern regex, boolean isGlued) {
-        super(preprocessSystemChat(text, isGlued), regex);
+    public WynnSystemText(Text text, boolean isGlued) {
+        super(preprocessSystemChat(text, isGlued));
         this.originText = text;
         this.header = extractHeader(text.getSiblings().getFirst().getSiblings().getFirst());
         this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
@@ -119,7 +124,7 @@ public abstract class WynnSystemText extends WynnChatText {
         }
         catch(TextTranslationFailException e) {
             LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
-            return new SimpleSystemText(originText, null).text();
+            return new SimpleSystemText(originText).text();
         }
         return originText.copy();
     }

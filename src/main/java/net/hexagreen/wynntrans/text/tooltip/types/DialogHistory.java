@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
-import net.hexagreen.wynntrans.text.chat.ChatType;
 import net.hexagreen.wynntrans.text.chat.types.Narration;
 import net.hexagreen.wynntrans.text.chat.types.NpcDialog;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
@@ -155,7 +154,7 @@ public class DialogHistory extends WynnTooltipText {
             for(int i = 1; i < text.getSiblings().size(); i++) {
                 reformed.append(text.getSiblings().get(i));
             }
-            return new NpcDialog(reformed, ChatType.DIALOG_NORMAL.getRegex()).setNoTranslationAddiction().text();
+            return new NpcDialog(reformed).setNoTranslationAddiction().text();
         }
 
         private Text translateNarration(Text text) {
@@ -169,7 +168,7 @@ public class DialogHistory extends WynnTooltipText {
                     reformed.append(text.getSiblings().get(i));
                 }
             }
-            return new Narration(reformed, null).setNoTranslationAddiction().text();
+            return new Narration(reformed).setNoTranslationAddiction().text();
         }
     }
 }

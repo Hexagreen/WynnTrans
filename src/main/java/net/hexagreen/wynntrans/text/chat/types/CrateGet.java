@@ -7,8 +7,13 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class CrateGet extends WynnChatText {
-    public CrateGet(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^(.+) has gotten a (.+) from their crate\\. ").matcher(text.getString()).find();
+    }
+
+    public CrateGet(Text text) {
+        super(text, Pattern.compile("^(.+) has gotten a (.+) from their crate\\. "));
     }
 
     @Override

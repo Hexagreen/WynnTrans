@@ -9,8 +9,13 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class RecruitMessage extends WynnChatText implements ISpaceProvider {
-    public RecruitMessage(Text text, Pattern regex) {
-        super(text, regex);
+
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^\\n +§6§lEnjoying Wynncraft\\?").matcher(text.getString()).find();
+    }
+
+    public RecruitMessage(Text text) {
+        super(text);
     }
 
     @Override

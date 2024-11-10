@@ -27,7 +27,7 @@ public class SimpleDisplay extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(valText.isBlank() || valText.replaceAll("(§0|\\n|À)", "").isBlank()) {
+        if(valText.isBlank() || valText.replaceAll("(§.|\\n|À)", "").isBlank()) {
             resultText = inputText;
             return;
         }

@@ -24,7 +24,7 @@ public class ContentBookFilterAndSort extends WynnTooltipText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = new SimpleTooltip(getSiblings().subList(0, getSiblings().size() - 3)).textRaw();
+        resultText = new SimpleTooltip(getSiblings().subList(0, getSiblings().size() - 3)).textAsMutable();
         resultText.append(" ")
                 .append(Text.translatable("wytr.tooltip.nextPage"))
                 .append(Text.translatable("wytr.tooltip.previousPage"));

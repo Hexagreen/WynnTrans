@@ -12,8 +12,12 @@ public class ItemSkillRequirement extends WynnSystemText {
     private final Text skill;
     private final Text level;
 
-    public ItemSkillRequirement(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("This item requires your (.+) skill to be at least §c(\\d+)\\.").matcher(removeTextBox(text)).find();
+    }
+
+    public ItemSkillRequirement(Text text) {
+        super(text, Pattern.compile("This item requires your (.+) skill to be at least §c(\\d+)\\."));
         this.skill = CharacterSkill.getSkill(matcher.group(1));
         this.level = Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }

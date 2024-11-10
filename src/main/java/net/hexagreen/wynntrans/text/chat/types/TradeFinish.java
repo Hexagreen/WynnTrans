@@ -12,8 +12,12 @@ public class TradeFinish extends WynnSystemText {
     private final boolean buyingMode;
     private final Text item;
 
-    public TradeFinish(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("Finished (?:buying|selling) ").matcher(text.getString()).find();
+    }
+
+    public TradeFinish(Text text) {
+        super(text, null);
         this.buyingMode = text.getString().contains("Finished buying ");
         this.item = parseItem();
     }

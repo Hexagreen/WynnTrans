@@ -4,11 +4,17 @@ import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.WorldEventComplete;
 import net.minecraft.text.Text;
 
+import java.util.regex.Pattern;
+
 public class WorldEventCompleteGlue extends TextGlue {
     private int count = 0;
 
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("\uDAFF\uDFBE\uE016\uE00E\uE011\uE00B\uE003 \uE004\uE015\uE004\uE00D\uE013\uDB00\uDC02$").matcher(text.getString()).find();
+    }
+
     public WorldEventCompleteGlue() {
-        super(null, WorldEventComplete.class);
+        super(WorldEventComplete::new);
     }
 
     @Override

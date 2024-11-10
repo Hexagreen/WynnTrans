@@ -9,8 +9,12 @@ import java.util.regex.Pattern;
 public class BombThanks extends WynnChatText {
     private final Text playerName;
 
-    public BombThanks(Text text, Pattern regex) {
-        super(text, regex);
+    public static boolean typeChecker(Text text) {
+        return Pattern.compile("^Want to thank .+\\? Click here to thank them!$").matcher(text.getString()).find();
+    }
+
+    public BombThanks(Text text) {
+        super(text);
         this.playerName = ((MutableText) getPlayerNameFromSibling(0)).setStyle(getStyle(0));
     }
 
