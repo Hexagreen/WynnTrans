@@ -19,13 +19,13 @@ public class DamageIndicator extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.dodged";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(dodge) resultText = Text.translatable(parentKey);
+        if(dodge) resultText = Text.translatable(translationKey);
         else resultText = inputText;
     }
 }

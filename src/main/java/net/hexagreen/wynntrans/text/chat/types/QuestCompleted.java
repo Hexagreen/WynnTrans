@@ -23,14 +23,14 @@ public class QuestCompleted extends WynnChatText implements ISpaceProvider {
     public QuestCompleted(Text text) {
         super(text);
         this.valQuestName = getSibling(2).getString().replaceAll("^§. +§.", "");
-        this.keyQuestName = parentKey + normalizeStringForKey(valQuestName);
+        this.keyQuestName = translationKey + normalizeStringForKey(valQuestName);
         if(getSibling(1).getString().contains("Mini-Quest")) {
             this.keyTitle = func + "miniQuestCompleted";
         }
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "quest.";
     }
 

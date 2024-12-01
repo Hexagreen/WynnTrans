@@ -30,13 +30,13 @@ public class NearProfessionLevelUp extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.levelUp.profession";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, playerName, level, profession)).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
+        resultText.append(Text.translatable(translationKey, playerName, level, profession)).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
     }
 }

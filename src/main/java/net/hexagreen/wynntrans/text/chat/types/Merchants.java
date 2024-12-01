@@ -21,7 +21,7 @@ public class Merchants extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.merchant";
     }
 
@@ -37,13 +37,13 @@ public class Merchants extends WynnSystemText {
         }
 
         if(lineFeedRemover(getContentString(1)).contains("Thank you for your business")) {
-            resultText.append(Text.translatable(parentKey + ".confirm").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(translationKey + ".confirm").setStyle(getStyle(1)));
         }
         else if(lineFeedRemover(getContentString(1)).contains("cannot afford that")) {
-            resultText.append(Text.translatable(parentKey + ".noEmerald").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(translationKey + ".noEmerald").setStyle(getStyle(1)));
         }
         else if(lineFeedRemover(getContentString(1)).contains("don't have enough space")) {
-            resultText.append(Text.translatable(parentKey + ".noSpace").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(translationKey + ".noSpace").setStyle(getStyle(1)));
         }
     }
 }

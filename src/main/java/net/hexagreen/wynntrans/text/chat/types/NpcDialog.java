@@ -28,11 +28,11 @@ public class NpcDialog extends WynnChatText {
         this.playerName = removedCustomNickname == null ? this.clientPlayerName : removedCustomNickname;
         this.valName = getContentString(0).replace(": ", "");
         String npcName = normalizeStringForKey(valName);
-        this.keyName = parentKey + "name." + npcName;
+        this.keyName = translationKey + "name." + npcName;
         String dialogIdx = matcher.group(1) + ".";
         String dialogLen = matcher.group(2) + ".";
         String hash = DigestUtils.sha1Hex(inputText.getString().replace(clientPlayerName, "%1$s")).substring(0, 8);
-        this.keyDialog = parentKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
+        this.keyDialog = translationKey + "dialog." + npcName + "." + dialogLen + dialogIdx + hash;
     }
 
     public NpcDialog setNoTranslationAddiction() {
@@ -41,7 +41,7 @@ public class NpcDialog extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey;
     }
 

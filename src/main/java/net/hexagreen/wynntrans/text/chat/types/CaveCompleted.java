@@ -19,11 +19,11 @@ public class CaveCompleted extends WynnChatText implements ISpaceProvider {
     public CaveCompleted(Text text) {
         super(text);
         this.valCaveName = getSibling(2).getSiblings().get(1).getString();
-        this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
+        this.keyCaveName = translationKey + normalizeStringForKey(valCaveName);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "cave.";
     }
 

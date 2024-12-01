@@ -44,13 +44,12 @@ public enum DisplayType {
     WORLD_EVENT_NAME(WorldEventName::new, WorldEventName::typeChecker),
     WORLD_EVENT_TIMER(WorldEventTimer::new, WorldEventTimer::typeChecker),
     WORLD_EVENT_BANNER(WorldEventBanner::new, WorldEventBanner::typeChecker),
+    MOB_TOTEM(MobTotem::new, MobTotem::typeChecker),
     SUMMONS_NAME(SummonsName::new, SummonsName::typeChecker),
+    ARCHER_TRAP(ArcherTrap::new, ArcherTrap::typeChecker),
     PET_NAME(PetName::new, PetName::typeChecker),
 
-    GUILD_LEADERBOARD(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.GUILD_LEADERBOARD.getTypeChecker()),
-    GUILD_NEXT_REWARD(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.GUILD_NEXT_REWARD.getTypeChecker()),
-    GUILD_SEASON_REWARD(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.GUILD_SEASON_REWARD.getTypeChecker()),
-    SPIRITS_WEEKLY_BOON(ProxySimpleDisplay::new, ProxySimpleDisplay.Templates.DRAWING_OF_THE_SPIRITS_TIMER.getTypeChecker()),
+    PROXY_DISPLAY(ProxySimpleDisplay::new, ProxySimpleDisplay::typeChecker),
 
     NO_TYPE(SimpleDisplay::new, null);
 

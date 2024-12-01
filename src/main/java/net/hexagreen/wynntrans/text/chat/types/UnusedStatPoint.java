@@ -22,7 +22,7 @@ public class UnusedStatPoint extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.statPointAlert";
     }
 
@@ -31,16 +31,16 @@ public class UnusedStatPoint extends WynnChatText {
         Style style = Style.EMPTY.withColor(Formatting.DARK_RED);
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey + ".1").setStyle(style));
+        resultText.append(Text.translatable(translationKey + ".1").setStyle(style));
         if(skillPoint != null) {
-            resultText.append(Text.translatable(parentKey + ".sp", skillPoint).setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)));
+            resultText.append(Text.translatable(translationKey + ".sp", skillPoint).setStyle(Style.EMPTY.withColor(Formatting.RED).withBold(true)));
             if(abilityPoint != null) {
-                resultText.append(Text.translatable(parentKey + ".2").setStyle(style)).append(Text.translatable(parentKey + ".ap", abilityPoint).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)));
+                resultText.append(Text.translatable(translationKey + ".2").setStyle(style)).append(Text.translatable(translationKey + ".ap", abilityPoint).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)));
             }
         }
         else {
-            resultText.append(Text.translatable(parentKey + ".ap", abilityPoint).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)));
+            resultText.append(Text.translatable(translationKey + ".ap", abilityPoint).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)));
         }
-        resultText.append(Text.translatable(parentKey + ".3").setStyle(style));
+        resultText.append(Text.translatable(translationKey + ".3").setStyle(style));
     }
 }

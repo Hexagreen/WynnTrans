@@ -38,7 +38,7 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.secretDiscovery";
     }
 
@@ -46,7 +46,7 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.empty();
 
-        MutableText t0 = Text.empty().append(Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
+        MutableText t0 = Text.empty().append(Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
         if(WTS.checkTranslationExist(keyDiscoveryName, valDiscoveryName)) {
             t0.append(Text.translatable(keyDiscoveryName).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }

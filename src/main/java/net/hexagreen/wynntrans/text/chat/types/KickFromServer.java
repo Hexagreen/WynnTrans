@@ -33,7 +33,7 @@ public class KickFromServer extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return inputText.getString().contains("Kicked whilst connecting") ? rootKey + "func.serverKickedOnConnection" : rootKey + "func.serverKicked";
     }
 
@@ -41,14 +41,14 @@ public class KickFromServer extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
-        resultText.append(Text.translatable(parentKey, channelNumber).setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        resultText.append(Text.translatable(translationKey, channelNumber).setStyle(Style.EMPTY.withColor(Formatting.RED)));
 
         KickReason reason = KickReason.findReason(getSibling(1));
-        if(reason != KickReason.UNKNOWN_REASON) resultText.append(Text.translatable(parentKey + reason.langCode));
+        if(reason != KickReason.UNKNOWN_REASON) resultText.append(Text.translatable(translationKey + reason.langCode));
         else resultText.append(getSibling(1));
 
         if(!kickWhileConnect) {
-            resultText.append(Text.translatable(parentKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            resultText.append(Text.translatable(translationKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
     }
 

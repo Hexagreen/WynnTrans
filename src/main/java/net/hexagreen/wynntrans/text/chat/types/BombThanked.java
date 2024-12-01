@@ -20,12 +20,12 @@ public class BombThanked extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.thanked";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.translatable(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.translatable(translationKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
     }
 }

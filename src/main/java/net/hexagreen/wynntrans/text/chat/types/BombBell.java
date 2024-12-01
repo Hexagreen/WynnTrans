@@ -30,7 +30,7 @@ public class BombBell extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.bombBell";
     }
 
@@ -40,6 +40,6 @@ public class BombBell extends WynnChatText {
         Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, playerName, bombName, channel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, playerName, bombName, channel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

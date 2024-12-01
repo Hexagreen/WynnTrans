@@ -33,14 +33,14 @@ public class NPCNameLiteral extends WynnDisplayText {
         this.valNpcName = npcName.replaceFirst("(§.)+", "");
         this.valNpcTalk = npcTalk.replaceFirst("(§.)+", "");
         String npcNameNormalized = normalizeStringForKey(this.valNpcName);
-        this.keyNpcName = parentKey + npcNameNormalized;
+        this.keyNpcName = translationKey + npcNameNormalized;
         this.subKeyNpcName = "wytr.mobName." + npcNameNormalized;
         this.keyNpcTalk = valNpcTalk.isBlank() ? null : rootKey + "talk." + npcNameNormalized + "." + DigestUtils.sha1Hex(valNpcTalk).substring(0, 4);
         this.trailer = inputText.getString().replaceFirst("(?:.|\\n)+§7NPC\\n?", "");
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "name.";
     }
 

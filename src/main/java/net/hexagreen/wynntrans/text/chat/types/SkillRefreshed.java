@@ -21,13 +21,13 @@ public class SkillRefreshed extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.skillRefreshed";
     }
 
     @Override
     protected void build() {
         resultText = Text.literal(icon);
-        resultText.append(Text.translatable(parentKey, skillName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+        resultText.append(Text.translatable(translationKey, skillName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
     }
 }

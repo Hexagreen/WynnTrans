@@ -30,7 +30,7 @@ public class MerchantName extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "merchant.";
     }
 
@@ -38,8 +38,8 @@ public class MerchantName extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
         resultText.append(icon).append("\n");
-        if(WTS.checkTranslationExist(parentKey + keyMerchant, valMerchant)) {
-            resultText.append(Text.translatable(parentKey + keyMerchant).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        if(WTS.checkTranslationExist(translationKey + keyMerchant, valMerchant)) {
+            resultText.append(Text.translatable(translationKey + keyMerchant).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
         else {
             resultText.append(Text.literal(valMerchant).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));

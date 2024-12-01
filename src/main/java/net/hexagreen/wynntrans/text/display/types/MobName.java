@@ -34,13 +34,13 @@ public class MobName extends WynnDisplayText {
         this.isRare = text.getString().substring(0, 2).matches("\uE02A |\uD83D\uDC31");
         if(isRare) index = 2;
         this.valMobName = getContentString(index);
-        this.keyMobName = parentKey + normalizeStringForKey(valMobName);
+        this.keyMobName = translationKey + normalizeStringForKey(valMobName);
         this.subKeyMobName = "wytr.name." + normalizeStringForKey(valMobName);
         this.styleMobName = getStyle(index);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "mobName.";
     }
 

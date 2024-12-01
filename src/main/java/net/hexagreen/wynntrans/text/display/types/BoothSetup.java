@@ -17,13 +17,13 @@ public class BoothSetup extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.boothSetup";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(icon).append(" ").append(Text.translatable(parentKey));
+        resultText.append(icon).append(" ").append(Text.translatable(translationKey));
     }
 }

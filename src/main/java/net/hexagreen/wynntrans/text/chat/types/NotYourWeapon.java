@@ -25,13 +25,13 @@ public class NotYourWeapon extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.illegalWeapon";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, item, className, weapon).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+        resultText.append(Text.translatable(translationKey, item, className, weapon).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }
 }

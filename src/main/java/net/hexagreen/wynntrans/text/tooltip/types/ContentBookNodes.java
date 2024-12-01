@@ -36,7 +36,7 @@ public class ContentBookNodes extends WynnTooltipText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return "";
     }
 

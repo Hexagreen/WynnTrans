@@ -18,7 +18,7 @@ public class ContentBookFilterAndSort extends WynnTooltipText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return null;
     }
 

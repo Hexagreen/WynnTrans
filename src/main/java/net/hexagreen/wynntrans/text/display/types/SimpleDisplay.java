@@ -16,12 +16,12 @@ public class SimpleDisplay extends WynnDisplayText {
     public SimpleDisplay(Text text) {
         super(text);
         this.valText = initValText();
-        this.keyText = parentKey + DigestUtils.sha1Hex(valText);
+        this.keyText = translationKey + DigestUtils.sha1Hex(valText);
         this.styleText = parseStyleCode(inputText.getString()).withParent(getStyle());
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.";
     }
 

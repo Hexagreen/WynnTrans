@@ -20,7 +20,7 @@ public class ItemLevelRequirement extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         if(inputText.getString().contains("potion")) return rootKey + "func.potionLevelReq";
         return rootKey + "func.itemLevelReq";
     }
@@ -28,6 +28,6 @@ public class ItemLevelRequirement extends WynnSystemText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().append(header).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
-        resultText.append(newTranslateWithSplit(parentKey, level));
+        resultText.append(newTranslateWithSplit(translationKey, level));
     }
 }

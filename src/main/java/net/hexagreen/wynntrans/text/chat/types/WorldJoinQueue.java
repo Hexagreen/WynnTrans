@@ -21,15 +21,15 @@ public class WorldJoinQueue extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.worldJoinQueue";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty().append("\n");
-        Text t0 = Text.translatable(parentKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true));
-        Text t1 = Text.translatable(parentKey + ".guide");
+        Text t0 = Text.translatable(translationKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true));
+        Text t1 = Text.translatable(translationKey + ".guide");
 
         resultText.append(getCenterIndent(t0)).append(t0).append("\n").append(getCenterIndent(t1)).append(t1).append("\n");
     }

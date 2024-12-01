@@ -31,7 +31,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
 
         this.objectiveNameStyle = parseStyleCode(getSibling(2).getString().replaceAll("(?!§.) +.+", ""));
         this.valObjectiveName = getSibling(2).getString().replaceAll("^§. +", "");
-        this.keyObjectiveName = parentKey + valObjectiveName.replace(" ", "");
+        this.keyObjectiveName = translationKey + valObjectiveName.replace(" ", "");
         normalizeKeyVal();
 
         if(text.getSiblings().size() == 8) {
@@ -44,7 +44,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "objective.";
     }
 
@@ -101,7 +101,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
     private void normalizeKeyVal() {
         Objectives normalizedObjective = Objectives.findNormalized(valObjectiveName);
         if(normalizedObjective != Objectives.NO_TYPE) {
-            this.keyObjectiveName = parentKey + normalizedObjective.getNormalizedKey();
+            this.keyObjectiveName = translationKey + normalizedObjective.getNormalizedKey();
             this.valObjectiveName = normalizedObjective.getNormalizedVal();
             this.argObjectiveName = normalizedObjective.getNormalizedArg();
         }

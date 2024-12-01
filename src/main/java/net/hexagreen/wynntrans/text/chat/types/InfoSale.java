@@ -32,17 +32,17 @@ public class InfoSale extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "saleInfo";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
-            String keySibling = parentKey + "." + hash + "_" + (index - 1);
+            String keySibling = translationKey + "." + hash + "_" + (index - 1);
             String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
             if(valSibling.contains("wynncraft.com")) {
@@ -57,7 +57,7 @@ public class InfoSale extends WynnChatText {
             }
         }
 
-        resultText.append(Text.translatable(parentKey + ".end", timer).setStyle(original.getSiblings().get(original.getSiblings().size() - 2).getStyle()));
+        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(original.getSiblings().get(original.getSiblings().size() - 2).getStyle()));
     }
 
     private Text initTimer(Text text) {

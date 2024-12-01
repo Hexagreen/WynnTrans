@@ -21,19 +21,19 @@ public class Resistance extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.resistance";
     }
 
     @Override
     protected void build() {
-        MutableText buffs = Text.empty().append(Text.translatable(parentKey + ".res", resValue).setStyle(getStyle(2)));
+        MutableText buffs = Text.empty().append(Text.translatable(translationKey + ".res", resValue).setStyle(getStyle(2)));
         if(getSiblings().size() == 6) {
-            buffs.append(Text.translatable(parentKey + ".and").setStyle(getStyle(3))).append(Text.translatable(parentKey + ".str", strValue).setStyle(getStyle(4)));
+            buffs.append(Text.translatable(translationKey + ".and").setStyle(getStyle(3))).append(Text.translatable(translationKey + ".str", strValue).setStyle(getStyle(4)));
         }
 
         resultText = Text.empty();
 
-        resultText.append(Text.translatable(parentKey, getSibling(0), buffs).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(translationKey, getSibling(0), buffs).setStyle(getStyle(1)));
     }
 }

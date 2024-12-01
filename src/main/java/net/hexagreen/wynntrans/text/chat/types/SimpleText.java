@@ -28,11 +28,11 @@ public class SimpleText extends WynnChatText {
             this.valText = inputText.getString();
             this.textStyle = Style.EMPTY;
         }
-        this.keyText = parentKey + DigestUtils.sha1Hex(valText);
+        this.keyText = translationKey + DigestUtils.sha1Hex(valText);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "text.";
     }
 

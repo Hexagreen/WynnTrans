@@ -22,13 +22,13 @@ public class SkinApplied extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.skinApplied.";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        String key = weaponMode ? parentKey + "weapon" : parentKey + "helmet";
+        String key = weaponMode ? translationKey + "weapon" : translationKey + "helmet";
 
         resultText = Text.empty();
         resultText.append(Text.translatable(key, skinName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));

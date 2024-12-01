@@ -22,14 +22,14 @@ public class MobTotemRunning extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.mobTotemRunning";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-        resultText.append(Text.translatable(parentKey, playerName, link));
+        resultText.append(Text.translatable(translationKey, playerName, link));
     }
 
     private Text getPlayerName(String string) {

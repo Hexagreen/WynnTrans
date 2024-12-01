@@ -27,7 +27,7 @@ public class SystemNPCName extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.";
     }
 

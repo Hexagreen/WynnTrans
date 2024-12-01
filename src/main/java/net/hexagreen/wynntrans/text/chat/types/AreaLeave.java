@@ -27,13 +27,13 @@ public class AreaLeave extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.area.leave";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, areaText).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, areaText).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

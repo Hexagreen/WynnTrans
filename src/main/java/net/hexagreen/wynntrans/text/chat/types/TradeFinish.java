@@ -23,7 +23,7 @@ public class TradeFinish extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.tradeFinish.";
     }
 
@@ -31,10 +31,10 @@ public class TradeFinish extends WynnSystemText {
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
         if(buyingMode) {
-            resultText.append(newTranslateWithSplit(parentKey + "buy", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            resultText.append(newTranslateWithSplit(translationKey + "buy", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             return;
         }
-        resultText.append(newTranslateWithSplit(parentKey + "sell", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(newTranslateWithSplit(translationKey + "sell", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 
     private Text parseItem() {

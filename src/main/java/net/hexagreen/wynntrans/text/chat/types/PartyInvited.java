@@ -15,14 +15,14 @@ public class PartyInvited extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.partyInvited";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text t0 = Text.translatable(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-        Text t1 = Text.translatable(parentKey + ".command").setStyle(getSibling(1).getSiblings().get(1).getStyle().withParent(getStyle(1)));
+        Text t0 = Text.translatable(translationKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+        Text t1 = Text.translatable(translationKey + ".command").setStyle(getSibling(1).getSiblings().get(1).getStyle().withParent(getStyle(1)));
 
         resultText = Text.empty().append("\n");
         resultText.append(getCenterIndent(t0).append(t0)).append("\n");

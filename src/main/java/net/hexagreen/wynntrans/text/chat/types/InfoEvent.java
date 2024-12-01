@@ -37,19 +37,19 @@ public class InfoEvent extends WynnChatText {
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
         this.valEName = text.getSiblings().get(1).getString().replace(": ", "");
         String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
-        this.keyEName = parentKey + ".eventName." + hash2;
+        this.keyEName = translationKey + ".eventName." + hash2;
         this.timer = initTimer(text.getSiblings().getLast());
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "eventInfo";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         if(WTS.checkTranslationExist(keyEName, valEName)) {
             resultText.append(Text.translatable(keyEName).setStyle(original.getSiblings().get(1).getStyle()).append(": "));
@@ -59,7 +59,7 @@ public class InfoEvent extends WynnChatText {
         }
 
         for(int index = 1; getSiblings().size() > index; index++) {
-            String keySibling = parentKey + "." + hash + "_" + (index - 1);
+            String keySibling = translationKey + "." + hash + "_" + (index - 1);
             String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
             if(valSibling.contains("wynncraft.com")) {
@@ -74,7 +74,7 @@ public class InfoEvent extends WynnChatText {
             }
         }
 
-        resultText.append(Text.translatable(parentKey + ".end", timer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     private Text initTimer(Text text) {

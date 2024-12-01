@@ -22,13 +22,13 @@ public class CrateAlert extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.crateAlert";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, command, crateName).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(translationKey, command, crateName).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

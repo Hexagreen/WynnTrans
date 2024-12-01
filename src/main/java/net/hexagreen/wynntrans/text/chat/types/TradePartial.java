@@ -25,7 +25,7 @@ public class TradePartial extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.tradePartial.";
     }
 
@@ -33,10 +33,10 @@ public class TradePartial extends WynnSystemText {
     protected void build() {
         resultText = Text.empty();
         if(buyingMode) {
-            resultText.append(newTranslateWithSplit(parentKey + "buy", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            resultText.append(newTranslateWithSplit(translationKey + "buy", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             return;
         }
-        resultText.append(newTranslateWithSplit(parentKey + "sell", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(newTranslateWithSplit(translationKey + "sell", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 
     private Text parseItem() {

@@ -19,7 +19,7 @@ public class Blacksmith extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.blacksmith";
     }
 
@@ -27,21 +27,21 @@ public class Blacksmith extends WynnSystemText {
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
 
-        resultText.append(Text.translatable(parentKey).append(": "));
+        resultText.append(Text.translatable(translationKey).append(": "));
 
         if(getContentString(1).contains("I can't buy")) {
-            resultText.append(newTranslateWithSplit(parentKey + ".no").setStyle(getStyle(1)));
+            resultText.append(newTranslateWithSplit(translationKey + ".no").setStyle(getStyle(1)));
         }
         else if(getContentString(1).contains("You have sold")) {
             Text soldAmount = getSoldAmount();
             Text earnedEmerald = getEarnedEmerald();
-            resultText.append(newTranslateWithSplit(parentKey + ".sold", soldAmount, earnedEmerald).setStyle(getStyle(1)));
+            resultText.append(newTranslateWithSplit(translationKey + ".sold", soldAmount, earnedEmerald).setStyle(getStyle(1)));
         }
         else if(getContentString(1).contains("You have repaired")) {
             Text[] parsed = getRepairing();
             Text repairedItem = parsed[0];
             Text repairCost = parsed[1];
-            resultText.append(newTranslateWithSplit(parentKey + ".repair", repairedItem, repairCost).setStyle(getStyle(1)));
+            resultText.append(newTranslateWithSplit(translationKey + ".repair", repairedItem, repairCost).setStyle(getStyle(1)));
         }
 
         else throw new TextTranslationFailException("Blacksmith.class");

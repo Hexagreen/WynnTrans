@@ -23,7 +23,7 @@ public class PartyLeaved extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.partyLeaved";
     }
 
@@ -31,6 +31,6 @@ public class PartyLeaved extends WynnSystemText {
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty().setStyle(getStyle()).append(header);
 
-        resultText.append(Text.translatable(parentKey, playerName));
+        resultText.append(Text.translatable(translationKey, playerName));
     }
 }

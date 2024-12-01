@@ -19,11 +19,11 @@ public class GoToStore extends WynnChatText {
         super(text);
         this.linkText = findLinkText();
         this.val = inputText.getString().replaceFirst("wynncraft\\.com/store[\\w/]*", "%s");
-        this.key = parentKey + DigestUtils.sha1Hex(val);
+        this.key = translationKey + DigestUtils.sha1Hex(val);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "text.";
     }
 

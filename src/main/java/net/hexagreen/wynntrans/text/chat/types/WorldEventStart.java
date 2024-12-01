@@ -22,13 +22,13 @@ public class WorldEventStart extends WynnSystemText {
     public WorldEventStart(Text text) {
         super(text, Pattern.compile("The (.+) World Event starts in (\\d+\\w)!"));
         this.valWorldEventName = matcher.group(1);
-        this.keyWorldEventName = parentKey + normalizeStringForKey(valWorldEventName);
+        this.keyWorldEventName = translationKey + normalizeStringForKey(valWorldEventName);
         this.leftTime = ITime.translateTime(matcher.group(2));
         this.distance = initDistanceText();
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "worldEvent.";
     }
 

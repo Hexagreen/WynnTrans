@@ -12,14 +12,14 @@ public class StorePurchased extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.storePurchased";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text t0 = Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
-        Text t1 = Text.translatable(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text t0 = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
+        Text t1 = Text.translatable(translationKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
 
         resultText = Text.empty();
         resultText.append(getCenterIndent(t0).append(t0)).append("\n").append(getCenterIndent(t1).append(t1));

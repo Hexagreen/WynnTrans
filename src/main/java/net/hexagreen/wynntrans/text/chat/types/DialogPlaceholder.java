@@ -13,7 +13,7 @@ public class DialogPlaceholder extends WynnChatText implements IFocusText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return null;
     }
 

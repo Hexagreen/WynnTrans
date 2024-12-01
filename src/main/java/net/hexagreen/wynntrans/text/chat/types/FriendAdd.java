@@ -18,13 +18,13 @@ public class FriendAdd extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.friendAdd";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, playerName).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(translationKey, playerName).setStyle(getStyle(0)));
     }
 }

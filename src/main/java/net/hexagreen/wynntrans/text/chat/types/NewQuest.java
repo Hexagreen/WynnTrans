@@ -14,11 +14,11 @@ public class NewQuest extends WynnChatText {
         this.questLineMode = getContentString().contains("Questline");
         this.miniQuestMode = getContentString().contains("Mini-Quest");
         this.valQuestName = getContentString(0);
-        this.keyQuestName = parentKey + normalizeStringForKey(valQuestName);
+        this.keyQuestName = translationKey + normalizeStringForKey(valQuestName);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "quest.";
     }
 

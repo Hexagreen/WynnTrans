@@ -23,14 +23,14 @@ public class Disguising extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.disguise.";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-        String key = apply ? parentKey + "on" : parentKey + "off";
+        String key = apply ? translationKey + "on" : translationKey + "off";
         resultText.append(Text.translatable(key, target));
     }
 

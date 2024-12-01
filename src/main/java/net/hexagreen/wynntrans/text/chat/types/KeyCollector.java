@@ -23,7 +23,7 @@ public class KeyCollector extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.keyCollector";
     }
 
@@ -31,21 +31,21 @@ public class KeyCollector extends WynnSystemText {
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
 
-        resultText.append(Text.translatable(parentKey).append(": "));
+        resultText.append(Text.translatable(translationKey).append(": "));
 
         switch(messageType) {
             case GIVE_ME_KEY ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".giveMeKey", parseDungeonKey(getSibling(2))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".giveMeKey", parseDungeonKey(getSibling(2))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case KEY_PASSED ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".keyPassed").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".keyPassed").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case NEED_KEY ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".needKey", parseDungeonKey(getSibling(2))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".needKey", parseDungeonKey(getSibling(2))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case PARTY_PASS -> {
                 if(getSiblings().size() == 6) {
-                    resultText.append(newTranslateWithSplit(parentKey + ".partyPass", parsePlayerName(getSibling(0)), parseTimeUnit(getSibling(2), getSibling(3)), parseNumber(getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".partyPass", parsePlayerName(getSibling(0)), parseTimeUnit(getSibling(2), getSibling(3)), parseNumber(getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
                 }
                 else {
-                    resultText.append(newTranslateWithSplit(parentKey + ".partyPass", getSibling(1), parseTimeUnit(getSibling(3), getSibling(4)), parseNumber(getSibling(5))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".partyPass", getSibling(1), parseTimeUnit(getSibling(3), getSibling(4)), parseNumber(getSibling(5))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
                 }
             }
             case NULL -> throw new TextTranslationFailException("KeyCollector.class");

@@ -19,7 +19,7 @@ public class EatThisText extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return null;
     }
 

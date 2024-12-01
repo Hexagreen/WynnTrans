@@ -35,11 +35,11 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
     public CaveCompletedLiteral(Text text) {
         super(splitTextBody(text));
         this.valCaveName = getSibling(2).getString().replaceAll("§. +§.", "");
-        this.keyCaveName = parentKey + normalizeStringForKey(valCaveName);
+        this.keyCaveName = translationKey + normalizeStringForKey(valCaveName);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "cave.";
     }
 

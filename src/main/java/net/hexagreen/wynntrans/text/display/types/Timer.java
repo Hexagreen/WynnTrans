@@ -18,7 +18,7 @@ public class Timer extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return null;
     }
 

@@ -31,17 +31,17 @@ public class WeeklyObjective extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.guildObj";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty().append("\n");
-        Text t1 = Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)).append("\n");
-        Text t2 = Text.translatable(parentKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("\n");
-        Text t3 = Text.translatable(parentKey + ".2").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild rewards"))).append("\n");
-        Text t4 = Text.translatable(parentKey + ".3").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append("\n");
+        Text t1 = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true)).append("\n");
+        Text t2 = Text.translatable(translationKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("\n");
+        Text t3 = Text.translatable(translationKey + ".2").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild rewards"))).append("\n");
+        Text t4 = Text.translatable(translationKey + ".3").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append("\n");
 
         resultText.append(getCenterIndent(t1)).append(t1).append(getCenterIndent(t2)).append(t2).append("\n");
 

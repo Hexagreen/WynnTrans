@@ -20,7 +20,7 @@ public class RaidKeeper extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.raidKeeper.cost";
     }
 
@@ -30,7 +30,7 @@ public class RaidKeeper extends WynnDisplayText {
         resultText.append(getSibling(0)).append("\n");
         resultText.append(raidName);
         resultText.append("\n\n");
-        resultText.append(Text.translatable(parentKey, cost).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, cost).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 
     private Text getRaidName(Text text) {

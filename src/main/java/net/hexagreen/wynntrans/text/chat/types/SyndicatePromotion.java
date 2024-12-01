@@ -13,7 +13,7 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "syndicate.rank.";
     }
 
@@ -25,7 +25,7 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
 
         Text rankOrigin = getSibling(4).getSiblings().getLast();
         String valRank = rankOrigin.getString().replaceAll("§.", "").replaceAll(" I+$", "");
-        String keyRank = parentKey + valRank.toLowerCase(Locale.ENGLISH);
+        String keyRank = translationKey + valRank.toLowerCase(Locale.ENGLISH);
         String bar = rankOrigin.getString().replaceFirst(".+( I+)$", "$1");
         Text rank = Text.translatable(keyRank).setStyle(parseStyleCode(rankOrigin.getString())).append(bar);
 

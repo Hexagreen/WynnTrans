@@ -24,13 +24,13 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.quickTrade";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.translatable(parentKey, playerName, buildCommand()).setStyle(getStyle());
+        resultText = Text.translatable(translationKey, playerName, buildCommand()).setStyle(getStyle());
     }
 
     private Text buildCommand() {

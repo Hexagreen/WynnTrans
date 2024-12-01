@@ -17,19 +17,19 @@ public class BombExpired extends WynnChatText {
 
     public BombExpired(Text text) {
         super(text, Pattern.compile("^You can buy (.+) [bB]ombs at our store"));
-        this.storeLink = Text.translatable(parentKey + ".store").setStyle(getStyle(0));
+        this.storeLink = Text.translatable(translationKey + ".store").setStyle(getStyle(0));
         this.bombName = parseBombName(matcher.group(1));
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.bombExpired";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
+        resultText.append(Text.translatable(translationKey, bombName, storeLink).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
     }
 
     private Text parseBombName(String bombName) {

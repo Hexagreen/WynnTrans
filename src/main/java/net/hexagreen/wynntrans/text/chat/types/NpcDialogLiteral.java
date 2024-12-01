@@ -27,7 +27,7 @@ public class NpcDialogLiteral extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return null;
     }
 

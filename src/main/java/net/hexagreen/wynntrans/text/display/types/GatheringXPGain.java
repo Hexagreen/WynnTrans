@@ -36,7 +36,7 @@ public class GatheringXPGain extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.professionXp";
     }
 
@@ -46,7 +46,7 @@ public class GatheringXPGain extends WynnDisplayText {
         resultText.append(multiplier);
 
         resultText.append("[");
-        resultText.append(Text.translatable(parentKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         resultText.append("]");
         resultText.append(percent);
         if(item != null) {

@@ -22,13 +22,13 @@ public class ServerRestart extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.serverRestart";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey + "." + unit, number).setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        resultText.append(Text.translatable(translationKey + "." + unit, number).setStyle(Style.EMPTY.withColor(Formatting.RED)));
     }
 }

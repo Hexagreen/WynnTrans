@@ -16,13 +16,13 @@ public class Disguise extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.disguise";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, getSibling(0), getSibling(2)).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(translationKey, getSibling(0), getSibling(2)).setStyle(getStyle(1)));
     }
 }

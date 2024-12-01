@@ -17,15 +17,15 @@ public class JoinQueue extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.joinQueue";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().append("\n");
-        Text t0 = Text.translatable(parentKey);
-        Text t1 = Text.translatable(parentKey + ".guide");
+        Text t0 = Text.translatable(translationKey);
+        Text t1 = Text.translatable(translationKey + ".guide");
 
         resultText.append(getCenterIndent(t0)).append(t0).append("\n").append(getCenterIndent(t1)).append(t1).append("\n");
     }

@@ -24,18 +24,18 @@ public class MobTotemDeployed extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.mobTotemDeployed";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-        resultText.append(Text.translatable(parentKey, playerName, location, coordinate));
+        resultText.append(Text.translatable(translationKey, playerName, location, coordinate));
     }
 
     private Text getLocation(Text text) {
         String areaName = normalizeStringForKey(text.getString());
-        return Text.translatable(parentKey + "area." + areaName);
+        return Text.translatable(translationKey + "area." + areaName);
     }
 }

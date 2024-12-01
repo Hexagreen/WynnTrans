@@ -19,17 +19,17 @@ public class Info extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "info";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
-            String keySibling = parentKey + "." + hash + "_" + index;
+            String keySibling = translationKey + "." + hash + "_" + index;
             String valSibling = getContentString(index);
 
             if(valSibling.isEmpty()) {
@@ -42,15 +42,15 @@ public class Info extends WynnChatText {
             }
             switch(valSibling) {
                 case "For more information, visit " -> {
-                    resultText.append(Text.translatable(parentKey + ".moreInfo").setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(translationKey + ".moreInfo").setStyle(getStyle(index)));
                     continue;
                 }
                 case "Visit " -> {
-                    resultText.append(Text.translatable(parentKey + ".moreInfo_alt1").setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(translationKey + ".moreInfo_alt1").setStyle(getStyle(index)));
                     continue;
                 }
                 case " for more!" -> {
-                    resultText.append(Text.translatable(parentKey + ".moreInfo_alt2").setStyle(getStyle(index)));
+                    resultText.append(Text.translatable(translationKey + ".moreInfo_alt2").setStyle(getStyle(index)));
                     continue;
                 }
             }

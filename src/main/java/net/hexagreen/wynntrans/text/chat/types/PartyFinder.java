@@ -24,15 +24,15 @@ public class PartyFinder extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.partyFinder";
     }
 
     @Override
     protected void build() {
-        Text standingPlayers = Text.empty().append(Text.translatable(parentKey + ".players", players).setStyle(Style.EMPTY.withColor(Formatting.YELLOW)));
+        Text standingPlayers = Text.empty().append(Text.translatable(translationKey + ".players", players).setStyle(Style.EMPTY.withColor(Formatting.YELLOW)));
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)).append(": ")).append(Text.translatable(parentKey + ".message", playerName, partyName, standingPlayers).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)).append(": ")).append(Text.translatable(translationKey + ".message", playerName, partyName, standingPlayers).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

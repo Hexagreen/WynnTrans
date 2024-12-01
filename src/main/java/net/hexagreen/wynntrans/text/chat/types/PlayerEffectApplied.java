@@ -20,13 +20,13 @@ public class PlayerEffectApplied extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.effectApplied";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty().append(header).setStyle(getStyle());
-        resultText.append(Text.translatable(parentKey, skinName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        resultText.append(Text.translatable(translationKey, skinName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

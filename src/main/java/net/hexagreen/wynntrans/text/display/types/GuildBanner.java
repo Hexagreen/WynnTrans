@@ -24,7 +24,7 @@ public class GuildBanner extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.guildBanner";
     }
 
@@ -38,6 +38,6 @@ public class GuildBanner extends WynnDisplayText {
             resultText.append(Text.literal(valAreaName).setStyle(Style.EMPTY.withColor(Formatting.WHITE).withBold(true)));
         }
 
-        resultText.append("\n").append(Text.translatable(parentKey + ".controlBy", owner).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(lines[2]).append("\n").append(Text.translatable(rootKey + "func.clickForOptions").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        resultText.append("\n").append(Text.translatable(translationKey + ".controlBy", owner).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(lines[2]).append("\n").append(Text.translatable(rootKey + "func.clickForOptions").setStyle(Style.EMPTY.withColor(Formatting.RED)));
     }
 }

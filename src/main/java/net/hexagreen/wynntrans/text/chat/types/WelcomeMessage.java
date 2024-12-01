@@ -31,7 +31,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.welcome";
     }
 
@@ -39,7 +39,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.literal("\n");
 
-        Text welcome = Text.translatable(parentKey);
+        Text welcome = Text.translatable(translationKey);
         resultText.append(getCenterIndent(welcome)).append(welcome).append("\n");
 
         resultText.append(getCenterIndent(LINK)).append(LINK).append("\n\n");
@@ -77,7 +77,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 
     private void appendTradeMessage(Matcher trade) {
         Text num = Text.literal(trade.group(1)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE).withBold(true));
-        Text textTrade = Text.translatable(parentKey + ".tradeAlarm", num).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
+        Text textTrade = Text.translatable(translationKey + ".tradeAlarm", num).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
         resultText.append(getCenterIndent(textTrade)).append(textTrade).append("\n");
     }
 
@@ -100,13 +100,13 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
         }
         resultText.append(getCenterIndent(textFestival)).append(textFestival).append("\n");
 
-        Text festivalGuide1 = Text.translatable(parentKey + ".fesGuide.1").setStyle(festDescStyle);
+        Text festivalGuide1 = Text.translatable(translationKey + ".fesGuide.1").setStyle(festDescStyle);
         resultText.append(getCenterIndent(festivalGuide1)).append(festivalGuide1).append("\n");
 
         Matcher crate = REGEX_CRATE.matcher(getSibling(3).getString());
         if(crate.find()) {
             String strCrate = crate.group(1);
-            Text festivalGuide2 = Text.translatable(parentKey + ".fesGuide.2", strCrate).setStyle(festDescStyle);
+            Text festivalGuide2 = Text.translatable(translationKey + ".fesGuide.2", strCrate).setStyle(festDescStyle);
             resultText.append(getCenterIndent(festivalGuide2)).append(festivalGuide2).append("\n\n");
         }
         else debugClass.writeTextAsJSON(inputText);
@@ -116,7 +116,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
             String strTime = time.group(1);
             Style styleTime = parseStyleCode(strTime);
             Text textTime = ITime.translateTime(strTime.replaceAll("§.", "")).setStyle(styleTime);
-            Text festivalGuide3 = Text.translatable(parentKey + ".fesGuide.3", textTime).setStyle(festTitleStyle.withBold(false));
+            Text festivalGuide3 = Text.translatable(translationKey + ".fesGuide.3", textTime).setStyle(festTitleStyle.withBold(false));
             resultText.append(getCenterIndent(festivalGuide3)).append(festivalGuide3).append("\n");
         }
     }

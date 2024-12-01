@@ -14,7 +14,7 @@ public class MiniQuestInfo extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.miniQuestInfo";
     }
 
@@ -22,9 +22,9 @@ public class MiniQuestInfo extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
         if(gatheringQuest) {
-            resultText.append(Text.translatable(parentKey + ".gathering", getSibling(0), getSibling(2), getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
+            resultText.append(Text.translatable(translationKey + ".gathering", getSibling(0), getSibling(2), getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
             return;
         }
-        resultText.append(Text.translatable(parentKey + ".slaying", getSibling(0), getSibling(2)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        resultText.append(Text.translatable(translationKey + ".slaying", getSibling(0), getSibling(2)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

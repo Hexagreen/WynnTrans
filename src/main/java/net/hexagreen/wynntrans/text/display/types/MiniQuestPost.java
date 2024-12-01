@@ -29,7 +29,7 @@ public class MiniQuestPost extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.post.";
     }
 
@@ -37,13 +37,13 @@ public class MiniQuestPost extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
         if(!gather) {
-            resultText.append(Text.translatable(parentKey + "slay").setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append(" ");
-            resultText.append(Text.translatable(parentKey + "slay.req", level).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append("\n");
+            resultText.append(Text.translatable(translationKey + "slay").setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append(" ");
+            resultText.append(Text.translatable(translationKey + "slay.req", level).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append("\n");
             resultText.append(Text.literal("NPC").setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
         else {
-            resultText.append(Text.translatable(parentKey + "gather").setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append(" ");
-            resultText.append(Text.translatable(parentKey + "gather.req", profession.getText(), level).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append("\n");
+            resultText.append(Text.translatable(translationKey + "gather").setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append(" ");
+            resultText.append(Text.translatable(translationKey + "gather.req", profession.getText(), level).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append("\n");
             resultText.append(Text.literal("NPC").setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
     }

@@ -21,13 +21,13 @@ public class ServerSwapSave extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.serverSwapSave";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, worldChannel).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

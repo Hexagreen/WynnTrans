@@ -20,12 +20,12 @@ public class BoothTitle extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.boothTitle";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().append(Text.translatable(parentKey, boothOwner).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append("\n").append(Text.literal(boothDesc).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText = Text.empty().append(Text.translatable(translationKey, boothOwner).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append("\n").append(Text.literal(boothDesc).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

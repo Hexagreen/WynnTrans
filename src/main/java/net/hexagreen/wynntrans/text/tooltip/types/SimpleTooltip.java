@@ -18,7 +18,7 @@ public class SimpleTooltip extends WynnTooltipText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "tooltip.";
     }
 
@@ -36,7 +36,7 @@ public class SimpleTooltip extends WynnTooltipText {
 
     private boolean hasTranslation(Text text) {
         String hash = DigestUtils.sha1Hex(text.getString());
-        String key = parentKey + hash;
+        String key = translationKey + hash;
         if(WTS.checkTranslationDoNotRegister(key)) return true;
 
         int index = 0;
@@ -66,7 +66,7 @@ public class SimpleTooltip extends WynnTooltipText {
 
             String content = sibling.getString();
             Style style = sibling.getStyle();
-            String key = parentKey + hash;
+            String key = translationKey + hash;
             if(siblings.size() != 1) key = key + "_" + (i + 1);
 
             if(!Pattern.compile("[A-z]").matcher(content).find()) {

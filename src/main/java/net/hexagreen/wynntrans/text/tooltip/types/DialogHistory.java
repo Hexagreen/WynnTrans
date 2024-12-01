@@ -27,13 +27,13 @@ public class DialogHistory extends WynnTooltipText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "tooltip.dialogHistory";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText.append(Text.translatable(parentKey))
+        resultText.append(Text.translatable(translationKey))
                 .append(" ");
         for(Text text : parseDialog()) {
             resultText.append(text);
@@ -90,11 +90,11 @@ public class DialogHistory extends WynnTooltipText {
             List<Text> result = new ArrayList<>();
             for(Text text : storage) {
                 if(text.getString().matches("• Dialogue Start")) {
-                    result.add(Text.translatable(parentKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                    result.add(Text.translatable(translationKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
                     continue;
                 }
                 else if(text.getString().matches("• Dialogue End")) {
-                    result.add(Text.translatable(parentKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                    result.add(Text.translatable(translationKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
                     continue;
                 }
                 else if(npcDialogPattern.matcher(text.getString()).find()) {

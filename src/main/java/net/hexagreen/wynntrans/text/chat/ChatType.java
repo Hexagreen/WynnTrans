@@ -110,7 +110,7 @@ public enum ChatType {
 
     public static boolean findAndRun(Text text) {
         ChatType find = findType(text);
-        return find.wct.apply(text).print();
+        return find.wct != null && find.wct.apply(text).print();
     }
 
     ChatType(Function<Text, WynnChatText> wct, Predicate<Text> typeChecker) {

@@ -27,7 +27,7 @@ public class SimpleSystemText extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "text.";
     }
 
@@ -77,7 +77,7 @@ public class SimpleSystemText extends WynnSystemText {
     }
 
     private String initKeyText() {
-        return parentKey + DigestUtils.sha1Hex(replacerRemover(valText));
+        return translationKey + DigestUtils.sha1Hex(replacerRemover(valText));
     }
 
     private boolean checkTranslationExistWithControl(String key, String value) {

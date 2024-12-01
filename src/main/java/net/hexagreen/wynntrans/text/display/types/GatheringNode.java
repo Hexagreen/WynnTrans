@@ -37,7 +37,7 @@ public class GatheringNode extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.gatheringNode";
     }
 
@@ -60,8 +60,8 @@ public class GatheringNode extends WynnDisplayText {
                 String key = lines[i].replaceAll(".+ ", "");
                 String val = lines[i].replaceFirst("§8", "");
                 resultText.append("\n");
-                if(WTS.checkTranslationExist(parentKey + ".get" + key, val)) {
-                    resultText.append(Text.translatable(parentKey + ".get" + key).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                if(WTS.checkTranslationExist(translationKey + ".get" + key, val)) {
+                    resultText.append(Text.translatable(translationKey + ".get" + key).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
                 }
                 else {
                     resultText.append(Text.literal(val).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));

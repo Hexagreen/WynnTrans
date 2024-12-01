@@ -116,6 +116,7 @@ public abstract class WynnSystemText extends WynnChatText {
     public MutableText text() {
         try {
             build();
+            debugClass.writeTextAsJSON(inputText, "Migration");
             return resultText;
         }
         catch(IndexOutOfBoundsException e) {

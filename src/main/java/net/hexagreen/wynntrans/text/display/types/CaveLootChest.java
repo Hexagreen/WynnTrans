@@ -40,16 +40,16 @@ public class CaveLootChest extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.lockedChest";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, chest).setStyle(color)).append("\n");
+        resultText.append(Text.translatable(translationKey, chest).setStyle(color)).append("\n");
         if(!other.isBlank()) {
-            String key = parentKey + ".obj." + DigestUtils.sha1Hex(other).substring(0, 4);
+            String key = translationKey + ".obj." + DigestUtils.sha1Hex(other).substring(0, 4);
             if(WTS.checkTranslationExist(key, other)) {
                 resultText.append(key);
                 return;
@@ -57,7 +57,7 @@ public class CaveLootChest extends WynnDisplayText {
         }
 
         if(valTarget.contains("Mobs")) {
-            resultText.append(Text.translatable(parentKey + ".slayMob", progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            resultText.append(Text.translatable(translationKey + ".slayMob", progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
         }
         else {
             MutableText target;
@@ -69,10 +69,10 @@ public class CaveLootChest extends WynnDisplayText {
                 target = Text.literal(valTarget).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
             }
             if(!progress.contains("a")) {
-                resultText.append(Text.translatable(parentKey + ".slayTarget", target, progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                resultText.append(Text.translatable(translationKey + ".slayTarget", target, progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             }
             else {
-                resultText.append(Text.translatable(parentKey + ".slayHead", target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                resultText.append(Text.translatable(translationKey + ".slayHead", target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
             }
         }
     }

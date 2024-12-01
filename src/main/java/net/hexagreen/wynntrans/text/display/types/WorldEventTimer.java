@@ -19,7 +19,7 @@ public class WorldEventTimer extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.worldEvent.timer";
     }
 
@@ -28,7 +28,7 @@ public class WorldEventTimer extends WynnDisplayText {
         Style style = Style.EMPTY.withColor(0xAEB8BF);
         if(startTimer) {
             Text timer = ITime.translateTime(getContentString().replaceAll("Starts in ", ""));
-            resultText = Text.translatable(parentKey, timer).setStyle(style);
+            resultText = Text.translatable(translationKey, timer).setStyle(style);
         }
         else {
             String num = getContentString().replaceAll("\\D", "");

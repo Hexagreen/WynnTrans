@@ -14,6 +14,10 @@ import java.util.regex.Pattern;
 public class ProxySimpleDisplay extends SimpleDisplay {
     private final Templates template;
 
+    public static boolean typeChecker(Text text) {
+        return Templates.findTemplate(text) != null;
+    }
+
     public ProxySimpleDisplay(Text text) {
         super(text);
         this.template = Templates.findTemplate(inputText);
@@ -106,10 +110,6 @@ public class ProxySimpleDisplay extends SimpleDisplay {
             this.typeChecker = typeChecker;
             this.mutator = mutator;
             this.argumentParser = argumentParser;
-        }
-
-        public Predicate<Text> getTypeChecker() {
-            return this.typeChecker;
         }
     }
 }

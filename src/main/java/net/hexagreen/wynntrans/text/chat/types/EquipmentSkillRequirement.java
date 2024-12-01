@@ -25,13 +25,13 @@ public class EquipmentSkillRequirement extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.equipSkillReq";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, equipName, skill, level).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
+        resultText.append(Text.translatable(translationKey, equipName, skill, level).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }
 }

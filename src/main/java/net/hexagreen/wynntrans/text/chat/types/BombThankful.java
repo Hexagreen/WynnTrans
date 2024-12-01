@@ -26,13 +26,13 @@ public class BombThankful extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.thankyou";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

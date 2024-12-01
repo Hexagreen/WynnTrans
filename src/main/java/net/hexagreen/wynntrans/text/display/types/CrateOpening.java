@@ -19,13 +19,13 @@ public class CrateOpening extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.crateOpen";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(crateName).append("\n").append(Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(crateName).append("\n").append(Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

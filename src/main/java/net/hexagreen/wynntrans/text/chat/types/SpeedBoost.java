@@ -20,15 +20,15 @@ public class SpeedBoost extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.speedBoost";
     }
 
     @Override
     protected void build() {
-        Text buffTime = Text.translatable(parentKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        Text buffTime = Text.translatable(translationKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, buffTime).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(translationKey, buffTime).setStyle(getStyle(1)));
     }
 }

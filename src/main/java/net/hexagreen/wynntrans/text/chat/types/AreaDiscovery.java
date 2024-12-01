@@ -32,7 +32,7 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.areaDiscovered";
     }
 
@@ -40,7 +40,7 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.empty();
 
-        MutableText t0 = Text.empty().append(Text.translatable(parentKey).setStyle(styleTitle));
+        MutableText t0 = Text.empty().append(Text.translatable(translationKey).setStyle(styleTitle));
         if(WTS.checkTranslationExist(keyAreaName, valAreaName)) {
             t0.append(Text.translatable(keyAreaName).setStyle(styleAreaName)).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }

@@ -20,13 +20,13 @@ public class LootChest extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.lootChest";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, star).setStyle(color));
+        resultText.append(Text.translatable(translationKey, star).setStyle(color));
     }
 }

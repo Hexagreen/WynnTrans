@@ -23,13 +23,13 @@ public class ItemSkillRequirement extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.itemSkillReq";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().append(header).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
-        resultText.append(newTranslateWithSplit(parentKey, skill, level));
+        resultText.append(newTranslateWithSplit(translationKey, skill, level));
     }
 }

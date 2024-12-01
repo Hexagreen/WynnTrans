@@ -27,13 +27,13 @@ public class NearCombatLevelUp extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.levelUp.combat";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GOLD));
-        resultText.append(Text.translatable(parentKey, playerName, level));
+        resultText.append(Text.translatable(translationKey, playerName, level));
     }
 }

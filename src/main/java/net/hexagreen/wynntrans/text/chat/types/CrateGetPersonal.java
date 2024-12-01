@@ -16,7 +16,7 @@ public class CrateGetPersonal extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.crateReward.personal";
     }
 

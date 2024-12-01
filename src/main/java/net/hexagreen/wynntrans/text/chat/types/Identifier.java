@@ -21,21 +21,21 @@ public class Identifier extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.identifier";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty().append(header).setStyle(getStyle());
-        resultText.append(Text.translatable(parentKey).append(": "));
+        resultText.append(Text.translatable(translationKey).append(": "));
 
         switch(messageType) {
             case ILLEGAL_ITEM ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".illegalItem", ItemRarity.UNIQUE.getRarity(), ItemRarity.RARE.getRarity(), ItemRarity.LEGENDARY.getRarity(), ItemRarity.SET.getRarity(), ItemRarity.FABLED.getRarity(), ItemRarity.MYTHIC.getRarity()).setStyle(getStyle(1)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".illegalItem", ItemRarity.UNIQUE.getRarity(), ItemRarity.RARE.getRarity(), ItemRarity.LEGENDARY.getRarity(), ItemRarity.SET.getRarity(), ItemRarity.FABLED.getRarity(), ItemRarity.MYTHIC.getRarity()).setStyle(getStyle(1)));
 
             case AUGMENT_FIRST ->
-                    resultText.append(newTranslateWithSplit(parentKey + ".augmentFirst").setStyle(getStyle(1)));
+                    resultText.append(newTranslateWithSplit(translationKey + ".augmentFirst").setStyle(getStyle(1)));
             case NULL -> throw new TextTranslationFailException(this.getClass().getName());
         }
     }

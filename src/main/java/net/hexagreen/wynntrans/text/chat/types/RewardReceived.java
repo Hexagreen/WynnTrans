@@ -17,14 +17,14 @@ public class RewardReceived extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "bomb.reward";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
+        resultText.append(Text.translatable(translationKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
     }
 
     private Text initRewards() {

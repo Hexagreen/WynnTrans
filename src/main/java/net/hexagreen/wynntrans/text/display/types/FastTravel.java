@@ -22,13 +22,13 @@ public class FastTravel extends WynnDisplayText {
     public FastTravel(Text text) {
         super(text);
         this.valTravelName = getContentString(2).split("\\n")[0];
-        this.keyTravelName = parentKey + normalizeStringForKey(valTravelName);
+        this.keyTravelName = translationKey + normalizeStringForKey(valTravelName);
         this.valDestination = getSibling(2).getSiblings().getFirst().getSiblings().get(2).getString();
         this.keyDestination = keyTravelName + ".dest." + DigestUtils.sha1Hex(valDestination).substring(0, 4);
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "travel.";
     }
 

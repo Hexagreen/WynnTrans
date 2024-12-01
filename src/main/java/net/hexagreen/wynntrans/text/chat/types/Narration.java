@@ -12,7 +12,7 @@ public class Narration extends WynnChatText {
     public Narration(Text text) {
         super(text);
         String hash = DigestUtils.sha1Hex(text.getString());
-        this.pKeyNarration = parentKey + hash;
+        this.pKeyNarration = translationKey + hash;
     }
 
     public Narration setNoTranslationAddiction() {
@@ -21,7 +21,7 @@ public class Narration extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "narration.";
     }
 

@@ -11,11 +11,11 @@ public class GuideAlert extends WynnChatText {
     public GuideAlert(Text text) {
         super(text);
         String hash = DigestUtils.sha1Hex(text.getString());
-        this.pKeyGnA = parentKey + hash;
+        this.pKeyGnA = translationKey + hash;
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "guideAlert.";
     }
 

@@ -17,7 +17,7 @@ public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.worldEvent.fail";
     }
 
@@ -27,7 +27,7 @@ public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
         resultText.append(Text.translatable("wytr.func.worldEvent.failedOne", eventName));
 
         Text t2 = Text.empty().append(getSibling(2).getSiblings().get(1)).append(getSibling(2).getSiblings().get(2));
-        Text t3 = Text.translatable(parentKey).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+        Text t3 = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
         Text t5 = Text.translatable(keyFailGuide).setStyle(Style.EMPTY.withColor(0xAEB8BF));
 
         resultText.append(splitter).append(splitter).append(getCenterIndent(t2).append(t2)).append(splitter).append(getCenterIndent(t3).append(t3)).append(splitter).append(splitter).append(getCenterIndent(t5).append(t5)).append(splitter);
@@ -47,10 +47,10 @@ public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
     private String initKeyGuide(Text text) {
         String content = text.getString();
         if(content.contains("Everyone in your group has died!")) {
-            return parentKey + ".eliminated";
+            return translationKey + ".eliminated";
         }
         if(content.contains("The time limit has expired!")) {
-            return parentKey + ".timeOut";
+            return translationKey + ".timeOut";
         }
         return null;
     }

@@ -14,7 +14,7 @@ public abstract class WynnTransText {
 
     protected static final String rootKey = "wytr.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
-    protected final String parentKey;
+    protected final String translationKey;
     protected final MutableText inputText;
     protected MutableText resultText;
 
@@ -31,7 +31,7 @@ public abstract class WynnTransText {
 
     public WynnTransText(Text text) {
         this.inputText = (MutableText) text;
-        this.parentKey = setParentKey();
+        this.translationKey = setTranslationKey();
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class WynnTransText {
      *
      * @return Key for translation
      */
-    protected abstract String setParentKey();
+    protected abstract String setTranslationKey();
 
     /**
      * Method for creating translatable text

@@ -23,13 +23,13 @@ public class TrinketCooldown extends WynnSystemText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.trinketCooldown";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().append(header);
-        resultText.append(newTranslateWithSplit(parentKey, item, time).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(newTranslateWithSplit(translationKey, item, time).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
     }
 }

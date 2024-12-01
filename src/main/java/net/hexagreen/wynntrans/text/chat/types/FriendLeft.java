@@ -25,7 +25,7 @@ public class FriendLeft extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.friendLeft";
     }
 
@@ -33,6 +33,6 @@ public class FriendLeft extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
-        resultText.append(Text.translatable(parentKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        resultText.append(Text.translatable(translationKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

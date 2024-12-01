@@ -20,7 +20,7 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.levelUp";
     }
 
@@ -28,12 +28,12 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
     protected void build() {
         resultText = Text.empty();
 
-        Text t1 = Text.translatable(parentKey).setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GOLD));
+        Text t1 = Text.translatable(translationKey).setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GOLD));
         resultText.append(getCenterIndent(t1).append(t1).append("\n"));
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
         if(m2.find()) {
-            Text t2 = Text.translatable(parentKey + ".nowOn", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+            Text t2 = Text.translatable(translationKey + ".nowOn", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
             resultText.append(getCenterIndent(t2).append(t2).append("\n"));
         }
 
@@ -42,7 +42,7 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
         Matcher m3 = REGEX_NEXTAP.matcher(getSibling(4).getString());
         if(m3.find()) {
             Text num = Text.literal(m3.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-            Text t3 = Text.translatable(parentKey + ".nextAP", num);
+            Text t3 = Text.translatable(translationKey + ".nextAP", num);
             resultText.append(getCenterIndent(t3).append(t3).append("\n"));
         }
 
@@ -50,22 +50,22 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
 
         for(int i = 6; getSiblings().size() > i; i++) {
             if(getSibling(i).getString().contains("+1 Ability Point")) {
-                resultText.append(Text.translatable(parentKey + ".abilityPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.translatable(parentKey + ".abilityPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append("\n");
+                resultText.append(Text.translatable(translationKey + ".abilityPoint").setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.translatable(translationKey + ".abilityPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+2 Skill Points")) {
-                resultText.append(Text.translatable(parentKey + ".skillPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append(Text.translatable(parentKey + ".skillPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append("\n");
+                resultText.append(Text.translatable(translationKey + ".skillPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append(Text.translatable(translationKey + ".skillPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+5 Maximum HP")) {
-                resultText.append(Text.translatable(parentKey + ".healthPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append(Text.translatable(translationKey + ".healthPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+ New Quest")) {
-                String keyNewQuest = parentKey + ".newQuest";
+                String keyNewQuest = translationKey + ".newQuest";
                 String valQuestName = getSibling(i).getString().substring(16).replace("[", "").replace("]", "").replace("À", "").replace("֎", "");
                 if(valQuestName.contains("Mini-Quest - ")) {
-                    keyNewQuest = parentKey + ".newMiniQuest";
+                    keyNewQuest = translationKey + ".newMiniQuest";
                     valQuestName = valQuestName.replace("Mini-Quest - ", "");
                 }
 

@@ -22,13 +22,13 @@ public class PouchSold extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.pouchSold";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, amount, emerald).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(translationKey, amount, emerald).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

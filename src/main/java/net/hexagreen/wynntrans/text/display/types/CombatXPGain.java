@@ -33,7 +33,7 @@ public class CombatXPGain extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.combatXp";
     }
 
@@ -44,10 +44,10 @@ public class CombatXPGain extends WynnDisplayText {
             resultText.append(multiplier);
         }
         resultText.append("[");
-        resultText.append(Text.translatable(parentKey, experience).setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+        resultText.append(Text.translatable(translationKey, experience).setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
         resultText.append("]\n");
         if(shared) {
-            resultText.append(Text.translatable(parentKey + ".shared"));
+            resultText.append(Text.translatable(translationKey + ".shared"));
         }
         else {
             resultText.append(owner);

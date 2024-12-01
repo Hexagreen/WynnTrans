@@ -19,17 +19,17 @@ public class InfoUpdate extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "updateInfo";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey).setStyle(getStyle(0)));
+        resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
-            String keySibling = parentKey + "." + hash + "_" + (index - 1);
+            String keySibling = translationKey + "." + hash + "_" + (index - 1);
             String valSibling = getContentString(index);
             if(valSibling.matches(".+\\..+/.+") || valSibling.isEmpty() || valSibling.equals(" ")) {
                 resultText.append(getSibling(index));

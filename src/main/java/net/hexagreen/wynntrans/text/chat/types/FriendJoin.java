@@ -23,13 +23,13 @@ public class FriendJoin extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.friendJoin";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, playerName, worldChannel, charClass));
+        resultText.append(Text.translatable(translationKey, playerName, worldChannel, charClass));
     }
 }

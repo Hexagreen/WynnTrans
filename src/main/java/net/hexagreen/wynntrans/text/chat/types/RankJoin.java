@@ -16,13 +16,13 @@ public class RankJoin extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.rankJoin";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(getSibling(0)).append(getSibling(1)).append(Text.translatable(parentKey).setStyle(getStyle(2)));
+        resultText.append(getSibling(0)).append(getSibling(1)).append(Text.translatable(translationKey).setStyle(getStyle(2)));
     }
 }

@@ -28,7 +28,7 @@ public class RewardChest extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.rewardChest";
     }
 
@@ -41,6 +41,6 @@ public class RewardChest extends WynnDisplayText {
         else {
             resultText.append(getSibling(0)).append("\n");
         }
-        resultText.append(Text.translatable(parentKey, lastTime).setStyle(timeStyle));
+        resultText.append(Text.translatable(translationKey, lastTime).setStyle(timeStyle));
     }
 }

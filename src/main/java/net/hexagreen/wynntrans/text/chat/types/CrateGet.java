@@ -17,7 +17,7 @@ public class CrateGet extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.crateReward";
     }
 
@@ -27,19 +27,19 @@ public class CrateGet extends WynnChatText {
 
         if(getSibling(0).getContent().equals(PlainTextContent.EMPTY)) {
             int nextIndexItemname = getSiblings().size() - 3;
-            resultText.append(getSibling(1)).append(Text.translatable(parentKey + "_1").setStyle(getStyle(2)));
+            resultText.append(getSibling(1)).append(Text.translatable(translationKey + "_1").setStyle(getStyle(2)));
             for(int i = 3; nextIndexItemname > i; i++) {
                 resultText.append(getSibling(i));
             }
-            resultText.append(Text.translatable(parentKey + "_2").setStyle(getStyle(nextIndexItemname))).append(getSibling(nextIndexItemname + 1));
+            resultText.append(Text.translatable(translationKey + "_2").setStyle(getStyle(nextIndexItemname))).append(getSibling(nextIndexItemname + 1));
         }
         else {
             int nextIndexItemname = getSiblings().size() - 3;
-            resultText.append(Text.literal(matcher.group(1)).setStyle(getStyle(0))).append(Text.translatable(parentKey + "_1").setStyle(getStyle(0)));
+            resultText.append(Text.literal(matcher.group(1)).setStyle(getStyle(0))).append(Text.translatable(translationKey + "_1").setStyle(getStyle(0)));
             for(int i = 1; nextIndexItemname > i; i++) {
                 resultText.append(getSibling(i));
             }
-            resultText.append(Text.translatable(parentKey + "_2").setStyle(getStyle(nextIndexItemname))).append(getSibling(nextIndexItemname + 1));
+            resultText.append(Text.translatable(translationKey + "_2").setStyle(getStyle(nextIndexItemname))).append(getSibling(nextIndexItemname + 1));
         }
     }
 }

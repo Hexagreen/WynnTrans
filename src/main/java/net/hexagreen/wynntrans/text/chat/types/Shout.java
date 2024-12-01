@@ -22,14 +22,14 @@ public class Shout extends WynnChatText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "func.shout";
     }
 
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
+        resultText.append(Text.translatable(translationKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
         for(int i = 0; i < getSiblings().size(); i++) {
             if(getSibling(i).getString().contains("] shouts: ")) continue;
             resultText.append(getSibling(i));

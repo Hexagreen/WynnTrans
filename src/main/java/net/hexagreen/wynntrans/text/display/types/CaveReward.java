@@ -21,7 +21,7 @@ public class CaveReward extends WynnDisplayText {
     }
 
     @Override
-    protected String setParentKey() {
+    protected String setTranslationKey() {
         return rootKey + "display.caveReward";
     }
 
@@ -36,6 +36,6 @@ public class CaveReward extends WynnDisplayText {
         }
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(parentKey, cave).setStyle(Style.EMPTY.withColor(Formatting.YELLOW).withBold(true)));
+        resultText.append(Text.translatable(translationKey, cave).setStyle(Style.EMPTY.withColor(Formatting.YELLOW).withBold(true)));
     }
 }
