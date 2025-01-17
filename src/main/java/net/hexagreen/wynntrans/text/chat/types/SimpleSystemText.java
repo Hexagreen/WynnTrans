@@ -21,7 +21,7 @@ public class SimpleSystemText extends WynnSystemText {
     }
 
     public SimpleSystemText(Text text) {
-        super(text, null);
+        super(text);
         this.valText = initValText();
         this.keyText = initKeyText();
     }

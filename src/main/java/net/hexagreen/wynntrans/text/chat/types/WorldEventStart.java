@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WorldEventStart extends WynnSystemText {
@@ -20,7 +21,9 @@ public class WorldEventStart extends WynnSystemText {
     }
 
     public WorldEventStart(Text text) {
-        super(text, Pattern.compile("The (.+) World Event starts in (\\d+\\w)!"));
+        super(text);
+        Matcher matcher = Pattern.compile("The (.+) World Event starts in (\\d+\\w)!").matcher(inputText.getString().replaceAll("\n", ""));
+        boolean ignore = matcher.find();
         this.valWorldEventName = matcher.group(1);
         this.keyWorldEventName = translationKey + normalizeStringForKey(valWorldEventName);
         this.leftTime = ITime.translateTime(matcher.group(2));

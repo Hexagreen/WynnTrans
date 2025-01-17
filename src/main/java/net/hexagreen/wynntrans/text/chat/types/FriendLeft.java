@@ -15,12 +15,12 @@ public class FriendLeft extends WynnChatText {
     }
 
     public FriendLeft(Text text) {
-        super(text, Pattern.compile("^§a(.+) left the game\\.$"));
+        super(text);
         if(text.getSiblings().size() > 1) {
             this.playerName = getPlayerNameFromSibling(0);
         }
         else {
-            this.playerName = Text.literal(matcher.group(1));
+            this.playerName = Text.literal(inputText.getString().replaceFirst("^§a(.+) left.+", "$1"));
         }
     }
 

@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TradePartial extends WynnSystemText {
@@ -18,7 +19,9 @@ public class TradePartial extends WynnSystemText {
     }
 
     public TradePartial(Text text) {
-        super(text, Pattern.compile("(\\d+)x .+ has been (?:Bought|Sold)\\.$"));
+        super(text);
+        Matcher matcher = Pattern.compile("(\\d+)x .+ has been (?:Bought|Sold)\\.$").matcher(inputText.getString().replaceAll("\n", ""));
+        boolean ignore = matcher.find();
         this.buyingMode = text.getString().contains(" has been Bought.");
         this.tradeAmount = matcher.group(1);
         this.item = parseItem();

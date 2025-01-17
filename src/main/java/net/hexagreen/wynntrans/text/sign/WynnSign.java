@@ -85,8 +85,7 @@ public class WynnSign {
                 sIndex++;
             }
         }
-        //noinspection DataFlowIssue
-        MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.signTranslationRegistered"));
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.signTranslationRegistered"));
     }
 
 }

@@ -42,9 +42,6 @@ def run_update():
     # 데이터프레임으로 변환
     df = pd.DataFrame(data_list)
 
-    # 데이터프레임 확인
-    print(df.head())
-
     # K-V 쌍 생성
     output_data = {}
 
@@ -58,9 +55,6 @@ def run_update():
             output_data[f"wytr.ability.arch.{normalized_name}"] = name
         else:
             output_data[f"wytr.ability.node.{normalized_name}"] = name
-
-    # 출력 준비된 데이터 확인
-    print(json.dumps(output_data, indent=4))
 
     # 기존 JSON 파일과 비교 및 업데이트
     folder_path = './lang/ability'
@@ -91,4 +85,4 @@ def run_update():
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(file_data, f, ensure_ascii=False, indent=4)
 
-    print("파일 업데이트 완료")
+    print("어빌리티 업데이트 완료")

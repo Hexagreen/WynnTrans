@@ -3,8 +3,8 @@ package net.hexagreen.wynntrans.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(EntityRenderer.class)
 abstract public class MixinEntityRenderer {
     @ModifyVariable(method = "renderLabelIfPresent", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    protected Text mixinRenderLabelIfPresent(Text text, @Local(argsOnly = true) Entity entity) {
-        if(!(entity instanceof PlayerEntity)) {
+    protected <S extends EntityRenderState> Text mixinRenderLabelIfPresent(Text text, @Local(argsOnly = true) S entityRenderState) {
+        if(!(entityRenderState instanceof PlayerEntityRenderState)) {
             if(text.getString().matches("§f.+§7's horse")) {
                 return Text.translatable("wytr.label.horse", text.getString().replaceFirst("§7's.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
             }

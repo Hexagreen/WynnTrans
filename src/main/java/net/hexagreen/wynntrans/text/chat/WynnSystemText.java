@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class WynnSystemText extends WynnChatText {
     protected final Text originText;
@@ -97,18 +95,14 @@ public abstract class WynnSystemText extends WynnChatText {
         return Text.literal(content).setStyle(style);
     }
 
-    @Deprecated
-    public WynnSystemText(Text text, Pattern regex) {
-        super(preprocessSystemChat(text, false), regex);
-        this.originText = text;
-        this.header = extractHeader(text.getSiblings().getFirst());
-        this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
+    public WynnSystemText(Text text) {
+        this(text, false);
     }
 
     public WynnSystemText(Text text, boolean isGlued) {
         super(preprocessSystemChat(text, isGlued));
         this.originText = text;
-        this.header = extractHeader(text.getSiblings().getFirst().getSiblings().getFirst());
+        this.header = extractHeader(text.getSiblings().getFirst());
         this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
     }
 
@@ -116,7 +110,6 @@ public abstract class WynnSystemText extends WynnChatText {
     public MutableText text() {
         try {
             build();
-            debugClass.writeTextAsJSON(inputText, "Migration");
             return resultText;
         }
         catch(IndexOutOfBoundsException e) {
@@ -128,11 +121,6 @@ public abstract class WynnSystemText extends WynnChatText {
             return new SimpleSystemText(originText).text();
         }
         return originText.copy();
-    }
-
-    @Override
-    protected Matcher createMatcher(Text text, Pattern regex) {
-        return regex.matcher(text.getString().replaceAll("\\n", ""));
     }
 
     /**

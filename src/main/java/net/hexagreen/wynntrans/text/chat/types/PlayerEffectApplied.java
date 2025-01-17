@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlayerEffectApplied extends WynnSystemText {
@@ -15,7 +16,9 @@ public class PlayerEffectApplied extends WynnSystemText {
     }
 
     public PlayerEffectApplied(Text text) {
-        super(text, Pattern.compile("You now have the (.+)\\."));
+        super(text);
+        Matcher matcher = Pattern.compile("You now have the (.+)\\.").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.skinName = matcher.group(1);
     }
 

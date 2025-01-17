@@ -36,7 +36,7 @@ public class Info extends WynnChatText {
                 resultText.append("");
                 continue;
             }
-            if(valSibling.contains("wynncraft.com")) {
+            if(valSibling.contains("wynn.gg") || valSibling.contains("wynncraft.com")) {
                 resultText.append(getSibling(index));
                 continue;
             }

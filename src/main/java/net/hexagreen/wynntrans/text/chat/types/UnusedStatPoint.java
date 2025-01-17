@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UnusedStatPoint extends WynnChatText {
@@ -16,7 +17,9 @@ public class UnusedStatPoint extends WynnChatText {
     }
 
     public UnusedStatPoint(Text text) {
-        super(text, Pattern.compile("^§4You have (?:§c§l(\\d+) unused Skill Points?)?(?:§4 and )?(?:§b§l(\\d+) unused Ability Points?)?! §4Right-Click"));
+        super(text);
+        Matcher matcher = Pattern.compile("^§4You have (?:§c§l(\\d+) unused Skill Points?)?(?:§4 and )?(?:§b§l(\\d+) unused Ability Points?)?!.+").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.skillPoint = matcher.group(1);
         this.abilityPoint = matcher.group(2);
     }

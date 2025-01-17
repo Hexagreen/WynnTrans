@@ -15,7 +15,7 @@ public class Blacksmith extends WynnSystemText {
     }
 
     public Blacksmith(Text text) {
-        super(text, null);
+        super(text);
     }
 
     @Override

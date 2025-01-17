@@ -17,7 +17,7 @@ public class TrinketOnActive extends WynnSystemText {
     }
 
     public TrinketOnActive(Text text) {
-        super(text, null);
+        super(text);
         this.item = getSibling(0);
         this.time = ITime.translateTime(getContentString(2)).setStyle(getStyle(2));
     }

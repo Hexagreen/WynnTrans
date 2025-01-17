@@ -15,8 +15,8 @@ public class SpeedBoost extends WynnChatText {
     }
 
     public SpeedBoost(Text text) {
-        super(text, Pattern.compile("^\\+(\\d) minutes speed boost\\."));
-        this.duration = matcher.group(1);
+        super(text);
+        this.duration = inputText.getString().replaceAll("\\D", "");
     }
 
     @Override

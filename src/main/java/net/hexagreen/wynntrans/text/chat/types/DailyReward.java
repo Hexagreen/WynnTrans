@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DailyReward extends WynnChatText {
@@ -16,7 +17,9 @@ public class DailyReward extends WynnChatText {
     }
 
     public DailyReward(Text text) {
-        super(text, Pattern.compile("^§7\\[Daily Rewards: (?:§a(\\d+) emeralds§7)?(?: and )?(?:§b(\\d+) items§7)?]$"));
+        super(text);
+        Matcher matcher = Pattern.compile("^§7\\[Daily Rewards: (?:§a(\\d+) emeralds§7)?(?: and )?(?:§b(\\d+) items§7)?]$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.emeralds = matcher.group(1);
         this.items = matcher.group(2);
     }

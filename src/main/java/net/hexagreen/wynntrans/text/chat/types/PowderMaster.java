@@ -13,7 +13,7 @@ public class PowderMaster extends WynnSystemText {
     }
 
     public PowderMaster(Text text) {
-        super(text, null);
+        super(text);
     }
 
     @Override

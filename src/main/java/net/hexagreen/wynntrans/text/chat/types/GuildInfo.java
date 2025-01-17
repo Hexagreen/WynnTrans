@@ -23,7 +23,7 @@ public class GuildInfo extends WynnSystemText {
     }
 
     public GuildInfo(Text text) {
-        super(text, null);
+        super(text);
         this.infoType = GuildInformation.findAndGet(inputText);
     }
 

@@ -17,7 +17,7 @@ public class TradeFinish extends WynnSystemText {
     }
 
     public TradeFinish(Text text) {
-        super(text, null);
+        super(text);
         this.buyingMode = text.getString().contains("Finished buying ");
         this.item = parseItem();
     }

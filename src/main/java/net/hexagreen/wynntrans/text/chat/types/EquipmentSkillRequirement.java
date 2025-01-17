@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EquipmentSkillRequirement extends WynnChatText {
@@ -18,7 +19,9 @@ public class EquipmentSkillRequirement extends WynnChatText {
     }
 
     public EquipmentSkillRequirement(Text text) {
-        super(text, Pattern.compile("^§c(.+)§4 requires your (.+) skill to be at least §c(\\d+)\\."));
+        super(text);
+        Matcher matcher = Pattern.compile("^§c(.+)§4 requires your (.+) skill to be at least §c(\\d+)\\.").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.equipName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.skill = CharacterSkill.getSkill(matcher.group(2));
         this.level = Text.literal(matcher.group(3)).setStyle(Style.EMPTY.withColor(Formatting.RED));

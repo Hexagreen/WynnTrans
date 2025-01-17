@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FriendList extends WynnSystemText {
@@ -16,7 +17,9 @@ public class FriendList extends WynnSystemText {
     }
 
     public FriendList(Text text) {
-        super(text, Pattern.compile("(.+)'s friends \\((\\d+)\\): "));
+        super(text);
+        Matcher matcher = Pattern.compile("(.+)'s friends \\((\\d+)\\): ").matcher(inputText.getString().replaceAll("\n", ""));
+        boolean ignore = matcher.find();
         this.playerName = matcher.group(1);
         this.friendNumber = matcher.group(2);
     }

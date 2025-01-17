@@ -17,55 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class WynnTooltipText extends WynnTransText {
-
-    private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
     private static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     private static boolean lever = false;
     private static boolean registered = true;
 
-    protected static Text colorCodedToStyled(Text text) {
-        List<Text> list = new ArrayList<>();
-        text.visit((style, asString) -> {
-            if(!asString.contains("§")) {
-                list.add(Text.literal(asString).setStyle(style));
-                return Optional.empty();
-            }
-            list.addAll(colorCodedToStyled(asString, style));
-            return Optional.empty();
-        }, Style.EMPTY);
-
-        return siblingsToText(list);
-    }
-
-    private static List<Text> colorCodedToStyled(String textAsString, Style parentStyle) {
-        Matcher matcher = colorParser.matcher(textAsString);
-        List<String> segments = new ArrayList<>();
-        while(matcher.find()) {
-            segments.add(matcher.group());
-        }
-        List<Text> result = new ArrayList<>();
-        for(String segment : segments) {
-            String content = segment.replaceFirst("(?:§.)+", "");
-            Style style = parseStyleCode(segment).withParent(parentStyle);
-            result.add(Text.literal(content).setStyle(style));
-        }
-        return result;
-    }
-
     protected static List<Text> colorCodedToStyledBatch(List<Text> textList) {
         return textList.parallelStream().map(WynnTooltipText::colorCodedToStyled).toList();
-    }
-
-    private static Text siblingsToText(List<Text> texts) {
-        MutableText result = Text.empty();
-        for(Text text : texts) {
-            result.append(text);
-        }
-        return result;
     }
 
     public WynnTooltipText(List<Text> text) {

@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DungeonComplete extends WynnChatText {
-    private static final Pattern HEAD = Pattern.compile("§6Great job! You've completed the (.+) Dungeon!");
     private static final Pattern EXP = Pattern.compile("^§7\\[\\+(\\d+) XP]");
     private static final Pattern FALLING_EMERALD = Pattern.compile("^§7\\[\\+(\\d+) falling emeralds]");
     private final Dungeons dungeon;
@@ -19,8 +18,8 @@ public class DungeonComplete extends WynnChatText {
     private final String gainedEmerald;
 
     public DungeonComplete(Text text) {
-        super(text, HEAD);
-        this.dungeon = Dungeons.getDungeons(matcher.group(1));
+        super(text);
+        this.dungeon = Dungeons.getDungeons(inputText.getString().replaceFirst("(?s).+the (.+) Dungeon.+", "$1"));
         Matcher m1 = EXP.matcher(getSibling(1).getString());
         Matcher m2 = FALLING_EMERALD.matcher(getSibling(2).getString());
         if(m1.find()) this.gainedXp = m1.group(1);
@@ -38,7 +37,8 @@ public class DungeonComplete extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
         resultText.append(Text.translatable(translationKey, dungeon.getDungeonName()).setStyle(Style.EMPTY.withColor(Formatting.GOLD))).append("\n");
-        if(gainedXp != null) resultText.append(attachBox(Text.translatable(translationKey + ".exp", gainedXp))).append("\n");
+        if(gainedXp != null)
+            resultText.append(attachBox(Text.translatable(translationKey + ".exp", gainedXp))).append("\n");
         if(gainedEmerald != null)
             resultText.append(attachBox(Text.translatable(translationKey + ".emerald", gainedEmerald))).append("\n");
         resultText.append(attachBox(dungeon.getDungeonBossReward())).append("\n");

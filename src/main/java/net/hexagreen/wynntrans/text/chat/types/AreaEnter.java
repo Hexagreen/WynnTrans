@@ -15,8 +15,8 @@ public class AreaEnter extends WynnChatText {
     }
 
     public AreaEnter(Text text) {
-        super(text, Pattern.compile("^§7\\[You are now entering (.+)]$"));
-        String areaName = matcher.group(1);
+        super(text);
+        String areaName = inputText.getString().replaceFirst(".+entering (.+)]$", "$1");
         String keyAreaName = rootKey + "area." + normalizeStringForKey(areaName);
         if(WTS.checkTranslationExist(keyAreaName, areaName)) {
             this.areaText = Text.translatable(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));

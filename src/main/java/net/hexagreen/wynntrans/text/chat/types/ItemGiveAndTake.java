@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Text;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ItemGiveAndTake extends WynnChatText {
@@ -15,7 +16,9 @@ public class ItemGiveAndTake extends WynnChatText {
     }
 
     public ItemGiveAndTake(Text text) {
-        super(text, Pattern.compile("^§.\\[([+-])(\\d+%?) (.+)]$"));
+        super(text);
+        Matcher matcher = Pattern.compile("^§.\\[([+-])(\\d+%?) (.+)]$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.direction = matcher.group(1);
         this.number = matcher.group(2);
         this.item = matcher.group(3);

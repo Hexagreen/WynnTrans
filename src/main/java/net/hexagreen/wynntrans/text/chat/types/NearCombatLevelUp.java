@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NearCombatLevelUp extends WynnChatText {
@@ -16,7 +17,9 @@ public class NearCombatLevelUp extends WynnChatText {
     }
 
     public NearCombatLevelUp(Text text) {
-        super(text, Pattern.compile("^(.+) is now combat level (\\d+)$"));
+        super(text);
+        Matcher matcher = Pattern.compile("^(.+) is now combat level (\\d+)$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.level = Text.literal(matcher.group(2));
         if(!getSiblings().isEmpty()) {
             this.playerName = getPlayerNameFromSibling(0);

@@ -29,22 +29,20 @@ public class OnGameMessageHandler {
         this.registerBackText = false;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public void toggleRecordMode() {
         this.recordAll = !recordAll;
         if(recordAll)
-            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.chatForceRecordMode.enable"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.chatForceRecordMode.enable"));
         else
-            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.chatForceRecordMode.disable"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.chatForceRecordMode.disable"));
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public void toggleBTRegisterMode() {
         this.registerBackText = !registerBackText;
         if(registerBackText)
-            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.registerBackgroundTextMode.enable"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.registerBackgroundTextMode.enable"));
         else
-            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.registerBackgroundTextMode.disable"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.registerBackgroundTextMode.disable"));
     }
 
     public void attachGlue(Text text) {
@@ -291,8 +289,7 @@ public class OnGameMessageHandler {
                 for(Text line : chunk.getSiblings()) {
                     if("\n".equals(line.getString())) continue;
                     if(!translateChatText(line)) {
-                        //noinspection DataFlowIssue
-                        MinecraftClient.getInstance().player.sendMessage(line);
+                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(line);
                     }
                 }
             }

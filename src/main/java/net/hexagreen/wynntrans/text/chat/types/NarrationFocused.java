@@ -18,7 +18,7 @@ public class NarrationFocused extends Narration implements IFocusText {
         super.build();
         switch(focusType) {
             case PRESS_SHIFT -> resultText = setToPressShift(resultText, fullText);
-            case SELECT_OPTION -> resultText = setToSelectOption(resultText, fullText, pKeyNarration);
+            case SELECT_OPTION -> resultText = setToSelectOption(resultText, fullText, keyNarration);
             case CUTSCENE -> resultText = setToCutScene(resultText);
             case AUTO -> resultText = setToConfirmless(resultText);
         }

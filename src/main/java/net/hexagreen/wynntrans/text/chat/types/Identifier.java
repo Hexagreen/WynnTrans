@@ -16,7 +16,7 @@ public class Identifier extends WynnSystemText {
     }
 
     public Identifier(Text text) {
-        super(text, null);
+        super(text);
         this.messageType = MessageType.getType(text);
     }
 

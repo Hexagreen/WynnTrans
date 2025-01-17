@@ -18,8 +18,8 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
     }
 
     public QuickTrade(Text text) {
-        super(text, Pattern.compile("^\n(.+) would like to trade!\n"));
-        this.playerName = matcher.group(1);
+        super(text);
+        this.playerName = inputText.getString().replaceFirst("^\n(.+) would.+", "$1");
         this.command = "/trade " + playerName;
     }
 

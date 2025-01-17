@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Text;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Merchants extends WynnSystemText {
@@ -14,7 +15,9 @@ public class Merchants extends WynnSystemText {
     }
 
     public Merchants(Text text) {
-        super(text, Pattern.compile("([\\w ]+) Merchant:"));
+        super(text);
+        Matcher matcher = Pattern.compile("([\\w ]+) Merchant:").matcher(inputText.getString().replaceAll("\n", ""));
+        boolean ignore = matcher.find();
         String merchantName = matcher.group(1);
         this.keyMerchantName = "wytr.merchant." + merchantName.replace(" ", "");
         this.valMerchantName = merchantName + " Merchant";

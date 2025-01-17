@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NotYourWeapon extends WynnChatText {
@@ -18,7 +19,9 @@ public class NotYourWeapon extends WynnChatText {
     }
 
     public NotYourWeapon(Text text) {
-        super(text, Pattern.compile("§c(.+)§4 is not a §c(.+)§4 weapon\\. You must use a §c.+\\."));
+        super(text);
+        Matcher matcher = Pattern.compile("§c(.+)§4 is not a §c(.+)§4 weapon\\. You must use a §c.+\\.").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.item = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.className = CharacterClass.getClassName(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.weapon = CharacterClass.getWeapon(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));

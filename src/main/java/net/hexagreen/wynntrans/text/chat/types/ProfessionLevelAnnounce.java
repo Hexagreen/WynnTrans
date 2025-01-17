@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProfessionLevelAnnounce extends WynnChatText {
@@ -17,7 +18,9 @@ public class ProfessionLevelAnnounce extends WynnChatText {
     }
 
     public ProfessionLevelAnnounce(Text text) {
-        super(text, Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching §flevel (\\d+) in §f(.)§7 (.+)§7!$"));
+        super(text);
+        Matcher matcher = Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching §flevel (\\d+) in §f(.)§7 (.+)§7!$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.level = "§f" + matcher.group(2);
         String profIcon = matcher.group(3) + " ";
         String keyProfName = "wytr.profession." + matcher.group(4).toLowerCase();

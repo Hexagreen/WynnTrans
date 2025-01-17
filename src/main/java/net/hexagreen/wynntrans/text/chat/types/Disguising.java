@@ -17,9 +17,9 @@ public class Disguising extends WynnChatText {
     }
 
     public Disguising(Text text) {
-        super(text, Pattern.compile("^§3You are (now|no longer) disguised as an? §b(.+)"));
-        this.apply = matcher.group(1).equals("now");
-        this.target = Text.literal(capitalizeFirstChar(matcher.group(2))).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        super(text);
+        this.apply = inputText.getString().contains("You are now");
+        this.target = Text.literal(capitalizeFirstChar(inputText.getString().replaceFirst(".+disguised as an? §b(.+)", "$1"))).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 
     @Override

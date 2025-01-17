@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans;
 
 import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.text.chat.Rulebooks;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
@@ -12,6 +13,7 @@ public class WynnTranslationStorage {
     private final Set<String> unregisteredTextSet = new HashSet<>();
     private final Set<List<Text>> unregisteredTooltipSet = new HashSet<>();
     private final Set<Text> unregisteredEntityLabelSet = new HashSet<>();
+    private Rulebooks rulebooks;
 
     public void onLanguageReloaded(Map<String, String> translationMap) {
         wynnTransDict.clear();
@@ -19,6 +21,7 @@ public class WynnTranslationStorage {
 
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
+        rulebooks = new Rulebooks();
         LOGGER.info("[WynnTrans] Reloaded Wynncraft Text Language Map.");
     }
 
@@ -41,6 +44,7 @@ public class WynnTranslationStorage {
     }
 
     public boolean checkTranslationExist(String key, String value) {
+        if(value.isBlank()) return false;
         String v = this.wynnTransDict.get(key);
         if(v == null) {
             this.recordUnregisteredText(key, value);
@@ -52,6 +56,10 @@ public class WynnTranslationStorage {
     public boolean checkTranslationDoNotRegister(String key) {
         String v = this.wynnTransDict.get(key);
         return !(v == null);
+    }
+
+    public Rulebooks getRulebooks() {
+        return rulebooks;
     }
 
     private void recordUnregisteredText(String key, String value) {

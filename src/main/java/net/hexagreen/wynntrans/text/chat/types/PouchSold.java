@@ -16,9 +16,9 @@ public class PouchSold extends WynnChatText {
     }
 
     public PouchSold(Text text) {
-        super(text, Pattern.compile("^§dYou have sold (§7\\d+)§d ingredients for a total of (§a.+)§d"));
-        this.amount = matcher.group(1);
-        this.emerald = matcher.group(2);
+        super(text);
+        this.amount = inputText.getString().replaceFirst(".+(§7\\d+).+", "$1");
+        this.emerald = inputText.getString().replaceFirst(".+total of (§a.+)§d.+", "$1");
     }
 
     @Override

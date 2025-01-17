@@ -4,11 +4,15 @@ import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static net.hexagreen.wynntrans.WynnTrans.wynnTranslationStorage;
 
@@ -94,38 +98,84 @@ public interface IFocusText extends ISpaceProvider {
     private void selectionOptions(MutableText constructingText, Text fullText, String pKeyDialog) {
         List<Text> original = fullText.getSiblings();
         for(int i = 6; i <= findLastOptionIndex(fullText); i = i + 2) {
-            List<Text> textBody = original.get(i).getSiblings().subList(2, original.get(i).getSiblings().size());
-            MutableText selection = MutableText.of(original.get(i).getContent()).setStyle(original.get(i).getStyle()).append(original.get(i).getSiblings().get(0)).append(original.get(i).getSiblings().get(1));
-            if(textBody.size() <= 1) {
-                String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(textBody.getFirst().getString()).substring(0, 4);
-                String valSelOpt = ((PlainTextContent) textBody.getFirst().getContent()).string();
-                if(wynnTranslationStorage.checkTranslationExist(keySelOpt, valSelOpt)) {
-                    selection.append(Text.translatable(keySelOpt).setStyle(textBody.getFirst().getStyle()));
-                }
-                else {
-                    selection.append(textBody.getFirst());
-                }
+            SelectionNormalizer carrier = new SelectionNormalizer(original.get(i));
+
+            Text normalized = carrier.getText();
+
+            // Selection number
+            MutableText result = MutableText.of(normalized.getContent()).setStyle(normalized.getStyle())
+                    .append(normalized.getSiblings().getFirst());
+
+            // Selection body
+            Text textBody = normalized.getSiblings().get(1);
+            String valSelOpt = textBody.getString();
+            String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(valSelOpt).substring(0, 4);
+            List<Text> textArgs = carrier.getArgs(keySelOpt, wynnTranslationStorage::checkTranslationExist);
+            if(wynnTranslationStorage.checkTranslationExist(keySelOpt, valSelOpt)) {
+                result.append(Text.translatable(keySelOpt, textArgs.toArray(new Object[0])).setStyle(textBody.getStyle()));
             }
             else {
-                String stringBody = original.get(i).getString().replaceFirst(" +\\[\\d+] ", "");
-                String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(stringBody).substring(0, 4);
-                for(int j = 0; j < textBody.size(); j++) {
-                    Text sibling = textBody.get(j);
-                    String valSelOpt = sibling.getString();
-                    String key = keySelOpt + "_" + (j + 1);
-                    if(wynnTranslationStorage.checkTranslationExist(key, valSelOpt)) {
-                        selection.append(Text.translatable(key).setStyle(sibling.getStyle()));
-                    }
-                    else {
-                        selection.append(sibling);
-                    }
+                MutableText reassembled = Text.empty().setStyle(textBody.getStyle());
+                String[] strings = (textBody.getString() + "%sEOL").split("%s");
+                for(int j = 0, l = strings.length - 1; j < l; j++) {
+                    if(!strings[j].isEmpty()) reassembled.append(strings[j]);
+                    if(j != l - 1) reassembled.append(textArgs.get(j));
                 }
+                result.append(reassembled);
             }
-            constructingText.append(selection).append("\n");
+            constructingText.append(result).append("\n");
         }
     }
 
     enum FocusType {
         PRESS_SHIFT, SELECT_OPTION, AUTO, CUTSCENE
+    }
+
+    class SelectionNormalizer extends TextNormalizer {
+
+        private SelectionNormalizer(Text text) {
+            super(text, wynnTranslationStorage.getRulebooks().selectionRulebook);
+        }
+
+        @Override
+        protected void normalizer(Text text) {
+            MutableText result = Text.empty().setStyle(text.getStyle());
+
+            // Selection number
+            Text selectionNumber = MutableText.of(text.getContent())
+                    .append(copiedSiblings.removeFirst())
+                    .append(copiedSiblings.removeFirst());
+            result.append(selectionNumber);
+
+            // Selection body
+            if(copiedSiblings.size() == 1 && hasNotMatchWithRule(copiedSiblings.getFirst().getString())) {
+                this.text = result.append(copiedSiblings.getFirst());
+                this.args = new ArrayList<>();
+                this.flags = new ArrayList<>();
+            }
+            else {
+                Style desiredStyle = findDesiredStyle(copiedSiblings);
+                ArgsRecord argsRecord = siblingsToArgs(copiedSiblings, desiredStyle);
+
+                this.text = result.append(Text.literal(argsRecord.textContent()).setStyle(desiredStyle));
+                this.args = argsRecord.args();
+                this.flags = argsRecord.flags();
+            }
+        }
+
+        @Override
+        protected String argsTransKeyMutator(String baseKey, String value) {
+            return baseKey + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
+        }
+
+        private Style findDesiredStyle(List<Text> siblings) {
+            for(Text sibling : siblings) {
+                if(Objects.equals(TextColor.fromFormatting(Formatting.GRAY), sibling.getStyle().getColor()))
+                    return sibling.getStyle();
+                if(Objects.equals(TextColor.fromFormatting(Formatting.LIGHT_PURPLE), sibling.getStyle().getColor()))
+                    return sibling.getStyle();
+            }
+            return siblings.getFirst().getStyle();
+        }
     }
 }

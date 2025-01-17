@@ -8,9 +8,7 @@ import java.util.List;
 public class ContentBookFilterAndSort extends WynnTooltipText {
 
     public static boolean typeChecker(List<Text> text) {
-        if(text.getFirst().getString().equals("Filter")) return true;
-        if(text.getFirst().getString().equals("Sort")) return true;
-        return false;
+        return text.getFirst().getString().equals("Filter") || text.getFirst().getString().equals("Sort");
     }
 
     public ContentBookFilterAndSort(List<Text> text) {

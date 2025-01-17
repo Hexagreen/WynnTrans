@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -26,15 +27,6 @@ public class WynnTransFileManager {
         String json = gson.toJson(target);
         String writeLine = ",\r\n\t" + json.replaceFirst("\\{", "");
         return writeToFile(writeLine);
-    }
-
-    public static void addSpace(String string) {
-        String str = "\r\n\t";
-        if(!string.isEmpty()) {
-            str = ",\r\n\t\"_c_" + string + "\":\"" + string + "\"";
-        }
-        str += "}";
-        writeToFile(str);
     }
 
     public static Set<String> readUnregistered() {
@@ -63,6 +55,17 @@ public class WynnTransFileManager {
             }
         }
         return new HashSet<>();
+    }
+
+    public static JsonObject readJson(String fileName) {
+        File file = new File(fileName);
+        try(FileReader reader = new FileReader(file)) {
+            return gson.fromJson(new JsonReader(reader), JsonObject.class);
+        }
+        catch(IOException e) {
+            LOGGER.warn("[WynnTrans] Failed to read {}.", fileName);
+        }
+        return null;
     }
 
     private static boolean writeToFile(String line) {

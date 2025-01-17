@@ -12,12 +12,12 @@ public class WorldJoinQueue extends WynnChatText implements ISpaceProvider {
     private final String worldChannel;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^\\n +§b§lYou are in world WC(\\d+)!").matcher(text.getString()).find();
+        return Pattern.compile("^\\n +§b§lYou are in world ((?:NA|EU)\\d+)!").matcher(text.getString()).find();
     }
 
     public WorldJoinQueue(Text text) {
-        super(text, Pattern.compile("^\\n +§b§lYou are in world WC(\\d+)!"));
-        this.worldChannel = matcher.group(1);
+        super(text);
+        this.worldChannel = inputText.getString().replaceFirst("(?s).+((?:NA|EU)\\d+).+", "$1");
     }
 
     @Override

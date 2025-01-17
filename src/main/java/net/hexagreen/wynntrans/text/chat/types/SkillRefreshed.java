@@ -16,8 +16,8 @@ public class SkillRefreshed extends WynnChatText {
     }
 
     public SkillRefreshed(Text text) {
-        super(text, Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$"));
-        this.skillName = "§7" + matcher.group(1);
+        super(text);
+        this.skillName = "§7" + inputText.getString().replaceFirst("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$", "$1");
     }
 
     @Override

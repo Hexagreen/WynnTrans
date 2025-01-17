@@ -16,8 +16,8 @@ public class MobTotemRunOut extends WynnChatText {
     }
 
     public MobTotemRunOut(Text text) {
-        super(text, Pattern.compile("(.+)'s Mob Totem has run out"));
-        this.playerName = getPlayerName(matcher.group(1));
+        super(text);
+        this.playerName = getPlayerName();
         this.link = getSibling(1);
     }
 
@@ -32,8 +32,8 @@ public class MobTotemRunOut extends WynnChatText {
         resultText.append(Text.translatable(translationKey, playerName, link));
     }
 
-    private Text getPlayerName(String string) {
-        String name = string + "'s";
-        return Text.translatable(name).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+    private Text getPlayerName() {
+        String name = inputText.getString().replaceFirst(".+(.+)'s.+", "$1's");
+        return Text.literal(name).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 }

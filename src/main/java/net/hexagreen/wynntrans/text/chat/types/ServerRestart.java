@@ -16,9 +16,9 @@ public class ServerRestart extends WynnChatText {
     }
 
     public ServerRestart(Text text) {
-        super(text, Pattern.compile("^§cThis world will restart in (\\d+) (minutes?|seconds?)\\.$"));
-        this.number = matcher.group(1);
-        this.unit = matcher.group(2);
+        super(text);
+        this.number = inputText.getString().replaceFirst(".+in (\\d+) .+", "$1");
+        this.unit = inputText.getString().replaceFirst(".+(minutes?|seconds?)\\.$", "$1");
     }
 
     @Override

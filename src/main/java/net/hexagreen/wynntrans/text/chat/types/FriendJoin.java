@@ -12,14 +12,14 @@ public class FriendJoin extends WynnChatText {
     private final Text charClass;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$").matcher(text.getString()).find();
+        return Pattern.compile("^.+ has logged into server (?:NA|EU)\\d+ as an? (.+)$").matcher(text.getString()).find();
     }
 
     public FriendJoin(Text text) {
-        super(text, Pattern.compile("^.+ has logged into server WC\\d+ as an? (.+)$"));
+        super(text);
         this.playerName = getSibling(0);
         this.worldChannel = getSibling(2);
-        this.charClass = CharacterClass.getClassName(matcher.group(1)).setStyle(getStyle(4));
+        this.charClass = CharacterClass.getClassName(inputText.getString().replaceFirst("as an? (.+)$", "$1")).setStyle(getStyle(4));
     }
 
     @Override

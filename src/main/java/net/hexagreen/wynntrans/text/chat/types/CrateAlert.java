@@ -17,8 +17,8 @@ public class CrateAlert extends WynnChatText {
     }
 
     public CrateAlert(Text text) {
-        super(text, Pattern.compile("^Use /crates to open your (.+ Crate)!$"));
-        this.crateName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+        super(text);
+        this.crateName = Text.literal(inputText.getString().replaceFirst(".+open your (.+ Crate)!$", "$1")).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
     }
 
     @Override

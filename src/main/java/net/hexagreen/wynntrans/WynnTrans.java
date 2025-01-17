@@ -45,7 +45,6 @@ public class WynnTrans implements ModInitializer {
         debugString = List.of(debugClass.readTextListFromJSON()).iterator();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CommandReadJson.register(dispatcher));
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandWriteComment.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleBackgroundTextRegistration.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleDisplayTextRecordMode.register(dispatcher));
@@ -65,20 +64,6 @@ public class WynnTrans implements ModInitializer {
                 @SuppressWarnings("DataFlowIssue") Text readText = Text.Serialization.fromJson(debugString.next(), MinecraftClient.getInstance().world.getRegistryManager());
                 context.getSource().sendMessage(readText);
             }
-            return 1;
-        }
-    }
-
-    private static class CommandWriteComment {
-        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-            dispatcher.register(
-                    ClientCommandManager.literal("wynntrans")
-                            .then(ClientCommandManager.literal("comment")
-                                    .executes(context -> run())));
-        }
-
-        private static int run() {
-            WynnTransFileManager.addSpace("");
             return 1;
         }
     }

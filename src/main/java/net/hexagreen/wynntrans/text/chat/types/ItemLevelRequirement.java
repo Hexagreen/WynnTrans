@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ItemLevelRequirement extends WynnSystemText {
@@ -15,7 +16,9 @@ public class ItemLevelRequirement extends WynnSystemText {
     }
 
     public ItemLevelRequirement(Text text) {
-        super(text, Pattern.compile("This (?:item|potion) is for Combat Lv\\. (\\d+)\\+ only\\."));
+        super(text);
+        Matcher matcher = Pattern.compile("This (?:item|potion) is for Combat Lv\\. (\\d+)\\+ only\\.").matcher(inputText.getString().replaceAll("\n", ""));
+        boolean ignore = matcher.find();
         this.level = Text.literal(matcher.group(1));
     }
 

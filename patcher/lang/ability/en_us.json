@@ -187,12 +187,9 @@
     "wytr.ability.node.TotemicShatter": "Totemic Shatter",
     "wytr.ability.node.Depersonalization": "Depersonalization",
     "wytr.ability.node.CrimsonEffigy": "Crimson Effigy",
-    "wytr.ability.node.MaskoftheCoward": "Mask of the Coward",
     "wytr.ability.node.FluidHealing": "Fluid Healing",
     "wytr.ability.node.MaddeningRoots": "Maddening Roots",
-    "wytr.ability.node.ChantoftheCoward": "Chant of the Coward",
     "wytr.ability.node.BloodRite": "Blood Rite",
-    "wytr.ability.node.MoreEffigies": "More Effigies",
     "wytr.ability.node.ChantoftheFanatic": "Chant of the Fanatic",
     "wytr.ability.node.StrongerTether": "Stronger Tether",
     "wytr.ability.node.TripleTotem": "Triple Totem",
@@ -337,5 +334,13 @@
     "wytr.ability.node.ArcaneOverflow": "Arcane Overflow",
     "wytr.ability.node.Timelock": "Timelock",
     "wytr.ability.node.Manastorm": "Manastorm",
-    "wytr.ability.node.MemoryRecollection": "Memory Recollection"
+    "wytr.ability.node.MemoryRecollection": "Memory Recollection",
+    "wytr.ability.node.FriendlyFire": "Friendly Fire",
+    "wytr.ability.node.SoaringWingbeats": "Soaring Wingbeats",
+    "wytr.ability.node.TotemShove": "Totem Shove",
+    "wytr.ability.node.MaskoftheHeretic": "Mask of the Heretic",
+    "wytr.ability.node.ChantoftheHeretic": "Chant of the Heretic",
+    "wytr.ability.node.HummingbirdsSong": "Hummingbird's Song",
+    "wytr.ability.node.Commander": "Commander",
+    "wytr.ability.node.PhantomForce": "Phantom Force"
 }

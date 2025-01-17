@@ -18,7 +18,7 @@ public class KeyCollector extends WynnSystemText {
     }
 
     public KeyCollector(Text text) {
-        super(text, null);
+        super(text);
         this.messageType = MessageType.getType(text);
     }
 

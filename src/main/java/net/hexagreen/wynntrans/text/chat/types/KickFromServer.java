@@ -16,12 +16,12 @@ public class KickFromServer extends WynnChatText {
     private String fallbackServer;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^Kicked (?:from|whilst connecting to) (?:(WC\\d+)|(DUMMY)): ").matcher(text.getString()).find();
+        return Pattern.compile("^Kicked (?:from|whilst connecting to) (?:((?:NA|EU)\\d+)|(DUMMY)): ").matcher(text.getString()).find();
     }
 
     public KickFromServer(Text text) {
-        super(text, Pattern.compile("^Kicked (?:from|whilst connecting to) (?:(WC\\d+)|(DUMMY)): "));
-        this.channelNumber = matcher.group(1);
+        super(text);
+        this.channelNumber = inputText.getString().replaceFirst("^Kicked (?:from|whilst connecting to) (?:((?:NA|EU)\\d+)|(DUMMY)): .+", "$1");
         this.kickWhileConnect = text.getString().contains("Kicked whilst connecting");
         try {
             Matcher m = fallbackRegex.matcher(getSibling(2).getString());

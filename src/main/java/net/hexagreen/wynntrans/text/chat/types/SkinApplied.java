@@ -16,9 +16,9 @@ public class SkinApplied extends WynnChatText {
     }
 
     public SkinApplied(Text text) {
-        super(text, Pattern.compile("^§7You have set your (weapon|helmet) skin to (.+)$"));
-        this.weaponMode = matcher.group(1).matches("weapon");
-        this.skinName = matcher.group(2);
+        super(text);
+        this.weaponMode = inputText.getString().contains("your weapon skin");
+        this.skinName = inputText.getString().replaceFirst(".+skin to (.+)$", "$1");
     }
 
     @Override

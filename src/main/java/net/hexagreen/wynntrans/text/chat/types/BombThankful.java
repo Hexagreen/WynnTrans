@@ -16,12 +16,12 @@ public class BombThankful extends WynnChatText {
     }
 
     public BombThankful(Text text) {
-        super(text, Pattern.compile("^§7You have thanked (.+)$"));
+        super(text);
         if(text.getSiblings().size() == 1) {
             this.playerName = (MutableText) getPlayerNameFromSibling(0);
         }
         else {
-            this.playerName = (MutableText) Text.of(matcher.group(1));
+            this.playerName = (MutableText) Text.of(inputText.getString().replaceFirst(".+thanked (.+)$", "$1"));
         }
     }
 

@@ -16,8 +16,8 @@ public class MobTotemRunning extends WynnChatText {
     }
 
     public MobTotemRunning(Text text) {
-        super(text, Pattern.compile("You are inside of (.+)'s mob totem"));
-        this.playerName = getPlayerName(matcher.group(1));
+        super(text);
+        this.playerName = getPlayerName();
         this.link = getSibling(3);
     }
 
@@ -32,8 +32,8 @@ public class MobTotemRunning extends WynnChatText {
         resultText.append(Text.translatable(translationKey, playerName, link));
     }
 
-    private Text getPlayerName(String string) {
-        String name = string + "'s";
+    private Text getPlayerName() {
+        String name = inputText.getString().replaceFirst(".+(.+)'s.+", "$1's");
         return Text.translatable(name).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 }

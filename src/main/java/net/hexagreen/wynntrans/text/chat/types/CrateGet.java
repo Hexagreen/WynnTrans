@@ -7,13 +7,15 @@ import net.minecraft.text.Text;
 import java.util.regex.Pattern;
 
 public class CrateGet extends WynnChatText {
+    private final String playerName;
 
     public static boolean typeChecker(Text text) {
         return Pattern.compile("^(.+) has gotten a (.+) from their crate\\. ").matcher(text.getString()).find();
     }
 
     public CrateGet(Text text) {
-        super(text, Pattern.compile("^(.+) has gotten a (.+) from their crate\\. "));
+        super(text);
+        this.playerName = inputText.getString().replaceFirst("^(.+) has gotten.+", "$1");
     }
 
     @Override
@@ -35,7 +37,7 @@ public class CrateGet extends WynnChatText {
         }
         else {
             int nextIndexItemname = getSiblings().size() - 3;
-            resultText.append(Text.literal(matcher.group(1)).setStyle(getStyle(0))).append(Text.translatable(translationKey + "_1").setStyle(getStyle(0)));
+            resultText.append(Text.literal(playerName).setStyle(getStyle(0))).append(Text.translatable(translationKey + "_1").setStyle(getStyle(0)));
             for(int i = 1; nextIndexItemname > i; i++) {
                 resultText.append(getSibling(i));
             }

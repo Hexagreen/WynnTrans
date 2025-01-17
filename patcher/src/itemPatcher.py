@@ -24,7 +24,7 @@ def fetch_api_data():
     api_url = "https://api.wynncraft.com/v3/item/database?fullResult"
     response = requests.get(api_url)
     if response.status_code == 200:
-        return response.json()
+        return sorted(response.json())
     else:
         return None
 
@@ -110,7 +110,7 @@ def task_R(added_items_json, removed_items):
         json_path = os.path.join(old_folder, json_file)
         
         # 기존 파일 읽기
-        with open(json_path, 'r') as f:
+        with open(json_path, 'r', encoding="UTF-8") as f:
             file_data = json.load(f)
         
         # 삭제할 항목 제거
@@ -123,8 +123,11 @@ def task_R(added_items_json, removed_items):
             file_data[key] = value
         
         # 수정된 파일 저장
-        with open(json_path, 'w') as f:
+        with open(json_path, 'w', encoding="UTF-8") as f:
             json.dump(file_data, f, indent=4)
+            
+    print("다음 아이템들이 삭제됨")
+    print(json.dumps(removed_items_json, indent=4))
 
 # 파일 경로 설정
 dataframe_file_path = './dataframe.csv'
@@ -169,4 +172,4 @@ def run_update():
     # 7. 작업 R 호출
     task_R(added_items_json, removed_items)
     
-    print("갱신 작업이 완료되었습니다.")
+    print("아이템 업데이트 완료")

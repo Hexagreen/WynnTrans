@@ -4,6 +4,7 @@ import net.hexagreen.wynntrans.enums.CratesTexts;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Text;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CrateGetPersonal extends WynnChatText {
@@ -11,7 +12,9 @@ public class CrateGetPersonal extends WynnChatText {
     private final CratesTexts.Crates grade;
 
     public CrateGetPersonal(Text text) {
-        super(text, headRegex);
+        super(text);
+        Matcher matcher = headRegex.matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.grade = CratesTexts.Crates.find(matcher.group(1));
     }
 

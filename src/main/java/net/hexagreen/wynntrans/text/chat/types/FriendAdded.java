@@ -13,8 +13,8 @@ public class FriendAdded extends WynnChatText {
     }
 
     public FriendAdded(Text text) {
-        super(text, Pattern.compile("^(.+) has added you as a friend!$"));
-        this.playerName = matcher.group(1);
+        super(text);
+        this.playerName = inputText.getString().replaceFirst("^(.+) has added.+", "$1");
     }
 
     @Override

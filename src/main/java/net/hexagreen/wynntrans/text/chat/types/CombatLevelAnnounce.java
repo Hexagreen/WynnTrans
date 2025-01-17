@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CombatLevelAnnounce extends WynnChatText {
@@ -16,7 +17,9 @@ public class CombatLevelAnnounce extends WynnChatText {
     }
 
     public CombatLevelAnnounce(Text text) {
-        super(text, Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching combat §flevel (\\d+)§7!$"));
+        super(text);
+        Matcher matcher = Pattern.compile("\\[§7!§8] §7Congratulations to (.+) for reaching combat §flevel (\\d+)§7!$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.level = "§f" + matcher.group(2);
         this.playerName = Text.literal(matcher.group(1));
         if(!text.getSiblings().isEmpty()) throw new TextTranslationFailException("CombatLevelAnnounce.class");

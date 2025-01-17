@@ -15,8 +15,8 @@ public class AreaLeave extends WynnChatText {
     }
 
     public AreaLeave(Text text) {
-        super(text, Pattern.compile("^§7\\[You are now leaving (.+)]$"));
-        String areaName = matcher.group(1);
+        super(text);
+        String areaName = inputText.getString().replaceFirst(".+leaving (.+)]$", "$1");
         String keyAreaName = rootKey + "area." + normalizeStringForKey(areaName);
         if(WTS.checkTranslationExist(keyAreaName, areaName)) {
             this.areaText = Text.translatable(keyAreaName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));

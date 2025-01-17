@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Text;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PartyLeaved extends WynnSystemText {
@@ -13,7 +14,9 @@ public class PartyLeaved extends WynnSystemText {
     }
 
     public PartyLeaved(Text text) {
-        super(text, Pattern.compile("^(.+) has left the party.$"));
+        super(text);
+        Matcher matcher = Pattern.compile("^(.+) has left the party.$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         if(text.getSiblings().size() > 3) {
             this.playerName = getPlayerNameFromSibling(0);
         }

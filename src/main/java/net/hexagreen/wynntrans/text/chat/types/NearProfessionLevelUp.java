@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NearProfessionLevelUp extends WynnChatText {
@@ -18,7 +19,9 @@ public class NearProfessionLevelUp extends WynnChatText {
     }
 
     public NearProfessionLevelUp(Text text) {
-        super(text, Pattern.compile("^§6(.+) is now level (\\d+) in §f(.)§6 (.+)$"));
+        super(text);
+        Matcher matcher = Pattern.compile("^§6(.+) is now level (\\d+) in §f(.)§6 (.+)$").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.level = matcher.group(2);
         this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon().setStyle(Style.EMPTY.withColor(Formatting.GOLD));
         if(!getSiblings().isEmpty()) {

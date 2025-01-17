@@ -5,6 +5,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EquipmentLevelRequirement extends WynnChatText {
@@ -16,7 +17,9 @@ public class EquipmentLevelRequirement extends WynnChatText {
     }
 
     public EquipmentLevelRequirement(Text text) {
-        super(text, Pattern.compile("^§c(.+)§4 is for combat level §c(\\d+)§4\\+ only\\."));
+        super(text);
+        Matcher matcher = Pattern.compile("^§c(.+)§4 is for combat level §c(\\d+)§4\\+ only\\.").matcher(inputText.getString());
+        boolean ignore = matcher.find();
         this.equipName = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.level = Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }

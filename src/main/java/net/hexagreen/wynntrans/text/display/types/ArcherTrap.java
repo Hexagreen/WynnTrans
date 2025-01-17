@@ -9,7 +9,7 @@ public class ArcherTrap extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("\\+\\d+% §7Damage") || text.getString().equals("Arming...");
+        return text.getString().matches("§b\\+\\d+% §7Damage") || text.getString().equals("Arming...");
     }
 
     public ArcherTrap(Text text) {

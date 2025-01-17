@@ -12,13 +12,12 @@ public class DisplayEntityHandler {
         this.recordAll = false;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public void toggleRecordMode() {
         this.recordAll = !recordAll;
         if(recordAll)
-            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.displayForceRecordMode.enable"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.displayForceRecordMode.enable"));
         else
-            MinecraftClient.getInstance().player.sendMessage(Text.translatable("wytr.command.displayForceRecordMode.disable"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.displayForceRecordMode.disable"));
     }
 
     public Text translateDisplayText(Text text) {

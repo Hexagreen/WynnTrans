@@ -16,9 +16,9 @@ public class BombExpired extends WynnChatText {
     }
 
     public BombExpired(Text text) {
-        super(text, Pattern.compile("^You can buy (.+) [bB]ombs at our store"));
+        super(text);
         this.storeLink = Text.translatable(translationKey + ".store").setStyle(getStyle(0));
-        this.bombName = parseBombName(matcher.group(1));
+        this.bombName = parseBombName(inputText.getString().replaceFirst("^You can buy (.+) [bB]ombs.+", "$1"));
     }
 
     @Override

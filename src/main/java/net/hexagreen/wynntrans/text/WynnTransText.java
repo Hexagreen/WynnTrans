@@ -8,20 +8,66 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class WynnTransText {
 
     protected static final String rootKey = "wytr.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
+    private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
     protected final String translationKey;
     protected final MutableText inputText;
     protected MutableText resultText;
 
+    protected static Text colorCodedToStyled(Text text) {
+        List<Text> list = new ArrayList<>();
+        text.visit((style, asString) -> {
+            if(asString.isEmpty()) return Optional.empty();
+            if(!asString.contains("§")) {
+                list.add(Text.literal(asString).setStyle(style));
+                return Optional.empty();
+            }
+            list.addAll(colorCodedToStyled(asString, style));
+            return Optional.empty();
+        }, Style.EMPTY);
+
+        return siblingsToText(list);
+    }
+
+    private static List<Text> colorCodedToStyled(String textAsString, Style parentStyle) {
+        Matcher matcher = colorParser.matcher(textAsString);
+        List<String> segments = new ArrayList<>();
+        while(matcher.find()) {
+            segments.add(matcher.group());
+        }
+        List<Text> result = new ArrayList<>();
+        for(String segment : segments) {
+            String content = segment.replaceFirst("(?:§.)+", "");
+            Style style = parseStyleCode(segment).withParent(parentStyle);
+            result.add(Text.literal(content).setStyle(style));
+        }
+        return result;
+    }
+
+    protected static Text siblingsToText(List<Text> texts) {
+        MutableText result = Text.empty();
+        for(Text text : texts) {
+            result.append(text);
+        }
+        return result;
+    }
+
     protected static Style parseStyleCode(String codeOrTextString) {
         String styleCode = codeOrTextString.replaceFirst("(?s).*?((?:§[0123456789abcdefklnmor])+).*", "$1");
         if(styleCode.isBlank()) return Style.EMPTY;
-        char[] codes = styleCode.replace("§", "").replaceAll("[^0123456789abcdefklmnor]", "").toCharArray();
+        char[] codes = styleCode.replace("§", "")
+                .replaceAll("[^0123456789abcdefklmnor]", "")
+                .replaceAll(".*r", "")
+                .toCharArray();
         Formatting[] formatting = new Formatting[codes.length];
         for(int i = 0; i < codes.length; i++) {
             formatting[i] = Formatting.byCode(codes[i]);

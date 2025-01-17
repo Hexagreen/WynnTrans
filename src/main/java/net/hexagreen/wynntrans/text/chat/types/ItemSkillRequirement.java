@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ItemSkillRequirement extends WynnSystemText {
@@ -17,7 +18,9 @@ public class ItemSkillRequirement extends WynnSystemText {
     }
 
     public ItemSkillRequirement(Text text) {
-        super(text, Pattern.compile("This item requires your (.+) skill to be at least §c(\\d+)\\."));
+        super(text);
+        Matcher matcher = Pattern.compile("This item requires your (.+) skill to be at least §c(\\d+)\\.").matcher(inputText.getString().replaceAll("\n", ""));
+        boolean ignore = matcher.find();
         this.skill = CharacterSkill.getSkill(matcher.group(1));
         this.level = Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }

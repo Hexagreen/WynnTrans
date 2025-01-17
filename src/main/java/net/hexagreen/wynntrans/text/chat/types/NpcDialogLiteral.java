@@ -1,29 +1,18 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
 public class NpcDialogLiteral extends WynnChatText {
-    private final String dialogIdx;
-    private final String dialogLen;
-    private final String npcName;
-    private final String dialog;
 
     public static boolean typeChecker(Text text) {
         return Pattern.compile("^§7\\[(\\d+)/(\\d+)] §.(.+: )(.+)").matcher(text.getString()).find();
     }
 
     public NpcDialogLiteral(Text text) {
-        super(text, Pattern.compile("^§7\\[(\\d+)/(\\d+)] §.(.+: )(.+)"));
-        this.dialogIdx = matcher.group(1);
-        this.dialogLen = matcher.group(2);
-        this.npcName = matcher.group(3);
-        this.dialog = matcher.group(4);
+        super(text);
     }
 
     @Override
@@ -33,8 +22,6 @@ public class NpcDialogLiteral extends WynnChatText {
 
     @Override
     public void build() {
-        MutableText reformed = Text.literal("[" + dialogIdx + "/" + dialogLen + "] ").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        reformed.append(Text.literal(npcName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append(dialog);
-        resultText = new NpcDialog(reformed).text();
+        resultText = new NpcDialog(colorCodedToStyled(inputText)).text();
     }
 }

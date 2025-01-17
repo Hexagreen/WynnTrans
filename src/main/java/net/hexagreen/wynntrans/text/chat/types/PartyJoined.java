@@ -13,12 +13,12 @@ public class PartyJoined extends WynnChatText {
     }
 
     public PartyJoined(Text text) {
-        super(text, Pattern.compile("^(.+) has joined your party, say hello!$"));
+        super(text);
         if(text.getSiblings().size() > 1) {
             this.playerName = getPlayerNameFromSibling(0);
         }
         else {
-            this.playerName = Text.literal(matcher.group(1)).setStyle(getStyle(0));
+            this.playerName = Text.literal(inputText.getString().replaceFirst("^(.+) has.+", "$1")).setStyle(getStyle(0));
         }
     }
 
