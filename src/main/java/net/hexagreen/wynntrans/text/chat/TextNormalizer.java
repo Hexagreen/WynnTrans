@@ -5,9 +5,11 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,38 +38,51 @@ public abstract class TextNormalizer {
         return args;
     }
 
-    protected String argsTransKeyMutator(String baseKey, String value) {
-        return baseKey;
-    }
-
     private void argsToTranslatable(String baseKey, BiFunction<String, String, Boolean> translationRegister) {
         for(int i = 0; i < args.size(); i++) {
             if(flags.get(i)) continue;
 
-            String key = baseKey + "." + (i + 1);
             Text current = args.get(i);
             String value = current.getString();
             Style style = current.getStyle().withParent(Style.EMPTY.withBold(false).withItalic(false).withUnderline(false).withObfuscated(false).withStrikethrough(false));
             Text mutated;
-            if(value.contains("%p")) {
-                value = value.replaceAll("%p", "%1\\$s");
-                Text playerName = args.get(i - 1);
-                String saltedKey = argsTransKeyMutator(key, value);
+            if(value.contains("%p") || value.contains("%s")) {
+                int argsCount = value.split("%s", -1).length - 1;
+                boolean containsP = value.contains("%p");
+                if(containsP) {
+                    argsCount++;
+                    value = value.replaceAll("%p", "%1\\$s");
+                }
+                List<Text> selectedArgs = new ArrayList<>();
+                for(int j = argsCount; j > 0; j--) {
+                    selectedArgs.add(args.remove(i - argsCount));
+                    flags.remove(i - argsCount);
+                }
+                i -= argsCount;
+                String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
                 if(translationRegister.apply(saltedKey, value)) {
-                    mutated = Text.translatable(saltedKey, playerName).setStyle(style);
+                    mutated = Text.translatable(saltedKey, selectedArgs.toArray(new Object[0])).setStyle(style);
                 }
                 else {
                     MutableText reassembled = Text.empty().setStyle(style);
-                    String[] strings = (value + "%1$sEOL").split("%1\\$s");
-                    for(int j = 0, l = strings.length - 1; j < l; j++) {
-                        if(!strings[j].isEmpty()) reassembled.append(strings[j]);
-                        if(j != l - 1) reassembled.append(playerName);
+                    String[] strings = value.split("%1\\$s", -1);
+                    Text playerName = null;
+                    if(containsP) playerName = selectedArgs.removeFirst();
+                    for(int j = 0, l = strings.length; j < l; j++) {
+                        if(!strings[j].isEmpty()) {
+                            String[] subOfStrings = strings[j].split("%s", -1);
+                            for(int k = 0, m = subOfStrings.length; k < m; k++) {
+                                if(!subOfStrings[k].isEmpty()) reassembled.append(subOfStrings[k]);
+                                if(k != m - 1) reassembled.append(selectedArgs.removeFirst());
+                            }
+                        }
+                        if(j != l - 1 && playerName != null) reassembled.append(playerName);
                     }
                     mutated = reassembled;
                 }
             }
             else {
-                String saltedKey = argsTransKeyMutator(key, value);
+                String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
                 if(translationRegister.apply(saltedKey, value)) {
                     mutated = Text.translatable(saltedKey).setStyle(style);
                 }
@@ -108,12 +123,12 @@ public abstract class TextNormalizer {
                 int groups = matcher.groupCount();
                 for(int i = 1; i <= groups; i++) {
                     args.add(Text.literal(matcher.group(i)).setStyle(sibling.getStyle()));
-                    flags.add(false);
+                    flags.add(true);
                 }
                 string = string.replaceFirst(rule.pattern(), rule.replace());
             }
 
-            if(desiredStyle.equals(sibling.getStyle())) {
+            if(Objects.equals(desiredStyle.getColor(), sibling.getStyle().getColor())) {
                 currentString.append(string);
             }
             else {

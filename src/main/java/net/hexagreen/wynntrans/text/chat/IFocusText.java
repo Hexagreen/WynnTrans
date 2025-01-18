@@ -163,11 +163,6 @@ public interface IFocusText extends ISpaceProvider {
             }
         }
 
-        @Override
-        protected String argsTransKeyMutator(String baseKey, String value) {
-            return baseKey + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
-        }
-
         private Style findDesiredStyle(List<Text> siblings) {
             for(Text sibling : siblings) {
                 if(Objects.equals(TextColor.fromFormatting(Formatting.GRAY), sibling.getStyle().getColor()))

@@ -12,6 +12,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class NpcDialog extends WynnChatText {
@@ -139,7 +140,7 @@ public class NpcDialog extends WynnChatText {
 
             static Style findDialogStyle(Style nameStyle) {
                 return Arrays.stream(DialogColor.values())
-                        .filter(type -> type.nameColor.equals(nameStyle))
+                        .filter(type -> Objects.equals(type.nameColor.getColor(), nameStyle.getColor()))
                         .findFirst().orElse(BASIC).dialogColor;
             }
 

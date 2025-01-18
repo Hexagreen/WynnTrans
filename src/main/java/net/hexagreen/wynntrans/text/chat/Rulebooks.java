@@ -26,9 +26,10 @@ public final class Rulebooks {
         JsonArray rules = json != null ? json.getAsJsonArray("rules") : null;
         for(int i = 0, size = (rules != null ? rules.size() : 0); i < size; i++) {
             JsonObject rule = rules.get(i).getAsJsonObject();
+            String selector = rule.get("selector").getAsString();
             String pattern = rule.get("pattern").getAsString();
             String replace = rule.get("replace").getAsString();
-            rulebook.add(new NormalizerRule(pattern, replace));
+            rulebook.add(new NormalizerRule(selector, pattern, replace));
         }
 
         return rulebook;
@@ -42,9 +43,9 @@ public final class Rulebooks {
         }
     }
 
-    public record NormalizerRule(String pattern, String replace) {
+    public record NormalizerRule(String selector, String pattern, String replace) {
         private boolean match(String target) {
-            return Pattern.compile(pattern).matcher(target).find();
+            return Pattern.compile(selector).matcher(target).matches();
         }
     }
 }
