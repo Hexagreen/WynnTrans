@@ -34,27 +34,6 @@ public class WynnTransClient implements ClientModInitializer {
             if(json.createNewFile()) {
                 LOGGER.info("[WynnTrans] Text capturing file initialized.");
             }
-
-            File ruleDir = new File(dir, "rulebook");
-            if(!ruleDir.exists() && !ruleDir.mkdirs()) throw new IOException();
-            File dRule = new File(dir, "rulebook/NpcDialogRules.json");
-            File sRule = new File(dir, "rulebook/SelectionRules.json");
-            File nRule = new File(dir, "rulebook/NarrationRules.json");
-            if(dRule.createNewFile()) {
-                FileWriter writer = new FileWriter(dRule);
-                writer.write("{}");
-                writer.close();
-            }
-            if(sRule.createNewFile()) {
-                FileWriter writer = new FileWriter(sRule);
-                writer.write("{}");
-                writer.close();
-            }
-            if(nRule.createNewFile()) {
-                FileWriter writer = new FileWriter(nRule);
-                writer.write("{}");
-                writer.close();
-            }
         }
         catch(IOException e) {
             LOGGER.warn("[WynnTrans] Cannot reach to WynnTrans directory or its file.");

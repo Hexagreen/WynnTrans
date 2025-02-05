@@ -48,8 +48,8 @@ public class WynnSign {
 
             int sIndex = 1;
             for(Text sibling : message[i].getSiblings()) {
-                if(WTS.checkTranslationDoNotRegister(keySign + "_" + sIndex)) {
-                    result.append(Text.translatable(keySign + "_" + sIndex).setStyle(sibling.getStyle()));
+                if(WTS.checkTranslationDoNotRegister(keySign + "." + sIndex)) {
+                    result.append(Text.translatable(keySign + "." + sIndex).setStyle(sibling.getStyle()));
                 }
                 else {
                     result.append(sibling);
@@ -81,7 +81,7 @@ public class WynnSign {
             for(Text sibling : message[i].getSiblings()) {
                 String valSignSibling = sibling.getString();
                 if(valSignSibling.isEmpty()) continue;
-                WTS.checkTranslationExist(keySign + "_" + sIndex, valSignSibling);
+                WTS.checkTranslationExist(keySign + "." + sIndex, valSignSibling);
                 sIndex++;
             }
         }

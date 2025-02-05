@@ -23,7 +23,7 @@ public class GuideAlert extends WynnChatText {
     protected void build() {
         resultText = MutableText.of(inputText.getContent()).setStyle(inputText.getStyle()).append(getSibling(0)).append(getSibling(1));
         for(int index = 2; getSiblings().size() > index; index++) {
-            String keySibling = pKeyGnA + "_" + (index - 1);
+            String keySibling = pKeyGnA + "." + (index - 1);
             String valSibling = getContentString(index);
             if(WTS.checkTranslationExist(keySibling, valSibling)) {
                 resultText.append(Text.translatable(keySibling).setStyle(getStyle(index)));

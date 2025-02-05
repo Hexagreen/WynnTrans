@@ -43,7 +43,7 @@ public class SimpleSystemText extends WynnSystemText {
             int i = 1;
             for(Text sibling : getSiblings()) {
                 String valText = lineFeedReplacer(sibling.getString());
-                String keyText = this.keyText + "_" + i++;
+                String keyText = this.keyText + "." + i++;
 
                 if(checkTranslationExistWithControl(keyText, valText)) {
                     if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);

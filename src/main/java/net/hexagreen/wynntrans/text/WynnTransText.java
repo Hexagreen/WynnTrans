@@ -2,10 +2,9 @@ package net.hexagreen.wynntrans.text;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextHandler;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ public abstract class WynnTransText {
     protected static final String rootKey = "wytr.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
     private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
+    private static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     protected final String translationKey;
     protected final MutableText inputText;
     protected MutableText resultText;
@@ -75,13 +75,17 @@ public abstract class WynnTransText {
         return Style.EMPTY.withFormatting(formatting);
     }
 
+    protected static String normalizeStringForKey(String string) {
+        return string.replaceAll("[ .,'À֎’:&%()\"-]", "");
+    }
+
     public WynnTransText(Text text) {
         this.inputText = (MutableText) text;
         this.translationKey = setTranslationKey();
     }
 
     /**
-     * Set {@code baseKey} for translation.
+     * Set {@code translationKey} for translation.
      *
      * @return Key for translation
      */
@@ -154,8 +158,35 @@ public abstract class WynnTransText {
         return inputText.getSiblings();
     }
 
-    protected String normalizeStringForKey(String string) {
-        return string.replaceAll("[ .,'À֎’:&%()\"-]", "");
+    protected List<Text> wrapLine(Text text, int length) {
+        List<StringVisitable> svs = handler.wrapLines(text, length, Style.EMPTY);
+        List<Text> wrapped = new ArrayList<>();
+        for(StringVisitable sv : svs) {
+            MutableText tmp = Text.empty();
+            sv.visit((style, string) -> {
+                tmp.append(Text.literal(string).setStyle(style));
+                return Optional.empty();
+            }, Style.EMPTY);
+            wrapped.add(tmp);
+        }
+        return wrapped;
+    }
+
+    protected Text rainbowDecoration(Text text) {
+        String[] rainbows = {"§4", "§c", "§6", "§e", "§a", "§2", "§b", "§9", "§5", "§d"};
+        StringBuilder sb = new StringBuilder();
+        int ignore = text.getString().codePoints().reduce(0, (index, cp) -> {
+            if(cp == " ".codePointAt(0)) {
+                sb.append(rainbows[index]).append(Character.toChars(cp));
+                return index + 1;
+            }
+            else {
+                sb.append(Character.toChars(cp));
+                return index;
+            }
+        });
+
+        return Text.literal(sb.toString()).setStyle(text.getStyle());
     }
 
     public static class TextTranslationFailException extends RuntimeException {

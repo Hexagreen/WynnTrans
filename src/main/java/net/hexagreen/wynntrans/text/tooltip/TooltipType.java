@@ -14,6 +14,7 @@ public enum TooltipType {
     CONTENT_BOOK_FILTER_AND_SORT(ContentBookFilterAndSort::new, ContentBookFilterAndSort::typeChecker),
     CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress::new, ContentBookProgress::typeChecker),
     CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
+    ITEM_NAME(ItemName::new, ItemName::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

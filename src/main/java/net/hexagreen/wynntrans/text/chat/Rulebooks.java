@@ -14,15 +14,15 @@ public final class Rulebooks {
     public final NormalizerRulebook narrationRulebook;
 
     public Rulebooks() {
-        this.npcDialogRulebook = new NormalizerRulebook(readRules("WynnTrans/rulebook/NpcDialogRules.json"));
-        this.selectionRulebook = new NormalizerRulebook(readRules("WynnTrans/rulebook/SelectionRules.json"));
-        this.narrationRulebook = new NormalizerRulebook(readRules("WynnTrans/rulebook/NarrationRules.json"));
+        this.npcDialogRulebook = new NormalizerRulebook(readRules("rulebook/npc-dialog-rules.json"));
+        this.selectionRulebook = new NormalizerRulebook(readRules("rulebook/selection-rules.json"));
+        this.narrationRulebook = new NormalizerRulebook(readRules("rulebook/narration-rules.json"));
     }
 
     private List<NormalizerRule> readRules(String filePath) {
         List<NormalizerRule> rulebook = new ArrayList<>();
 
-        JsonObject json = WynnTransFileManager.readJson(filePath);
+        JsonObject json = WynnTransFileManager.readJsonInResources(filePath);
         JsonArray rules = json != null ? json.getAsJsonArray("rules") : null;
         for(int i = 0, size = (rules != null ? rules.size() : 0); i < size; i++) {
             JsonObject rule = rules.get(i).getAsJsonObject();

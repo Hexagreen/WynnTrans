@@ -70,7 +70,8 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
                 resultText.append(getCenterIndent(guide)).append(guide).append("\n");
             }
             else {
-                resultText.append(getCenterIndent(valGuide)).append(valGuide);
+                Text guide = Text.literal(valGuide).setStyle(getStyle(i));
+                resultText.append(getCenterIndent(guide)).append(guide);
             }
         }
     }
@@ -135,7 +136,8 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
             resultText.append(getCenterIndent(guide)).append(guide).append("\n");
         }
         else {
-            resultText.append(getCenterIndent(body)).append(body);
+            Text guide = Text.literal(body);
+            resultText.append(getCenterIndent(guide)).append(guide);
         }
     }
 }

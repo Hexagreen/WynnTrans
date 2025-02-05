@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.hexagreen.wynntrans.text.chat.OnGameMessageHandler;
 import net.hexagreen.wynntrans.text.display.DisplayEntityHandler;
 import net.hexagreen.wynntrans.text.sign.UseBlockHandler;
+import net.hexagreen.wynntrans.text.title.TitleHandler;
 import net.hexagreen.wynntrans.text.tooltip.DrawTooltipHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.CommandManager;
@@ -28,6 +29,7 @@ public class WynnTrans implements ModInitializer {
     public static OnGameMessageHandler onGameMessageHandler;
     public static DisplayEntityHandler displayEntityHandler;
     public static DrawTooltipHandler drawTooltipHandler;
+    public static TitleHandler titleHandler;
     public static WynnTranslationStorage wynnTranslationStorage;
     public static boolean translationTargetSignMarker;
     private static Iterator<String> debugString;
@@ -37,6 +39,7 @@ public class WynnTrans implements ModInitializer {
         onGameMessageHandler = new OnGameMessageHandler();
         displayEntityHandler = new DisplayEntityHandler();
         drawTooltipHandler = new DrawTooltipHandler();
+        titleHandler = new TitleHandler();
         wynnTranslationStorage = new WynnTranslationStorage();
         translationTargetSignMarker = false;
 

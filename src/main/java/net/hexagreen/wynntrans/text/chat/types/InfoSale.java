@@ -42,7 +42,7 @@ public class InfoSale extends WynnChatText {
         resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
-            String keySibling = translationKey + "." + hash + "_" + (index - 1);
+            String keySibling = translationKey + "." + hash + "." + (index - 1);
             String valSibling = getContentString(index);
             if(valSibling.isEmpty()) resultText.append("");
             if(valSibling.contains("wynncraft.com")) {

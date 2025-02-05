@@ -6,20 +6,16 @@ import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.tooltip.types.SimpleTooltip;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextHandler;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class WynnTooltipText extends WynnTransText {
-    private static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     private static boolean lever = false;
     private static boolean registered = true;
 
@@ -34,7 +30,10 @@ public abstract class WynnTooltipText extends WynnTransText {
 
     public List<Text> text() {
         long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_SUBTRACT) == 1) return getSiblings();
+        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_SUBTRACT) == 1) {
+            textRecorder(getSiblings());
+            return getSiblings();
+        }
         try {
             build();
             textRecorder(resultText.getSiblings());
@@ -48,7 +47,7 @@ public abstract class WynnTooltipText extends WynnTransText {
             LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
             return new SimpleTooltip(getSiblings()).text();
         }
-        textRecorder(inputText.getSiblings());
+        textRecorder(getSiblings());
         return getSiblings();
     }
 
@@ -83,20 +82,6 @@ public abstract class WynnTooltipText extends WynnTransText {
         }
     }
 
-    protected List<Text> wrapLine(Text text, int length) {
-        List<StringVisitable> svs = handler.wrapLines(text, length, Style.EMPTY);
-        List<Text> wrapped = new ArrayList<>();
-        for(StringVisitable sv : svs) {
-            MutableText tmp = Text.empty();
-            sv.visit((style, string) -> {
-                tmp.append(Text.literal(string).setStyle(style));
-                return Optional.empty();
-            }, Style.EMPTY);
-            wrapped.add(tmp);
-        }
-        return wrapped;
-    }
-
     protected Text mergeTextStyleSide(Text text) {
         return mergeTextStyleSide(new Text[]{text});
     }
@@ -107,7 +92,7 @@ public abstract class WynnTooltipText extends WynnTransText {
         AtomicReference<Style> newStyle = new AtomicReference<>(texts[0].getSiblings().getFirst().getStyle());
         for(Text text : texts) {
             text.visit((style, string) -> {
-                if(string.isBlank()) return Optional.empty();
+                if(string.isEmpty()) return Optional.empty();
                 if(!style.equals(newStyle.get())) {
                     result.append(Text.literal(newBody.get().toString()).setStyle(newStyle.get()));
                     newBody.set(new StringBuilder());

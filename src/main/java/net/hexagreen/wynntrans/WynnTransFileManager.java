@@ -8,6 +8,8 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 
@@ -57,13 +59,12 @@ public class WynnTransFileManager {
         return new HashSet<>();
     }
 
-    public static JsonObject readJson(String fileName) {
-        File file = new File(fileName);
-        try(FileReader reader = new FileReader(file)) {
-            return gson.fromJson(new JsonReader(reader), JsonObject.class);
+    public static JsonObject readJsonInResources(String filePath) {
+        try(BufferedReader reader = MinecraftClient.getInstance().getResourceManager().openAsReader(Identifier.of("wynntrans", filePath))) {
+            return gson.fromJson(reader, JsonObject.class);
         }
         catch(IOException e) {
-            LOGGER.warn("[WynnTrans] Failed to read {}.", fileName);
+            LOGGER.warn("[WynnTrans] Failed to read resource {}.", filePath);
         }
         return null;
     }

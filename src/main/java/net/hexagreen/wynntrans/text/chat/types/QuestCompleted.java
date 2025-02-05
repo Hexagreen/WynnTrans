@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -36,7 +37,10 @@ public class QuestCompleted extends WynnChatText implements ISpaceProvider {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n").append(getCenterIndent(keyTitle)).append(Text.translatable(keyTitle).setStyle(parseStyleCode(getSibling(1).getString()))).append("\n");
+        MutableText t0 = Text.translatable(keyTitle).setStyle(parseStyleCode(getSibling(1).getString()));
+        resultText = Text.empty().append("\n")
+                .append(getCenterIndent(t0)).append(t0)
+                .append("\n");
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
             Text questName = Text.translatable(keyQuestName).setStyle(parseStyleCode(getSibling(2).getString().replaceAll("(§.) +(§.).+", "$1$2")));

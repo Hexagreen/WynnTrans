@@ -23,6 +23,8 @@ public class Disguise extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey, getSibling(0), getSibling(2)).setStyle(getStyle(1)));
+        Text mob = getSibling(2);
+        Text capitalized = Text.literal(capitalizeFirstChar(mob.getString())).setStyle(mob.getStyle());
+        resultText.append(Text.translatable(translationKey, getSibling(0), capitalized).setStyle(getStyle(1)));
     }
 }

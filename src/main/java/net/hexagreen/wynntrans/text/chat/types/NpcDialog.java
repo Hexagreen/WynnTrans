@@ -60,8 +60,7 @@ public class NpcDialog extends WynnChatText {
         // Talker name
         Text t0 = getSibling(0);
         if(checkTranslationExist(keyName, valName)) {
-            resultText.append(Text.translatable(keyName).setStyle(t0.getStyle()));
-            resultText.append(Text.literal(": ").setStyle(t0.getStyle()));
+            resultText.append(Text.translatable(keyName).setStyle(t0.getStyle()).append(": "));
         }
         else {
             resultText.append(t0);
@@ -71,7 +70,7 @@ public class NpcDialog extends WynnChatText {
         Text dialogBody = getSibling(1);
         List<Text> dialogArgs = carrier.getArgs(keyDialog, this::checkTranslationExist);
         if(checkTranslationExist(keyDialog, dialogBody.getString())) {
-            resultText.append(Text.translatable(keyDialog, dialogArgs.toArray(new Object[0])).setStyle(dialogBody.getStyle()));
+            resultText.append(Text.translatable(keyDialog, dialogArgs.toArray(Object[]::new)).setStyle(dialogBody.getStyle()));
         }
         else {
             MutableText reassembled = Text.empty().setStyle(dialogBody.getStyle());
@@ -96,7 +95,7 @@ public class NpcDialog extends WynnChatText {
         }
 
         @Override
-        protected void normalizer(Text text) {
+        protected void normalize(Text text) {
             MutableText result;
 
             // Dialog counter

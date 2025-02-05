@@ -35,7 +35,7 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
                 .append(getCenterIndent(t2).append(t2)).append("\n\n")
                 .append(getCenterIndent(rank).append(rank)).append("\n");
 
-        if(getSiblings().size() <= 6) {
+        if(getSiblings().size() >= 6) {
             for(int i = 5, size = getSiblings().size(); i < size; i++) {
                 Text promotionReward = getSibling(i).getSiblings().get(1);
                 resultText.append(getCenterIndent(promotionReward).append(promotionReward)).append("\n");

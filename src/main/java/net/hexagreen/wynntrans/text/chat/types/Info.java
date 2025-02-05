@@ -29,7 +29,7 @@ public class Info extends WynnChatText {
         resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         for(int index = 1; getSiblings().size() > index; index++) {
-            String keySibling = translationKey + "." + hash + "_" + index;
+            String keySibling = translationKey + "." + hash + "." + index;
             String valSibling = getContentString(index);
 
             if(valSibling.isEmpty()) {

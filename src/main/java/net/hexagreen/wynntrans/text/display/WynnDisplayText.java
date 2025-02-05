@@ -21,7 +21,7 @@ public abstract class WynnDisplayText extends WynnTransText {
             debugClass.writeTextAsJSON(inputText, "OOB - Display");
         }
         catch(TextTranslationFailException e) {
-            LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
+            LogUtils.getLogger().warn("[WynnTrans] Unprocessed display message has been recorded.\n", e);
             return new SimpleDisplay(inputText).text();
         }
         return inputText;

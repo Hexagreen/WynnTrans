@@ -42,12 +42,12 @@ public class Narration extends WynnChatText {
     protected void build() {
         List<Text> narrationArgs = carrier.getArgs(keyNarration, this::checkTranslationExist);
         if(checkTranslationExist(keyNarration, inputText.getString())) {
-            resultText = Text.translatable(keyNarration, narrationArgs.toArray(new Object[0])).setStyle(inputText.getStyle());
+            resultText = Text.translatable(keyNarration, narrationArgs.toArray(Object[]::new)).setStyle(inputText.getStyle());
         }
         else {
             MutableText reassembled = Text.empty().setStyle(inputText.getStyle());
-            String[] strings = (inputText.getString() + "%sEOL").split("%s");
-            for(int j = 0, l = strings.length - 1; j < l; j++) {
+            String[] strings = inputText.getString().split("%s", -1);
+            for(int j = 0, l = strings.length; j < l; j++) {
                 if(!strings[j].isEmpty()) reassembled.append(strings[j]);
                 if(j != l - 1) reassembled.append(narrationArgs.get(j));
             }
@@ -67,7 +67,7 @@ public class Narration extends WynnChatText {
         }
 
         @Override
-        protected void normalizer(Text text) {
+        protected void normalize(Text text) {
             if(copiedSiblings.isEmpty() && hasNotMatchWithRule(text.getString())) {
                 this.text = text;
                 this.args = new ArrayList<>();

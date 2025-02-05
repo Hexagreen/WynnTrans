@@ -11,7 +11,7 @@ public class ServerSwapSave extends WynnChatText {
     private final Text worldChannel;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^§7Saving your player data before switching to §f(?:NA|EU)\\d+").matcher(text.getString()).find();
+        return Pattern.compile("^§7Saving your player data before switching to §f(?:NA|EU|AS)\\d+").matcher(text.getString()).find();
     }
 
     public ServerSwapSave(Text text) {

@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat;
 
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
@@ -24,10 +25,10 @@ public abstract class TextNormalizer {
     protected TextNormalizer(Text text, Rulebooks.NormalizerRulebook rulebook) {
         this.copiedSiblings = text.getSiblings() == null ? new ArrayList<>() : new ArrayList<>(text.getSiblings());
         this.rulebook = rulebook;
-        normalizer(text);
+        normalize(text);
     }
 
-    protected abstract void normalizer(Text text);
+    protected abstract void normalize(Text text);
 
     public Text getText() {
         return text;
@@ -61,7 +62,7 @@ public abstract class TextNormalizer {
                 i -= argsCount;
                 String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
                 if(translationRegister.apply(saltedKey, value)) {
-                    mutated = Text.translatable(saltedKey, selectedArgs.toArray(new Object[0])).setStyle(style);
+                    mutated = Text.translatable(saltedKey, selectedArgs.toArray(Object[]::new)).setStyle(style);
                 }
                 else {
                     MutableText reassembled = Text.empty().setStyle(style);
@@ -82,12 +83,21 @@ public abstract class TextNormalizer {
                 }
             }
             else {
-                String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
-                if(translationRegister.apply(saltedKey, value)) {
-                    mutated = Text.translatable(saltedKey).setStyle(style);
+                Matcher itemNameMatcher = Pattern.compile(" ?\\[(\\d+) (.+)] ?").matcher(value);
+                if(itemNameMatcher.find()) {
+                    String quantity = itemNameMatcher.group(1);
+                    String itemName = itemNameMatcher.group(2);
+                    Text itemNameText = new ItemName(itemName).textAsMutable();
+                    mutated = Text.literal("[" + quantity + " " + itemNameText.getString() + "]").setStyle(style);
                 }
                 else {
-                    mutated = current.copy().setStyle(style);
+                    String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
+                    if(translationRegister.apply(saltedKey, value)) {
+                        mutated = Text.translatable(saltedKey).setStyle(style);
+                    }
+                    else {
+                        mutated = current.copy().setStyle(style);
+                    }
                 }
             }
             args.set(i, mutated);
@@ -102,6 +112,7 @@ public abstract class TextNormalizer {
         @SuppressWarnings("DataFlowIssue") String clientPlayerName = MinecraftClient.getInstance().player.getName().getString();
 
         textBody.forEach(sibling -> {
+            if(sibling.getString().isEmpty()) return;
             if(sibling.getContent().equals(PlainTextContent.EMPTY)) {
                 args.add(sibling.copy());
                 flags.add(true);

@@ -39,7 +39,7 @@ public class SyndicatePromotionGlue extends TextGlue {
             count++;
             return true;
         }
-        else if(count >= 5 && (text.getString().isEmpty() || text.getString().matches("(?s).+\\[.+]"))) {
+        else if(count >= 5 && (text.getString().isEmpty() || Pattern.compile("(?s).+\\[.+]").matcher(text.getString()).find())) {
             resetTimer();
             gluedText.append(text);
             count++;

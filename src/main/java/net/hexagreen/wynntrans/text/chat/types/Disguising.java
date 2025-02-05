@@ -5,7 +5,6 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Disguising extends WynnChatText {
@@ -32,12 +31,5 @@ public class Disguising extends WynnChatText {
         resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
         String key = apply ? translationKey + "on" : translationKey + "off";
         resultText.append(Text.translatable(key, target));
-    }
-
-    private String capitalizeFirstChar(String input) {
-        String body = input.substring(1);
-        char head = input.toUpperCase(Locale.ENGLISH).charAt(0);
-
-        return head + body;
     }
 }

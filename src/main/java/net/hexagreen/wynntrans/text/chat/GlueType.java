@@ -24,6 +24,11 @@ public enum GlueType {
     PARTY_INVITED(PartyInvitedGlue::new, PartyInvitedGlue::typeChecker),
     STORE_PURCHASED(StorePurchasedGlue::new, StorePurchasedGlue::typeChecker),
     SYNDICATE_PROMOTION(SyndicatePromotionGlue::new, SyndicatePromotionGlue::typeChecker),
+    LOOTRUN_BEACON(LootrunBeaconGlue::new, LootrunBeaconGlue::typeChecker),
+    LOOTRUN_CHALLENGE_COMPLETE(LootrunChallengeCompleteGlue::new, LootrunChallengeCompleteGlue::typeChecker),
+    LOOTRUN_CHALLENGE_FAIL(LootrunChallengeFailGlue::new, LootrunChallengeFailGlue::typeChecker),
+    LOOTRUN_MISSION_COMPLETE(LootrunMissionCompleteGlue::new, LootrunMissionCompleteGlue::typeChecker),
+    LOOTRUN_SUMMARY(LootrunSummaryGlue::new, LootrunSummaryGlue::typeChecker),
 
     NO_TYPE(null, null);
 

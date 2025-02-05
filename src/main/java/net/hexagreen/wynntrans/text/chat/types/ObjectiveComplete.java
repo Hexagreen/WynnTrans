@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.enums.Objectives;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -50,13 +51,18 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n").append(getCenterIndent(func + "objCompleted")).append(Text.translatable(func + "objCompleted").setStyle(titleStyle)).append("\n");
+        MutableText titleText = Text.translatable(func + "objCompleted").setStyle(titleStyle);
+        resultText = Text.empty().append("\n")
+                .append(getCenterIndent(titleText)).append(titleText)
+                .append("\n");
 
         if(WTS.checkTranslationExist(keyObjectiveName, valObjectiveName)) {
-            resultText.append(getCenterIndent(keyObjectiveName, argObjectiveName)).append(Text.translatable(keyObjectiveName, argObjectiveName).setStyle(objectiveNameStyle));
+            MutableText text = Text.translatable(keyObjectiveName, argObjectiveName).setStyle(objectiveNameStyle);
+            resultText.append(getCenterIndent(text)).append(text);
         }
         else {
-            resultText.append(getCenterIndent(Text.literal(valObjectiveName))).append(Text.literal(valObjectiveName).setStyle(objectiveNameStyle));
+            MutableText text = Text.literal(valObjectiveName).setStyle(objectiveNameStyle);
+            resultText.append(getCenterIndent(text)).append(text);
         }
 
         resultText.append("\n\n");
@@ -95,7 +101,9 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
             resultText.append("\n").append(getCenterIndent(origin)).append(origin).append("\n\n");
         }
 
-        resultText.append(getCenterIndent(func + "objReward")).append(Text.translatable(func + "objReward").setStyle(getSibling(-1).getSiblings().get(1).getStyle())).append("\n");
+        MutableText rewardText = Text.translatable(func + "objReward").setStyle(getSibling(-1).getSiblings().get(1).getStyle());
+        resultText.append(getCenterIndent(rewardText)).append(rewardText)
+                .append("\n");
     }
 
     private void normalizeKeyVal() {

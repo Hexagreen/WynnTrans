@@ -12,13 +12,13 @@ public class Shout extends WynnChatText {
     private final String server;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^(.+) \\[((?:NA|EU)\\d+)] shouts: ").matcher(text.getString()).find();
+        return Pattern.compile("^(.+) \\[((?:NA|EU|AS)\\d+)] shouts: ").matcher(text.getString()).find();
     }
 
     public Shout(Text text) {
         super(text);
         this.name = inputText.getString().replaceFirst("^(.+) \\[.+", "$1");
-        this.server = inputText.getString().replaceFirst(".+\\[((?:NA|EU)\\d+)].+", "$1");
+        this.server = inputText.getString().replaceFirst(".+\\[((?:NA|EU|AS)\\d+)].+", "$1");
     }
 
     @Override

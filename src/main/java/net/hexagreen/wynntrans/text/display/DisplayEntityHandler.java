@@ -6,22 +6,22 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 public class DisplayEntityHandler {
-    private boolean recordAll;
+    private boolean recordMode;
 
     public DisplayEntityHandler() {
-        this.recordAll = false;
+        this.recordMode = false;
     }
 
     public void toggleRecordMode() {
-        this.recordAll = !recordAll;
-        if(recordAll)
+        this.recordMode = !recordMode;
+        if(recordMode)
             MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.displayForceRecordMode.enable"));
         else
             MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.displayForceRecordMode.disable"));
     }
 
     public Text translateDisplayText(Text text) {
-        if(recordAll) debugClass.writeTextAsJSON(text, "DisplayRecord");
+        if(recordMode) debugClass.writeTextAsJSON(text, "DisplayRecord");
         try {
             return DisplayType.findAndRun(text);
         }

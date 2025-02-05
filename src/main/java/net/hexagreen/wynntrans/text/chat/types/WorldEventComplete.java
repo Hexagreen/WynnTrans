@@ -28,7 +28,12 @@ public class WorldEventComplete extends WynnSystemText implements ISpaceProvider
         Text t3 = Text.translatable("wytr.func.reward.experience", experience).setStyle(Style.EMPTY.withColor(0xEBF7FF));
         Text t4 = Text.translatable(translationKey + ".guide").setStyle(Style.EMPTY.withColor(0xAEB8BF));
 
-        resultText.append(splitter).append(getCenterIndent(t0).append(t0)).append(splitter).append(getCenterIndent(t1).append(t1)).append(splitter).append(splitter).append(getCenterIndent(t3).append(t3)).append(splitter).append(getCenterIndent(t4).append(t4)).append(splitter);
+        resultText.append(splitter).append(getSystemTextCenterIndent(t0).append(t0))
+                .append(splitter).append(getSystemTextCenterIndent(t1).append(t1))
+                .append(splitter)
+                .append(splitter).append(getSystemTextCenterIndent(t3).append(t3))
+                .append(splitter).append(getSystemTextCenterIndent(t4).append(t4))
+                .append(splitter);
     }
 
     private String initExperience(Text text) {

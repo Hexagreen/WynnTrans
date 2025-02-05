@@ -11,7 +11,7 @@
     "homepage": "https://github.com/Hexagreen/WynnTrans"
   },
   "license": "MIT",
-  "icon": "assets/WynnTrans/icon.png",
+  "icon": "assets/wynntrans/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [

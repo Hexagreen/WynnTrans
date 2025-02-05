@@ -276,7 +276,7 @@ public class ContentBookNodes extends WynnTooltipText {
                 questDesc = Text.empty();
                 int i = 1;
                 for(Text sibling : siblings) {
-                    String keyDesc = key + "_" + i++;
+                    String keyDesc = key + "." + i++;
                     String valDesc = sibling.getString();
                     Style styleDesc = sibling.getStyle();
                     if(WTS.checkTranslationExist(keyDesc, valDesc)) {
@@ -541,7 +541,7 @@ public class ContentBookNodes extends WynnTooltipText {
                     String subKey;
                     if(size == 2) subKey = "";
                     else {
-                        subKey = "_" + i;
+                        subKey = "." + i;
                         val = text.getSiblings().get(i).getString();
                     }
 

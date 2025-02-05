@@ -17,7 +17,7 @@ public class Resistance extends WynnChatText {
     public Resistance(Text text) {
         super(text);
         this.resValue = inputText.getString().replaceFirst(".+you (\\d+%) resistance.+", "$1");
-        this.strValue = inputText.getString().replaceFirst(".+(?:and (\\d+%) strength)?.*", "$1");
+        this.strValue = inputText.getString().replaceFirst(".+and (\\d+%) strength\\.", "$1");
     }
 
     @Override

@@ -47,7 +47,7 @@ public class SimpleTooltip extends WynnTooltipText {
                 break;
             }
         }
-        return WTS.checkTranslationDoNotRegister(key + "_" + (index + 1));
+        return WTS.checkTranslationDoNotRegister(key + "." + (index + 1));
     }
 
     private boolean pressedAddTranslationKey() {
@@ -67,7 +67,7 @@ public class SimpleTooltip extends WynnTooltipText {
             String content = sibling.getString();
             Style style = sibling.getStyle();
             String key = translationKey + hash;
-            if(siblings.size() != 1) key = key + "_" + (i + 1);
+            if(siblings.size() != 1) key = key + "." + (i + 1);
 
             if(!Pattern.compile("[A-z]").matcher(content).find()) {
                 result.append(sibling);

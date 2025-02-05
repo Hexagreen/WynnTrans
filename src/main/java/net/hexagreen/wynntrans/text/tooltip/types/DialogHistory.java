@@ -3,11 +3,10 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.text.chat.types.Narration;
 import net.hexagreen.wynntrans.text.chat.types.NpcDialog;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,118 +56,77 @@ public class DialogHistory extends WynnTooltipText {
         DialogParser parser = new DialogParser();
         for(Text text : getSiblings().subList(2, getSiblings().size() - 5)) {
             if(text.getString().contains("• Dialogue")) {
-                parser.flushNarration();
-                parser.runParser();
+                parser.emptyBuffers();
                 parser.addToResult(text);
                 continue;
             }
             if(npcDialogPattern.matcher(text.getString()).find()) {
-                parser.flushNarration();
-                parser.runParser();
-                parser.addToParser(text);
+                parser.emptyBuffers();
+                parser.addToDBuffer(text, true);
                 continue;
             }
-            if(parser.isNarration(text)) {
-                parser.runParser();
-                parser.addToParser(text);
-                parser.tryNarrationParsing();
-                continue;
+            if(!parser.addToDBuffer(text, false)) {
+                parser.addToNBuffer(text);
             }
-            parser.addToParser(text);
         }
-        parser.flushNarration();
-        parser.runParser();
+        parser.emptyBuffers();
         return parser.getResult();
     }
 
     private class DialogParser {
         private final List<Text> storage = new ArrayList<>();
-        private final List<Text> parseTarget = new ArrayList<>();
-        private final List<Text> narration = new ArrayList<>();
+        private final List<Text> nBuffer = new ArrayList<>();
+        private final List<Text> dBuffer = new ArrayList<>();
 
         private List<Text> getResult() {
             List<Text> result = new ArrayList<>();
             for(Text text : storage) {
-                if(text.getString().matches("• Dialogue Start")) {
-                    result.add(Text.translatable(translationKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
-                    continue;
-                }
-                else if(text.getString().matches("• Dialogue End")) {
-                    result.add(Text.translatable(translationKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
-                    continue;
-                }
-                else if(npcDialogPattern.matcher(text.getString()).find()) {
-                    text = translateNpcDialog(text);
-                }
-                else {
-                    text = translateNarration(text);
-                }
                 result.addAll(wrapLine(text, 180));
             }
             return result;
         }
 
         private void addToResult(Text text) {
-            storage.add(text);
-        }
-
-        private void addToParser(Text text) {
-            parseTarget.add(text);
-        }
-
-        private void runParser() {
-            if(parseTarget.isEmpty()) return;
-            storage.add(mergeTextStyleSide(parseTarget.toArray(Text[]::new)));
-            parseTarget.clear();
-        }
-
-        private void tryNarrationParsing() {
-            narration.addAll(parseTarget);
-            parseTarget.clear();
-            Text tmpText = mergeTextStyleSide(narration.toArray(Text[]::new));
-            String hash = DigestUtils.sha1Hex(tmpText.getString());
-            if(WTS.checkTranslationDoNotRegister("wytr.narration." + hash)
-                    || WTS.checkTranslationDoNotRegister("wytr.narration." + hash + "_1")) {
-                storage.add(tmpText);
-                narration.clear();
+            if(text.getString().matches("• Dialogue Start")) {
+                storage.add(Text.translatable(translationKey + ".start").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
             }
+            else if(text.getString().matches("• Dialogue End")) {
+                storage.add(Text.translatable(translationKey + ".end").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+            }
+            else storage.add(text);
         }
 
-        private void flushNarration() {
-            storage.addAll(narration);
-            narration.clear();
-        }
-
-        private boolean isNarration(Text text) {
-            for(Text sibling : text.getSiblings()) {
-                Style style = sibling.getStyle();
-                if(style.isItalic() && style.getColor() != null && style.getColor().getName().equals("gray")) {
-                    return true;
-                }
+        private boolean addToDBuffer(Text text, boolean force) {
+            if(force) dBuffer.add(text);
+            else if(!dBuffer.isEmpty()) dBuffer.add(text);
+            else return false;
+            Text tmpText = mergeTextStyleSide(dBuffer.toArray(Text[]::new));
+            Text translated = new NpcDialog(tmpText).setNoTranslationAddiction().text();
+            if(translated.getSiblings().get(1).getContent() instanceof TranslatableTextContent) {
+                storage.add(translated);
+                dBuffer.clear();
+                nBuffer.clear();
+                return true;
             }
             return false;
         }
 
-        private Text translateNpcDialog(Text text) {
-            MutableText reformed = text.getSiblings().getFirst().copy();
-            for(int i = 1; i < text.getSiblings().size(); i++) {
-                reformed.append(text.getSiblings().get(i));
+        private void addToNBuffer(Text text) {
+            nBuffer.add(text);
+            Text tmpText = mergeTextStyleSide(nBuffer.toArray(Text[]::new));
+            Text translated = new Narration(tmpText).setNoTranslationAddiction().text();
+            if(translated.getContent() instanceof TranslatableTextContent) {
+                storage.add(translated);
+                nBuffer.clear();
+                dBuffer.clear();
             }
-            return new NpcDialog(reformed).setNoTranslationAddiction().text();
         }
 
-        private Text translateNarration(Text text) {
-            MutableText reformed;
-            if(text.getSiblings().size() == 1) {
-                reformed = text.getSiblings().getFirst().copy();
-            }
-            else {
-                reformed = Text.empty();
-                for(int i = 0; i < text.getSiblings().size(); i++) {
-                    reformed.append(text.getSiblings().get(i));
-                }
-            }
-            return new Narration(reformed).setNoTranslationAddiction().text();
+        public void emptyBuffers() {
+            if(!dBuffer.isEmpty()) storage.addAll(dBuffer);
+            else storage.addAll(nBuffer);
+            dBuffer.clear();
+            nBuffer.clear();
         }
     }
 }

@@ -112,7 +112,7 @@ public interface IFocusText extends ISpaceProvider {
             String keySelOpt = pKeyDialog + ".selOpt." + DigestUtils.sha1Hex(valSelOpt).substring(0, 4);
             List<Text> textArgs = carrier.getArgs(keySelOpt, wynnTranslationStorage::checkTranslationExist);
             if(wynnTranslationStorage.checkTranslationExist(keySelOpt, valSelOpt)) {
-                result.append(Text.translatable(keySelOpt, textArgs.toArray(new Object[0])).setStyle(textBody.getStyle()));
+                result.append(Text.translatable(keySelOpt, textArgs.toArray(Object[]::new)).setStyle(textBody.getStyle()));
             }
             else {
                 MutableText reassembled = Text.empty().setStyle(textBody.getStyle());
@@ -138,7 +138,7 @@ public interface IFocusText extends ISpaceProvider {
         }
 
         @Override
-        protected void normalizer(Text text) {
+        protected void normalize(Text text) {
             MutableText result = Text.empty().setStyle(text.getStyle());
 
             // Selection number

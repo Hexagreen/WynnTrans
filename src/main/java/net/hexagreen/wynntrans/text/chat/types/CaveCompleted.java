@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -29,7 +30,10 @@ public class CaveCompleted extends WynnChatText implements ISpaceProvider {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append("\n").append(getCenterIndent(rootKey + "func.caveCompleted")).append(Text.translatable(rootKey + "func.caveCompleted").setStyle(getSibling(1).getSiblings().getFirst().getStyle())).append("\n");
+        MutableText titleText = Text.translatable(rootKey + "func.caveCompleted").setStyle(getSibling(1).getSiblings().getFirst().getStyle());
+        resultText = Text.empty().append("\n")
+                .append(getCenterIndent(titleText)).append(titleText)
+                .append("\n");
 
         Text t0;
         if(WTS.checkTranslationExist(keyCaveName, valCaveName)) {

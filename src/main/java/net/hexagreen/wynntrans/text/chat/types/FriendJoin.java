@@ -12,7 +12,7 @@ public class FriendJoin extends WynnChatText {
     private final Text charClass;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^.+ has logged into server (?:NA|EU)\\d+ as an? (.+)$").matcher(text.getString()).find();
+        return Pattern.compile("^.+ has logged into server (?:NA|EU|AS)\\d+ as an? (.+)$").matcher(text.getString()).find();
     }
 
     public FriendJoin(Text text) {

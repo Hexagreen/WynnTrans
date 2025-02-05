@@ -13,14 +13,14 @@ public class ShoutLiteral extends WynnChatText {
     private final String body;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^§5(.+) \\[((?:NA|EU)\\d+)] shouts: §d").matcher(text.getString()).find();
+        return Pattern.compile("^§5(.+) \\[((?:NA|EU|AS)\\d+)] shouts: §d").matcher(text.getString()).find();
     }
 
     public ShoutLiteral(Text text) {
         super(text);
         this.name = inputText.getString().replaceFirst("^§5(.+) \\[.+", "$1");
-        this.server = inputText.getString().replaceFirst(".+\\[((?:NA|EU)\\d+)].+", "$1");
-        this.body = text.getString().replaceAll("^§5(.+) \\[((?:NA|EU)\\d+)] shouts: §d", "");
+        this.server = inputText.getString().replaceFirst(".+\\[((?:NA|EU|AS)\\d+)].+", "$1");
+        this.body = text.getString().replaceAll("^§5(.+) \\[((?:NA|EU|AS)\\d+)] shouts: §d", "");
     }
 
     @Override

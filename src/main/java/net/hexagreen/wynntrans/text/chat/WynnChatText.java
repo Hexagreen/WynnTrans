@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 
 public abstract class WynnChatText extends WynnTransText {
@@ -56,5 +57,12 @@ public abstract class WynnChatText extends WynnTransText {
         else {
             return getSibling(index);
         }
+    }
+
+    protected String capitalizeFirstChar(String input) {
+        String body = input.substring(1);
+        char head = input.toUpperCase(Locale.ENGLISH).charAt(0);
+
+        return head + body;
     }
 }

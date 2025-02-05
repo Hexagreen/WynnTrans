@@ -4,9 +4,6 @@ import json
 import re
 import os
 
-# 데이터프레임 초기화
-df = pd.DataFrame(columns=["name", "type", "lore"])
-
 # type을 정수로 매핑
 type_mapping = {
     "ingredient": 1,
@@ -24,15 +21,19 @@ def fetch_api_data():
     api_url = "https://api.wynncraft.com/v3/item/database?fullResult"
     response = requests.get(api_url)
     if response.status_code == 200:
-        return sorted(response.json())
+        return response.json()
     else:
         return None
 
 # 데이터프레임 생성 함수
 def create_dataframe(api_response):
     data = []
+    data_names = set()
+
+    items = api_response.items()
+    print(f"읽어들인 아이템 수: {len(items)}")
     
-    for key, value in api_response.items():
+    for key, value in items:
         name = key
         type_value = value.get("type")
         lore = value.get("lore", None)  # lore가 없으면 null로 처리
@@ -48,22 +49,25 @@ def create_dataframe(api_response):
             continue
 
         # 중복된 항목은 추가하지 않음
-        if not any(df['name'] == name):
+        if name not in data_names:
             type_int = type_mapping.get(type_value, 0)  # 매핑되지 않으면 0으로 처리
             data.append([name, type_int, lore])
+            data_names.add(name)
 
+    print(f"중복 제거 후 아이템 수: {len(data)}")
     return pd.DataFrame(data, columns=["name", "type", "lore"])
 
 # 데이터프레임 갱신 함수
-def update_dataframe(new_df):
-    global df
-    
+def update_dataframe(old_df, new_df):
+    print(f"신규 데이터 프레임 길이: {len(new_df)}")
+    print(f"기존 데이터 프레임 길이: {len(old_df)}")
+
     # 기존 데이터와 비교
-    removed_items = df[~df['name'].isin(new_df['name'])]  # 기존에 있었는데 삭제된 항목
-    added_items = new_df[~new_df['name'].isin(df['name'])]  # 새로 추가된 항목
+    removed_items = old_df[~(old_df['name'].isin(new_df['name']))]  # 기존에 있었는데 삭제된 항목
+    added_items = new_df[~(new_df['name'].isin(old_df['name']))]  # 새로 추가된 항목
 
     # 기존 데이터프레임 덮어쓰기
-    df = new_df
+    save_dataframe(new_df)
 
     return added_items, removed_items
 
@@ -83,8 +87,10 @@ def task_T(added_items):
         json_result[f"wytr.item.{strType}.{keyName}"] = name
         if lore:
             json_result[f"wytr.item.{strType}.{keyName}.lore"] = lore
-    
+
+    print(f"JSON 변환된 아이템 수: {len(json_result)}")
     return json_result
+
 import os
 
 # 작업 R 함수
@@ -126,8 +132,11 @@ def task_R(added_items_json, removed_items):
         with open(json_path, 'w', encoding="UTF-8") as f:
             json.dump(file_data, f, indent=4)
             
-    print("다음 아이템들이 삭제됨")
-    print(json.dumps(removed_items_json, indent=4))
+    # 삭제된 항목을 './removed.json' 파일에 저장
+    with open('./removed.json', 'w', encoding='UTF-8') as f:
+        json.dump(removed_items_json, f, indent=4, ensure_ascii=False)
+    
+    print("삭제된 아이템 목록이 './removed.json' 파일에 저장되었습니다.")
 
 # 파일 경로 설정
 dataframe_file_path = './dataframe.csv'
@@ -145,10 +154,8 @@ def load_dataframe():
         return pd.DataFrame(columns=["name", "type", "lore"])
 
 def run_update():
-    global df
-    
     # 1. 기존에 저장된 데이터프레임 불러오기
-    df = load_dataframe()
+    old_df = load_dataframe()
 
     # 2. API 응답 받아오기
     api_data = fetch_api_data()
@@ -161,11 +168,8 @@ def run_update():
     new_df = create_dataframe(api_data)
     
     # 4. 기존 데이터프레임과 비교
-    added_items, removed_items = update_dataframe(new_df)
-    
-    # 5. 새로운 데이터프레임을 CSV로 저장
-    save_dataframe(new_df)
-    
+    added_items, removed_items = update_dataframe(old_df, new_df)
+
     # 6. 작업 T 호출
     added_items_json = task_T(added_items)
     
