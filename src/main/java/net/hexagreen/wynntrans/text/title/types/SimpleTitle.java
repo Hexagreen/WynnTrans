@@ -82,7 +82,7 @@ public class SimpleTitle extends WynnTitleText {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean emptyChecker(Text text) {
-        String string = text.getString();
+        String string = text.getString().replaceAll("§.", "");
         return string.isEmpty() || string.matches("Á+|\\d+|\\.+") || !Objects.equals(text.getStyle().getFont(), Identifier.ofVanilla("default"));
     }
 

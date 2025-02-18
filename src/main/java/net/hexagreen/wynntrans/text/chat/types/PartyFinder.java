@@ -12,12 +12,12 @@ public class PartyFinder extends WynnSystemText {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().isEmpty()) return false;
-        return text.getSiblings().getFirst().getString().equals("Party Finder:");
+        return text.getSiblings().get(1).getString().equals(" Party Finder:");
     }
 
     public PartyFinder(Text text) {
         super(text);
-        this.playerName = getContentString(1).replaceFirst("Hey (.+),.+", "$1");
+        this.playerName = getContentString(1).replaceFirst("(?s)Hey (.+),.+", "$1");
         this.partyName = getSibling(2);
         this.players = getSibling(4);
     }

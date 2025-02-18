@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public enum ChatType {
-    NORMAL_CHAT(null, text -> Pattern.compile("^(\uE04E\uE040|\uE044\uE054|\uE040\uE052)").matcher(text.getString()).find()),
+    NORMAL_CHAT(null, text -> Pattern.compile("^(\uE04D\uE040|\uE044\uE054|\uE040\uE052)").matcher(text.getString()).find()),
     PRIVATE_MESSAGE(null, text -> Pattern.compile("\\[(.+) (?:\\((?:NA|EU|AS)\\d+\\) )?➤ (.+)]").matcher(text.getString()).find()),
     PRIVATE_MESSAGE_SAME_SERVER(null, text -> Pattern.compile("(.+)\uE003(.+):").matcher(text.getString()).find()),
     DIALOG_NORMAL(NpcDialog::new, NpcDialog::typeChecker),
