@@ -1,15 +1,12 @@
 package net.hexagreen.wynntrans.text.chat;
 
-import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import org.slf4j.Logger;
 
 import java.util.function.Function;
 
 public abstract class TextGlue {
-    protected static final Logger LOGGER = LogUtils.getLogger();
     private static final byte TIMER_THRESHOLD = 1;
     protected MutableText gluedText;
     private Function<Text, WynnChatText> wct;

@@ -51,6 +51,7 @@ public class WynnTrans implements ModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleBackgroundTextRegistration.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleDisplayTextRecordMode.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTitleTextRecordMode.register(dispatcher));
 
         ClientTickEvents.START_WORLD_TICK.register((StartTick) -> onGameMessageHandler.onStartWorldTick());
 
@@ -109,6 +110,20 @@ public class WynnTrans implements ModInitializer {
 
         private static int run() {
             displayEntityHandler.toggleRecordMode();
+            return 1;
+        }
+    }
+
+    private static class CommandToggleTitleTextRecordMode {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wynntrans")
+                            .then(ClientCommandManager.literal("recordTitle")
+                                    .executes(context -> run())));
+        }
+
+        private static int run() {
+            titleHandler.toggleRecordMode();
             return 1;
         }
     }

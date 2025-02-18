@@ -1,5 +1,7 @@
 package net.hexagreen.wynntrans.text.title;
 
+import net.hexagreen.wynntrans.text.title.types.EmeraldPouch;
+import net.hexagreen.wynntrans.text.title.types.IngredientPouch;
 import net.hexagreen.wynntrans.text.title.types.SimpleTitle;
 import net.minecraft.text.Text;
 
@@ -9,6 +11,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public enum TitleType {
+    EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker, true),
+    INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker, true),
+
+    PROXY_TITLE(ProxySimpleTitle::new, ProxySimpleTitle::typeChecker, true),
+    PROXY_SUBTITLE(ProxySimpleTitle::new, ProxySimpleTitle::typeChecker, false),
     NO_TYPE(SimpleTitle::new, null, true);
 
     private final Function<Text, WynnTitleText> wtt;

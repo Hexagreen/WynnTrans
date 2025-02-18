@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.chat.ILootrun;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -11,6 +12,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LootrunBeacon extends WynnChatText implements ILootrun {
+
+    public static MutableText getBeaconNameText(String beaconNameString) {
+        Text vibrant;
+        if(beaconNameString.contains("Vibrant")) vibrant = Text.translatable("wytr.lootrun.beacon.vibrant");
+        else vibrant = Text.empty();
+
+        Text color = Text.translatable("wytr.lootrun.beacon." + getColorStringForKey(beaconNameString));
+
+        MutableText beaconName;
+        beaconName = Text.translatable("wytr.lootrun.beacon", vibrant, color);
+        return beaconName;
+    }
+
+    private static String getColorStringForKey(String beaconNameString) {
+        return beaconNameString.replaceFirst("(?:§.)*(?:Vibrant )?(.+) Beacon", "$1")
+                .replaceAll(" ", "_")
+                .toLowerCase(Locale.ENGLISH);
+    }
 
     public LootrunBeacon(Text text) {
         super(text);
@@ -65,17 +84,7 @@ public class LootrunBeacon extends WynnChatText implements ILootrun {
         String beaconNameString = siblings.getFirst().getString();
         Style beaconNameStyle = parseStyleCode(beaconNameString);
 
-        Text vibrant;
-        if(beaconNameString.contains("Vibrant")) vibrant = Text.translatable("wytr.lootrun.beacon.vibrant");
-        else vibrant = Text.empty();
-
-        String colorString = beaconNameString.replaceFirst("(?:§.)+(?:Vibrant )?(.+) Beacon", "$1")
-                .replaceAll(" ", "_")
-                .toLowerCase(Locale.ENGLISH);
-        Text color = Text.translatable("wytr.lootrun.beacon." + colorString);
-
-        Text beaconName;
-        beaconName = Text.translatable("wytr.lootrun.beacon", vibrant, color).setStyle(beaconNameStyle);
+        Text beaconName = getBeaconNameText(beaconNameString).setStyle(beaconNameStyle);
         if(beaconNameString.contains("Rainbow")) beaconName = rainbowDecoration(beaconName);
 
         String beaconDescString = siblings.getLast().getString();
@@ -90,7 +99,7 @@ public class LootrunBeacon extends WynnChatText implements ILootrun {
             numbers.add(Text.literal(numberMatcher.group()).setStyle(numberStyle));
         }
 
-        Text beaconDesc = Text.translatable("wytr.lootrun.beacon." + colorString + ".desc", numbers.toArray(Object[]::new))
+        Text beaconDesc = Text.translatable("wytr.lootrun.beacon." + getColorStringForKey(beaconNameString) + ".desc", numbers.toArray(Object[]::new))
                 .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
 
         List<Text> result = wrapLine(beaconDesc, (int) CHAT_HUD_WIDTH / 3);

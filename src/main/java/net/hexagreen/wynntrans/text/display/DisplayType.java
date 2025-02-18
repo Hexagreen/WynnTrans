@@ -34,7 +34,7 @@ public enum DisplayType {
     CRATE_REWARD(CrateReward::new, CrateReward::typeChecker),
     CRATE_OPENING(CrateOpening::new, CrateOpening::typeChecker),
     TIMER(Timer::new, Timer::typeChecker),
-    TOTEM_HEALING(TotemHealing::new, TotemHealing::typeChecker),
+    TOTEM_HEALING(ShamanTotem::new, ShamanTotem::typeChecker),
     BOSS_ALTAR(BossAltar::new, BossAltar::typeChecker),
     KILL_COUNTER(SlayCounter::new, SlayCounter::typeChecker),
     DUNGEON_TITLE(DungeonTitle::new, DungeonTitle::typeChecker),

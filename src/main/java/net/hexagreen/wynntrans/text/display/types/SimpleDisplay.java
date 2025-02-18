@@ -42,7 +42,7 @@ public class SimpleDisplay extends WynnDisplayText {
                     resultText = newTranslate(keyContentText).setStyle(styleText);
                 }
                 else {
-                    resultText = Text.literal(valContentText).setStyle(styleText);
+                    resultText = Text.literal(valContentText).setStyle(getStyle());
                     debugClass.writeTextAsJSON(inputText, "Display");
                     recorded = true;
                 }

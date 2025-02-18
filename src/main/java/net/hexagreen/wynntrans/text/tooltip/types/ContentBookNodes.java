@@ -149,7 +149,7 @@ public class ContentBookNodes extends WynnTooltipText {
             }
             String hash = DigestUtils.sha1Hex("- " + category);
             MutableText categoryText = Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.GRAY))
-                    .append(Text.translatable("wytr.tooltip." + hash + "_2"))
+                    .append(Text.translatable("wytr.tooltip." + hash + ".2"))
                     .append("]");
             contentName.append(categoryText);
 

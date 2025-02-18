@@ -62,7 +62,9 @@ public abstract class WynnTransText {
     }
 
     protected static Style parseStyleCode(String codeOrTextString) {
-        String styleCode = codeOrTextString.replaceFirst("(?s).*?((?:§[0123456789abcdefklnmor])+).*", "$1");
+        Matcher matcher = Pattern.compile("^((?:§[0123456789abcdefklnmor])+)").matcher(codeOrTextString.replaceFirst("^\\s+", ""));
+        if(!matcher.find()) return Style.EMPTY;
+        String styleCode = matcher.group(1);
         if(styleCode.isBlank()) return Style.EMPTY;
         char[] codes = styleCode.replace("§", "")
                 .replaceAll("[^0123456789abcdefklmnor]", "")
