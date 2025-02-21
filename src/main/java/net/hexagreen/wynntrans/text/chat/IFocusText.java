@@ -74,14 +74,14 @@ public interface IFocusText extends ISpaceProvider {
         String key = "wytr.func.pressShift";
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
         MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(2).getStyle()));
-        return getCenterIndent(textBody).append(textBody);
+        return centerAlign(textBody);
     }
 
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
         List<Text> original = fullText.getSiblings().get(findLastOptionIndex(fullText) + 4).getSiblings();
         MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(1).getStyle()));
-        return getCenterIndent(textBody).append(textBody);
+        return centerAlign(textBody);
     }
 
     private int findLastOptionIndex(Text fullText) {

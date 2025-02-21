@@ -53,7 +53,7 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
         else {
             t0.append(Text.literal(valDiscoveryName).setStyle(Style.EMPTY.withColor(Formatting.AQUA))).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n");
+        resultText.append(centerAlign(t0)).append("\n");
 
         MutableText area = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
         if(WTS.checkTranslationExist(keyDiscoveryArea, valDiscoveryArea)) {
@@ -62,7 +62,7 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
         else {
             area.append(getSibling(2).getString().replaceAll("^ *", ""));
         }
-        resultText.append(getCenterIndent(area)).append(area).append("\n\n");
+        resultText.append(centerAlign(area)).append("\n\n");
 
         String keyAreaLore = keyDiscoveryName + ".desc";
         String valAreaLore = concatLore();
@@ -75,7 +75,7 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
         }
         for(String str : loreLines) {
             Text line = Text.literal(str).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-            resultText.append(getCenterIndent(line)).append(line).append("\n");
+            resultText.append(centerAlign(line)).append("\n");
         }
     }
 

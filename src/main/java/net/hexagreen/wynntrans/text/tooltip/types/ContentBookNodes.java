@@ -579,7 +579,7 @@ public class ContentBookNodes extends WynnTooltipText {
 
             int totalWidth = getLongestWidth(result);
             result.add(Text.literal(" "));
-            result.add(getCenterIndent(ctt, totalWidth).append(ctt));
+            result.add(centerAlign(ctt, totalWidth));
         }
 
         private Text getIndentation(Text infoText) {

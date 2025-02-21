@@ -32,7 +32,7 @@ public class CaveCompleted extends WynnChatText implements ISpaceProvider {
     protected void build() {
         MutableText titleText = Text.translatable(rootKey + "func.caveCompleted").setStyle(getSibling(1).getSiblings().getFirst().getStyle());
         resultText = Text.empty().append("\n")
-                .append(getCenterIndent(titleText)).append(titleText)
+                .append(centerAlign(titleText))
                 .append("\n");
 
         Text t0;
@@ -43,7 +43,7 @@ public class CaveCompleted extends WynnChatText implements ISpaceProvider {
             t0 = getSibling(2).getSiblings().get(1);
         }
 
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n\n").append(Text.translatable(rootKey + "func.reward").setStyle(getSibling(4).getSiblings().getFirst().getStyle())).append("\n");
+        resultText.append(centerAlign(t0)).append("\n\n").append(Text.translatable(rootKey + "func.reward").setStyle(getSibling(4).getSiblings().getFirst().getStyle())).append("\n");
 
 
         for(int i = 5; getSiblings().size() > i; i++) {

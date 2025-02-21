@@ -53,16 +53,16 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
     protected void build() {
         MutableText titleText = Text.translatable(func + "objCompleted").setStyle(titleStyle);
         resultText = Text.empty().append("\n")
-                .append(getCenterIndent(titleText)).append(titleText)
+                .append(centerAlign(titleText))
                 .append("\n");
 
         if(WTS.checkTranslationExist(keyObjectiveName, valObjectiveName)) {
             MutableText text = Text.translatable(keyObjectiveName, argObjectiveName).setStyle(objectiveNameStyle);
-            resultText.append(getCenterIndent(text)).append(text);
+            resultText.append(centerAlign(text));
         }
         else {
             MutableText text = Text.literal(valObjectiveName).setStyle(objectiveNameStyle);
-            resultText.append(getCenterIndent(text)).append(text);
+            resultText.append(centerAlign(text));
         }
 
         resultText.append("\n\n");
@@ -91,18 +91,18 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
         if(keyEName != null) {
             if(WTS.checkTranslationExist(keyEName, valEName)) {
                 Text text = Text.translatable(keyEName).setStyle(styleEName);
-                resultText.append(getCenterIndent(text)).append(text);
+                resultText.append(centerAlign(text));
             }
             else {
                 Text origin = Text.literal(valEName).setStyle(styleEName);
-                resultText.append(getCenterIndent(origin)).append(origin);
+                resultText.append(centerAlign(origin));
             }
             Text origin = Text.literal(getSibling(5).getString().replaceAll(" +§.", "")).setStyle(styleEReward);
-            resultText.append("\n").append(getCenterIndent(origin)).append(origin).append("\n\n");
+            resultText.append("\n").append(centerAlign(origin)).append("\n\n");
         }
 
         MutableText rewardText = Text.translatable(func + "objReward").setStyle(getSibling(-1).getSiblings().get(1).getStyle());
-        resultText.append(getCenterIndent(rewardText)).append(rewardText)
+        resultText.append(centerAlign(rewardText))
                 .append("\n");
     }
 

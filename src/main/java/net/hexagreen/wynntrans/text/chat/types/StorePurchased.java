@@ -22,6 +22,6 @@ public class StorePurchased extends WynnChatText implements ISpaceProvider {
         Text t1 = Text.translatable(translationKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
 
         resultText = Text.empty();
-        resultText.append(getCenterIndent(t0).append(t0)).append("\n").append(getCenterIndent(t1).append(t1));
+        resultText.append(centerAlign(t0)).append("\n").append(centerAlign(t1));
     }
 }

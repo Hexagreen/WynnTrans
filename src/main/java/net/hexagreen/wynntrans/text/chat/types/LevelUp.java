@@ -29,12 +29,12 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
         resultText = Text.empty();
 
         Text t1 = Text.translatable(translationKey).setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GOLD));
-        resultText.append(getCenterIndent(t1).append(t1).append("\n"));
+        resultText.append(centerAlign(t1).append("\n"));
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
         if(m2.find()) {
             Text t2 = Text.translatable(translationKey + ".nowOn", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-            resultText.append(getCenterIndent(t2).append(t2).append("\n"));
+            resultText.append(centerAlign(t2).append("\n"));
         }
 
         resultText.append("\n");
@@ -43,7 +43,7 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
         if(m3.find()) {
             Text num = Text.literal(m3.group(1)).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
             Text t3 = Text.translatable(translationKey + ".nextAP", num);
-            resultText.append(getCenterIndent(t3).append(t3).append("\n"));
+            resultText.append(centerAlign(t3).append("\n"));
         }
 
         resultText.append("\n");

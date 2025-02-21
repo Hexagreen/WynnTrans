@@ -28,13 +28,13 @@ public class LevelUpProfession extends WynnChatText implements ISpaceProvider {
         resultText = Text.empty();
 
         Text t1 = Text.translatable(translationKey).setStyle(Style.EMPTY.withBold(true).withColor(Formatting.GOLD));
-        resultText.append(getCenterIndent(t1).append(t1).append("\n"));
+        resultText.append(centerAlign(t1).append("\n"));
 
         Matcher m2 = REGEX_LEVELUP.matcher(getSibling(2).getString());
         if(m2.find()) {
             Text prof = Profession.getProfession(m2.group(2).charAt(0)).getTextWithIcon().setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
             Text t2 = Text.translatable(translationKey + ".nowOnIn", m2.group(1), prof).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
-            resultText.append(getCenterIndent(t2).append(t2).append("\n"));
+            resultText.append(centerAlign(t2).append("\n"));
         }
 
         resultText.append("\n");
@@ -78,12 +78,12 @@ public class LevelUpProfession extends WynnChatText implements ISpaceProvider {
                 if(m3.group(3) != null) {
                     Text toolName = Profession.getProfession(m3.group(2).charAt(0)).getTool(m3.group(3)).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
                     Text nextTool = Text.translatable(translationKey + ".nextTool", moreLevel, toolName).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
-                    resultText.append(getCenterIndent(nextTool)).append(nextTool);
+                    resultText.append(centerAlign(nextTool));
                 }
                 else {
                     Text resourceName = Text.literal(getSibling(i).getString().replaceAll(".+ gather from §d", "")).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
                     Text nextResource = Text.translatable(translationKey + ".nextResource", moreLevel, resourceName).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE));
-                    resultText.append(getCenterIndent(nextResource)).append(nextResource);
+                    resultText.append(centerAlign(nextResource));
                 }
                 resultText.append("\n");
                 return;

@@ -27,6 +27,6 @@ public class JoinQueue extends WynnChatText implements ISpaceProvider {
         Text t0 = Text.translatable(translationKey);
         Text t1 = Text.translatable(translationKey + ".guide");
 
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n").append(getCenterIndent(t1)).append(t1).append("\n");
+        resultText.append(centerAlign(t0)).append("\n").append(centerAlign(t1)).append("\n");
     }
 }

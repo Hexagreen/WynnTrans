@@ -41,8 +41,8 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
 
         int width = getLongestWidth(resultText.getSiblings(), progressBar);
         resultText.append(" ")
-                .append(getCenterIndent(progressBar, width).append(progressBar))
-                .append(getCenterIndent(completionCount, width).append(completionCount));
+                .append(centerAlign(progressBar, width))
+                .append(centerAlign(completionCount, width));
     }
 
     private void translateAndAlignText(List<Text> list) {

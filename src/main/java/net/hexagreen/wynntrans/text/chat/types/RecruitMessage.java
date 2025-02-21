@@ -31,6 +31,6 @@ public class RecruitMessage extends WynnChatText implements ISpaceProvider {
         Text t2 = Text.translatable(translationKey + ".2").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/recruit")));
         Text t3 = Text.translatable(translationKey + ".3");
 
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n").append(getCenterIndent(t1)).append(t1).append("\n\n").append(getCenterIndent(t2)).append(t2).append("\n").append(getCenterIndent(t3)).append(t3).append("\n");
+        resultText.append(centerAlign(t0)).append("\n").append(centerAlign(t1)).append("\n\n").append(centerAlign(t2)).append("\n").append(centerAlign(t3)).append("\n");
     }
 }

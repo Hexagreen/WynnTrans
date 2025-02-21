@@ -50,7 +50,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
         Text title;
         title = Text.translatable(func + "caveCompleted").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN));
 
-        resultText.append(getCenterIndent(title)).append(title).append("\n");
+        resultText.append(centerAlign(title)).append("\n");
 
 
         Text t0;
@@ -62,7 +62,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
             t0 = Text.literal(getSibling(2).getString().replaceAll(" +(?=§)", ""));
         }
 
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n\n").append("           ").append(Text.translatable(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
+        resultText.append(centerAlign(t0)).append("\n\n").append("           ").append(Text.translatable(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");
 
 
         for(int i = 5; getSiblings().size() > i; i++) {

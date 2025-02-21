@@ -39,16 +39,16 @@ public class QuestCompleted extends WynnChatText implements ISpaceProvider {
     protected void build() {
         MutableText t0 = Text.translatable(keyTitle).setStyle(parseStyleCode(getSibling(1).getString()));
         resultText = Text.empty().append("\n")
-                .append(getCenterIndent(t0)).append(t0)
+                .append(centerAlign(t0))
                 .append("\n");
 
         if(WTS.checkTranslationExist(keyQuestName, valQuestName)) {
             Text questName = Text.translatable(keyQuestName).setStyle(parseStyleCode(getSibling(2).getString().replaceAll("(§.) +(§.).+", "$1$2")));
-            resultText.append(getCenterIndent(questName)).append(questName);
+            resultText.append(centerAlign(questName));
         }
         else {
             Text origin = Text.literal(valQuestName).setStyle(Style.EMPTY.withColor(Formatting.YELLOW).withBold(true));
-            resultText.append(getCenterIndent(origin)).append(origin);
+            resultText.append(centerAlign(origin));
         }
 
         resultText.append("\n\n").append("            ").append(Text.translatable(func + "reward").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))).append("\n");

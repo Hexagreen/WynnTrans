@@ -43,22 +43,22 @@ public class WeeklyObjective extends WynnChatText implements ISpaceProvider {
         Text t3 = Text.translatable(translationKey + ".2").setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild rewards"))).append("\n");
         Text t4 = Text.translatable(translationKey + ".3").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)).append("\n");
 
-        resultText.append(getCenterIndent(t1)).append(t1).append(getCenterIndent(t2)).append(t2).append("\n");
+        resultText.append(centerAlign(t1)).append(centerAlign(t2)).append("\n");
 
         if(keyEName != null) {
             if(WTS.checkTranslationExist(keyEName, valEName)) {
                 Text text = Text.translatable(keyEName).setStyle(styleEName);
-                resultText.append(getCenterIndent(text)).append(text);
+                resultText.append(centerAlign(text));
             }
             else {
                 Text origin = Text.literal(valEName).setStyle(styleEName);
-                resultText.append(getCenterIndent(origin)).append(origin);
+                resultText.append(centerAlign(origin));
             }
             Text origin = getCrateName(getSibling(4));
-            resultText.append("\n").append(getCenterIndent(origin)).append(origin).append("\n\n");
+            resultText.append("\n").append(centerAlign(origin)).append("\n\n");
         }
 
-        resultText.append(getCenterIndent(t3)).append(t3).append(getCenterIndent(t4)).append(t4);
+        resultText.append(centerAlign(t3)).append(centerAlign(t4));
     }
 
     private Text getCrateName(Text text) {

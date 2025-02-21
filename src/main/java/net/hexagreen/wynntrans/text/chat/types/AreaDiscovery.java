@@ -47,7 +47,7 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
         else {
             t0.append(Text.literal(valAreaName).setStyle(styleAreaName)).append(Text.literal(experience).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
-        resultText.append(getCenterIndent(t0)).append(t0).append("\n");
+        resultText.append(centerAlign(t0)).append("\n");
 
         if(shortForm) return;
         else resultText.append("\n");
@@ -63,7 +63,7 @@ public class AreaDiscovery extends WynnChatText implements ISpaceProvider {
         }
         for(String str : loreLines) {
             Text line = Text.literal(str).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-            resultText.append(getCenterIndent(line)).append(line).append("\n");
+            resultText.append(centerAlign(line)).append("\n");
         }
     }
 

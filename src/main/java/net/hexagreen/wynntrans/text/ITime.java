@@ -10,7 +10,7 @@ public interface ITime {
     Pattern timePattern = Pattern.compile("(?:(\\d+)(?:days|day|d))?(?:(\\d+)(?:hours|hour|h))?(?:(\\d+)(?:minutes|minute|min|m))?(?:(\\d+)(?:seconds|second|sec|s))?");
 
     static MutableText translateTime(String string) {
-        Matcher matcher = timePattern.matcher(string.replaceAll(" ", ""));
+        Matcher matcher = timePattern.matcher(string.replaceAll(" ", "").replaceAll("§.", ""));
         MutableText result = Text.empty();
         if(matcher.find()) {
             String d = matcher.group(1), h = matcher.group(2), m = matcher.group(3), s = matcher.group(4);

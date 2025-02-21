@@ -25,8 +25,8 @@ public class PartyInvited extends WynnChatText implements ISpaceProvider {
         Text t1 = Text.translatable(translationKey + ".command").setStyle(getSibling(1).getSiblings().get(1).getStyle().withParent(getStyle(1)));
 
         resultText = Text.empty().append("\n");
-        resultText.append(getCenterIndent(t0).append(t0)).append("\n");
-        resultText.append(getCenterIndent(t1).append(t1)).append("\n");
+        resultText.append(centerAlign(t0)).append("\n");
+        resultText.append(centerAlign(t1)).append("\n");
     }
 
     private Text getPlayerName() {

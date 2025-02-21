@@ -33,10 +33,10 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
         Text rank = Text.translatable(keyRank).setStyle(parseStyleCode(rankOrigin.getString())).append(bar);
 
         resultText = Text.empty();
-        resultText.append(getCenterIndent(t0).append(t0)).append("\n")
-                .append(getCenterIndent(t1).append(t1)).append("\n")
-                .append(getCenterIndent(t2).append(t2)).append("\n\n")
-                .append(getCenterIndent(rank).append(rank)).append("\n");
+        resultText.append(centerAlign(t0)).append("\n")
+                .append(centerAlign(t1)).append("\n")
+                .append(centerAlign(t2)).append("\n\n")
+                .append(centerAlign(rank)).append("\n");
 
         if(getSiblings().size() >= 6) {
             for(int i = 5, size = getSiblings().size(); i < size; i++) {
