@@ -13,6 +13,7 @@ import net.minecraft.text.TranslatableTextContent;
 import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OnGameMessageHandler {
@@ -279,6 +280,7 @@ public class OnGameMessageHandler {
         }
 
         private void flush() {
+            List<Text> storage = new ArrayList<>(this.storage);
             if(storage.isEmpty()) return;
             MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
             if(!registerBackText) {

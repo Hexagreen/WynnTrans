@@ -6,12 +6,42 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.Optional;
 
 public class SimpleDisplay extends WynnDisplayText {
     private final String keyText;
     private final String valText;
     private final Style styleText;
+
+    public static MutableText translateTextTree(Text text, String translationKey) {
+        MutableText result = Text.empty();
+
+        int[] index = {0};
+        text.visit((s, t) -> {
+            if(!s.getFont().equals(Identifier.of("minecraft:default"))) {
+                result.append(Text.literal(t).setStyle(s));
+            }
+            else {
+                String k = translationKey + (index[0] == 0 ? "" : "." + index[0]);
+                if(WTS.checkTranslationExist(k, t)) {
+                    result.append(Text.translatable(k).setStyle(s));
+                }
+                else {
+                    result.append(Text.literal(t).setStyle(s));
+                }
+            }
+            index[0]++;
+            return Optional.empty();
+        }, Style.EMPTY);
+        return result;
+    }
+
+    private static boolean blankChecker(String str) {
+        return str.replaceAll("(§.|\\n|À)", "").isBlank();
+    }
 
     public SimpleDisplay(Text text) {
         super(text);
@@ -27,10 +57,12 @@ public class SimpleDisplay extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(valText.isBlank() || valText.replaceAll("(§.|\\n|À)", "").isBlank()) {
+        if(blankChecker(valText)) {
             resultText = inputText;
             return;
         }
+
+        if((resultText = translateDeepTreeDisplayText(inputText, this.keyText)) != null) return;
 
         boolean recorded = false;
         if(!getSiblings().isEmpty()) {
@@ -87,5 +119,22 @@ public class SimpleDisplay extends WynnDisplayText {
 
     protected MutableText newTranslate(String key) {
         return Text.translatable(key);
+    }
+
+    public MutableText translateDeepTreeDisplayText(Text text, String translationKey) {
+        if(depthCounter(text) > 1) {
+            return translateTextTree(text, translationKey);
+        }
+        return null;
+    }
+
+    private int depthCounter(Text text) {
+        if(text.getSiblings().isEmpty()) return 0;
+        else {
+            return text.getSiblings().stream()
+                    .map(this::depthCounter)
+                    .max(Integer::compareTo)
+                    .orElse(0) + 1;
+        }
     }
 }

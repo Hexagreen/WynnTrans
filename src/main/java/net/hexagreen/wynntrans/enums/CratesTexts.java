@@ -18,7 +18,7 @@ public class CratesTexts {
         RARE("rare", Text.translatable("wytr.crate.rare").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE))),
         EPIC("epic", Text.translatable("wytr.crate.epic").setStyle(Style.EMPTY.withColor(Formatting.GOLD))),
         GODLY("godly", Text.translatable("wytr.crate.godly").setStyle(Style.EMPTY.withColor(Formatting.RED))),
-        BLACK_MARKET("Black Market",
+        BLACK_MARKET("blackmarket",
                 Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_RED))
                         .append(BAR).append(Text.translatable("wytr.crate.blackMarket")).append(BAR));
 
@@ -27,7 +27,8 @@ public class CratesTexts {
         private final Style gradeStyle;
 
         public static Crates find(String string) {
-            return Arrays.stream(Crates.values()).filter(crateGrades -> crateGrades.match(string)).findFirst().orElse(COMMON);
+            String str = string.replaceAll(" ", "").toLowerCase(Locale.ENGLISH);
+            return Arrays.stream(Crates.values()).filter(crateGrades -> crateGrades.match(str)).findFirst().orElse(COMMON);
         }
 
         Crates(String gradeName, MutableText gradeText) {

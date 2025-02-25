@@ -11,7 +11,7 @@ public class PartyFinder extends WynnSystemText {
     private final Text players;
 
     public static boolean typeChecker(Text text) {
-        if(text.getSiblings().isEmpty()) return false;
+        if(text.getSiblings().size() < 2) return false;
         return text.getSiblings().get(1).getString().equals(" Party Finder:");
     }
 

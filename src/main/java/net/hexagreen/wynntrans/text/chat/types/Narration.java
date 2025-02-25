@@ -9,7 +9,6 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,20 +67,13 @@ public class Narration extends WynnChatText {
 
         @Override
         protected void normalize(Text text) {
-            if(copiedSiblings.isEmpty() && hasNotMatchWithRule(text.getString())) {
-                this.text = text;
-                this.args = new ArrayList<>();
-                this.flags = new ArrayList<>();
-            }
-            else {
-                copiedSiblings.addFirst(MutableText.of(text.getContent()).setStyle(text.getStyle()));
-                Style desiredStyle = findDesiredStyle(copiedSiblings);
-                ArgsRecord argsRecord = siblingsToArgs(copiedSiblings, desiredStyle);
+            copiedSiblings.addFirst(MutableText.of(text.getContent()).setStyle(text.getStyle()));
+            Style desiredStyle = findDesiredStyle(copiedSiblings);
+            ArgsRecord argsRecord = siblingsToArgs(copiedSiblings, desiredStyle);
 
-                this.text = Text.literal(argsRecord.textContent()).setStyle(desiredStyle);
-                this.args = argsRecord.args();
-                this.flags = argsRecord.flags();
-            }
+            this.text = Text.literal(argsRecord.textContent()).setStyle(desiredStyle);
+            this.args = argsRecord.args();
+            this.flags = argsRecord.flags();
         }
 
         private Style findDesiredStyle(List<Text> siblings) {

@@ -18,7 +18,7 @@ public abstract class WynnSystemText extends WynnChatText {
     protected final Text splitter;
 
     protected static String removeTextBox(Text text) {
-        return text.getString().replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ");
+        return text.getString().replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ").replaceAll("\\n", "");
     }
 
     protected static Text preprocessSystemChat(Text text, boolean isGlued) {

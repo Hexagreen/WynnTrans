@@ -9,7 +9,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -112,19 +111,12 @@ public class NpcDialog extends WynnChatText {
             result.append(talker);
 
             // Dialog body
-            if(copiedSiblings.size() == 1 && hasNotMatchWithRule(copiedSiblings.getFirst().getString())) {
-                this.text = result.append(copiedSiblings.getFirst());
-                this.args = new ArrayList<>();
-                this.flags = new ArrayList<>();
-            }
-            else {
-                Style desiredStyle = DialogColor.findDialogStyle(talker.getStyle());
-                ArgsRecord argsRecord = siblingsToArgs(copiedSiblings, desiredStyle);
+            Style desiredStyle = DialogColor.findDialogStyle(talker.getStyle());
+            ArgsRecord argsRecord = siblingsToArgs(copiedSiblings, desiredStyle);
 
-                this.text = result.append(Text.literal(argsRecord.textContent()).setStyle(desiredStyle));
-                this.args = argsRecord.args();
-                this.flags = argsRecord.flags();
-            }
+            this.text = result.append(Text.literal(argsRecord.textContent()).setStyle(desiredStyle));
+            this.args = argsRecord.args();
+            this.flags = argsRecord.flags();
         }
 
         private enum DialogColor {

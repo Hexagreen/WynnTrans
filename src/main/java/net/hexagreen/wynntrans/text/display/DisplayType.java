@@ -16,6 +16,7 @@ public enum DisplayType {
     CAVE_TITLE(CaveTitle::new, CaveTitle::typeChecker),
     CAVE_REWARD(CaveReward::new, CaveReward::typeChecker),
     NPC_NAME_LITERAL(NPCNameLiteral::new, NPCNameLiteral::typeChecker),
+    NPC_NAME(NPCName::new, NPCName::typeChecker),
     MOB_NAME(MobName::new, MobName::typeChecker),
     GATHERING(Gathering::new, Gathering::typeChecker),
     GATHERING_NODE(GatheringNode::new, GatheringNode::typeChecker),

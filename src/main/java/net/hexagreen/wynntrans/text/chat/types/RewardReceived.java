@@ -24,14 +24,24 @@ public class RewardReceived extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
+        if(hasStoreLink()) {
+            resultText.append(Text.translatable(translationKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
+        }
+        else {
+            resultText.append(Text.translatable(rootKey + "func.reward", rewards).setStyle(parseStyleCode(getSibling(0).getString())));
+        }
     }
 
     private Text initRewards() {
-        MutableText rewards = Text.empty().append("\n");
-        for(int i = 1; i < getSiblings().size() - 1; i++) {
-            rewards.append(getSibling(i)).append("\n");
+        MutableText rewards = Text.empty();
+        for(int i = 1; i < getSiblings().size() - (hasStoreLink() ? 1 : 0); i++) {
+            rewards.append("\n").append(getSibling(i));
         }
         return rewards;
+    }
+
+    private boolean hasStoreLink() {
+        Text last = getSiblings().getLast();
+        return !last.getString().replaceAll("§.", "").matches(" ?- .+");
     }
 }

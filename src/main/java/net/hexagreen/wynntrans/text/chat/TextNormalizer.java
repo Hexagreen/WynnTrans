@@ -152,10 +152,6 @@ public abstract class TextNormalizer {
         return new ArgsRecord(textContent, args, flags);
     }
 
-    protected boolean hasNotMatchWithRule(String target) {
-        return rulebook.findRule(target) == null;
-    }
-
     protected record ArgsRecord(String textContent, List<Text> args, List<Boolean> flags) {
     }
 }

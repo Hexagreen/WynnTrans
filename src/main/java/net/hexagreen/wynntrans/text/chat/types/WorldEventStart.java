@@ -17,12 +17,12 @@ public class WorldEventStart extends WynnSystemText {
     private final Text distance;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("The (.+) World Event starts in (\\d+\\w)!").matcher(removeTextBox(text)).find();
+        return Pattern.compile("The (.+) World Event starts in ((?:\\d+\\w ?)+)!").matcher(removeTextBox(text)).find();
     }
 
     public WorldEventStart(Text text) {
         super(text);
-        Matcher matcher = Pattern.compile("The (.+) World Event starts in (\\d+\\w)!").matcher(inputText.getString().replaceAll("\n", ""));
+        Matcher matcher = Pattern.compile("The (.+) World Event starts in ((?:\\d+\\w ?)+)!").matcher(inputText.getString().replaceAll("\n", ""));
         boolean ignore = matcher.find();
         this.valWorldEventName = matcher.group(1);
         this.keyWorldEventName = translationKey + normalizeStringForKey(valWorldEventName);
