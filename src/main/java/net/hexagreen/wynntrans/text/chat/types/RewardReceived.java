@@ -28,7 +28,7 @@ public class RewardReceived extends WynnChatText {
             resultText.append(Text.translatable(translationKey, rewards, STORE).setStyle(parseStyleCode(getSibling(0).getString())));
         }
         else {
-            resultText.append(Text.translatable(rootKey + "func.reward", rewards).setStyle(parseStyleCode(getSibling(0).getString())));
+            resultText.append(Text.translatable(rootKey + "func.rewardReceived", rewards).setStyle(parseStyleCode(getSibling(0).getString())));
         }
     }
 

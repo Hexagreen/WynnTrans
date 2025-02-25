@@ -42,9 +42,9 @@ public class NPCName extends WynnDisplayText {
             resultText = Text.translatable(keyNpcName).setStyle(getStyle()).append("\n");
         }
         else {
-            resultText = inputText.copyContentOnly();
+            resultText = inputText.copyContentOnly().setStyle(getStyle());
         }
-        
+
         if(!npcTalk.getString().equals("NPC")) {
             resultText.append(SimpleDisplay.translateTextTree(npcTalk, keyNpcTalk));
         }
