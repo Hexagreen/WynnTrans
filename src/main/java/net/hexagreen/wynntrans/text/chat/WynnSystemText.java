@@ -3,7 +3,10 @@ package net.hexagreen.wynntrans.text.chat;
 import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.chat.types.SimpleSystemText;
-import net.minecraft.text.*;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -146,7 +149,7 @@ public abstract class WynnSystemText extends WynnChatText {
         List<Object> arguments = new ArrayList<>();
         arguments.addFirst(splitter);
         arguments.addAll(Arrays.asList(args));
-        return MutableText.of(new TranslatableTextContent(key, null, arguments.toArray()));
+        return Text.translatable(key, arguments.toArray());
     }
 
     /**

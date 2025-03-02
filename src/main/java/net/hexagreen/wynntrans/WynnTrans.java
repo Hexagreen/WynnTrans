@@ -32,7 +32,18 @@ public class WynnTrans implements ModInitializer {
     public static TitleHandler titleHandler;
     public static WynnTranslationStorage wynnTranslationStorage;
     public static boolean translationTargetSignMarker;
+    public static String wynnPlayerName = "DummyEmptyPlayerName";
+    public static boolean playerNameCacheExpired = true;
     private static Iterator<String> debugString;
+
+    public static void refreshWynnPlayerName() {
+        WynnTransFileManager.whoAmI();
+        playerNameCacheExpired = false;
+    }
+
+    public static void expireWynnPlayerName() {
+        playerNameCacheExpired = true;
+    }
 
     @Override
     public void onInitialize() {
@@ -48,8 +59,8 @@ public class WynnTrans implements ModInitializer {
         debugString = List.of(debugClass.readTextListFromJSON()).iterator();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CommandReadJson.register(dispatcher));
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleBackgroundTextRegistration.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleDisplayTextRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTitleTextRecordMode.register(dispatcher));
 
@@ -75,7 +86,7 @@ public class WynnTrans implements ModInitializer {
     private static class CommandToggleRecordMode {
         private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
             dispatcher.register(
-                    ClientCommandManager.literal("wynntrans")
+                    ClientCommandManager.literal("wytr")
                             .then(ClientCommandManager.literal("recordMode")
                                     .executes(context -> run())));
         }
@@ -89,7 +100,7 @@ public class WynnTrans implements ModInitializer {
     private static class CommandToggleBackgroundTextRegistration {
         private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
             dispatcher.register(
-                    ClientCommandManager.literal("wynntrans")
+                    ClientCommandManager.literal("wytr")
                             .then(ClientCommandManager.literal("registerBT")
                                     .executes(context -> run())));
         }
@@ -103,7 +114,7 @@ public class WynnTrans implements ModInitializer {
     private static class CommandToggleDisplayTextRecordMode {
         private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
             dispatcher.register(
-                    ClientCommandManager.literal("wynntrans")
+                    ClientCommandManager.literal("wytr")
                             .then(ClientCommandManager.literal("recordDisplay")
                                     .executes(context -> run())));
         }
@@ -117,7 +128,7 @@ public class WynnTrans implements ModInitializer {
     private static class CommandToggleTitleTextRecordMode {
         private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
             dispatcher.register(
-                    ClientCommandManager.literal("wynntrans")
+                    ClientCommandManager.literal("wytr")
                             .then(ClientCommandManager.literal("recordTitle")
                                     .executes(context -> run())));
         }

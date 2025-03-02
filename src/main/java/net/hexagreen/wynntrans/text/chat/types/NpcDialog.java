@@ -73,10 +73,10 @@ public class NpcDialog extends WynnChatText {
         }
         else {
             MutableText reassembled = Text.empty().setStyle(dialogBody.getStyle());
-            String[] strings = (dialogBody.getString() + "%sEOL").split("%s");
-            for(int j = 0, l = strings.length - 1; j < l; j++) {
+            String[] strings = dialogBody.getString().split("%s", -1);
+            for(int j = 0, l = strings.length; j < l; j++) {
                 if(!strings[j].isEmpty()) reassembled.append(strings[j]);
-                if(j != l - 1) reassembled.append(dialogArgs.get(j));
+                if(j != l - 1) reassembled.append(dialogArgs.removeFirst());
             }
             resultText.append(reassembled);
         }

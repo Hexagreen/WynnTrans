@@ -1,9 +1,8 @@
 package net.hexagreen.wynntrans.text.chat;
 
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -16,19 +15,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class TextNormalizer {
+    public final Text originalText;
     private final Rulebooks.NormalizerRulebook rulebook;
-    protected Text text;
     protected List<Text> copiedSiblings;
+    /**
+     * Normalized text. May contain string replacer for arguments
+     */
+    protected Text text;
+    /**
+     * Arguments that insert to text. Arguments can be translated
+     */
     protected List<Text> args;
+    /**
+     * Flags for bypass argument translation
+     */
     protected List<Boolean> flags;
 
     protected TextNormalizer(Text text, Rulebooks.NormalizerRulebook rulebook) {
+        this.originalText = text;
         this.copiedSiblings = text.getSiblings() == null ? new ArrayList<>() : new ArrayList<>(text.getSiblings());
         this.rulebook = rulebook;
         normalize(text);
     }
 
     protected abstract void normalize(Text text);
+
+    protected boolean argsFilter(Text sibling) {
+        return false;
+    }
 
     public Text getText() {
         return text;
@@ -40,6 +54,22 @@ public abstract class TextNormalizer {
     }
 
     private void argsToTranslatable(String baseKey, BiFunction<String, String, Boolean> translationRegister) {
+        List<Text> _nestedArgs = new ArrayList<>();
+        List<Boolean> _nestedFlags = new ArrayList<>();
+        for(int i = args.size() - 1; i >= 0; i--) {
+            Text current = args.get(i);
+            String value = current.getString();
+            int nestedCount = value.split("%s", -1).length - 1;
+            if(value.contains("%p")) nestedCount++;
+            for(int j = 1; j <= nestedCount; j++) {
+                _nestedArgs.add(args.remove(i - j));
+                _nestedFlags.add(flags.remove(i - j));
+            }
+            i -= nestedCount;
+        }
+        List<Text> nestedArgs = _nestedArgs.reversed();
+        List<Boolean> nestedFlags = _nestedFlags.reversed();
+
         for(int i = 0; i < args.size(); i++) {
             if(flags.get(i)) continue;
 
@@ -51,16 +81,27 @@ public abstract class TextNormalizer {
                 int argsCount = value.split("%s", -1).length - 1;
                 boolean containsP = value.contains("%p");
                 if(containsP) {
-                    argsCount++;
                     value = value.replaceAll("%p", "%1\\$s");
+                    argsCount++;
                 }
+
                 List<Text> selectedArgs = new ArrayList<>();
-                for(int j = argsCount; j > 0; j--) {
-                    selectedArgs.add(args.remove(i - argsCount));
-                    flags.remove(i - argsCount);
-                }
-                i -= argsCount;
                 String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
+                for(int j = 1; j <= argsCount; j++) {
+                    Text arg = nestedArgs.removeFirst();
+                    boolean flag = nestedFlags.removeFirst();
+                    String saltyVal = arg.getString();
+                    String saltyKey = saltedKey + "." + j + "_" + DigestUtils.sha1Hex(saltyVal).substring(0, 4);
+                    Text translatedArg;
+                    if(flag && translationRegister.apply(saltyKey, saltyVal)) {
+                        translatedArg = Text.translatable(saltyKey).setStyle(arg.getStyle());
+                    }
+                    else {
+                        translatedArg = arg;
+                    }
+                    selectedArgs.add(translatedArg);
+                }
+
                 if(translationRegister.apply(saltedKey, value)) {
                     mutated = Text.translatable(saltedKey, selectedArgs.toArray(Object[]::new)).setStyle(style);
                 }
@@ -88,7 +129,7 @@ public abstract class TextNormalizer {
                     String quantity = itemNameMatcher.group(1);
                     String itemName = itemNameMatcher.group(2);
                     Text itemNameText = new ItemName(itemName).textAsMutable();
-                    mutated = Text.literal("[" + quantity + " " + itemNameText.getString() + "]").setStyle(style);
+                    mutated = Text.translatable("wytr.func.questingItem", quantity, itemNameText.getString()).setStyle(style);
                 }
                 else {
                     String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
@@ -105,38 +146,42 @@ public abstract class TextNormalizer {
     }
 
     protected ArgsRecord siblingsToArgs(List<Text> textBody, Style desiredStyle) {
+        String wholeText = originalText.getString();
         List<Text> args = new ArrayList<>();
         List<Boolean> flags = new ArrayList<>();
         StringBuilder currentString = new StringBuilder();
-        int[] bodySize = {textBody.size()};
-        @SuppressWarnings("DataFlowIssue") String clientPlayerName = MinecraftClient.getInstance().player.getName().getString();
+        String playerName = WynnTrans.wynnPlayerName;
+        int[] ruleNumber = {0};
 
         textBody.forEach(sibling -> {
             if(sibling.getString().isEmpty()) return;
-            if(sibling.getContent().equals(PlainTextContent.EMPTY)) {
-                args.add(sibling.copy());
+
+            if(argsFilter(sibling)) {
+                args.add(sibling);
                 flags.add(true);
-                currentString.append("%p");
-                bodySize[0]--;
+                currentString.append("%s");
                 return;
             }
+
             String string = sibling.getString();
-            if(string.contains(clientPlayerName)) {
-                args.add(Text.literal(clientPlayerName).setStyle(sibling.getStyle()));
+            if(string.contains(playerName)) {
+                args.add(Text.literal(playerName).setStyle(sibling.getStyle()));
                 flags.add(true);
-                string = string.replaceAll(clientPlayerName, "%p");
+                string = string.replaceAll(playerName, "%p");
             }
 
-            Rulebooks.NormalizerRule rule = rulebook.findRule(string);
+            Rulebooks.NormalizerRule rule = rulebook.findRule(wholeText, ruleNumber[0]);
             if(rule != null) {
                 Matcher matcher = Pattern.compile(rule.pattern()).matcher(string);
-                boolean ignore = matcher.find();
-                int groups = matcher.groupCount();
-                for(int i = 1; i <= groups; i++) {
-                    args.add(Text.literal(matcher.group(i)).setStyle(sibling.getStyle()));
-                    flags.add(true);
+                if(matcher.find()) {
+                    ruleNumber[0]++;
+                    int groups = matcher.groupCount();
+                    for(int i = 1; i <= groups; i++) {
+                        args.add(Text.literal(matcher.group(i)).setStyle(sibling.getStyle()));
+                        flags.add(!rule.registration());
+                    }
+                    string = string.replaceFirst(rule.pattern(), rule.replace());
                 }
-                string = string.replaceFirst(rule.pattern(), rule.replace());
             }
 
             if(Objects.equals(desiredStyle.getColor(), sibling.getStyle().getColor())) {

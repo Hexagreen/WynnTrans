@@ -1,42 +1,29 @@
 package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.debugClass;
+import net.hexagreen.wynntrans.text.chat.TextNormalizer;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class SimpleDisplay extends WynnDisplayText {
-    private final String keyText;
+    private final DisplayCarrier carrier;
     private final String valText;
     private final Style styleText;
+    private String keyText;
 
-    public static MutableText translateTextTree(Text text, String translationKey) {
-        MutableText result = Text.empty();
-
-        int[] index = {0};
-        text.visit((s, t) -> {
-            if(!s.getFont().equals(Identifier.of("minecraft:default"))) {
-                result.append(Text.literal(t).setStyle(s));
-            }
-            else {
-                String k = translationKey + (index[0] == 0 ? "" : "." + index[0]);
-                if(WTS.checkTranslationExist(k, t)) {
-                    result.append(Text.translatable(k).setStyle(s));
-                }
-                else {
-                    result.append(Text.literal(t).setStyle(s));
-                }
-            }
-            index[0]++;
-            return Optional.empty();
-        }, Style.EMPTY);
-        return result;
+    public static Text translateTextTree(Text text, String translationKey) {
+        return new SimpleDisplay(text).changeKey(translationKey).text();
     }
 
     private static boolean blankChecker(String str) {
@@ -44,7 +31,12 @@ public class SimpleDisplay extends WynnDisplayText {
     }
 
     public SimpleDisplay(Text text) {
-        super(text);
+        this(new DisplayCarrier(text));
+    }
+
+    private SimpleDisplay(DisplayCarrier carrier) {
+        super(carrier.getText());
+        this.carrier = carrier;
         this.valText = initValText();
         this.keyText = translationKey + DigestUtils.sha1Hex(valText);
         this.styleText = parseStyleCode(inputText.getString()).withParent(getStyle());
@@ -62,79 +54,74 @@ public class SimpleDisplay extends WynnDisplayText {
             return;
         }
 
-        if((resultText = translateDeepTreeDisplayText(inputText, this.keyText)) != null) return;
-
-        boolean recorded = false;
-        if(!getSiblings().isEmpty()) {
-            int i = 1;
-            if(!inputText.getContent().equals(PlainTextContent.EMPTY)) {
-                String valContentText = ((PlainTextContent) inputText.getContent()).string();
-                String keyContentText = this.keyText + ".0";
-                if(WTS.checkTranslationExist(keyContentText, valContentText)) {
-                    resultText = newTranslate(keyContentText).setStyle(styleText);
-                }
-                else {
-                    resultText = Text.literal(valContentText).setStyle(getStyle());
-                    debugClass.writeTextAsJSON(inputText, "Display");
-                    recorded = true;
-                }
-            }
-
-            for(Text sibling : getSiblings()) {
-                String valText = sibling.getString();
-                String keyText = this.keyText + "." + i++;
-
-                if(resultText == null) resultText = Text.empty().setStyle(styleText);
-                if(valText.equals("\n")) {
-                    resultText.append("\n");
-                    continue;
-                }
-
-                if(WTS.checkTranslationExist(keyText, valText)) {
-                    resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
-                }
-                else {
-                    resultText.append(sibling);
-                    if(!recorded) {
-                        debugClass.writeTextAsJSON(inputText, "Display");
-                        recorded = true;
-                    }
-                }
-            }
+        List<Text> displayArgs = carrier.getArgs(keyText, WTS::checkTranslationExist);
+        if(WTS.checkTranslationExist(keyText, valText)) {
+            resultText = newTranslate(keyText, displayArgs.toArray(Object[]::new)).setStyle(styleText);
         }
         else {
-            if(WTS.checkTranslationExist(keyText, valText)) {
-                resultText = newTranslate(keyText).setStyle(styleText);
+            MutableText reassembled = Text.empty().setStyle(styleText);
+            String[] strings = valText.split("%s", -1);
+            for(int j = 0, l = strings.length; j < l; j++) {
+                if(!strings[j].isEmpty()) reassembled.append(strings[j]);
+                if(j != l - 1) reassembled.append(displayArgs.removeFirst());
             }
-            else {
-                resultText = inputText;
-                debugClass.writeTextAsJSON(inputText, "Display");
-            }
+            resultText = reassembled;
+            debugClass.writeTextAsJSON(carrier.originalText, "Display");
         }
+    }
+
+    private SimpleDisplay changeKey(String newKey) {
+        this.keyText = newKey;
+        return this;
     }
 
     protected String initValText() {
         return inputText.getString().replaceFirst("^(?:§.)+", "");
     }
 
-    protected MutableText newTranslate(String key) {
-        return Text.translatable(key);
+    protected MutableText newTranslate(String key, Object... args) {
+        return Text.translatable(key, args);
     }
 
-    public MutableText translateDeepTreeDisplayText(Text text, String translationKey) {
-        if(depthCounter(text) > 1) {
-            return translateTextTree(text, translationKey);
+    private static class DisplayCarrier extends TextNormalizer {
+
+        protected DisplayCarrier(Text text) {
+            super(text, WTS.getRulebooks().displayRuleBook);
         }
-        return null;
-    }
 
-    private int depthCounter(Text text) {
-        if(text.getSiblings().isEmpty()) return 0;
-        else {
-            return text.getSiblings().stream()
-                    .map(this::depthCounter)
-                    .max(Integer::compareTo)
-                    .orElse(0) + 1;
+        @Override
+        protected boolean argsFilter(Text sibling) {
+            return !sibling.getStyle().getFont().equals(Identifier.of("minecraft:default"));
+        }
+
+        @Override
+        protected void normalize(Text text) {
+            if(blankChecker(text.getString())) {
+                this.text = text;
+                this.args = new ArrayList<>();
+                this.flags = new ArrayList<>();
+            }
+
+            List<Text> visited = new ArrayList<>();
+            Style[] styles = {Style.EMPTY, Style.EMPTY};
+            text.visit((s, t) -> {
+                visited.add(Text.literal(t).setStyle(s));
+                if(!blankChecker(t) && styles[0] == Style.EMPTY) {
+                    styles[0] = s;
+                }
+                if(!blankChecker(t) && Objects.equals(TextColor.fromFormatting(Formatting.GRAY), s.getColor())) {
+                    styles[1] = s;
+                }
+                return Optional.empty();
+            }, Style.EMPTY);
+
+            copiedSiblings = visited;
+            Style desiredStyle = styles[1] != Style.EMPTY ? styles[1] : styles[0];
+            ArgsRecord argsRecord = siblingsToArgs(copiedSiblings, desiredStyle);
+
+            this.text = Text.literal(argsRecord.textContent()).setStyle(desiredStyle);
+            this.args = argsRecord.args();
+            this.flags = argsRecord.flags();
         }
     }
 }

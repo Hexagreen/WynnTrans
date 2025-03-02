@@ -48,13 +48,13 @@ public class SimpleTitle extends WynnTitleText {
             }
         }
         else {
-            resultText = Text.empty().setStyle(getStyle());
+            resultText = inputText.copyContentOnly().setStyle(getStyle());
         }
 
         if(!getSiblings().isEmpty()) {
             int i = 1;
             for(Text sibling : getSiblings()) {
-                if(!emptyChecker(sibling)) {
+                if(!emptyChecker(sibling.copy().setStyle(sibling.getStyle().withParent(getStyle())))) {
                     String keySibling = keyTitle + "." + i++;
                     String valSibling = sibling.getString().replaceFirst("^(§.)+", "");
                     Style styleSibling = parseStyleCode(sibling.getString()).withParent(sibling.getStyle());
@@ -95,7 +95,7 @@ public class SimpleTitle extends WynnTitleText {
                 stringBuilder.append(t);
             }
             return Optional.empty();
-        }, Style.EMPTY);
+        }, text.getStyle());
         if(counter.get() == 1) {
             this.simplifiedKey = translationKey + DigestUtils.sha1Hex(getValText(stringBuilder.toString()));
             return true;

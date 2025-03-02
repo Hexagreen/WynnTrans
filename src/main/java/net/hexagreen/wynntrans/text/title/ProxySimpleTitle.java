@@ -22,8 +22,7 @@ public class ProxySimpleTitle extends SimpleTitle {
 
     @Override
     protected String getValText(String string) {
-        if(template == null) return Templates.findTemplate(inputText).mutator.apply(string);
-        return template.mutator.apply(string);
+        return Templates.findTemplate(inputText).mutator.apply(string);
     }
 
     @Override

@@ -1,27 +1,31 @@
 package net.hexagreen.wynntrans;
 
 import com.google.common.io.Files;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 
 import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class WynnTransFileManager {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     private static final String fileName = "WynnTrans/scannedTexts.json";
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
 
     public static boolean addTranslation(String key, String value) {
         Map<String, String> target = new HashMap<>();
@@ -100,5 +104,35 @@ public class WynnTransFileManager {
             LOGGER.warn("[WynnTrans] Failed to load language file. Is file corrupted?");
         }
         return true;
+    }
+
+    public static void whoAmI() {
+        if(!"DummyEmptyPlayerName".equals(WynnTrans.wynnPlayerName) || !WynnTrans.playerNameCacheExpired) {
+            return;
+        }
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        @SuppressWarnings("DataFlowIssue")
+        String playerName = player.getName().getString();
+        String playerUUID = player.getUuidAsString();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.wynncraft.com/v3/player/whoami"))
+                .GET()
+                .build();
+
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .orTimeout(5, TimeUnit.SECONDS)
+                .exceptionally(e -> null)
+                .thenAccept(s -> {
+                    if(s != null) {
+                        JsonObject response = gson.fromJson(s, JsonObject.class);
+                        JsonElement nickname = response.has(playerUUID) ? response.getAsJsonObject(playerUUID).get("nickname") : null;
+
+                        if(nickname instanceof JsonNull || nickname == null) WynnTrans.wynnPlayerName = playerName;
+                        else WynnTrans.wynnPlayerName = nickname.getAsString();
+                    }
+                    else WynnTrans.wynnPlayerName = playerName;
+                });
     }
 }

@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
@@ -28,6 +29,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
 
     public WelcomeMessage(Text text) {
         super(text);
+        WynnTrans.refreshWynnPlayerName();
     }
 
     @Override

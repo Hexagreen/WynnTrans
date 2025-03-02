@@ -48,7 +48,7 @@ public class Narration extends WynnChatText {
             String[] strings = inputText.getString().split("%s", -1);
             for(int j = 0, l = strings.length; j < l; j++) {
                 if(!strings[j].isEmpty()) reassembled.append(strings[j]);
-                if(j != l - 1) reassembled.append(narrationArgs.get(j));
+                if(j != l - 1) reassembled.append(narrationArgs.removeFirst());
             }
             resultText = reassembled;
         }

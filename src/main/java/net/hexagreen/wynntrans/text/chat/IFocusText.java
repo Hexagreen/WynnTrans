@@ -115,10 +115,10 @@ public interface IFocusText extends ISpaceProvider {
             }
             else {
                 MutableText reassembled = Text.empty().setStyle(textBody.getStyle());
-                String[] strings = (textBody.getString() + "%sEOL").split("%s");
-                for(int j = 0, l = strings.length - 1; j < l; j++) {
+                String[] strings = textBody.getString().split("%s", -1);
+                for(int j = 0, l = strings.length; j < l; j++) {
                     if(!strings[j].isEmpty()) reassembled.append(strings[j]);
-                    if(j != l - 1) reassembled.append(textArgs.get(j));
+                    if(j != l - 1) reassembled.append(textArgs.removeFirst());
                 }
                 result.append(reassembled);
             }

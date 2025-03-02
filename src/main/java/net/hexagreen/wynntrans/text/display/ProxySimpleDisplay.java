@@ -29,7 +29,7 @@ public class ProxySimpleDisplay extends SimpleDisplay {
     }
 
     @Override
-    protected MutableText newTranslate(String key) {
+    protected MutableText newTranslate(String key, Object... args) {
         return Text.translatable(key, template.argumentParser.apply(inputText));
     }
 
