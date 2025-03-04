@@ -52,7 +52,7 @@ public class SimpleSystemText extends WynnSystemText {
                 else {
                     if(resultText == null) resultText = originText.copy();
                     if(translationRegisterControl && !recorded) {
-                        debugClass.writeTextAsJSON(inputText, "SystemText");
+                        debugClass.writeTextAsJSON(originText, "SystemText");
                         recorded = true;
                     }
                 }
@@ -66,7 +66,7 @@ public class SimpleSystemText extends WynnSystemText {
             else {
                 resultText = originText.copy();
                 if(translationRegisterControl) {
-                    debugClass.writeTextAsJSON(inputText, "SystemLiteral");
+                    debugClass.writeTextAsJSON(originText, "SystemLiteral");
                 }
             }
         }

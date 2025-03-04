@@ -2,12 +2,12 @@ package net.hexagreen.wynntrans;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.hexagreen.wynntrans.text.chat.OnGameMessageHandler;
@@ -20,20 +20,21 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class WynnTrans implements ModInitializer {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LoggerFactory.getLogger("WynnTrans");
+    public static WynnTranslationStorage wynnTranslationStorage;
     public static OnGameMessageHandler onGameMessageHandler;
     public static DisplayEntityHandler displayEntityHandler;
     public static DrawTooltipHandler drawTooltipHandler;
     public static TitleHandler titleHandler;
-    public static WynnTranslationStorage wynnTranslationStorage;
     public static boolean translationTargetSignMarker;
-    public static String wynnPlayerName = "DummyEmptyPlayerName";
-    public static boolean playerNameCacheExpired = true;
+    public static boolean playerNameCacheExpired;
+    public static String wynnPlayerName;
     private static Iterator<String> debugString;
 
     public static void refreshWynnPlayerName() {
@@ -47,14 +48,16 @@ public class WynnTrans implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        wynnTranslationStorage = new WynnTranslationStorage();
         onGameMessageHandler = new OnGameMessageHandler();
         displayEntityHandler = new DisplayEntityHandler();
         drawTooltipHandler = new DrawTooltipHandler();
         titleHandler = new TitleHandler();
-        wynnTranslationStorage = new WynnTranslationStorage();
         translationTargetSignMarker = false;
+        playerNameCacheExpired = true;
+        wynnPlayerName = "DummyEmptyPlayerName";
 
-        LOGGER.info("[WynnTrans] Hello, Wynn!");
+        LOGGER.info("Hello, Wynn!");
 
         debugString = List.of(debugClass.readTextListFromJSON()).iterator();
 
@@ -67,6 +70,9 @@ public class WynnTrans implements ModInitializer {
         ClientTickEvents.START_WORLD_TICK.register((StartTick) -> onGameMessageHandler.onStartWorldTick());
 
         UseBlockCallback.EVENT.register(new UseBlockHandler());
+        ScreenEvents.AFTER_INIT.register((c, s, w, h) -> {
+            if("\uDAFF\uDFD5\uE01F".equals(s.getTitle().getString())) expireWynnPlayerName();
+        });
     }
 
     private static class CommandReadJson {

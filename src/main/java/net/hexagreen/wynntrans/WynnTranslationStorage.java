@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans;
 
-import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.text.chat.Rulebooks;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -8,7 +7,7 @@ import org.slf4j.Logger;
 import java.util.*;
 
 public class WynnTranslationStorage {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = WynnTrans.LOGGER;
     private final Map<String, String> wynnTransDict = new HashMap<>();
     private final Set<String> unregisteredTextSet = new HashSet<>();
     private final Set<List<Text>> unregisteredTooltipSet = new HashSet<>();
@@ -22,7 +21,7 @@ public class WynnTranslationStorage {
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
         rulebooks = new Rulebooks();
-        LOGGER.info("[WynnTrans] Reloaded Wynncraft Text Language Map.");
+        LOGGER.info("Reloaded Wynncraft Text Language Map.");
     }
 
     public void recordUnregisteredTooltip(List<Text> text, String tag) {
@@ -69,9 +68,9 @@ public class WynnTranslationStorage {
         this.unregisteredTextSet.add(key);
         boolean recorded = WynnTransFileManager.addTranslation(key, value);
         if(!recorded) {
-            LOGGER.warn("[WynnTrans] Failed to record translation.");
-            LOGGER.warn("[WynnTrans] key: {}", key);
-            LOGGER.warn("[WynnTrans] value: {}", value);
+            LOGGER.warn("Failed to record translation.");
+            LOGGER.warn("key: {}", key);
+            LOGGER.warn("value: {}", value);
         }
     }
 }

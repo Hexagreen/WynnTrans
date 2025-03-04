@@ -4,7 +4,6 @@ import com.google.common.io.Files;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -22,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class WynnTransFileManager {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = WynnTrans.LOGGER;
     private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     private static final String fileName = "WynnTrans/scannedTexts.json";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
@@ -43,7 +42,7 @@ public class WynnTransFileManager {
             return map.keySet();
         }
         catch(IOException e) {
-            LOGGER.warn("[WynnTrans] Failed to read unregistered texts. File doesn't exist.");
+            LOGGER.warn("Failed to read unregistered texts. File doesn't exist.");
         }
         catch(JsonSyntaxException e) {
             String timestamp = new SimpleDateFormat("MMdd_HHmmss").format(new Date());
@@ -56,7 +55,7 @@ public class WynnTransFileManager {
                 }
             }
             catch(IOException ex) {
-                LOGGER.error("[WynnTrans] Failed to backup and read unregistered texts. Restart game.");
+                LOGGER.error("Failed to backup and read unregistered texts. Restart game.");
                 System.exit(1);
             }
         }
@@ -68,7 +67,7 @@ public class WynnTransFileManager {
             return gson.fromJson(reader, JsonObject.class);
         }
         catch(IOException e) {
-            LOGGER.warn("[WynnTrans] Failed to read resource {}.", filePath);
+            LOGGER.warn("Failed to read resource {}.", filePath);
         }
         return null;
     }
@@ -101,13 +100,13 @@ public class WynnTransFileManager {
 
         }
         catch(IOException e) {
-            LOGGER.warn("[WynnTrans] Failed to load language file. Is file corrupted?");
+            LOGGER.warn("Failed to load language file. Is file corrupted?");
         }
         return true;
     }
 
     public static void whoAmI() {
-        if(!"DummyEmptyPlayerName".equals(WynnTrans.wynnPlayerName) || !WynnTrans.playerNameCacheExpired) {
+        if(!WynnTrans.playerNameCacheExpired) {
             return;
         }
         ClientPlayerEntity player = MinecraftClient.getInstance().player;

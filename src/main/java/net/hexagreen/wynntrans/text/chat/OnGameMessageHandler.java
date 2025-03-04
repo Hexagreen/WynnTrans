@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat;
 
-import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.text.chat.types.*;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OnGameMessageHandler {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = WynnTrans.LOGGER;
     private final BackgroundText backgroundText;
     protected TextGlue textGlue;
     private boolean recordAll;

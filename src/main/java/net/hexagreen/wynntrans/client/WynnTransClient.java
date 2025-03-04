@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.client;
 
-import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.hexagreen.wynntrans.WynnTrans;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class WynnTransClient implements ClientModInitializer {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = WynnTrans.LOGGER;
 
     /**
      * Runs the mod initializer on the client environment.
@@ -32,12 +32,12 @@ public class WynnTransClient implements ClientModInitializer {
             }
             File json = new File(dir, "json.txt");
             if(json.createNewFile()) {
-                LOGGER.info("[WynnTrans] Text capturing file initialized.");
+                LOGGER.info("Text capturing file initialized.");
             }
         }
         catch(IOException e) {
-            LOGGER.warn("[WynnTrans] Cannot reach to WynnTrans directory or its file.");
+            LOGGER.warn("Cannot reach to WynnTrans directory or its file.");
         }
-        LOGGER.info("[WynnTrans] Loaded.");
+        LOGGER.info("Loaded.");
     }
 }

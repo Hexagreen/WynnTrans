@@ -117,7 +117,7 @@ public abstract class WynnSystemText extends WynnChatText {
         }
         catch(IndexOutOfBoundsException e) {
             LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OutOfBound");
+            debugClass.writeTextAsJSON(originText, "OutOfBound");
         }
         catch(TextTranslationFailException e) {
             LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
