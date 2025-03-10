@@ -7,7 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface ITime {
-    Pattern timePattern = Pattern.compile("(?:(\\d+)(?:days|day|d))?(?:(\\d+)(?:hours|hour|h))?(?:(\\d+)(?:minutes|minute|min|m))?(?:(\\d+)(?:seconds|second|sec|s))?");
+    Pattern timePattern = Pattern.compile("(?:(/|\\d+)(?:days|day|d))?(?:(/|\\d+)(?:hours|hour|h))?(?:(/|\\d+)(?:minutes|minute|min|m))?(?:(/|\\d+)(?:seconds|second|sec|s))?");
+
+    static MutableText translateTime(Text text) {
+        return translateTime(text.getString()).setStyle(text.getStyle());
+    }
 
     static MutableText translateTime(String string) {
         Matcher matcher = timePattern.matcher(string.replaceAll(" ", "").replaceAll("§.", ""));

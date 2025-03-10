@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.title;
 
-import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.title.types.SimpleTitle;
@@ -17,11 +17,11 @@ public abstract class WynnTitleText extends WynnTransText {
             return resultText;
         }
         catch(IndexOutOfBoundsException e) {
-            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
+            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
             debugClass.writeTextAsJSON(inputText, "OOB - Title");
         }
         catch(TextTranslationFailException e) {
-            LogUtils.getLogger().warn("[WynnTrans] Unprocessed title message has been recorded.\n", e);
+            WynnTrans.LOGGER.warn("Unprocessed title message has been recorded.\n", e);
             return new SimpleTitle(inputText).text();
         }
         return inputText;

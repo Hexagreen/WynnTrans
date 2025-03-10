@@ -5,6 +5,8 @@
 	"wytr.command.chatForceRecordMode.disable": "채팅 강제 기록 §4비활성화",
 	"wytr.command.displayForceRecordMode.enable": "텍스트 디스플레이 강제 기록 §a활성화",
 	"wytr.command.displayForceRecordMode.disable": "텍스트 디스플레이 강제 기록 §4비활성화",
+	"wytr.command.tooltipForceRecordMode.enable": "아이템 툴팁 강제 기록 §a활성화",
+	"wytr.command.tooltipForceRecordMode.disable": "아이템 툴팁 강제 기록 §4비활성화",
 	"wytr.command.titleForceRecordMode.enable": "타이틀 텍스트 강제 기록 §a활성화",
 	"wytr.command.titleForceRecordMode.disable": "타이틀 텍스트 강제 기록 §4비활성화",
 	"wytr.command.signTranslationRegistered": "번역 키가 저장되었습니다."

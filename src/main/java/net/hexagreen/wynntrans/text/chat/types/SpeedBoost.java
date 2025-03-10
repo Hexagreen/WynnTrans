@@ -1,22 +1,24 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
 public class SpeedBoost extends WynnChatText {
-    private final String duration;
+    private final Text playerName;
+    private final Text duration;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^\\+(\\d) minutes speed boost\\.").matcher(text.getString()).find();
+        if(text.getSiblings().size() < 4) return false;
+        return text.getSiblings().get(3).getString().equals(" speed boost.");
     }
 
     public SpeedBoost(Text text) {
         super(text);
-        this.duration = inputText.getString().replaceAll("\\D", "");
+        this.playerName = getSibling(0);
+        this.duration = ITime.translateTime(getContentString(2).replace("+", ""));
     }
 
     @Override
@@ -26,9 +28,9 @@ public class SpeedBoost extends WynnChatText {
 
     @Override
     protected void build() {
-        Text buffTime = Text.translatable(translationKey + ".dur", duration).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        Text buffTime = Text.literal("+").setStyle(Style.EMPTY.withColor(Formatting.AQUA)).append(duration);
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey, buffTime).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(translationKey, playerName, buffTime).setStyle(getStyle()));
     }
 }

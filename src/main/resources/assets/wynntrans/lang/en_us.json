@@ -5,6 +5,8 @@
 	"wytr.command.chatForceRecordMode.disable": "Incoming chat text recording §4Disabled",
 	"wytr.command.displayForceRecordMode.enable": "Display force recording §aEnabled",
 	"wytr.command.displayForceRecordMode.disable": "Display force recording §4Disabled",
+	"wytr.command.tooltipForceRecordMode.enable": "Tooltip force recording §aEnabled",
+	"wytr.command.tooltipForceRecordMode.disable": "Tooltip force recording §4Disabled",
 	"wytr.command.titleForceRecordMode.enable": "Title and Subtitle force recording §aEnabled",
 	"wytr.command.titleForceRecordMode.disable": "Title and Subtitle force recording §4Disabled",
 	"wytr.command.signTranslationRegistered": "Translation key registered."

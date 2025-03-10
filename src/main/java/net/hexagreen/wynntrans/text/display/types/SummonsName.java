@@ -12,7 +12,7 @@ public class SummonsName extends WynnDisplayText {
     private final Text timer;
 
     public static boolean typeChecker(Text text) {
-        return text.getString().matches("^.+'s§7 (?:Puppet|Effigy|Hound|Crow)\\n\\d+[ms]$");
+        return text.getString().matches(".+'s§7 (?:Puppet|Effigy|Hound|Crow)\\n§7\\d+[ms]");
     }
 
     public SummonsName(Text text) {

@@ -9,7 +9,7 @@ import java.util.List;
 public class ItemName extends WynnTooltipText {
     private boolean addiction = true;
 
-    public static boolean typeChecker(List<Text> text) {
+    public static boolean typeChecker(List<Text> texts) {
         return false;
     }
 
@@ -19,8 +19,8 @@ public class ItemName extends WynnTooltipText {
         return wrapped;
     }
 
-    public ItemName(List<Text> text) {
-        super(text);
+    public ItemName(List<Text> texts) {
+        super(texts);
     }
 
     public ItemName(Text text) {

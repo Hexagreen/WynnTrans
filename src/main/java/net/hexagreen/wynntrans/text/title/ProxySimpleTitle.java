@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.title;
 
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.title.types.SimpleTitle;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -38,6 +39,22 @@ public class ProxySimpleTitle extends SimpleTitle {
                 },
                 s -> s.replaceFirst("\\d+", "%s"),
                 s -> s.replaceAll("\\D", "")
+        ),
+        WORLD_EVENT_START_TIMER(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("Starts in (\\d+[hms] ?)+");
+                },
+                s -> "Starts in %s",
+                s -> ITime.translateTime(s.replaceFirst("Starts in ", ""))
+        ),
+        WORLD_EVENT_NEXT_WAVE(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("Next wave in \\d");
+                },
+                s -> "Next wave in %s",
+                s -> s.replaceFirst("Next wave in ", "")
         );
 
         private final Predicate<Text> template;

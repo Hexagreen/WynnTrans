@@ -100,6 +100,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 this.text = text;
                 this.args = new ArrayList<>();
                 this.flags = new ArrayList<>();
+                return;
             }
 
             List<Text> visited = new ArrayList<>();

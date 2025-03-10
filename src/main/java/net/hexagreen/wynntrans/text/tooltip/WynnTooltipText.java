@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.text.tooltip;
 
-import com.mojang.logging.LogUtils;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
@@ -9,45 +8,36 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class WynnTooltipText extends WynnTransText {
-    private static boolean lever = false;
-    private static boolean registered = true;
 
     protected static List<Text> colorCodedToStyledBatch(List<Text> textList) {
         return textList.parallelStream().map(WynnTooltipText::colorCodedToStyled).toList();
     }
 
-    public WynnTooltipText(List<Text> text) {
-        super(siblingsToText(text));
+    public WynnTooltipText(List<Text> texts) {
+        super(siblingsToText(texts));
         resultText = Text.empty();
     }
 
     public List<Text> text() {
-        long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_SUBTRACT) == 1) {
-            textRecorder(getSiblings());
-            return getSiblings();
-        }
         try {
             build();
-            textRecorder(resultText.getSiblings());
             return resultText.getSiblings();
         }
         catch(IndexOutOfBoundsException e) {
-            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
+            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
             debugClass.writeTextAsJSON(inputText, "OOB - Tooltip");
         }
         catch(TextTranslationFailException e) {
-            LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
+            WynnTrans.LOGGER.warn("Unprocessed tooltip message.\n", e);
             return new SimpleTooltip(getSiblings()).text();
         }
-        textRecorder(getSiblings());
         return getSiblings();
     }
 
@@ -57,39 +47,25 @@ public abstract class WynnTooltipText extends WynnTransText {
             return resultText;
         }
         catch(IndexOutOfBoundsException e) {
-            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
+            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
             debugClass.writeTextAsJSON(inputText, "OOB - Tooltip");
         }
         catch(TextTranslationFailException e) {
-            LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
+            WynnTrans.LOGGER.warn("Unprocessed tooltip message.\n", e);
         }
         return inputText;
     }
 
-    protected void textRecorder(List<Text> texts) {
-        boolean rawMode = false;
-        long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 0) lever = false;
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1 && !lever) registered = false;
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_LEFT_ALT) == 1) rawMode = true;
-        List<Text> target = texts.isEmpty() ? getSiblings() : texts;
-        if(!rawMode) target = colorCodedToStyledBatch(target);
-
-        if(!registered) {
-            WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(target, "Tooltip");
-            registered = true;
-            lever = true;
-        }
-    }
-
     protected Text mergeTextStyleSide(Text text) {
-        return mergeTextStyleSide(new Text[]{text});
+        List<Text> texts = new ArrayList<>();
+        texts.add(text);
+        return mergeTextStyleSide(texts);
     }
 
-    protected Text mergeTextStyleSide(Text[] texts) {
+    protected Text mergeTextStyleSide(List<Text> texts) {
         MutableText result = Text.empty();
         AtomicReference<StringBuilder> newBody = new AtomicReference<>(new StringBuilder());
-        AtomicReference<Style> newStyle = new AtomicReference<>(texts[0].getSiblings().getFirst().getStyle());
+        AtomicReference<Style> newStyle = new AtomicReference<>(texts.getFirst().getSiblings().getFirst().getStyle());
         for(Text text : texts) {
             text.visit((style, string) -> {
                 if(string.isEmpty()) return Optional.empty();

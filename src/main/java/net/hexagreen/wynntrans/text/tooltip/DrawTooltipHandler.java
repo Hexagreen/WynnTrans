@@ -1,41 +1,55 @@
 package net.hexagreen.wynntrans.text.tooltip;
 
-import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DrawTooltipHandler {
-    private static boolean lever = false;
-    private static boolean registered = true;
+    private List<Text> cacheKey;
+    private List<Text> cacheVal;
+    private boolean recordMode;
+
+    public DrawTooltipHandler() {
+        this.cacheKey = new ArrayList<>();
+        this.cacheVal = new ArrayList<>();
+    }
+
+    public void clearCache() {
+        this.cacheKey = new ArrayList<>();
+        this.cacheVal = new ArrayList<>();
+    }
+
+    public void toggleRecordMode() {
+        this.recordMode = !recordMode;
+        if(recordMode)
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.tooltipForceRecordMode.enable"));
+        else
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.tooltipForceRecordMode.disable"));
+    }
 
     public List<Text> translateTooltipText(List<Text> texts) {
         try {
-            return TooltipType.findAndRun(texts);
+            return getCacheOrTranslate(texts);
         }
         catch(Exception e) {
             for(Text text : texts) {
                 debugClass.writeTextAsJSON(text, "TooltipException");
             }
-            LogUtils.getLogger().error("[WynnTrans] Exception thrown in translating tooltip texts\n", e);
+            WynnTrans.LOGGER.error("Exception thrown in translating tooltip texts\n", e);
             return texts;
         }
     }
 
-    public Text translateTooltipText(Text text) {
-        long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 0) lever = false;
-        if(GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1 && !lever) registered = false;
-        if(!registered) {
-            debugClass.writeTextAsJSON(Text.literal(" "));
-            debugClass.writeTextAsJSON(text, "Tooltip1");
-            debugClass.writeTextAsJSON(Text.literal(" "));
-            registered = true;
-            lever = true;
+    private List<Text> getCacheOrTranslate(List<Text> texts) {
+        if(!texts.equals(cacheKey)) {
+            if(recordMode) WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(texts, "Tooltip");
+            cacheKey = texts;
+            cacheVal = TooltipType.findAndRun(texts);
         }
-        return text;
+        return cacheVal;
     }
 }

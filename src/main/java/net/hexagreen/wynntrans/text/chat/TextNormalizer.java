@@ -156,6 +156,11 @@ public abstract class TextNormalizer {
         textBody.forEach(sibling -> {
             if(sibling.getString().isEmpty()) return;
 
+            if(sibling.getString().matches("[\\n ]+")) {
+                currentString.append(sibling.getString());
+                return;
+            }
+
             if(argsFilter(sibling)) {
                 args.add(sibling);
                 flags.add(true);

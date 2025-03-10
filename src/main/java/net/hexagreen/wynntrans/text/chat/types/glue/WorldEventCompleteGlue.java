@@ -40,6 +40,10 @@ public class WorldEventCompleteGlue extends TextGlue {
             count++;
             return true;
         }
+        else if(count == 6 && text.getString().isBlank()) {
+            pop();
+            return true;
+        }
         else {
             pop();
             return true;

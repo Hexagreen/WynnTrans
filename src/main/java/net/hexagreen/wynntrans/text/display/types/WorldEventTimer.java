@@ -10,7 +10,7 @@ public class WorldEventTimer extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("^Starts in \\d+[hms]|^\\d+ targets? remains?");
+        return text.getString().matches("^Starts in (\\d+[hms] ?)+|^\\d+ targets? remains?");
     }
 
     public WorldEventTimer(Text text) {

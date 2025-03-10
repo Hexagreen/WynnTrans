@@ -12,8 +12,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public enum TitleType {
-    EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker, true),
-    INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker, true),
+    EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker, false),
+    INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker, false),
     CRATE_REWARD_TIER(CrateRewardTier::new, CrateRewardTier::typeChecker, false),
 
     PROXY_TITLE(ProxySimpleTitle::new, ProxySimpleTitle::typeChecker, true),

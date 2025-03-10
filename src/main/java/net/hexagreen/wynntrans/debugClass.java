@@ -7,8 +7,6 @@ import net.minecraft.text.Text;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class debugClass {
     private static final String path = FabricLoader.getInstance().getGameDir().resolve("WynnTrans") + File.separator;
@@ -35,15 +33,5 @@ public class debugClass {
 
     public static void writeTextAsJSON(Text text) {
         debugClass.writeTextAsJSON(text, "");
-    }
-
-    public static String[] readTextListFromJSON() {
-        try {
-            String str = Files.readString(Paths.get("D:/debug/json.txt"));
-            return str.split("\r\n~~~~~\r\n");
-        }
-        catch(Exception ignored) {
-        }
-        return new String[]{"EMPTY"};
     }
 }
