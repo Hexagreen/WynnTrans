@@ -1,29 +1,21 @@
 package net.hexagreen.wynntrans;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.hexagreen.wynntrans.text.chat.OnGameMessageHandler;
 import net.hexagreen.wynntrans.text.display.DisplayEntityHandler;
+import net.hexagreen.wynntrans.text.scoreboard.ScoreboardSidebarHandler;
 import net.hexagreen.wynntrans.text.sign.UseBlockHandler;
 import net.hexagreen.wynntrans.text.title.TitleHandler;
 import net.hexagreen.wynntrans.text.tooltip.DrawTooltipHandler;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class WynnTrans implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("WynnTrans");
@@ -32,10 +24,10 @@ public class WynnTrans implements ModInitializer {
     public static DisplayEntityHandler displayEntityHandler;
     public static DrawTooltipHandler drawTooltipHandler;
     public static TitleHandler titleHandler;
+    public static ScoreboardSidebarHandler scoreboardSidebarHandler;
     public static boolean translationTargetSignMarker;
     public static boolean playerNameCacheExpired;
     public static String wynnPlayerName;
-    private static Iterator<String> debugString;
 
     public static void refreshWynnPlayerName() {
         WynnTransFileManager.whoAmI();
@@ -53,18 +45,17 @@ public class WynnTrans implements ModInitializer {
         displayEntityHandler = new DisplayEntityHandler();
         drawTooltipHandler = new DrawTooltipHandler();
         titleHandler = new TitleHandler();
+        scoreboardSidebarHandler = new ScoreboardSidebarHandler();
         translationTargetSignMarker = false;
         playerNameCacheExpired = true;
         wynnPlayerName = "DummyEmptyPlayerName";
 
         LOGGER.info("Hello, Wynn!");
 
-        debugString = List.of(debugClass.readTextListFromJSON()).iterator();
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CommandReadJson.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleBackgroundTextRegistration.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleDisplayTextRecordMode.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTooltipTextRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTitleTextRecordMode.register(dispatcher));
 
         ClientTickEvents.START_WORLD_TICK.register((StartTick) -> onGameMessageHandler.onStartWorldTick());
@@ -73,20 +64,6 @@ public class WynnTrans implements ModInitializer {
         ScreenEvents.AFTER_INIT.register((c, s, w, h) -> {
             if("\uDAFF\uDFD5\uE01F".equals(s.getTitle().getString())) expireWynnPlayerName();
         });
-    }
-
-    private static class CommandReadJson {
-        private static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-            dispatcher.register(CommandManager.literal("readJson").executes(CommandReadJson::run));
-        }
-
-        private static int run(CommandContext<ServerCommandSource> context) {
-            if(debugString.hasNext()) {
-                @SuppressWarnings("DataFlowIssue") Text readText = Text.Serialization.fromJson(debugString.next(), MinecraftClient.getInstance().world.getRegistryManager());
-                context.getSource().sendMessage(readText);
-            }
-            return 1;
-        }
     }
 
     private static class CommandToggleRecordMode {
@@ -127,6 +104,20 @@ public class WynnTrans implements ModInitializer {
 
         private static int run() {
             displayEntityHandler.toggleRecordMode();
+            return 1;
+        }
+    }
+
+    private static class CommandToggleTooltipTextRecordMode {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("recordTooltip")
+                                    .executes(context -> run())));
+        }
+
+        private static int run() {
+            drawTooltipHandler.toggleRecordMode();
             return 1;
         }
     }

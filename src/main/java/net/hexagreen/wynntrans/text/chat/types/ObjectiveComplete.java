@@ -18,9 +18,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
     private static final String func = rootKey + "func.";
     private final Style titleStyle;
     private final Style objectiveNameStyle;
-    private String keyObjectiveName;
-    private String valObjectiveName;
-    private Object argObjectiveName = new Object[0];
+    private final MutableText objective;
     private String keyEName = null;
     private String valEName = null;
     private Style styleEName = null;
@@ -31,9 +29,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
         this.titleStyle = parseStyleCode(getSibling(1).getString().replaceAll("\\[.+]", "").replaceAll(" ", ""));
 
         this.objectiveNameStyle = parseStyleCode(getSibling(2).getString().replaceAll("(?!§.) +.+", ""));
-        this.valObjectiveName = getSibling(2).getString().replaceAll("^§. +", "");
-        this.keyObjectiveName = translationKey + valObjectiveName.replace(" ", "");
-        normalizeKeyVal();
+        this.objective = getObjective();
 
         if(text.getSiblings().size() == 8) {
             this.styleEName = parseStyleCode(getSibling(4).getString());
@@ -56,14 +52,7 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
                 .append(centerAlign(titleText))
                 .append("\n");
 
-        if(WTS.checkTranslationExist(keyObjectiveName, valObjectiveName)) {
-            MutableText text = Text.translatable(keyObjectiveName, argObjectiveName).setStyle(objectiveNameStyle);
-            resultText.append(centerAlign(text));
-        }
-        else {
-            MutableText text = Text.literal(valObjectiveName).setStyle(objectiveNameStyle);
-            resultText.append(centerAlign(text));
-        }
+        resultText.append(centerAlign(objective.setStyle(objectiveNameStyle)));
 
         resultText.append("\n\n");
 
@@ -106,12 +95,8 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
                 .append("\n");
     }
 
-    private void normalizeKeyVal() {
-        Objectives normalizedObjective = Objectives.findNormalized(valObjectiveName);
-        if(normalizedObjective != Objectives.NO_TYPE) {
-            this.keyObjectiveName = translationKey + normalizedObjective.getNormalizedKey();
-            this.valObjectiveName = normalizedObjective.getNormalizedVal();
-            this.argObjectiveName = normalizedObjective.getNormalizedArg();
-        }
+    private MutableText getObjective() {
+        Objectives normalizedObjective = Objectives.findNormalized(getSibling(2).getString().replaceAll("^§. +", ""));
+        return normalizedObjective.getTranslatedText();
     }
 }

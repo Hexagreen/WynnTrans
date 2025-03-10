@@ -17,12 +17,12 @@ public class DialogHistory extends WynnTooltipText {
     private static final Pattern npcDialogPattern = Pattern.compile("^\\[\\d+/\\d+]");
     private static final Pattern pageCounterPattern = Pattern.compile("Page (\\d+) of (\\d+)");
 
-    public static boolean typeChecker(List<Text> text) {
-        return text.getFirst().getString().equals("Dialogue History");
+    public static boolean typeChecker(List<Text> texts) {
+        return texts.getFirst().getString().equals("Dialogue History");
     }
 
-    public DialogHistory(List<Text> text) {
-        super(colorCodedToStyledBatch(text));
+    public DialogHistory(List<Text> texts) {
+        super(colorCodedToStyledBatch(texts));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class DialogHistory extends WynnTooltipText {
             if(force) dBuffer.add(text);
             else if(!dBuffer.isEmpty()) dBuffer.add(text);
             else return false;
-            Text tmpText = mergeTextStyleSide(dBuffer.toArray(Text[]::new));
+            Text tmpText = mergeTextStyleSide(dBuffer);
             Text translated = new NpcDialog(tmpText).setNoTranslationAddiction().text();
             if(translated.getSiblings().get(1).getContent() instanceof TranslatableTextContent) {
                 storage.add(translated);
@@ -113,7 +113,7 @@ public class DialogHistory extends WynnTooltipText {
 
         private void addToNBuffer(Text text) {
             nBuffer.add(text);
-            Text tmpText = mergeTextStyleSide(nBuffer.toArray(Text[]::new));
+            Text tmpText = mergeTextStyleSide(nBuffer);
             Text translated = new Narration(tmpText).setNoTranslationAddiction().text();
             if(translated.getContent() instanceof TranslatableTextContent) {
                 storage.add(translated);

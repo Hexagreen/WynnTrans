@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.title;
 
-import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -27,7 +27,7 @@ public class TitleHandler {
         }
         catch(Exception e) {
             debugClass.writeTextAsJSON(text, "TitleException");
-            LogUtils.getLogger().error("[WynnTrans] Exception thrown in translating title texts\n", e);
+            WynnTrans.LOGGER.error("Exception thrown in translating title texts\n", e);
             return text;
         }
     }
@@ -39,7 +39,7 @@ public class TitleHandler {
         }
         catch(Exception e) {
             debugClass.writeTextAsJSON(text, "SubtitleException");
-            LogUtils.getLogger().error("[WynnTrans] Exception thrown in translating subtitle texts\n", e);
+            WynnTrans.LOGGER.error("Exception thrown in translating subtitle texts\n", e);
             return text;
         }
     }

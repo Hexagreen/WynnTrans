@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class ArcherTrap extends WynnDisplayText {
     private final boolean arming;
@@ -9,7 +11,7 @@ public class ArcherTrap extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("§b\\+\\d+% §7Damage") || text.getString().equals("Arming...");
+        return text.getString().matches("§b\\+\\d+% §7Damage") || text.getString().equals("§eArming...");
     }
 
     public ArcherTrap(Text text) {
@@ -25,8 +27,9 @@ public class ArcherTrap extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        if(arming) resultText = Text.translatable(translationKey).setStyle(getStyle());
-        else resultText = Text.translatable(translationKey + ".charge", damage).setStyle(getStyle());
+        if(arming) resultText = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
+        else
+            resultText = Text.translatable(translationKey + ".charge", damage).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
 
     }
 }

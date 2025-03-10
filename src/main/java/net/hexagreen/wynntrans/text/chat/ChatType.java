@@ -75,6 +75,7 @@ public enum ChatType {
 
     CRAFTED_STAT_REQ(ItemSkillRequirement::new, ItemSkillRequirement::typeChecker),
     CRAFTED_LEVEL_REQ(ItemLevelRequirement::new, ItemLevelRequirement::typeChecker),
+    EQUIP_QUEST_REQ(EquipQuestRequirement::new, EquipQuestRequirement::typeChecker),
     FINISH_TRADING(TradeFinish::new, TradeFinish::typeChecker),
     PARTIAL_TRADING(TradePartial::new, TradePartial::typeChecker),
     POWDER_MASTER(PowderMaster::new, PowderMaster::typeChecker),

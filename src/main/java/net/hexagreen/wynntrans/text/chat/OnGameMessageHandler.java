@@ -129,7 +129,7 @@ public class OnGameMessageHandler {
             return ChatType.findAndRun(text);
         }
         catch(Exception e) {
-            LOGGER.warn("Error in analyseSinglelineText");
+            LOGGER.error("Error in analyseSinglelineText");
             throw e;
         }
     }

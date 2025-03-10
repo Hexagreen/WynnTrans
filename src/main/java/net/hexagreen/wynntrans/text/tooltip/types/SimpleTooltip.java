@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class SimpleTooltip extends WynnTooltipText {
 
-    public SimpleTooltip(List<Text> text) {
-        super(text);
+    public SimpleTooltip(List<Text> texts) {
+        super(texts);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SimpleTooltip extends WynnTooltipText {
 
     private boolean pressedAddTranslationKey() {
         long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        return GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_MULTIPLY) == 1
+        return GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1
                 && GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_LEFT_CONTROL) == 1;
     }
 

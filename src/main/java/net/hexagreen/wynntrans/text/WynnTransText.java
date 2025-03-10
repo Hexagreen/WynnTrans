@@ -17,11 +17,22 @@ public abstract class WynnTransText {
 
     protected static final String rootKey = "wytr.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
+    protected static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
-    private static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
     protected final String translationKey;
     protected final MutableText inputText;
     protected MutableText resultText;
+
+    protected static Text flatText(Text text) {
+        MutableText linear = text.copyContentOnly().setStyle(text.getStyle());
+        for(Text sibling : text.getSiblings()) {
+            sibling.visit((s, t) -> {
+                linear.append(Text.literal(t).setStyle(s));
+                return Optional.empty();
+            }, text.getStyle());
+        }
+        return linear;
+    }
 
     protected static Text colorCodedToStyled(Text text) {
         List<Text> list = new ArrayList<>();

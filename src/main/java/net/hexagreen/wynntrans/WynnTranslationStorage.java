@@ -21,6 +21,10 @@ public class WynnTranslationStorage {
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
         rulebooks = new Rulebooks();
+
+        WynnTrans.drawTooltipHandler.clearCache();
+        WynnTrans.scoreboardSidebarHandler.clearCache();
+
         LOGGER.info("Reloaded Wynncraft Text Language Map.");
     }
 

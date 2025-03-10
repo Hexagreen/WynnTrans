@@ -7,6 +7,7 @@ import net.minecraft.text.Text;
 
 public class WorldEventName extends WynnDisplayText {
     private final String keyWorldEvent;
+    private final String valWorldEvent;
     private final boolean timerMode;
 
     public static boolean typeChecker(Text text) {
@@ -17,8 +18,9 @@ public class WorldEventName extends WynnDisplayText {
 
     public WorldEventName(Text text) {
         super(text);
-        this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(getContentString());
-        this.timerMode = getContentString().matches("\\d+ (hour|minute|second)s? left");
+        this.valWorldEvent = getContentString();
+        this.keyWorldEvent = "wytr.worldEvent." + normalizeStringForKey(valWorldEvent);
+        this.timerMode = valWorldEvent.matches("\\d+ (hour|minute|second)s? left");
     }
 
     @Override
@@ -29,9 +31,11 @@ public class WorldEventName extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Style style = Style.EMPTY.withColor(0xEBF7FF);
-        if(!timerMode) resultText = Text.translatable(keyWorldEvent).setStyle(style);
+        if(!timerMode) {
+            resultText = Text.translatableWithFallback(keyWorldEvent, valWorldEvent).setStyle(style);
+        }
         else {
-            Text time = ITime.translateTime(getContentString().replaceFirst(" left", ""));
+            Text time = ITime.translateTime(valWorldEvent.replaceFirst(" left", ""));
             resultText = Text.translatable("wytr.display.worldEvent.timeLeft", time).setStyle(style);
         }
     }

@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.title.types;
 
+import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.title.WynnTitleText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -8,18 +9,18 @@ import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleTitle extends WynnTitleText {
     private final String keyTitle;
     private final boolean canSimplify;
     private String simplifiedKey;
+    private boolean recorded;
 
     public SimpleTitle(Text text) {
-        super(text);
+        super(flatText(text));
         this.keyTitle = translationKey + DigestUtils.sha1Hex(text.getString());
-        this.canSimplify = isCanSimplify(text);
+        this.canSimplify = isCanSimplify(inputText);
+        this.recorded = false;
     }
 
     @Override
@@ -37,6 +38,7 @@ public class SimpleTitle extends WynnTitleText {
                     resultText = newTranslate(simplifiedKey).setStyle(contentStyle);
                 }
                 else {
+                    recordUnregistered();
                     resultText = Text.literal(contentString).setStyle(contentStyle);
                 }
             }
@@ -44,6 +46,7 @@ public class SimpleTitle extends WynnTitleText {
                 resultText = newTranslate(keyTitle).setStyle(contentStyle);
             }
             else {
+                recordUnregistered();
                 resultText = Text.literal(contentString).setStyle(contentStyle);
             }
         }
@@ -63,6 +66,7 @@ public class SimpleTitle extends WynnTitleText {
                             resultText.append(newTranslate(simplifiedKey).setStyle(styleSibling));
                         }
                         else {
+                            recordUnregistered();
                             resultText.append(sibling);
                         }
                     }
@@ -70,6 +74,7 @@ public class SimpleTitle extends WynnTitleText {
                         resultText.append(newTranslate(keySibling).setStyle(styleSibling));
                     }
                     else {
+                        recordUnregistered();
                         resultText.append(sibling);
                     }
                 }
@@ -87,16 +92,15 @@ public class SimpleTitle extends WynnTitleText {
     }
 
     private boolean isCanSimplify(Text text) {
-        AtomicInteger counter = new AtomicInteger();
+        int counter = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        text.visit((s, t) -> {
-            if(s.getFont().equals(Identifier.of("minecraft:default"))) {
-                counter.getAndIncrement();
-                stringBuilder.append(t);
+        for(Text sibling : text.getSiblings()) {
+            if(!sibling.getString().isEmpty() && sibling.getStyle().getFont().equals(Identifier.of("minecraft:default"))) {
+                counter++;
+                stringBuilder.append(sibling.getString());
             }
-            return Optional.empty();
-        }, text.getStyle());
-        if(counter.get() == 1) {
+        }
+        if(counter == 1) {
             this.simplifiedKey = translationKey + DigestUtils.sha1Hex(getValText(stringBuilder.toString()));
             return true;
         }
@@ -109,5 +113,10 @@ public class SimpleTitle extends WynnTitleText {
 
     protected String getValText(String original) {
         return original;
+    }
+
+    private void recordUnregistered() {
+        if(!recorded) debugClass.writeTextAsJSON(inputText, "Title");
+        recorded = true;
     }
 }

@@ -7,37 +7,14 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class ShamanTotem extends WynnDisplayText {
-    private final boolean isHealingTotem;
-    private Text timer;
-    private Text owner;
-    private MutableText icon;
-    private String heal;
 
     public static boolean typeChecker(Text text) {
-        return text.getString().matches("§c\\d+s\\n§c\\+\\d+❤§7/s") || text.getString().matches(".+'s Totem\\n\\uE01F \\d+s");
+        return text.getString().matches(".+'s Totem\\n(\\+\\d+❤/s )?\\uE01F \\d+s");
     }
 
     public ShamanTotem(Text text) {
-        super(text);
-        this.isHealingTotem = text.getString().contains("❤");
-        if(isHealingTotem) {
-            String[] split = text.getString().split("\\n");
-            this.timer = new Timer(Text.literal(split[0])).text();
-            this.heal = split[1];
-        }
-        else {
-            Matcher matcher = Pattern.compile("(.+)'s Totem\\n\\uE01F (\\d+s)").matcher(text.getString());
-            if(matcher.find()) {
-                this.owner = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
-                this.timer = ITime.translateTime(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-                this.icon = text.getSiblings().getFirst().getSiblings().getFirst().getSiblings().getFirst().copy();
-                icon.setStyle(icon.getStyle().withColor(Formatting.LIGHT_PURPLE));
-            }
-        }
+        super(flatText(text));
     }
 
     @Override
@@ -47,12 +24,24 @@ public class ShamanTotem extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+        boolean isHealingTotem = getSibling(1).getString().contains("❤");
+
+        Text owner = Text.literal(getContentString().replaceFirst("'s ", ""))
+                .setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        Text icon = getSiblings().get(getSiblings().size() - 3);
+        Text timer = ITime.translateTime(getSiblings().getLast().getString())
+                .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+
+        MutableText info = Text.empty();
+
         if(isHealingTotem) {
-            resultText = Text.empty();
-            resultText.append(timer).append("\n").append(heal);
+            Text heal = getSibling(1);
+            Text unit = ITime.translateTime(getSibling(2).getString())
+                    .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            info.append(heal).append(unit).append(" ");
         }
-        else {
-            resultText = Text.translatable(translationKey, owner, icon, timer).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        }
+        info.append(icon).append(" ").append(timer);
+
+        resultText = Text.translatable(translationKey, owner, info).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
     }
 }

@@ -53,6 +53,7 @@ public class SimpleSystemText extends WynnSystemText {
                     if(resultText == null) resultText = originText.copy();
                     if(translationRegisterControl && !recorded) {
                         debugClass.writeTextAsJSON(originText, "SystemText");
+                        debugClass.writeTextAsJSON(inputText, "    --    ");
                         recorded = true;
                     }
                 }

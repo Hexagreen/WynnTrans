@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.chat;
 
-import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.chat.types.SimpleSystemText;
 import net.minecraft.text.MutableText;
@@ -116,11 +116,12 @@ public abstract class WynnSystemText extends WynnChatText {
             return resultText;
         }
         catch(IndexOutOfBoundsException e) {
-            LogUtils.getLogger().warn("[WynnTrans] IndexOutOfBound occurred.\n", e);
+            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
             debugClass.writeTextAsJSON(originText, "OutOfBound");
+            debugClass.writeTextAsJSON(inputText, "    --    ");
         }
         catch(TextTranslationFailException e) {
-            LogUtils.getLogger().warn("[WynnTrans] Unprocessed chat message has been recorded.\n", e);
+            WynnTrans.LOGGER.warn("Unprocessed chat message has been recorded.\n", e);
             return new SimpleSystemText(originText).text();
         }
         return originText.copy();

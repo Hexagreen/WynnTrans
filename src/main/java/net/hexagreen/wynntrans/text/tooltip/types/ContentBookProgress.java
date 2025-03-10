@@ -15,14 +15,14 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
 
     private final boolean isSecretDiscovery;
 
-    public static boolean typeChecker(List<Text> text) {
-        return text.getFirst().getString().matches(".+ Progress$")
-                && text.getLast().getString().matches(".+\\d+ of \\d+ completed");
+    public static boolean typeChecker(List<Text> texts) {
+        return texts.getFirst().getString().matches(".+ Progress$")
+                && texts.getLast().getString().matches(".+\\d+ of \\d+ completed");
     }
 
-    public ContentBookProgress(List<Text> text) {
-        super(colorCodedToStyledBatch(text));
-        this.isSecretDiscovery = getSibling(2).getString().equals("Categories");
+    public ContentBookProgress(List<Text> texts) {
+        super(colorCodedToStyledBatch(texts));
+        this.isSecretDiscovery = getSibling(0).getString().contains("Secret Discoveries");
     }
 
     @Override
