@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class WynnScoreboardText extends WynnTransText {
     protected Style GRAY = Style.EMPTY.withColor(Formatting.GRAY);
 
-    protected static List<Text> colorCodedToStyledBatch(List<Text> textList) {
+    private static List<Text> colorCodedToStyledBatch(List<Text> textList) {
         return textList.parallelStream().map(WynnScoreboardText::colorCodedToStyled).toList();
     }
 

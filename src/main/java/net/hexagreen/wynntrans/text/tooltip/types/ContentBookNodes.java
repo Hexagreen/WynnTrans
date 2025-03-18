@@ -23,6 +23,7 @@ public class ContentBookNodes extends WynnTooltipText {
             .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.DARK_PURPLE)));
 
     public static boolean typeChecker(List<Text> texts) {
+        if(texts.isEmpty()) return false;
         Text reformed = colorCodedToStyled(texts.getFirst());
         if(reformed.getSiblings().size() != 2) return false;
         return reformed.getSiblings().get(1).getString()
@@ -32,7 +33,7 @@ public class ContentBookNodes extends WynnTooltipText {
     }
 
     public ContentBookNodes(List<Text> texts) {
-        super(colorCodedToStyledBatch(texts));
+        super(texts);
     }
 
     @Override

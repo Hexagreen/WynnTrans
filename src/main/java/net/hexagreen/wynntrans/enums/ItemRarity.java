@@ -1,7 +1,10 @@
 package net.hexagreen.wynntrans.enums;
 
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+
+import java.util.Locale;
 
 public enum ItemRarity {
     NORMAL(Text.translatable("wytr.rarity.normal").setStyle(Style.EMPTY.withColor(0xFFFFFF))),
@@ -13,13 +16,17 @@ public enum ItemRarity {
     SET(Text.translatable("wytr.rarity.set").setStyle(Style.EMPTY.withColor(0x55FF55))),
     CRAFTED(Text.translatable("wytr.rarity.crafted").setStyle(Style.EMPTY.withColor(0x00AAAA)));
 
-    private final Text rarity;
+    private final MutableText rarity;
 
-    ItemRarity(Text rarity) {
+    public static MutableText getRarity(String rarity) {
+        return valueOf(rarity.toUpperCase(Locale.ENGLISH)).rarity;
+    }
+
+    ItemRarity(MutableText rarity) {
         this.rarity = rarity;
     }
 
-    public Text getRarity() {
+    public MutableText getRarity() {
         return rarity;
     }
 }

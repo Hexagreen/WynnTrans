@@ -8,6 +8,7 @@
   "client": [
     "MixinClientPlayNetworkHandler",
     "MixinDisplayEntityRenderer",
+    "MixinDrawContext",
     "MixinEntityRenderer",
     "MixinInGameHud",
     "MixinItemStack",

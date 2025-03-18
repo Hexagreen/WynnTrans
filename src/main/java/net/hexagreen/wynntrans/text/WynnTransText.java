@@ -185,6 +185,54 @@ public abstract class WynnTransText {
         return wrapped;
     }
 
+    protected Text styleToColorCode(List<Text> siblings, Style overrideStyle) {
+        StringBuilder stringBuilder = new StringBuilder();
+        TextColor oColor = overrideStyle.getColor();
+        boolean oBold = overrideStyle.isBold();
+        boolean oItalic = overrideStyle.isItalic();
+        boolean oUnder = overrideStyle.isUnderlined();
+        boolean oStrike = overrideStyle.isStrikethrough();
+        boolean oObfuscated = overrideStyle.isObfuscated();
+        boolean codeAppended = false;
+
+        for(Text text : siblings) {
+            Style style = text.getStyle();
+            TextColor color = style.getColor();
+
+            if(codeAppended) {
+                stringBuilder.append(Formatting.RESET);
+                codeAppended = false;
+            }
+            if(color != null && !color.equals(oColor)) {
+                Formatting formatting = Formatting.byName(color.getName());
+                if(formatting != null) stringBuilder.append(formatting);
+                codeAppended = true;
+            }
+            if(style.isBold() && !oBold) {
+                stringBuilder.append(Formatting.BOLD);
+                codeAppended = true;
+            }
+            if(style.isItalic() && !oItalic) {
+                stringBuilder.append(Formatting.ITALIC);
+                codeAppended = true;
+            }
+            if(style.isUnderlined() && !oUnder) {
+                stringBuilder.append(Formatting.UNDERLINE);
+                codeAppended = true;
+            }
+            if(style.isStrikethrough() && !oStrike) {
+                stringBuilder.append(Formatting.STRIKETHROUGH);
+                codeAppended = true;
+            }
+            if(style.isObfuscated() && !oObfuscated) {
+                stringBuilder.append(Formatting.OBFUSCATED);
+                codeAppended = true;
+            }
+            stringBuilder.append(text.getString());
+        }
+        return Text.literal(stringBuilder.toString()).setStyle(overrideStyle);
+    }
+
     protected Text rainbowDecoration(Text text) {
         String[] rainbows = {"§4", "§c", "§6", "§e", "§a", "§2", "§b", "§9", "§5", "§d"};
         StringBuilder sb = new StringBuilder();

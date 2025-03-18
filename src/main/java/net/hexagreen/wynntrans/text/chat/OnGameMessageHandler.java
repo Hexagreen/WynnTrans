@@ -62,6 +62,7 @@ public class OnGameMessageHandler {
     }
 
     public boolean translateChatText(Text text) {
+        if(MinecraftClient.getInstance().world == null) return false;
         if(recordAll) debugClass.writeTextAsJSON(text, "Record");
         if(text.getContent() instanceof TranslatableTextContent) return false;
         try {

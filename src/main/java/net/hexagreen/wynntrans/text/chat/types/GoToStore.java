@@ -12,6 +12,7 @@ public class GoToStore extends WynnChatText {
     private final String val;
 
     public static boolean typeChecker(Text text) {
+        if(text.getString().contains("\uDAFF\uDFFC")) return false;
         return Pattern.compile("wynncraft\\.com/store").matcher(text.getString()).find();
     }
 

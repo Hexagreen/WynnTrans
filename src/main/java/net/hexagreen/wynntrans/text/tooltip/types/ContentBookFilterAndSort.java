@@ -9,11 +9,12 @@ import java.util.List;
 public class ContentBookFilterAndSort extends WynnTooltipText {
 
     public static boolean typeChecker(List<Text> texts) {
+        if(texts.isEmpty()) return false;
         return texts.getFirst().getString().equals("Filter") || texts.getFirst().getString().equals("Sort");
     }
 
     public ContentBookFilterAndSort(List<Text> texts) {
-        super(colorCodedToStyledBatch(texts));
+        super(texts);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class ContentBookFilterAndSort extends WynnTooltipText {
             resultText = new SimpleTooltip(getSiblings().subList(0, getSiblings().size() - 3)).textAsMutable();
         }
         else {
-            resultText = new SimpleTooltip(getSiblings().subList(0, 1)).textAsMutable();
+            resultText = new SimpleTooltip(getSiblings().subList(0, 2)).textAsMutable();
             for(Text line : getSiblings().subList(2, getSiblings().size() - 3)) {
                 String v = line.getSiblings().get(1).getString();
                 String k = "wytr.content." + normalizeStringForKey(v);

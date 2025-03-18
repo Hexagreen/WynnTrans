@@ -44,19 +44,30 @@ public class ContentTracking extends WynnScoreboardText {
         resultText.append(head);
 
         Text targetName = texts.removeFirst();
-        String[] split = targetName.getString().split(" \\(");
+        String targetNameString;
+        String leftTime;
+        if(category.equals("World Event")) {
+            String[] split = targetName.getString().split(" \\(");
+            targetNameString = split[0];
+            leftTime = split.length > 1 ? split[1] : null;
+        }
+        else {
+            targetNameString = targetName.getString();
+            leftTime = null;
+        }
+
         MutableText contentName;
 
-        this.normalizedName = normalizeStringForKey(split[0]);
+        this.normalizedName = normalizeStringForKey(targetNameString);
         if(!category.equals("Dungeon")) {
-            contentName = Text.translatableWithFallback(baseKey + normalizedName, split[0])
+            contentName = Text.translatableWithFallback(baseKey + normalizedName, targetNameString)
                     .setStyle(targetName.getStyle());
         }
         else {
-            contentName = Dungeons.getDungeons(split[0]).getDungeonName().setStyle(targetName.getStyle());
+            contentName = Dungeons.getDungeons(targetNameString).getDungeonName().setStyle(targetName.getStyle());
         }
-        if(split.length > 1) {
-            Text timer = ITime.translateTime(split[1].replace(" left)", ""));
+        if(leftTime != null) {
+            Text timer = ITime.translateTime(leftTime.replace(" left)", ""));
             contentName.append(" ").append(Text.translatable(translationKey + ".timer", timer));
         }
         resultText.append(contentName);

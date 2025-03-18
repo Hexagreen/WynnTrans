@@ -6,21 +6,21 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-public class SummonsName extends WynnDisplayText {
+public class SummonsNameLiteral extends WynnDisplayText {
     private final String owner;
     private final Text summons;
     private final Text timer;
 
     public static boolean typeChecker(Text text) {
-        return text.getString().matches(".+'s (?:Puppet|Effigy|Bird|Hound|Crow)(?:\\n. \\d+[ms])?");
+        return text.getString().matches(".+'s§7 (?:Puppet|Effigy|Bird|Hound|Crow)\\n§7\\d+[ms]");
     }
 
-    public SummonsName(Text text) {
+    public SummonsNameLiteral(Text text) {
         super(text);
         String str = inputText.getString();
-        this.owner = str.replaceFirst("(?s)'s .+", "");
-        this.summons = Text.literal(str.replaceAll(".+'s |\\n.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        this.timer = ITime.translateTime(str.replaceFirst(".+\\n. ", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        this.owner = str.replaceFirst("'s§7 .+\\n.+", "");
+        this.summons = Text.literal(str.replaceAll(".+'s§7 |\\n.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        this.timer = ITime.translateTime(str.replaceFirst(".+\\n", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
     }
 
     @Override

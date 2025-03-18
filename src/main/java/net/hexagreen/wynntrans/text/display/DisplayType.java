@@ -46,7 +46,7 @@ public enum DisplayType {
     WORLD_EVENT_TIMER(WorldEventTimer::new, WorldEventTimer::typeChecker),
     WORLD_EVENT_BANNER(WorldEventBanner::new, WorldEventBanner::typeChecker),
     MOB_TOTEM(MobTotem::new, MobTotem::typeChecker),
-    SUMMONS_NAME(SummonsName::new, SummonsName::typeChecker),
+    SUMMONS_NAME(SummonsNameLiteral::new, SummonsNameLiteral::typeChecker),
     ARCHER_TRAP(ArcherTrap::new, ArcherTrap::typeChecker),
     PET_NAME(PetName::new, PetName::typeChecker),
 

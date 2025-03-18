@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class SimpleTooltip extends WynnTooltipText {
+    private final List<Text> original;
 
     public SimpleTooltip(List<Text> texts) {
         super(texts);
+        this.original = texts;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class SimpleTooltip extends WynnTooltipText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        for(Text text : getSiblings()) {
+        for(Text text : original) {
             if(hasTranslation(text) || pressedAddTranslationKey()) {
                 resultText.append(applyTranslation(text));
             }

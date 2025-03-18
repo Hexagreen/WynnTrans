@@ -6,16 +6,16 @@ import net.minecraft.text.Text;
 import java.util.Locale;
 
 public enum CharacterClass {
-    ARCHER(Text.translatable("wytr.classes.archer"), Text.translatable("wytr.classes.archer.weapon")),
-    WARRIOR(Text.translatable("wytr.classes.warrior"), Text.translatable("wytr.classes.warrior.weapon")),
-    MAGE(Text.translatable("wytr.classes.mage"), Text.translatable("wytr.classes.mage.weapon")),
-    ASSASSIN(Text.translatable("wytr.classes.assassin"), Text.translatable("wytr.classes.assassin.weapon")),
-    SHAMAN(Text.translatable("wytr.classes.shaman"), Text.translatable("wytr.classes.shaman.weapon")),
-    HUNTER(Text.translatable("wytr.classes.archer_alt"), Text.translatable("wytr.classes.archer.weapon")),
-    KNIGHT(Text.translatable("wytr.classes.warrior_alt"), Text.translatable("wytr.classes.warrior.weapon")),
-    DARK_WIZARD(Text.translatable("wytr.classes.mage_alt"), Text.translatable("wytr.classes.mage.weapon")),
-    NINJA(Text.translatable("wytr.classes.assassin_alt"), Text.translatable("wytr.classes.assassin.weapon")),
-    SKYSEER(Text.translatable("wytr.classes.shaman_alt"), Text.translatable("wytr.classes.shaman.weapon"));
+    ARCHER(Text.translatable("wytr.class.archer"), Text.translatable("wytr.class.archer.weapon")),
+    WARRIOR(Text.translatable("wytr.class.warrior"), Text.translatable("wytr.class.warrior.weapon")),
+    MAGE(Text.translatable("wytr.class.mage"), Text.translatable("wytr.class.mage.weapon")),
+    ASSASSIN(Text.translatable("wytr.class.assassin"), Text.translatable("wytr.class.assassin.weapon")),
+    SHAMAN(Text.translatable("wytr.class.shaman"), Text.translatable("wytr.class.shaman.weapon")),
+    HUNTER(Text.translatable("wytr.class.archer_alt"), Text.translatable("wytr.class.archer.weapon")),
+    KNIGHT(Text.translatable("wytr.class.warrior_alt"), Text.translatable("wytr.class.warrior.weapon")),
+    DARK_WIZARD(Text.translatable("wytr.class.mage_alt"), Text.translatable("wytr.class.mage.weapon")),
+    NINJA(Text.translatable("wytr.class.assassin_alt"), Text.translatable("wytr.class.assassin.weapon")),
+    SKYSEER(Text.translatable("wytr.class.shaman_alt"), Text.translatable("wytr.class.shaman.weapon"));
 
     private final MutableText className;
     private final MutableText weapon;

@@ -18,11 +18,12 @@ public class DialogHistory extends WynnTooltipText {
     private static final Pattern pageCounterPattern = Pattern.compile("Page (\\d+) of (\\d+)");
 
     public static boolean typeChecker(List<Text> texts) {
+        if(texts.isEmpty()) return false;
         return texts.getFirst().getString().equals("Dialogue History");
     }
 
     public DialogHistory(List<Text> texts) {
-        super(colorCodedToStyledBatch(texts));
+        super(texts);
     }
 
     @Override

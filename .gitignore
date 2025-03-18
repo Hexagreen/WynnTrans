@@ -29,3 +29,5 @@ run/
 
 patcher/venv
 patcher/src/__pycache__
+/libs/*.jar
+/libs/*.zip

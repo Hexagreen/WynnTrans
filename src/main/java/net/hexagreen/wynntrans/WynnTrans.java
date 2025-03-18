@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.hexagreen.wynntrans.text.chat.OnGameMessageHandler;
 import net.hexagreen.wynntrans.text.display.DisplayEntityHandler;
 import net.hexagreen.wynntrans.text.scoreboard.ScoreboardSidebarHandler;
@@ -27,6 +28,7 @@ public class WynnTrans implements ModInitializer {
     public static ScoreboardSidebarHandler scoreboardSidebarHandler;
     public static boolean translationTargetSignMarker;
     public static boolean playerNameCacheExpired;
+    public static boolean wynntilsLoaded;
     public static String wynnPlayerName;
 
     public static void refreshWynnPlayerName() {
@@ -64,6 +66,8 @@ public class WynnTrans implements ModInitializer {
         ScreenEvents.AFTER_INIT.register((c, s, w, h) -> {
             if("\uDAFF\uDFD5\uE01F".equals(s.getTitle().getString())) expireWynnPlayerName();
         });
+
+        wynntilsLoaded = FabricLoader.getInstance().isModLoaded("wynntils");
     }
 
     private static class CommandToggleRecordMode {

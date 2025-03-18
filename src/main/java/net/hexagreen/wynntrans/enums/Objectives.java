@@ -11,17 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum Objectives {
-    LOOT_CHEST(Pattern.compile("Loot Chests"), "LootChests", "Loot Chests"),
-    OPEN_CHEST(Pattern.compile("Open Chests"), "OpenChests", "Open Chests"),
     TIERED_LOOT_CHEST(Pattern.compile("Loot Chests T(\\d)\\+"), "LootChestsTiered", "Loot Chests T%s+"),
     SLAY_LEVELED_MOBS(Pattern.compile("Slay Lv\\. (\\d+)\\+ Mobs"), "SlayLeveledMobs", "Slay Lv. %s+ Mobs"),
-    GATHER_RESOURCE(Pattern.compile("Gather Resources"), "GatherResources", "Gather Resources"),
-    GATHER_WOOD(Pattern.compile("Gather Wood"), "GatherWood", "Gather Wood"),
-    GATHER_ORE(Pattern.compile("Gather Ore"), "GatherOre", "Gather Ore"),
-    CRAFT_ITEM(Pattern.compile("Craft Items"), "CraftItems", "Craft Items"),
-    QUEST(Pattern.compile("Finish Quests"), "FinishQuests", "Finish Quests"),
-    DUNGEON(Pattern.compile("Win Dungeons"), "WinDungeons", "Win Dungeons"),
-    DISCOVERY(Pattern.compile("Find Discoveries"), "FindDiscoveries", "Find Discoveries"),
     NO_TYPE(null, null, null);
 
     private final Pattern regex;
@@ -31,7 +22,10 @@ public enum Objectives {
     private String testInput;
 
     public static Objectives findNormalized(String string) {
-        return Arrays.stream(Objectives.values()).filter(objectives -> objectives.isMatch(string)).findFirst().orElse(NO_TYPE);
+        return Arrays.stream(Objectives.values())
+                .filter(objectives -> objectives.isMatch(string))
+                .findFirst()
+                .orElse(NO_TYPE);
     }
 
     Objectives(Pattern regex, String normalizedKey, String normalizedVal) {

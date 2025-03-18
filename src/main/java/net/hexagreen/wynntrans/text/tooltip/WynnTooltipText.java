@@ -16,12 +16,18 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class WynnTooltipText extends WynnTransText {
 
-    protected static List<Text> colorCodedToStyledBatch(List<Text> textList) {
+    private static List<Text> colorCodedToStyledBatch(List<Text> textList) {
         return textList.parallelStream().map(WynnTooltipText::colorCodedToStyled).toList();
     }
 
+    protected static List<Text> textToList(Text text) {
+        List<Text> wrapped = new ArrayList<>();
+        wrapped.add(text);
+        return wrapped;
+    }
+
     public WynnTooltipText(List<Text> texts) {
-        super(siblingsToText(texts));
+        super(siblingsToText(colorCodedToStyledBatch(texts)));
         resultText = Text.empty();
     }
 

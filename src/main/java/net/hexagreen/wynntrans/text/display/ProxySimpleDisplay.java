@@ -93,6 +93,27 @@ public class ProxySimpleDisplay extends SimpleDisplay {
                     Matcher m = Pattern.compile("(§c§l.+)'s Grave\\n(§3\\[§c♥§8♥♥§3])\\n").matcher(text.getString());
                     boolean ignore = m.find();
                     return new String[]{m.group(1), m.group(2)};
+                }),
+        FES_HEROES_PERFORMANCE_RUNNING(text -> text.getString().matches("(?s)A §dperformance §7is currently active.+"),
+                text -> text.getString().replaceFirst("§a.+?§7", "%1\\$s§7"),
+                text -> {
+                    Matcher m = Pattern.compile("(§a.+?)§7").matcher(text.getString());
+                    if(m.find()) return new String[]{m.group(1)};
+                    else return new String[]{"ERROR"};
+                }),
+        FES_HEROES_PERFORMANCE_TIMER(text -> text.getString().matches("(?s)§7The §dnext performance §7will be in.+"),
+                text -> text.getString().replaceFirst("§c.+?§7", "%1\\$s§7").replaceFirst("§a.+?§7", "%2\\$s§7"),
+                text -> {
+                    Matcher m = Pattern.compile("(?s)(§c.+?)§7.+(§a.+?)§7").matcher(text.getString());
+                    if(m.find()) return new String[]{m.group(1), m.group(2)};
+                    else return new String[]{"ERROR", "ERROR"};
+                }),
+        FES_HEROES_PERFORMANCE_SPECIAL(text -> text.getString().matches("(?s)§7A §d§nspecial event§7 featuring an important\\n§7guest.+"),
+                text -> text.getString().replaceFirst("§c.+?§7", "%1\\$s§7"),
+                text -> {
+                    Matcher m = Pattern.compile("(§c.+?)§7").matcher(text.getString());
+                    if(m.find()) return new String[]{m.group(1)};
+                    else return new String[]{"ERROR"};
                 });
 
         private final Predicate<Text> typeChecker;

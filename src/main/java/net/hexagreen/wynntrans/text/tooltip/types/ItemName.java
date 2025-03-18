@@ -3,7 +3,6 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemName extends WynnTooltipText {
@@ -13,18 +12,12 @@ public class ItemName extends WynnTooltipText {
         return false;
     }
 
-    private static List<Text> wrapText(Text text) {
-        List<Text> wrapped = new ArrayList<>();
-        wrapped.add(text);
-        return wrapped;
-    }
-
     public ItemName(List<Text> texts) {
         super(texts);
     }
 
     public ItemName(Text text) {
-        this(wrapText(text));
+        this(textToList(text));
     }
 
     public ItemName(String itemName) {

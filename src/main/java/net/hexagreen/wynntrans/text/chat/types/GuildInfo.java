@@ -44,7 +44,6 @@ public class GuildInfo extends WynnSystemText {
                 resultText.append(newTranslateWithSplit(translationKey + ".weekObj.expire", time));
             }
             case WEEK_OBJ_NEW -> {
-                debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
                 resultText.append(newTranslateWithSplit(translationKey + ".weekObj.new"));
             }
             case SEASON_END -> {
