@@ -32,7 +32,7 @@ public class NormalEquipment extends WynnTooltipText {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        String itemName = texts.getFirst().getString().replaceAll("^Perfect |^Defective | \\[.+%]$", "");
+        String itemName = texts.getFirst().getString().replaceAll("^Unidentified |^Perfect |^Defective | \\[.+%]$", "");
         String normalized = normalizeStringForKey(itemName);
         return WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
@@ -41,7 +41,7 @@ public class NormalEquipment extends WynnTooltipText {
 
     private static List<Text> correctSplitter(List<Text> texts) {
         return texts.stream()
-                .map(text -> text.getString().equals(WRONG_SPLITTER.getString()) ? SPLITTER : text)
+                .map(text -> text.getString().equals(WRONG_SPLITTER.getString()) || text.getString().isEmpty() ? SPLITTER : text)
                 .toList();
     }
 
@@ -85,7 +85,7 @@ public class NormalEquipment extends WynnTooltipText {
             if(seg.getFirst().getSiblings().getFirst().getString().equals("Price:")) {
                 translatePriceSection(seg);
             }
-            else if(seg.getFirst().getString().contains("Attack Speed")) {
+            else if(Pattern.compile("Attack Speed|This item's powers have").matcher(seg.getFirst().getString()).find()) {
                 translateNameSection(seg);
             }
             else if(BASE_STAT_REGEX.matcher(seg.getFirst().getString()).find()) {
@@ -106,7 +106,7 @@ public class NormalEquipment extends WynnTooltipText {
             else if(seg.getFirst().getString().equals("Set Bonus:")) {
                 translateSetBonusSection(seg);
             }
-            else if(Pattern.compile(".+ Item$|Powder Slots").matcher(seg.getFirst().getString()).find()) {
+            else if(Pattern.compile(".+ Item( \\[\\d+])?$|Powder Slots").matcher(seg.getFirst().getString()).find()) {
                 translateTailSection(seg);
                 break;
             }
@@ -129,17 +129,22 @@ public class NormalEquipment extends WynnTooltipText {
     }
 
     private void translateNameSection(List<Text> texts) {
-        List<Text> dump = new ArrayList<>();
-        texts.forEach(t -> {
-            String itemNameString = t.getString().replaceAll("^Perfect |^Defective | \\[.+%]$", "");
+        for(Text t : texts) {
+            String itemNameString = t.getString().replaceAll("^Unidentified |^Perfect |^Defective | \\[.+%]$", "");
             String normalized = normalizeStringForKey(itemNameString);
+            boolean unidentified = t.getString().matches("^Unidentified .+");
             boolean wynntilsPerfect = t.getString().matches("^Perfect .+");
             boolean wynntilsDefective = t.getString().matches("^Defective .+");
             boolean wynntilsPercentage = t.getString().matches(".+ \\[.+%]$");
             MutableText itemName;
-            if(normalized.matches(".+AttackSpeed$")) {
-                dump.add(Text.translatable("wytr.tooltip.attackSpeed." + normalized.replaceFirst("AttackSpeed", "")).setStyle(GRAY));
-                return;
+            if(normalized.equals("Thisitemspowershave")) {
+                tempText.add(Text.translatable("wytr.tooltip.identifyGuide").setStyle(GRAY));
+                wrapTargetIdx.add(tempText.size() - 1);
+                break;
+            }
+            else if(normalized.matches(".+AttackSpeed$")) {
+                addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed." + normalized.replaceFirst("AttackSpeed", "")).setStyle(GRAY));
+                continue;
             }
             else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized)) {
                 itemNameKey = "wytr.item.weapon." + normalized;
@@ -158,7 +163,11 @@ public class NormalEquipment extends WynnTooltipText {
             }
 
             MutableText translated;
-            if(wynntilsPerfect) {
+            if(unidentified) {
+                translated = Text.translatable("wytr.tooltip.unidentified", itemName)
+                        .setStyle(t.getSiblings().getFirst().getStyle());
+            }
+            else if(wynntilsPerfect) {
                 Text perfect = Text.translatable("wytr.tooltip.perfectID", itemName);
                 translated = IWynntilsFeature.coloringPerfectItem(perfect);
             }
@@ -174,10 +183,9 @@ public class NormalEquipment extends WynnTooltipText {
                 translated.append(t.getSiblings().getLast());
             }
 
-            dump.add(translated);
-            dump.add(Text.literal(itemNameString).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
-        });
-        dump.forEach(this::addAndRecordWidth);
+            addAndRecordWidth(translated);
+            addAndRecordWidth(Text.literal(itemNameString).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+        }
     }
 
     private void translatePriceSection(List<Text> texts) {
@@ -289,7 +297,7 @@ public class NormalEquipment extends WynnTooltipText {
         List<Text> translatedIDs = new IdentificationTooltip(texts).text();
         translatedIDs.forEach(t -> {
             tempText.add(t);
-            if(t.getContent().toString().isEmpty()) {
+            if(t.getContent().toString().equals("empty")) {
                 updateLongestWidth(textRenderer.getWidth(t));
             }
             else {
@@ -325,6 +333,10 @@ public class NormalEquipment extends WynnTooltipText {
             if(string.contains("Powder Slots")) {
                 String[] powderInfo = styleToColorCode(t.getSiblings(), GRAY).getString().split(" Powder Slots ?");
                 body = Text.translatable("wytr.tooltip.powderSlot", powderInfo[0], powderInfo.length == 2 ? powderInfo[1] : "").setStyle(GRAY);
+                addAndRecordWidth(body);
+            }
+            else if(string.matches("Untradable Item")) {
+                body = Text.translatable("wytr.tooltip.untradable").setStyle(Style.EMPTY.withColor(Formatting.RED));
                 addAndRecordWidth(body);
             }
             else if(string.matches(".+ Item( \\[\\d+])?$")) {
