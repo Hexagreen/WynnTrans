@@ -110,7 +110,8 @@ public class SimpleDisplay extends WynnDisplayText {
                 if(!blankChecker(t) && styles[0] == Style.EMPTY) {
                     styles[0] = s;
                 }
-                if(!blankChecker(t) && Objects.equals(TextColor.fromFormatting(Formatting.GRAY), s.getColor())) {
+                if(!blankChecker(t) && Objects.equals(TextColor.fromFormatting(Formatting.GRAY), s.getColor())
+                        && s.getFont().equals(Identifier.of("minecraft:default"))) {
                     styles[1] = s;
                 }
                 return Optional.empty();

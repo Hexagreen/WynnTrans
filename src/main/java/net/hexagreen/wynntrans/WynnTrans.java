@@ -30,6 +30,7 @@ public class WynnTrans implements ModInitializer {
     public static boolean playerNameCacheExpired;
     public static boolean wynntilsLoaded;
     public static String wynnPlayerName;
+    public static String currentScreen;
 
     public static void refreshWynnPlayerName() {
         WynnTransFileManager.whoAmI();
@@ -51,6 +52,7 @@ public class WynnTrans implements ModInitializer {
         translationTargetSignMarker = false;
         playerNameCacheExpired = true;
         wynnPlayerName = "DummyEmptyPlayerName";
+        currentScreen = "";
 
         LOGGER.info("Hello, Wynn!");
 
@@ -64,7 +66,8 @@ public class WynnTrans implements ModInitializer {
 
         UseBlockCallback.EVENT.register(new UseBlockHandler());
         ScreenEvents.AFTER_INIT.register((c, s, w, h) -> {
-            if("\uDAFF\uDFD5\uE01F".equals(s.getTitle().getString())) expireWynnPlayerName();
+            currentScreen = s != null ? s.getTitle().getString() : "";
+            if("\uDAFF\uDFD5\uE01F".equals(currentScreen)) expireWynnPlayerName();
         });
 
         wynntilsLoaded = FabricLoader.getInstance().isModLoaded("wynntils");

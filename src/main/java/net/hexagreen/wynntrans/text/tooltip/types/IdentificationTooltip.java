@@ -101,7 +101,7 @@ public class IdentificationTooltip extends WynnTooltipText {
         Text _secondIDValue = siblings.removeFirst();
         Text secondIDValue = extractIDValue(_secondIDValue);
 
-        result.append(Text.translatable("wytr.tooltip.rangedID", firstIDValue, secondIDValue).setStyle(to.getStyle()));
+        result.append(Text.translatable("wytr.tooltip.equipment.rangedID", firstIDValue, secondIDValue).setStyle(to.getStyle()));
 
         MutableText id = Text.literal(" ");
         Text idType = siblings.removeFirst();
@@ -120,7 +120,7 @@ public class IdentificationTooltip extends WynnTooltipText {
         }
         else if(_str.contains("tier")) {
             String num = _str.replaceFirst(" tier", "");
-            idValue = Text.translatable("wytr.tooltip.idAtkSpdTier", num).setStyle(_idValue.getStyle());
+            idValue = Text.translatable("wytr.tooltip.equipment.attackSpeedID", num).setStyle(_idValue.getStyle());
         }
         else {
             idValue = _idValue;

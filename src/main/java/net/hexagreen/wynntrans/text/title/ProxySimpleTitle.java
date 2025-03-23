@@ -32,13 +32,34 @@ public class ProxySimpleTitle extends SimpleTitle {
     }
 
     private enum Templates {
+        WORLD_JOIN_QUEUE(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("§aQueueing for (NA|EU|AS)\\d+\\.*");
+                },
+                s -> s.replaceFirst("(NA|EU|AS)\\d+", "%s").replaceFirst("\\.*$", "%s"),
+                s -> {
+                    String partial = s.replaceFirst("§aQueueing for ", "");
+                    String server = partial.replaceAll("\\.", "");
+                    String dot = partial.replaceAll("[^.]", "");
+                    return new Object[]{server, dot};
+                }
+        ),
+        WORLD_JOIN_QUEUE_POS(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("You are in position #\\d+");
+                },
+                s -> s.replaceFirst("\\d+", "%s"),
+                s -> new Object[]{s.replaceAll("\\D", "")}
+        ),
         JOINING_QUEUE_TIMER(
                 text -> {
                     if(text.getSiblings().size() != 2) return false;
                     return text.getSiblings().get(1).getString().matches("Joining queue in \\d+ seconds");
                 },
                 s -> s.replaceFirst("\\d+", "%s"),
-                s -> s.replaceAll("\\D", "")
+                s -> new Object[]{s.replaceAll("\\D", "")}
         ),
         WORLD_EVENT_START_TIMER(
                 text -> {
@@ -46,7 +67,7 @@ public class ProxySimpleTitle extends SimpleTitle {
                     return text.getString().matches("Starts in (\\d+[hms] ?)+");
                 },
                 s -> "Starts in %s",
-                s -> ITime.translateTime(s.replaceFirst("Starts in ", ""))
+                s -> new Object[]{ITime.translateTime(s.replaceFirst("Starts in ", ""))}
         ),
         WORLD_EVENT_NEXT_WAVE(
                 text -> {
@@ -54,12 +75,12 @@ public class ProxySimpleTitle extends SimpleTitle {
                     return text.getString().matches("Next wave in \\d");
                 },
                 s -> "Next wave in %s",
-                s -> s.replaceFirst("Next wave in ", "")
+                s -> new Object[]{s.replaceFirst("Next wave in ", "")}
         );
 
         private final Predicate<Text> template;
         private final Function<String, String> mutator;
-        private final Function<String, Object> argumentParser;
+        private final Function<String, Object[]> argumentParser;
 
         private static Templates findTemplate(Text text) {
             return Arrays.stream(Templates.values())
@@ -68,7 +89,7 @@ public class ProxySimpleTitle extends SimpleTitle {
                     .orElse(null);
         }
 
-        Templates(Predicate<Text> template, Function<String, String> mutator, Function<String, Object> argumentParser) {
+        Templates(Predicate<Text> template, Function<String, String> mutator, Function<String, Object[]> argumentParser) {
             this.template = template;
             this.mutator = mutator;
             this.argumentParser = argumentParser;

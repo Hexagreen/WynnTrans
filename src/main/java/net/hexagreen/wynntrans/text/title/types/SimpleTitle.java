@@ -18,7 +18,7 @@ public class SimpleTitle extends WynnTitleText {
 
     public SimpleTitle(Text text) {
         super(flatText(text));
-        this.keyTitle = translationKey + DigestUtils.sha1Hex(text.getString());
+        this.keyTitle = translationKey + DigestUtils.sha1Hex(getValText(text.getString()));
         this.canSimplify = isCanSimplify(inputText);
         this.recorded = false;
     }
@@ -42,7 +42,7 @@ public class SimpleTitle extends WynnTitleText {
                     resultText = Text.literal(contentString).setStyle(contentStyle);
                 }
             }
-            else if(WTS.checkTranslationExist(keyTitle, contentString)) {
+            else if(WTS.checkTranslationExist(keyTitle, getValText(contentString))) {
                 resultText = newTranslate(keyTitle).setStyle(contentStyle);
             }
             else {
@@ -70,7 +70,7 @@ public class SimpleTitle extends WynnTitleText {
                             resultText.append(sibling);
                         }
                     }
-                    else if(WTS.checkTranslationExist(keySibling, valSibling)) {
+                    else if(WTS.checkTranslationExist(keySibling, getValText(valSibling))) {
                         resultText.append(newTranslate(keySibling).setStyle(styleSibling));
                     }
                     else {

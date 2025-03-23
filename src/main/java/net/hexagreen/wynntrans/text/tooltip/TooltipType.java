@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 public enum TooltipType {
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
+    UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     DIALOG_HISTORY(DialogHistory::new, DialogHistory::typeChecker),
     CONTENT_BOOK_FILTER_AND_SORT(ContentBookFilterAndSort::new, ContentBookFilterAndSort::typeChecker),
     CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress::new, ContentBookProgress::typeChecker),

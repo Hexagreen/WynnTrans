@@ -73,9 +73,9 @@ public enum Identifications {
 
     private String getKey() {
         if(!this.major) {
-            return switch (this) {
+            return switch(this) {
                 case STRENGTH, DEXTERITY, INTELLIGENCE, DEFENCE, AGILITY -> this.key;
-                case NO_TYPE -> "wytr.id." + testInput.replaceAll("[^A-z]", "");
+                case NO_TYPE -> "wytr.id." + testInput.replaceAll("[^0-9A-z]", "");
                 default -> "wytr.id." + key;
             };
         }

@@ -1,8 +1,10 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.IWynntilsFeature;
+import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -16,9 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-public class NormalEquipment extends WynnTooltipText {
-    private static final Text WRONG_SPLITTER = Text.literal("§7");
-    private static final Text SPLITTER = Text.literal(" ");
+public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter {
     private static final Style GRAY = Style.EMPTY.withColor(Formatting.GRAY);
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
@@ -31,22 +31,18 @@ public class NormalEquipment extends WynnTooltipText {
     private String itemNameKey = "";
 
     public static boolean typeChecker(List<Text> texts) {
-        if(texts.isEmpty()) return false;
-        String itemName = texts.getFirst().getString().replaceAll("^Unidentified |^Perfect |^Defective | \\[.+%]$", "");
+        if(texts.size() < 2) return false;
+        if(Pattern.compile("[\uE000\uE001\uE002\uE004]").matcher(WynnTrans.currentScreen).find()) return false;
+        if(texts.get(1).getString().contains("Sold")) return false;
+        String itemName = texts.getFirst().getString().replaceAll("^Unidentified |^Perfect |^Defective |§f⬡ Shiny |\\[.+%]$", "");
         String normalized = normalizeStringForKey(itemName);
         return WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized);
     }
 
-    private static List<Text> correctSplitter(List<Text> texts) {
-        return texts.stream()
-                .map(text -> text.getString().equals(WRONG_SPLITTER.getString()) || text.getString().isEmpty() ? SPLITTER : text)
-                .toList();
-    }
-
     public NormalEquipment(List<Text> texts) {
-        super(correctSplitter(texts));
+        super(ITooltipSplitter.correctSplitter(texts));
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
         this.tempText = new ArrayList<>();
         this.wrapTargetIdx = new ArrayList<>();
@@ -61,19 +57,7 @@ public class NormalEquipment extends WynnTooltipText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
-        List<Text> segment = new ArrayList<>();
-
-        for(Text text : getSiblings()) {
-            if(text.getString().equals(SPLITTER.getString())) {
-                if(segment.isEmpty()) continue;
-                segments.add(segment);
-                segment = new ArrayList<>();
-            }
-            else {
-                segment.add(text);
-            }
-        }
-        if(!segment.isEmpty()) segments.add(segment);
+        splitTooltipToSegments(getSiblings(), segments);
 
         for(int i = 0, size = segments.size(); i < size; i++) {
             if(i == 0) {
@@ -94,8 +78,11 @@ public class NormalEquipment extends WynnTooltipText {
             else if(POWDER_SPECIAL_REGEX.matcher(seg.getFirst().getSiblings().getLast().getString()).find()) {
                 translatePowderSkillSection(seg);
             }
-            else if(seg.getFirst().getSiblings().getFirst().getString().matches("[✔✖]")) {
+            else if(seg.getFirst().getSiblings().getFirst().getString().matches("[✔✖] ?")) {
                 translateReqSection(seg);
+            }
+            else if(seg.getFirst().getSiblings().getFirst().getString().equals("⬡ ")) {
+                translateShinySection(seg);
             }
             else if(seg.getFirst().getSiblings().getFirst().getString().matches("[+-]\\d+(%|/[35]s| Tiers)?")) {
                 translateIDSection(seg);
@@ -130,15 +117,19 @@ public class NormalEquipment extends WynnTooltipText {
 
     private void translateNameSection(List<Text> texts) {
         for(Text t : texts) {
-            String itemNameString = t.getString().replaceAll("^Unidentified |^Perfect |^Defective | \\[.+%]$", "");
+            String itemNameString = t.getString().replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny | \\[.+%]$", "");
             String normalized = normalizeStringForKey(itemNameString);
+            boolean shiny = t.getString().matches(".*⬡ Shiny.+");
             boolean unidentified = t.getString().matches("^Unidentified .+");
             boolean wynntilsPerfect = t.getString().matches("^Perfect .+");
             boolean wynntilsDefective = t.getString().matches("^Defective .+");
             boolean wynntilsPercentage = t.getString().matches(".+ \\[.+%]$");
-            MutableText itemName;
+            MutableText itemName = Text.empty();
+            if(shiny) {
+                itemName.append(Text.translatable("wytr.tooltip.equipment.shiny"));
+            }
             if(normalized.equals("Thisitemspowershave")) {
-                tempText.add(Text.translatable("wytr.tooltip.identifyGuide").setStyle(GRAY));
+                tempText.add(Text.translatable("wytr.tooltip.equipment.identifyGuide").setStyle(GRAY));
                 wrapTargetIdx.add(tempText.size() - 1);
                 break;
             }
@@ -148,35 +139,37 @@ public class NormalEquipment extends WynnTooltipText {
             }
             else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized)) {
                 itemNameKey = "wytr.item.weapon." + normalized;
-                itemName = Text.translatable(itemNameKey);
+                itemName.append(Text.translatable(itemNameKey));
             }
             else if(WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized)) {
                 itemNameKey = "wytr.item.armour." + normalized;
-                itemName = Text.translatable(itemNameKey);
+                itemName.append(Text.translatable(itemNameKey));
             }
             else if(WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized)) {
                 itemNameKey = "wytr.item.accessory." + normalized;
-                itemName = Text.translatable(itemNameKey);
+                itemName.append(Text.translatable(itemNameKey));
             }
             else {
-                itemName = t.getSiblings().getFirst().copy();
+                if(shiny) itemName.append(t.getSiblings().get(1).getString().replaceFirst("Shiny ", ""));
+                else itemName.append(t.getSiblings().getFirst().copy());
             }
 
             MutableText translated;
             if(unidentified) {
-                translated = Text.translatable("wytr.tooltip.unidentified", itemName)
+                translated = Text.translatable("wytr.tooltip.equipment.unidentified", itemName)
                         .setStyle(t.getSiblings().getFirst().getStyle());
             }
             else if(wynntilsPerfect) {
-                Text perfect = Text.translatable("wytr.tooltip.perfectID", itemName);
+                Text perfect = Text.translatable("wytr.tooltip.equipment.perfectID", itemName);
                 translated = IWynntilsFeature.coloringPerfectItem(perfect);
             }
             else if(wynntilsDefective) {
-                Text defective = Text.translatable("wytr.tooltip.defectiveID", itemName);
+                Text defective = Text.translatable("wytr.tooltip.equipment.defectiveID", itemName);
                 translated = IWynntilsFeature.coloringDefectiveItem(defective);
             }
             else {
-                translated = itemName.copy().setStyle(t.getSiblings().getFirst().getStyle());
+                if(shiny) translated = itemName.copy().setStyle(t.getSiblings().get(1).getStyle());
+                else translated = itemName.copy().setStyle(t.getSiblings().getFirst().getStyle());
             }
 
             if(wynntilsPercentage) {
@@ -258,6 +251,7 @@ public class NormalEquipment extends WynnTooltipText {
         texts.forEach(t -> {
             String[] headAndNum = t.getSiblings().getLast().getString().split(": ");
             Text icon = t.getSiblings().getFirst();
+            Text reformedIcon = Text.literal(icon.getString().replaceFirst(" ", "")).setStyle(icon.getStyle());
             Text body;
             if(headAndNum[0].contains("Class Req")) {
                 String className = headAndNum[1].split("/")[0].toLowerCase(Locale.ENGLISH);
@@ -286,10 +280,24 @@ public class NormalEquipment extends WynnTooltipText {
             }
 
             Text line = Text.empty().setStyle(GRAY)
-                    .append(icon).append(" ").append(body);
+                    .append(reformedIcon).append(" ").append(body);
             dump.add(line);
         });
 
+        dump.forEach(this::addAndRecordWidth);
+    }
+
+    private void translateShinySection(List<Text> texts) {
+        List<Text> dump = new ArrayList<>();
+        texts.forEach(t -> {
+            Text icon = t.getSiblings().getFirst();
+            Text number = t.getSiblings().getLast();
+            String v = t.getSiblings().get(1).getString().replaceFirst(": ", "");
+            String k = "wytr.shiny." + normalizeStringForKey(v);
+            WTS.checkTranslationExist(k, v);
+            Text tracker = Text.translatable(k).setStyle(GRAY).append(": ");
+            dump.add(Text.empty().append(icon).append(tracker).append(number));
+        });
         dump.forEach(this::addAndRecordWidth);
     }
 
@@ -312,7 +320,7 @@ public class NormalEquipment extends WynnTooltipText {
         String setNameKey = "wytr.setItem." + normalizeStringForKey(setNameVal);
         WTS.checkTranslationExist(setNameKey, setNameVal);
         Text setName = Text.translatableWithFallback(setNameKey, setNameVal);
-        Text head = Text.translatable("wytr.tooltip.setFamily", setName).setStyle(siblings.getFirst().getStyle())
+        Text head = Text.translatable("wytr.tooltip.equipment.setFamily", setName).setStyle(siblings.getFirst().getStyle())
                 .append(" ").append(siblings.getLast());
         addAndRecordWidth(head);
         texts.subList(1, texts.size()).forEach(this::addAndRecordWidth);
@@ -320,7 +328,7 @@ public class NormalEquipment extends WynnTooltipText {
 
     private void translateSetBonusSection(List<Text> texts) {
         List<Text> dump = new ArrayList<>();
-        dump.add(Text.translatable("wytr.tooltip.setBonus").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        dump.add(Text.translatable("wytr.tooltip.equipment.setBonus").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
         dump.addAll(new IdentificationTooltip(texts.subList(1, texts.size())).text());
         dump.forEach(this::addAndRecordWidth);
     }
@@ -332,17 +340,21 @@ public class NormalEquipment extends WynnTooltipText {
             Text body;
             if(string.contains("Powder Slots")) {
                 String[] powderInfo = styleToColorCode(t.getSiblings(), GRAY).getString().split(" Powder Slots ?");
-                body = Text.translatable("wytr.tooltip.powderSlot", powderInfo[0], powderInfo.length == 2 ? powderInfo[1] : "").setStyle(GRAY);
+                body = Text.translatable("wytr.tooltip.equipment.powderSlot", powderInfo[0], powderInfo.length == 2 ? powderInfo[1] : "").setStyle(GRAY);
                 addAndRecordWidth(body);
             }
             else if(string.matches("Untradable Item")) {
-                body = Text.translatable("wytr.tooltip.untradable").setStyle(Style.EMPTY.withColor(Formatting.RED));
+                body = Text.translatable("wytr.tooltip.item.untradable").setStyle(Style.EMPTY.withColor(Formatting.RED));
+                addAndRecordWidth(body);
+            }
+            else if(string.matches("Quest Item")) {
+                body = Text.translatable("wytr.tooltip.item.questItem").setStyle(Style.EMPTY.withColor(Formatting.RED));
                 addAndRecordWidth(body);
             }
             else if(string.matches(".+ Item( \\[\\d+])?$")) {
                 String[] splits = string.split(" ");
                 Text rarity = ItemRarity.getRarity(splits[0]);
-                body = Text.translatable("wytr.tooltip.itemRarity", rarity).setStyle(rarity.getStyle())
+                body = Text.translatable("wytr.tooltip.item.rarity", rarity).setStyle(rarity.getStyle())
                         .append(splits.length == 3 ? " " + splits[2] : "");
                 addAndRecordWidth(body);
             }

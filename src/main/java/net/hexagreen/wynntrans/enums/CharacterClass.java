@@ -28,6 +28,10 @@ public enum CharacterClass {
         return valueOf(className.toUpperCase(Locale.ENGLISH).replace(" ", "_")).weapon;
     }
 
+    public Text getWeapon() {
+        return this.weapon.copy();
+    }
+
     CharacterClass(MutableText className, MutableText weapon) {
         this.className = className;
         this.weapon = weapon;

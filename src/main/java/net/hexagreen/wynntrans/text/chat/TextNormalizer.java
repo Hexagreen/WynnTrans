@@ -189,7 +189,7 @@ public abstract class TextNormalizer {
                 }
             }
 
-            if(Objects.equals(desiredStyle.getColor(), sibling.getStyle().getColor())) {
+            if(Objects.equals(desiredStyle, sibling.getStyle())) {
                 currentString.append(string);
             }
             else {
