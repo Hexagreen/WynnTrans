@@ -27,7 +27,7 @@ public class CaveProgress extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+        resultText.append(Text.translatable(translationKey).setStyle(GRAY)).append("\n");
         if(completed)
             resultText.append(Text.translatable("wytr.display.caveComplete").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
         else resultText.append(bar);

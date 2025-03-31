@@ -30,8 +30,8 @@ public class EquipQuestRequirement extends WynnSystemText {
     @Override
     protected void build() {
         Text questName = Text.translatableWithFallback("wytr.quest." + normalizeStringForKey(this.questName), this.questName).setStyle(RED);
-        Text equipName = new ItemName(this.equipName).textAsMutable().setStyle(RED);
+        Text equipName = new ItemName(this.equipName).setNoTranslationAddiction().textAsMutable().setStyle(RED);
 
-        resultText = newTranslateWithSplit(translationKey, questName, equipName).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
+        resultText = Text.translatable(translationKey, questName, equipName).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
     }
 }

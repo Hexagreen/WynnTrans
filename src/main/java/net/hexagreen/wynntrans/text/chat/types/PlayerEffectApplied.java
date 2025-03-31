@@ -29,7 +29,7 @@ public class PlayerEffectApplied extends WynnSystemText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
         resultText.append(Text.translatable(translationKey, skinName).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 }

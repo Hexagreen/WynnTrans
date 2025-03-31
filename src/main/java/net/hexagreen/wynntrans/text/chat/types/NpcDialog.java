@@ -123,7 +123,7 @@ public class NpcDialog extends WynnChatText {
             BASIC(Style.EMPTY.withColor(Formatting.DARK_GREEN), Style.EMPTY.withColor(Formatting.GREEN)),
             FES_HERO(Style.EMPTY.withColor(Formatting.DARK_PURPLE), Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)),
             FES_BONFIRE(Style.EMPTY.withColor(Formatting.GOLD), Style.EMPTY.withColor(Formatting.YELLOW)),
-            FES_SPIRITS(Style.EMPTY.withColor(Formatting.DARK_GRAY), Style.EMPTY.withColor(Formatting.GRAY)),
+            FES_SPIRITS(Style.EMPTY.withColor(Formatting.DARK_GRAY), GRAY),
             FES_BLIZZARD(Style.EMPTY.withColor(Formatting.DARK_AQUA), Style.EMPTY.withColor(Formatting.AQUA));
 
             private final Style nameColor;

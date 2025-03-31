@@ -10,7 +10,7 @@ import net.minecraft.util.Formatting;
 public class ShamanTotem extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
-        return text.getString().matches(".+'s Totem\\n(\\+\\d+❤/s )?\\uE01F \\d+s");
+        return text.getString().matches(".+('s|s') Totem\\n(\\+\\d+❤/s )?\\uE01F \\d+s");
     }
 
     public ShamanTotem(Text text) {
@@ -26,22 +26,22 @@ public class ShamanTotem extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         boolean isHealingTotem = getSibling(1).getString().contains("❤");
 
-        Text owner = Text.literal(getContentString().replaceFirst("'s ", ""))
+        Text owner = Text.literal(getContentString().replaceFirst("('s|') ", ""))
                 .setStyle(Style.EMPTY.withColor(Formatting.AQUA));
         Text icon = getSiblings().get(getSiblings().size() - 3);
         Text timer = ITime.translateTime(getSiblings().getLast().getString())
-                .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                .setStyle(GRAY);
 
         MutableText info = Text.empty();
 
         if(isHealingTotem) {
             Text heal = getSibling(1);
             Text unit = ITime.translateTime(getSibling(2).getString())
-                    .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                    .setStyle(GRAY);
             info.append(heal).append(unit).append(" ");
         }
         info.append(icon).append(" ").append(timer);
 
-        resultText = Text.translatable(translationKey, owner, info).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.translatable(translationKey, owner, info).setStyle(GRAY);
     }
 }

@@ -2,9 +2,7 @@ package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +26,7 @@ public class GatheringXPGain extends WynnDisplayText {
         if(matcher.find()) {
             this.multiplier = matcher.group(1);
             this.experience = matcher.group(2);
-            this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            this.profession = Profession.getProfession(matcher.group(3).charAt(0)).getTextWithIcon().setStyle(GRAY);
             this.percent = matcher.group(4);
             this.item = matcher.group(5);
         }
@@ -42,11 +40,11 @@ public class GatheringXPGain extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.empty().setStyle(GRAY);
         resultText.append(multiplier);
 
         resultText.append("[");
-        resultText.append(Text.translatable(translationKey, experience, profession).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, experience, profession).setStyle(GRAY));
         resultText.append("]");
         resultText.append(percent);
         if(item != null) {

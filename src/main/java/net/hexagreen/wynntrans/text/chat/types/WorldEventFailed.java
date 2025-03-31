@@ -23,19 +23,19 @@ public class WorldEventFailed extends WynnSystemText implements ISpaceProvider {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().append(header).setStyle(getStyle(0));
+        resultText = Text.empty().setStyle(getStyle(0));
         resultText.append(Text.translatable("wytr.func.worldEvent.failedOne", eventName));
 
         Text t2 = Text.empty().append(getSibling(2).getSiblings().get(1)).append(getSibling(2).getSiblings().get(2));
         Text t3 = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
         Text t5 = Text.translatable(keyFailGuide).setStyle(Style.EMPTY.withColor(0xAEB8BF));
 
-        resultText.append(splitter)
-                .append(splitter).append(getSystemTextCenterIndent(t2).append(t2))
-                .append(splitter).append(getSystemTextCenterIndent(t3).append(t3))
-                .append(splitter)
-                .append(splitter).append(getSystemTextCenterIndent(t5).append(t5))
-                .append(splitter);
+        resultText.append("\n")
+                .append(getSystemTextCenterIndent(t2).append(t2)).append("\n")
+                .append(getSystemTextCenterIndent(t3).append(t3)).append("\n")
+                .append("\n")
+                .append(getSystemTextCenterIndent(t5).append(t5)).append("\n")
+                .append("\n");
     }
 
     private Text initEventName(Text text) {

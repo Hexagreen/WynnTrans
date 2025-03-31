@@ -6,14 +6,15 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 public interface ISpaceProvider {
+    TextRenderer TEXT_RENDERER = MinecraftClient.getInstance().textRenderer;
     double CHAT_HUD_WIDTH = MinecraftClient.getInstance().inGameHud.getChatHud().getWidth()
             / MinecraftClient.getInstance().inGameHud.getChatHud().getChatScale();
     int CENTER = (int) CHAT_HUD_WIDTH / 2;
-    int SPACE_WIDTH = MinecraftClient.getInstance().textRenderer.getWidth(" ");
+    int SPACE_WIDTH = TEXT_RENDERER.getWidth(" ");
     int SPLITTER_WIDTH = 7;
 
     default MutableText getSystemTextCenterIndent(Text alignTargetText) {
-        int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(alignTargetText);
+        int textWidth = TEXT_RENDERER.getWidth(alignTargetText);
 
         StringBuilder spaces = new StringBuilder();
         for(int pixels = CENTER - (int) (0.5 + textWidth / 2.0) - SPLITTER_WIDTH; pixels > 0; ) {
@@ -31,7 +32,7 @@ public interface ISpaceProvider {
     }
 
     default MutableText getCenterIndent(Text target, int criteriaWidth) {
-        int textWidth = MinecraftClient.getInstance().textRenderer.getWidth(target);
+        int textWidth = TEXT_RENDERER.getWidth(target);
         if(textWidth >= criteriaWidth) return Text.empty();
 
         StringBuilder spaces = new StringBuilder();
@@ -58,7 +59,7 @@ public interface ISpaceProvider {
     }
 
     default MutableText twoColumnAlign(Text front, Text rear) {
-        TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+        TextRenderer renderer = TEXT_RENDERER;
         MutableText result = Text.empty();
 
         int frontWidth = renderer.getWidth(front);
@@ -96,11 +97,11 @@ public interface ISpaceProvider {
     }
 
     default MutableText getRearSpace(Text front, Text criteria) {
-        return getRearSpace(front, MinecraftClient.getInstance().textRenderer.getWidth(criteria));
+        return getRearSpace(front, TEXT_RENDERER.getWidth(criteria));
     }
 
     default MutableText getRearSpace(Text front, int maxFrontWidth) {
-        int frontWidth = MinecraftClient.getInstance().textRenderer.getWidth(front);
+        int frontWidth = TEXT_RENDERER.getWidth(front);
 
         StringBuilder spaces = new StringBuilder();
         for(int pixels = maxFrontWidth - frontWidth; pixels > 0; ) {

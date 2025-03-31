@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -42,15 +43,15 @@ public class SimpleSystemText extends WynnSystemText {
         if(getSiblings().size() > 1) {
             int i = 1;
             for(Text sibling : getSiblings()) {
-                String valText = lineFeedReplacer(sibling.getString());
+                String valText = sibling.getString();
                 String keyText = this.keyText + "." + i++;
 
                 if(checkTranslationExistWithControl(keyText, valText)) {
-                    if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
-                    resultText.append(newTranslateWithSplit(keyText).setStyle(sibling.getStyle()));
+                    if(resultText == null) resultText = Text.empty().setStyle(getStyle());
+                    resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
-                    if(resultText == null) resultText = originText.copy();
+                    if(resultText == null) resultText = inputText.copy();
                     if(translationRegisterControl && !recorded) {
                         debugClass.writeTextAsJSON(originText, "SystemText");
                         debugClass.writeTextAsJSON(inputText, "    --    ");
@@ -60,12 +61,12 @@ public class SimpleSystemText extends WynnSystemText {
             }
         }
         else {
-            if(resultText == null) resultText = Text.empty().setStyle(getStyle()).append(header);
+            if(resultText == null) resultText = Text.empty().setStyle(getStyle());
             if(checkTranslationExistWithControl(keyText, valText)) {
-                resultText.append(newTranslateWithSplit(keyText).setStyle(getStyle(0)));
+                resultText.append(newTranslate(keyText).setStyle(getStyle(0)));
             }
             else {
-                resultText = originText.copy();
+                resultText = inputText.copy();
                 if(translationRegisterControl) {
                     debugClass.writeTextAsJSON(originText, "SystemLiteral");
                 }
@@ -74,11 +75,15 @@ public class SimpleSystemText extends WynnSystemText {
     }
 
     protected String initValText() {
-        return lineFeedReplacer(inputText.getString());
+        return inputText.getString();
     }
 
     private String initKeyText() {
-        return translationKey + DigestUtils.sha1Hex(replacerRemover(valText));
+        return translationKey + DigestUtils.sha1Hex(lineFeedRemover(valText));
+    }
+
+    protected MutableText newTranslate(String key) {
+        return Text.translatable(key);
     }
 
     private boolean checkTranslationExistWithControl(String key, String value) {

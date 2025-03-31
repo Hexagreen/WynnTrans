@@ -54,6 +54,6 @@ public class SlayCounter extends WynnDisplayText {
         }
 
         resultText = Text.empty().setStyle(getStyle());
-        resultText.append(getSibling(0)).append("\n\n").append(Text.translatable(translationKey, t0, t1).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n\n").append(counter);
+        resultText.append(getSibling(0)).append("\n\n").append(Text.translatable(translationKey, t0, t1).setStyle(GRAY)).append("\n\n").append(counter);
     }
 }

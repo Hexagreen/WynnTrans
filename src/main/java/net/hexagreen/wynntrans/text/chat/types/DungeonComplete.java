@@ -46,7 +46,7 @@ public class DungeonComplete extends WynnChatText {
     }
 
     private Text attachBox(Text text) {
-        MutableText out = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append("[+");
+        MutableText out = Text.empty().setStyle(GRAY).append("[+");
         out.append(text).append("]");
         return out;
     }

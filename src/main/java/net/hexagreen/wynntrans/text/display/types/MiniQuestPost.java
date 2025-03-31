@@ -14,6 +14,7 @@ public class MiniQuestPost extends WynnDisplayText {
     private final boolean gather;
     private final String level;
     private final Profession profession;
+    private final Text npcTag;
 
     public static boolean typeChecker(Text text) {
         return text.getString().contains(" Post §2[");
@@ -26,6 +27,7 @@ public class MiniQuestPost extends WynnDisplayText {
         boolean ignore = m.find();
         this.level = m.group(2);
         this.profession = gather ? Profession.getProfession(m.group(1)) : null;
+        this.npcTag = getSibling(0);
     }
 
     @Override
@@ -39,12 +41,12 @@ public class MiniQuestPost extends WynnDisplayText {
         if(!gather) {
             resultText.append(Text.translatable(translationKey + "slay").setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append(" ");
             resultText.append(Text.translatable(translationKey + "slay.req", level).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append("\n");
-            resultText.append(Text.literal("NPC").setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            resultText.append(npcTag);
         }
         else {
             resultText.append(Text.translatable(translationKey + "gather").setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append(" ");
             resultText.append(Text.translatable(translationKey + "gather.req", profession.getText(), level).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))).append("\n");
-            resultText.append(Text.literal("NPC").setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            resultText.append(npcTag);
         }
     }
 }

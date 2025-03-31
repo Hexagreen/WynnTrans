@@ -3,7 +3,6 @@ package net.hexagreen.wynntrans.text.display.types;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 public class RaidTitle extends WynnDisplayText {
     private final Text raidName;
@@ -29,8 +28,8 @@ public class RaidTitle extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text level = Text.translatable("wytr.requirement.combat", levelReq).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        Text quest = Text.translatable("wytr.requirement.quest", questReq).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text level = Text.translatable("wytr.requirement.combat", levelReq).setStyle(GRAY);
+        Text quest = Text.translatable("wytr.requirement.quest", questReq).setStyle(GRAY);
         resultText = Text.empty().setStyle(getStyle())
                 .append(getSibling(0)).append("\n")
                 .append(raidName).append("\n\n")

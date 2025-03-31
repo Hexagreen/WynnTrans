@@ -3,7 +3,6 @@ package net.hexagreen.wynntrans.text.display.types;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.Locale;
 
@@ -44,7 +43,7 @@ public class BossAltar extends WynnDisplayText {
         String strDiff = diff.copyContentOnly().getString().replaceFirst("\n(.|\n)+$", "")
                 .replaceAll(" ", "").toLowerCase(Locale.ENGLISH);
         Text difficulty = Text.translatable("wytr.difficulty." + strDiff).setStyle(style);
-        return Text.translatable("wytr.difficulty", difficulty).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        return Text.translatable("wytr.difficulty", difficulty).setStyle(GRAY);
     }
 
     private Text getAltarName(Text text) {

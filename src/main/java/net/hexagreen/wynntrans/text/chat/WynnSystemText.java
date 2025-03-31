@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.text.chat;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.types.SimpleSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
@@ -11,7 +12,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,12 +19,13 @@ public abstract class WynnSystemText extends WynnChatText {
     protected final Text originText;
     protected final MutableText header;
     protected final Text splitter;
+    private final int wrappingWidth;
 
     protected static String removeTextBox(Text text) {
         return text.getString().replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ").replaceAll("\\n", "");
     }
 
-    protected static Text preprocessSystemChat(Text text, boolean isGlued) {
+    private static Text preprocessSystemChat(Text text, boolean isGlued) {
         if(isGlued) {
             MutableText glued = Text.empty();
             for(Text line : text.getSiblings()) {
@@ -105,15 +106,17 @@ public abstract class WynnSystemText extends WynnChatText {
     public WynnSystemText(Text text, boolean isGlued) {
         super(preprocessSystemChat(text, isGlued));
         this.originText = text;
-        this.header = extractHeader(text.getSiblings().getFirst());
-        this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06").setStyle(text.getStyle().withFont(Identifier.of("minecraft:chat")));
+        Style boxColor = text.getStyle().withFont(Identifier.of("minecraft:chat"));
+        this.header = extractHeader(text.getSiblings().getFirst()).setStyle(boxColor);
+        this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06 ").setStyle(boxColor);
+        this.wrappingWidth = setLineWrappingWidth();
     }
 
     @Override
     public MutableText text() {
         try {
             build();
-            return resultText;
+            return attachBox(resultText);
         }
         catch(IndexOutOfBoundsException e) {
             WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
@@ -127,41 +130,8 @@ public abstract class WynnSystemText extends WynnChatText {
         return originText.copy();
     }
 
-    /**
-     * Makes {@code MutableText} contains translatable form content. <p>
-     * First translation argument is {@code splitter}
-     *
-     * @param key Translation key
-     * @return {@code MutableText} contains translatable form content.
-     */
-    protected MutableText newTranslateWithSplit(String key) {
-        return Text.translatable(key, splitter);
-    }
-
-    /**
-     * Makes {@code MutableText} contains translatable form content. <p>
-     * First translation argument is {@code splitter}
-     *
-     * @param key  Translation key
-     * @param args Translation arguments
-     * @return {@code MutableText} contains translatable form content.
-     */
-    protected MutableText newTranslateWithSplit(String key, Object... args) {
-        List<Object> arguments = new ArrayList<>();
-        arguments.addFirst(splitter);
-        arguments.addAll(Arrays.asList(args));
-        return Text.translatable(key, arguments.toArray());
-    }
-
-    /**
-     * Replace linefeed character to placeholder for {@code splitter} <p>
-     * Use for create translation registration value string
-     *
-     * @param string Target for replace linefeed to placeholder
-     * @return String with all linefeed replaced
-     */
-    protected String lineFeedReplacer(String string) {
-        return string.replaceAll("\\n", "%1\\$s");
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH;
     }
 
     /**
@@ -175,12 +145,19 @@ public abstract class WynnSystemText extends WynnChatText {
         return string.replaceAll("\\n", "");
     }
 
-    protected String replacerRemover(String string) {
-        return string.replaceAll("%1\\$s", "");
-    }
-
     private MutableText extractHeader(Text headerSibling) {
         String content = ((PlainTextContent) headerSibling.getContent()).string();
         return Text.literal(content + " ").setStyle(headerSibling.getStyle());
+    }
+
+    private MutableText attachBox(Text text) {
+        MutableText result = Text.empty();
+        boolean[] flag = new boolean[]{false};
+        wrapLine(text, wrappingWidth).forEach(t -> {
+            Text box = flag[0] ? splitter : header;
+            result.append(box).append(t);
+            flag[0] = true;
+        });
+        return result;
     }
 }

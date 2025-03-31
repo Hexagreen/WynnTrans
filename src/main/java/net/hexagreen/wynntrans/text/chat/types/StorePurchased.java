@@ -19,7 +19,7 @@ public class StorePurchased extends WynnChatText implements ISpaceProvider {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text t0 = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
-        Text t1 = Text.translatable(translationKey + ".1").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text t1 = Text.translatable(translationKey + ".1").setStyle(GRAY);
 
         resultText = Text.empty();
         resultText.append(centerAlign(t0)).append("\n").append(centerAlign(t1));

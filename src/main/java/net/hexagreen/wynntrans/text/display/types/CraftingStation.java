@@ -26,7 +26,7 @@ public class CraftingStation extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.empty().setStyle(GRAY);
         resultText.append(getHead()).append("\n").append(Text.translatable(translationKey)).append("\n").append(Text.translatable(translationKey + "." + profession.getKey()));
     }
 

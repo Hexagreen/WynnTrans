@@ -62,12 +62,12 @@ public class ObjectiveComplete extends WynnChatText implements ISpaceProvider {
             for(int i = 4; getSiblings().size() > i; i++) {
                 Matcher m1 = REGEX_EXP.matcher(getSibling(i).getString());
                 if(m1.find()) {
-                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.experience", m1.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.experience", m1.group(1)).setStyle(GRAY)).append("\n");
                     continue;
                 }
                 Matcher m2 = REGEX_EME.matcher(getSibling(i).getString());
                 if(m2.find()) {
-                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                    resultText.append("     - ").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(Text.translatable(func + "reward.emerald", m2.group(1)).setStyle(GRAY)).append("\n");
                     continue;
                 }
                 resultText.append(getSibling(i));

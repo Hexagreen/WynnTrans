@@ -38,6 +38,6 @@ public class GuildBanner extends WynnDisplayText {
             resultText.append(Text.literal(valAreaName).setStyle(Style.EMPTY.withColor(Formatting.WHITE).withBold(true)));
         }
 
-        resultText.append("\n").append(Text.translatable(translationKey + ".controlBy", owner).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n").append(lines[2]).append("\n").append(Text.translatable(rootKey + "func.clickForOptions").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+        resultText.append("\n").append(Text.translatable(translationKey + ".controlBy", owner).setStyle(GRAY)).append("\n").append(lines[2]).append("\n").append(Text.translatable(rootKey + "func.clickForOptions").setStyle(Style.EMPTY.withColor(Formatting.RED)));
     }
 }

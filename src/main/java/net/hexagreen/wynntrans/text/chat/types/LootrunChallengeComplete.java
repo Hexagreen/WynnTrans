@@ -27,7 +27,7 @@ public class LootrunChallengeComplete extends WynnChatText implements ILootrun {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GREEN).withBold(true));
-        Text desc = Text.translatable(translationKey + ".desc").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text desc = Text.translatable(translationKey + ".desc").setStyle(GRAY);
 
         List<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
@@ -39,7 +39,7 @@ public class LootrunChallengeComplete extends WynnChatText implements ILootrun {
 
         if(textChunks.getFirst().getFirst().getString().matches("§7.§7\\[\\+\\d+%.+")) {
             List<Text> effectsBody = textChunks.removeFirst();
-            Style effectStyle = Style.EMPTY.withColor(Formatting.GRAY);
+            Style effectStyle = GRAY;
             Text damageInc = translateEffect(effectsBody.getFirst().getSiblings().getLast().getString()).setStyle(effectStyle);
             Text healthInc = translateEffect(effectsBody.getLast().getSiblings().getLast().getString()).setStyle(effectStyle);
             resultText.append(centerAlign(damageInc)).append("\n")
@@ -69,26 +69,26 @@ public class LootrunChallengeComplete extends WynnChatText implements ILootrun {
         if(rewardTypeString.contains("§6§lBoon")) {
             result.add(Text.translatable("wytr.lootrun.boon").setStyle(rewardTypeStyle));
             String boon = normalizeStringForKey(siblings.getLast().getString().replaceAll("§.", ""));
-            result.add(Text.translatable("wytr.lootrun.boon." + boon).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            result.add(Text.translatable("wytr.lootrun.boon." + boon).setStyle(GRAY));
         }
         else if(rewardTypeString.contains("§5§lCurses")) {
             result.add(Text.translatable("wytr.lootrun.curse").setStyle(rewardTypeStyle));
             Matcher effectMatcher = Pattern.compile("\\[.+?]").matcher(siblings.getLast().getString());
             while(effectMatcher.find()) {
-                result.add(translateEffect(effectMatcher.group()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                result.add(translateEffect(effectMatcher.group()).setStyle(GRAY));
             }
         }
         else if(rewardTypeString.contains("§b§lMission Started")) {
             result.add(Text.translatable("wytr.lootrun.mission").setStyle(rewardTypeStyle));
             String mission = normalizeStringForKey(siblings.getLast().getString().replaceAll("§.", ""));
-            result.add(Text.translatable("wytr.lootrun.mission." + mission).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            result.add(Text.translatable("wytr.lootrun.mission." + mission).setStyle(GRAY));
         }
         else {
             String mission = normalizeStringForKey(rewardTypeString.replaceAll("§.", ""));
             result.add(Text.translatable("wytr.lootrun.mission." + mission).setStyle(rewardTypeStyle));
             Matcher effectMatcher = Pattern.compile("\\[.+?]").matcher(siblings.getLast().getString());
             while(effectMatcher.find()) {
-                result.add(translateEffect(effectMatcher.group()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                result.add(translateEffect(effectMatcher.group()).setStyle(GRAY));
             }
         }
 

@@ -2,7 +2,7 @@ package net.hexagreen.wynntrans.text.title;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
-import net.minecraft.client.MinecraftClient;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.Text;
 
 public class TitleHandler {
@@ -15,9 +15,9 @@ public class TitleHandler {
     public void toggleRecordMode() {
         this.recordMode = !recordMode;
         if(recordMode)
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.titleForceRecordMode.enable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.titleForceRecordMode.enable"));
         else
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.titleForceRecordMode.disable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.titleForceRecordMode.disable"));
     }
 
     public Text translateTitleText(Text text) {

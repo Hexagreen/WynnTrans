@@ -1,9 +1,7 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -26,6 +24,6 @@ public class BombThanked extends WynnChatText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.translatable(translationKey, playerName).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.translatable(translationKey, playerName).setStyle(GRAY);
     }
 }

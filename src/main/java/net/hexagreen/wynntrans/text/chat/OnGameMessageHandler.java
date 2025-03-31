@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.chat.types.*;
 import net.hexagreen.wynntrans.text.chat.types.glue.SelectionGlue;
 import net.minecraft.client.MinecraftClient;
@@ -33,17 +34,17 @@ public class OnGameMessageHandler {
     public void toggleRecordMode() {
         this.recordAll = !recordAll;
         if(recordAll)
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.chatForceRecordMode.enable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.chatForceRecordMode.enable"));
         else
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.chatForceRecordMode.disable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.chatForceRecordMode.disable"));
     }
 
     public void toggleBTRegisterMode() {
         this.registerBackText = !registerBackText;
         if(registerBackText)
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.registerBackgroundTextMode.enable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.registerBackgroundTextMode.enable"));
         else
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.registerBackgroundTextMode.disable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.registerBackgroundTextMode.disable"));
     }
 
     public void attachGlue(Text text) {
@@ -292,7 +293,7 @@ public class OnGameMessageHandler {
                 for(Text line : chunk.getSiblings()) {
                     if("\n".equals(line.getString())) continue;
                     if(!translateChatText(line)) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(line);
+                        WynnTransText.transportMessage(line);
                     }
                 }
             }

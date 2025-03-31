@@ -43,18 +43,21 @@ public class CaveCompleted extends WynnChatText implements ISpaceProvider {
             t0 = getSibling(2).getSiblings().get(1);
         }
 
-        resultText.append(centerAlign(t0)).append("\n\n").append(Text.translatable(rootKey + "func.reward").setStyle(getSibling(4).getSiblings().getFirst().getStyle())).append("\n");
+        resultText.append(centerAlign(t0)).append("\n\n").append(Text.translatable(rootKey + "func.reward")
+                .setStyle(getSibling(4).getSiblings().getFirst().getStyle())).append("\n");
 
 
         for(int i = 5; getSiblings().size() > i; i++) {
             Matcher m1 = REGEX_EXP.matcher(getSibling(i).getSiblings().get(1).getString());
             if(m1.find()) {
-                resultText.append(getSibling(i).getSiblings().get(0)).append(Text.translatable(rootKey + "func.reward.experience", m1.group(1)).setStyle(getSibling(i).getSiblings().get(1).getStyle())).append("\n");
+                resultText.append(getSibling(i).getSiblings().get(0)).append(Text.translatable(rootKey + "func.reward.experience", m1.group(1))
+                        .setStyle(getSibling(i).getSiblings().get(1).getStyle())).append("\n");
                 continue;
             }
             Matcher m2 = REGEX_EME.matcher(getSibling(i).getSiblings().get(1).getString());
             if(m2.find()) {
-                resultText.append(getSibling(i).getSiblings().getFirst()).append(Text.translatable(rootKey + "func.reward.emerald", m2.group(1)).setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append("\n");
+                resultText.append(getSibling(i).getSiblings().getFirst()).append(Text.translatable(rootKey + "func.reward.emerald", m2.group(1))
+                        .setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append("\n");
                 continue;
             }
             String valExclusiveReward = getSibling(i).getString();

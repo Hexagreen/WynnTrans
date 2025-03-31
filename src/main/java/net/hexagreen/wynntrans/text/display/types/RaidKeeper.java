@@ -3,7 +3,6 @@ package net.hexagreen.wynntrans.text.display.types;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 public class RaidKeeper extends WynnDisplayText {
     private final Text raidName;
@@ -30,7 +29,7 @@ public class RaidKeeper extends WynnDisplayText {
         resultText.append(getSibling(0)).append("\n");
         resultText.append(raidName);
         resultText.append("\n\n");
-        resultText.append(Text.translatable(translationKey, cost).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey, cost).setStyle(GRAY));
     }
 
     private Text getRaidName(Text text) {

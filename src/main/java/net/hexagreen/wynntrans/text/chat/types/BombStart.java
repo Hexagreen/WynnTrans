@@ -10,6 +10,7 @@ import net.minecraft.util.Formatting;
 import java.util.regex.Pattern;
 
 public class BombStart extends WynnChatText {
+    public static final Style DARK_AQUA = Style.EMPTY.withColor(Formatting.DARK_AQUA);
     private final Text playerName;
     private final Bombs bomb;
 
@@ -37,11 +38,13 @@ public class BombStart extends WynnChatText {
 
         switch(bomb) {
             case COMBAT_XP, PROFESSION_XP, PROFESSION_SPEED, LOOT ->
-                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(Text.translatable(translationKey + ".durational", bomb.getBombDescription(), bomb.getBombTime()).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA)));
-            case ITEM ->
-                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(Text.translatable(translationKey + ".instant", bomb.getBombDescription()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(DARK_AQUA))
+                            .append(Text.translatable(translationKey + ".durational", bomb.getBombDescription(), bomb.getBombTime()).setStyle(DARK_AQUA));
+            case ITEM -> resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(DARK_AQUA))
+                    .append(Text.translatable(translationKey + ".instant", bomb.getBombDescription()).setStyle(GRAY));
             case DUNGEON ->
-                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA))).append(bomb.getBombDescription());
+                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(DARK_AQUA))
+                            .append(bomb.getBombDescription());
             default -> {
                 debugClass.writeTextAsJSON(inputText, "UnknownBomb");
                 resultText = inputText;

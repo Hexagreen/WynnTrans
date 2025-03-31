@@ -4,6 +4,8 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextHandler;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.network.message.MessageHandler;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
@@ -17,11 +19,18 @@ public abstract class WynnTransText {
 
     protected static final String rootKey = "wytr.";
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
-    protected static final TextHandler handler = MinecraftClient.getInstance().textRenderer.getTextHandler();
+    protected static final Style GRAY = Style.EMPTY.withColor(Formatting.GRAY);
+    protected static final TextRenderer TEXT_RENDERER = MinecraftClient.getInstance().textRenderer;
+    protected static final TextHandler TEXT_HANDLER = TEXT_RENDERER.getTextHandler();
+    private static final MessageHandler MESSAGE_HANDLER = MinecraftClient.getInstance().getMessageHandler();
     private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
     protected final String translationKey;
     protected final MutableText inputText;
     protected MutableText resultText;
+
+    public static void transportMessage(Text text) {
+        MESSAGE_HANDLER.onGameMessage(text, false);
+    }
 
     protected static Text flatText(Text text) {
         MutableText linear = text.copyContentOnly().setStyle(text.getStyle());
@@ -64,7 +73,7 @@ public abstract class WynnTransText {
         return result;
     }
 
-    protected static Text siblingsToText(List<Text> texts) {
+    protected static MutableText siblingsToText(List<Text> texts) {
         MutableText result = Text.empty();
         for(Text text : texts) {
             result.append(text);
@@ -172,7 +181,7 @@ public abstract class WynnTransText {
     }
 
     protected List<Text> wrapLine(Text text, int length) {
-        List<StringVisitable> svs = handler.wrapLines(text, length, Style.EMPTY);
+        List<StringVisitable> svs = TEXT_HANDLER.wrapLines(text, length, Style.EMPTY);
         List<Text> wrapped = new ArrayList<>();
         for(StringVisitable sv : svs) {
             MutableText tmp = Text.empty();

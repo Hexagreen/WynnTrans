@@ -30,7 +30,7 @@ public class Merchants extends WynnSystemText {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
 
         if(WTS.checkTranslationExist(keyMerchantName, valMerchantName)) {
             resultText.append(Text.translatable(keyMerchantName).append(": "));

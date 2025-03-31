@@ -8,7 +8,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class WynnScoreboardText extends WynnTransText {
-    protected Style GRAY = Style.EMPTY.withColor(Formatting.GRAY);
 
     private static List<Text> colorCodedToStyledBatch(List<Text> textList) {
         return textList.parallelStream().map(WynnScoreboardText::colorCodedToStyled).toList();
@@ -86,7 +84,7 @@ public abstract class WynnScoreboardText extends WynnTransText {
     }
 
     protected List<Text> wrapLine(Text text) {
-        List<StringVisitable> svs = handler.wrapLines(text, 200, Style.EMPTY);
+        List<StringVisitable> svs = TEXT_HANDLER.wrapLines(text, 200, Style.EMPTY);
         List<Text> wrapped = new ArrayList<>();
         for(StringVisitable sv : svs) {
             MutableText tmp = Text.empty();

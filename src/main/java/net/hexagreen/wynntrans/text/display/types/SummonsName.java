@@ -6,21 +6,16 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.List;
+
 public class SummonsName extends WynnDisplayText {
-    private final String owner;
-    private final Text summons;
-    private final Text timer;
 
     public static boolean typeChecker(Text text) {
-        return text.getString().matches(".+'s (?:Puppet|Effigy|Bird|Hound|Crow)(?:\\n. \\d+[ms])?");
+        return text.getString().matches(".+'s (?:Puppet|Effigy|Bird)(?:\\n. \\d+[ms])?");
     }
 
     public SummonsName(Text text) {
         super(text);
-        String str = inputText.getString();
-        this.owner = str.replaceFirst("(?s)'s .+", "");
-        this.summons = Text.literal(str.replaceAll(".+'s |\\n.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        this.timer = ITime.translateTime(str.replaceFirst(".+\\n. ", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
     }
 
     @Override
@@ -30,6 +25,17 @@ public class SummonsName extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.translatable(translationKey, owner, summons, timer).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        Text owner = Text.literal(getContentString().replaceFirst("'s ", "")).setStyle(getStyle());
+        Text summons = Text.literal(getContentString(0).replaceFirst("\\n", "")).setStyle(GRAY);
+
+        List<Text> nested = getSibling(0).getSiblings();
+        if(!nested.isEmpty()) {
+            Text timer = nested.getFirst().copy().setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)).append(" ")
+                    .append(ITime.translateTime(nested.getLast().getString()).setStyle(GRAY));
+            resultText = Text.translatable(translationKey + ".duration", owner, summons, timer);
+            return;
+        }
+
+        resultText = Text.translatable(translationKey, owner, summons).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
     }
 }

@@ -3,7 +3,6 @@ package net.hexagreen.wynntrans.text.display.types;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -47,7 +46,7 @@ public class FastTravel extends WynnDisplayText {
         else {
             dest = Text.literal(valDestination).setStyle(Style.EMPTY.withItalic(true));
         }
-        Text destination = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY)).append(icon).append(" ").append(dest).append(" ").append(icon).append("\n ");
+        Text destination = Text.empty().setStyle(GRAY).append(icon).append(" ").append(dest).append(" ").append(icon).append("\n ");
 
         resultText = Text.empty().setStyle(getStyle());
         resultText.append(getSibling(0)).append("\n");

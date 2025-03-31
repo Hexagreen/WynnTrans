@@ -50,9 +50,9 @@ public class GatheringNode extends WynnDisplayText {
         else {
             resultText.append(Text.literal(valResource).setStyle(styleResource)).append("\n");
         }
-        Text prof = profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE)).append(" ").append(profession.getText().setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        Text prof = profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE)).append(" ").append(profession.getText().setStyle(GRAY));
         resultText.append(checkCross)
-                .append(Text.translatable("wytr.requirement.profession", prof, level).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                .append(Text.translatable("wytr.requirement.profession", prof, level).setStyle(GRAY));
 
         if(lines.length > 3) {
             resultText.append("\n");

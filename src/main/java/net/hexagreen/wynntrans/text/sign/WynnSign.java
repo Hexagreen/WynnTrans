@@ -2,8 +2,8 @@ package net.hexagreen.wynntrans.text.sign;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.WynnTranslationStorage;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.block.entity.SignText;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
@@ -85,7 +85,7 @@ public class WynnSign {
                 sIndex++;
             }
         }
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.signTranslationRegistered"));
+        WynnTransText.transportMessage(Text.translatable("wytr.command.signTranslationRegistered"));
     }
 
 }

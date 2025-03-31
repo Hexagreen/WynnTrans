@@ -1,5 +1,8 @@
 package net.hexagreen.wynntrans.text.chat;
 
+import com.wynntils.core.components.Managers;
+import com.wynntils.features.overlays.NpcDialogueFeature;
+import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.minecraft.client.MinecraftClient;
@@ -71,6 +74,10 @@ public interface IFocusText extends ISpaceProvider {
 
     private Text pressShiftToContinue(Text fullText) {
         String key = "wytr.func.pressShift";
+        if(WynnTrans.wynntilsLoaded) {
+            NpcDialogueFeature feature = Managers.Feature.getFeatureInstance(NpcDialogueFeature.class);
+            if(feature.isEnabled()) return fullText.getSiblings().get(6);
+        }
         List<Text> original = fullText.getSiblings().get(6).getSiblings();
         MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(2).getStyle()));
         return centerAlign(textBody);
@@ -78,6 +85,10 @@ public interface IFocusText extends ISpaceProvider {
 
     private Text selectOptionContinue(Text fullText) {
         String key = "wytr.func.selectOption";
+        if(WynnTrans.wynntilsLoaded) {
+            NpcDialogueFeature feature = Managers.Feature.getFeatureInstance(NpcDialogueFeature.class);
+            if(feature.isEnabled()) return fullText.getSiblings().get(findLastOptionIndex(fullText) + 4);
+        }
         List<Text> original = fullText.getSiblings().get(findLastOptionIndex(fullText) + 4).getSiblings();
         MutableText textBody = (Text.translatable(key + ".1").setStyle(original.get(0).getStyle())).append(Text.translatable(key + ".2").setStyle(original.get(1).getStyle())).append(Text.translatable(key + ".3").setStyle(original.get(1).getStyle()));
         return centerAlign(textBody);

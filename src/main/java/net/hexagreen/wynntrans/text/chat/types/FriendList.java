@@ -31,14 +31,13 @@ public class FriendList extends WynnSystemText {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
         resultText.append(Text.translatable(translationKey, playerName, friendNumber));
 
         String[] friends = getSibling(0).getString().replaceFirst("^.+'s friends \\(\\d+\\): ", "").split("\\n ");
 
         resultText.append(Text.literal(friends[0]).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
         for(int i = 1; i < friends.length; i++) {
-            resultText.append(splitter);
             resultText.append(Text.literal(friends[i]).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
         }
     }

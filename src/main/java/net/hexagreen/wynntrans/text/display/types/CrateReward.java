@@ -10,7 +10,7 @@ public class CrateReward extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("§.(?:Common|Rare|Epic|Godly|... Black Market ...) Reward\\n.+");
+        return text.getString().matches("§.(?:Common|Rare|Epic|Godly|§4§8§k...§4 Black Market §8§k...§4) Reward\\n.+");
     }
 
     public CrateReward(Text text) {

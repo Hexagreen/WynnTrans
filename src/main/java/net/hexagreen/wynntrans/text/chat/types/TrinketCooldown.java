@@ -2,9 +2,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
@@ -29,7 +27,7 @@ public class TrinketCooldown extends WynnSystemText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().append(header);
-        resultText.append(newTranslateWithSplit(translationKey, item, time).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText = Text.empty();
+        resultText.append(Text.translatable(translationKey, item, time).setStyle(GRAY));
     }
 }

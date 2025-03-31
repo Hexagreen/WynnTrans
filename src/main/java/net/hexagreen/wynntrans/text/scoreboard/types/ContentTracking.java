@@ -156,7 +156,7 @@ public class ContentTracking extends WynnScoreboardText {
                         .setStyle(siblings.get(1).getStyle());
                 arguments.add(1, postName);
                 return Text.translatable("wytr.tooltip.miniQuestDesc.slay", arguments.toArray(Object[]::new))
-                        .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                        .setStyle(GRAY);
             }
             else {
                 String postString = siblings.get(1).getString();
@@ -165,7 +165,7 @@ public class ContentTracking extends WynnScoreboardText {
                         .setStyle(siblings.get(1).getStyle());
                 arguments.add(2, postName);
                 return Text.translatable("wytr.tooltip.miniQuestDesc.gather", arguments.toArray(Object[]::new))
-                        .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                        .setStyle(GRAY);
             }
         }
 
@@ -208,7 +208,7 @@ public class ContentTracking extends WynnScoreboardText {
         String key = baseKey + normalizedName + ".desc";
         String valDesc = descText.getString().replaceAll("\\[-?\\d+, -?\\d+, -?\\d+]", "%1\\$s");
         if(WTS.checkTranslationExist(key, valDesc)) {
-            caveDesc = Text.translatable(key, coordinate).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            caveDesc = Text.translatable(key, coordinate).setStyle(GRAY);
         }
         else {
             caveDesc = descText.copy();
@@ -221,7 +221,7 @@ public class ContentTracking extends WynnScoreboardText {
         String valDesc = descText.getString();
         MutableText otherDesc;
         if(WTS.checkTranslationExist(key, valDesc)) {
-            otherDesc = Text.translatable(key).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            otherDesc = Text.translatable(key).setStyle(GRAY);
         }
         else {
             otherDesc = descText.copy();

@@ -19,8 +19,8 @@ public class SummonsNameLiteral extends WynnDisplayText {
         super(text);
         String str = inputText.getString();
         this.owner = str.replaceFirst("'s§7 .+\\n.+", "");
-        this.summons = Text.literal(str.replaceAll(".+'s§7 |\\n.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
-        this.timer = ITime.translateTime(str.replaceFirst(".+\\n", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        this.summons = Text.literal(str.replaceAll(".+'s§7 |\\n.+", "")).setStyle(GRAY);
+        this.timer = ITime.translateTime(str.replaceFirst(".+\\n", "")).setStyle(GRAY);
     }
 
     @Override

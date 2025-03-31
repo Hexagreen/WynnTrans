@@ -29,7 +29,7 @@ public class ArcherTrap extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         if(arming) resultText = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.YELLOW));
         else
-            resultText = Text.translatable(translationKey + ".charge", damage).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            resultText = Text.translatable(translationKey + ".charge", damage).setStyle(GRAY);
 
     }
 }

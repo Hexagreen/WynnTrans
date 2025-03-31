@@ -57,7 +57,7 @@ public class CaveLootChest extends WynnDisplayText {
         }
 
         if(valTarget.contains("Mobs")) {
-            resultText.append(Text.translatable(translationKey + ".slayMob", progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            resultText.append(Text.translatable(translationKey + ".slayMob", progress).setStyle(GRAY));
         }
         else {
             MutableText target;
@@ -69,10 +69,10 @@ public class CaveLootChest extends WynnDisplayText {
                 target = Text.literal(valTarget).setStyle(Style.EMPTY.withColor(Formatting.WHITE));
             }
             if(!progress.contains("a")) {
-                resultText.append(Text.translatable(translationKey + ".slayTarget", target, progress).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                resultText.append(Text.translatable(translationKey + ".slayTarget", target, progress).setStyle(GRAY));
             }
             else {
-                resultText.append(Text.translatable(translationKey + ".slayHead", target).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                resultText.append(Text.translatable(translationKey + ".slayHead", target).setStyle(GRAY));
             }
         }
     }

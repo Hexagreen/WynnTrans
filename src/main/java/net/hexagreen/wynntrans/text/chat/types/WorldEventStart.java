@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Style;
@@ -31,24 +32,29 @@ public class WorldEventStart extends WynnSystemText {
     }
 
     @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
+    }
+
+    @Override
     protected String setTranslationKey() {
         return rootKey + "worldEvent.";
     }
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().append(header).setStyle(getStyle(0));
+        resultText = Text.empty().setStyle(getStyle(0));
         if(WTS.checkTranslationExist(keyWorldEventName, valWorldEventName)) {
             Text worldEvent = Text.translatable(keyWorldEventName);
-            resultText.append(newTranslateWithSplit(rootKey + "func.worldEvent.start", worldEvent, leftTime, distance, CLICK2TRACK));
+            resultText.append(Text.translatable(rootKey + "func.worldEvent.start", worldEvent, leftTime, distance, CLICK2TRACK));
         }
         else {
-            resultText.append(newTranslateWithSplit(rootKey + "func.worldEvent.start", valWorldEventName, leftTime, distance, CLICK2TRACK));
+            resultText.append(Text.translatable(rootKey + "func.worldEvent.start", valWorldEventName, leftTime, distance, CLICK2TRACK));
         }
     }
 
     private Text initDistanceText() {
         String distance = getSibling(1).getString().replaceAll("\\D", "");
-        return Text.translatable(rootKey + "func.worldEvent.distance", distance).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        return Text.translatable(rootKey + "func.worldEvent.distance", distance).setStyle(GRAY);
     }
 }

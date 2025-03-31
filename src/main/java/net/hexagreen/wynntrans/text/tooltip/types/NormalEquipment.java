@@ -4,10 +4,9 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.IWynntilsFeature;
+import net.hexagreen.wynntrans.text.tooltip.IPricedItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -18,13 +17,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter {
-    private static final Style GRAY = Style.EMPTY.withColor(Formatting.GRAY);
+public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter, IPricedItem {
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
             Pattern.compile(" (.+) [IV]+");
-    private final TextRenderer textRenderer;
     private final List<Text> tempText;
     private final List<Integer> wrapTargetIdx;
     private int longestWidth;
@@ -43,7 +40,6 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
 
     public NormalEquipment(List<Text> texts) {
         super(ITooltipSplitter.correctSplitter(texts));
-        this.textRenderer = MinecraftClient.getInstance().textRenderer;
         this.tempText = new ArrayList<>();
         this.wrapTargetIdx = new ArrayList<>();
         this.longestWidth = 150;
@@ -58,6 +54,8 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
+        ItemTooltipPriceSection priceSection = detachPriceSection(segments);
+        int priceSectionIndex = priceSection.position();
 
         for(int i = 0, size = segments.size(); i < size; i++) {
             if(i == 0) {
@@ -65,11 +63,14 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
                 tempText.add(SPLITTER);
                 continue;
             }
-            List<Text> seg = segments.get(i);
-            if(seg.getFirst().getSiblings().getFirst().getString().equals("Price:")) {
-                translatePriceSection(seg);
+            else if(i == priceSectionIndex) {
+                priceSection.priceTexts().forEach(this::addAndRecordWidth);
+                tempText.add(SPLITTER);
+                continue;
             }
-            else if(Pattern.compile("Attack Speed|This item's powers have").matcher(seg.getFirst().getString()).find()) {
+
+            List<Text> seg = segments.get(i);
+            if(Pattern.compile("Attack Speed|This item's powers have").matcher(seg.getFirst().getString()).find()) {
                 translateNameSection(seg);
             }
             else if(BASE_STAT_REGEX.matcher(seg.getFirst().getString()).find()) {
@@ -179,19 +180,6 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
             addAndRecordWidth(translated);
             addAndRecordWidth(Text.literal(itemNameString).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
         }
-    }
-
-    private void translatePriceSection(List<Text> texts) {
-        List<Text> dump = new ArrayList<>();
-        texts.forEach(t -> {
-            if(t.getString().equals("Price:")) {
-                dump.add(Text.translatable("wytr.func.price").setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
-            }
-            else {
-                dump.add(t);
-            }
-        });
-        dump.forEach(this::addAndRecordWidth);
     }
 
     private void translateBaseStatSection(List<Text> texts) {
@@ -306,7 +294,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         translatedIDs.forEach(t -> {
             tempText.add(t);
             if(t.getContent().toString().equals("empty")) {
-                updateLongestWidth(textRenderer.getWidth(t));
+                updateLongestWidth(TEXT_RENDERER.getWidth(t));
             }
             else {
                 wrapTargetIdx.add(tempText.size() - 1);
@@ -381,7 +369,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     }
 
     private void addAndRecordWidth(Text text) {
-        updateLongestWidth(textRenderer.getWidth(text));
+        updateLongestWidth(TEXT_RENDERER.getWidth(text));
         tempText.add(text);
     }
 }

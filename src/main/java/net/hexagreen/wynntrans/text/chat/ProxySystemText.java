@@ -24,24 +24,24 @@ public class ProxySystemText extends SimpleSystemText {
 
     @Override
     protected String initValText() {
-        return lineFeedReplacer(Templates.findTemplate(inputText).mutator.apply(inputText));
+        return Templates.findTemplate(inputText).mutator.apply(inputText);
     }
 
     @Override
-    protected MutableText newTranslateWithSplit(String key) {
-        return Text.translatable(key, splitter, template.argumentParser.apply(inputText));
+    protected MutableText newTranslate(String key) {
+        return Text.translatable(key, template.argumentParser.apply(inputText));
     }
 
     private enum Templates {
-        ANNIHILATION(Pattern.compile("^Prepare to defend the province at"),
-                text -> text.getString().replaceAll("in .+!$", "in %2\\$s!"),
+        ANNIHILATION(Pattern.compile("Prepare to defend the province at"),
+                text -> text.getString().replaceAll("in .+!$", "in %1\\$s!"),
                 text -> {
                     Matcher m = Pattern.compile("in (.+)!$").matcher(text.getString());
                     boolean ignore = m.find();
                     return ITime.translateTime(m.group(1));
                 }),
         BANK_PAGE_ADDED(Pattern.compile("You have unlocked page"),
-                text -> text.getString().replaceAll("\\d+", "%2\\$s"),
+                text -> text.getString().replaceAll("\\d+", "%1\\$s"),
                 text -> text.getString().replaceAll("\\D", ""));
 
         private final Pattern template;

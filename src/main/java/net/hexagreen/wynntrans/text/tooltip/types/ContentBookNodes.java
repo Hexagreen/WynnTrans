@@ -148,7 +148,7 @@ public class ContentBookNodes extends WynnTooltipText {
             else {
                 contentName.append(Dungeons.getDungeons(normalizedName).getDungeonName().setStyle(name.getStyle())).append(" ");
             }
-            MutableText categoryText = Text.literal("[").setStyle(Style.EMPTY.withColor(Formatting.GRAY))
+            MutableText categoryText = Text.literal("[").setStyle(GRAY)
                     .append(Text.translatableWithFallback("wytr.content." + normalizeStringForKey(category), category))
                     .append("]");
             contentName.append(categoryText);
@@ -247,7 +247,7 @@ public class ContentBookNodes extends WynnTooltipText {
                             .setStyle(siblings.get(1).getStyle());
                     arguments.add(1, postName);
                     desc = Text.translatable("wytr.tooltip.miniQuestDesc.slay", arguments.toArray(Object[]::new))
-                            .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                            .setStyle(GRAY);
                 }
                 else {
                     String postString = siblings.get(1).getString();
@@ -256,7 +256,7 @@ public class ContentBookNodes extends WynnTooltipText {
                             .setStyle(siblings.get(1).getStyle());
                     arguments.add(2, postName);
                     desc = Text.translatable("wytr.tooltip.miniQuestDesc.gather", arguments.toArray(Object[]::new))
-                            .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                            .setStyle(GRAY);
                 }
                 return;
             }
@@ -304,7 +304,7 @@ public class ContentBookNodes extends WynnTooltipText {
                 carrierText = descText;
             }
             String carrier = carrierText.getString().replaceAll("\n", " ");
-            desc = Text.literal(carrier).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            desc = Text.literal(carrier).setStyle(GRAY);
         }
 
         private void descSectionCave(Text descText) {
@@ -314,7 +314,7 @@ public class ContentBookNodes extends WynnTooltipText {
             StringBuilder key = new StringBuilder().append(baseKey).append(normalizedName).append(".desc");
             String valDesc = descText.getString().replaceAll("\\[-?\\d+, -?\\d+, -?\\d+]", "%1\\$s");
             if(WTS.checkTranslationExist(key.toString(), valDesc)) {
-                caveDesc = Text.translatable(key.toString(), coordinate).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                caveDesc = Text.translatable(key.toString(), coordinate).setStyle(GRAY);
             }
             else {
                 caveDesc = descText;
@@ -327,7 +327,7 @@ public class ContentBookNodes extends WynnTooltipText {
             String valDesc = descText.getString();
             Text otherDesc;
             if(WTS.checkTranslationExist(key.toString(), valDesc)) {
-                otherDesc = Text.translatable(key.toString()).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                otherDesc = Text.translatable(key.toString()).setStyle(GRAY);
             }
             else {
                 otherDesc = descText;
@@ -342,7 +342,7 @@ public class ContentBookNodes extends WynnTooltipText {
         }
 
         private void processInfoSection(List<Text> chunk) {
-            Style style = Style.EMPTY.withColor(Formatting.GRAY);
+            Style style = GRAY;
             List<Text> infos = new ArrayList<>();
             for(Text line : chunk) {
                 String string = line.getString();
@@ -513,7 +513,7 @@ public class ContentBookNodes extends WynnTooltipText {
 
         private Text rewardSectionTranslate(Text text) {
             String reward = text.getSiblings().get(1).getString();
-            MutableText line = Text.literal(" ").setStyle(Style.EMPTY.withColor(Formatting.GRAY))
+            MutableText line = Text.literal(" ").setStyle(GRAY)
                     .append(text.getSiblings().getFirst());
             if(reward.matches("\\+\\d+(?: Combat)? XP")) {
                 String num = reward.replaceAll("\\D", "");

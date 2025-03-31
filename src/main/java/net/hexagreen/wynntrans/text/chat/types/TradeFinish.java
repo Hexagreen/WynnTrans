@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -23,18 +24,23 @@ public class TradeFinish extends WynnSystemText {
     }
 
     @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
+    }
+
+    @Override
     protected String setTranslationKey() {
         return rootKey + "func.tradeFinish.";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
         if(buyingMode) {
-            resultText.append(newTranslateWithSplit(translationKey + "buy", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            resultText.append(Text.translatable(translationKey + "buy", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             return;
         }
-        resultText.append(newTranslateWithSplit(translationKey + "sell", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(translationKey + "sell", item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 
     private Text parseItem() {

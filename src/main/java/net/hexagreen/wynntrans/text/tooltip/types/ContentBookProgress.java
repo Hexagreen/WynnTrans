@@ -1,8 +1,8 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.text.ISpaceProvider;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
@@ -88,7 +88,7 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
     private void appendAlignment(List<List<Text>> list) {
         int max = -1;
         for(List<Text> bundle : list) {
-            max = Math.max(max, MinecraftClient.getInstance().textRenderer.getWidth(bundle.getFirst()));
+            max = Math.max(max, WynnTransText.TEXT_RENDERER.getWidth(bundle.getFirst()));
         }
 
         for(List<Text> bundle : list) {

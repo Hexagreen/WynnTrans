@@ -4,10 +4,10 @@ import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class SpecialNPCName extends WynnDisplayText {
+    private static final Identifier BANNER = Identifier.of("minecraft:banner/pill");
     private final Text icon;
     private final MutableText banner;
     private final String keyName;
@@ -16,7 +16,7 @@ public class SpecialNPCName extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         try {
-            return text.getSiblings().get(2).getSiblings().getFirst().getStyle().getFont().equals(Identifier.of("minecraft:banner/pill"))
+            return text.getSiblings().get(2).getSiblings().getFirst().getStyle().getFont().equals(BANNER)
                     && text.getString().contains("\n§7NPC");
         }
         catch(Exception ignore) {
@@ -61,6 +61,6 @@ public class SpecialNPCName extends WynnDisplayText {
         }
 
         resultText = Text.empty();
-        resultText.append(icon).append("\n").append(banner.setStyle(banner.getStyle().withParent(getStyle(2)))).append("\n").append(name).append("\n").append(Text.literal("NPC").setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(icon).append("\n").append(banner.setStyle(banner.getStyle().withParent(getStyle(2)))).append("\n").append(name).append("\n").append(Text.literal("NPC").setStyle(GRAY));
     }
 }

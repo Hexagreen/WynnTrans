@@ -54,11 +54,11 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
                 continue;
             }
             if(getSibling(i).getString().contains("+2 Skill Points")) {
-                resultText.append(Text.translatable(translationKey + ".skillPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append(Text.translatable(translationKey + ".skillPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append("\n");
+                resultText.append(Text.translatable(translationKey + ".skillPoint").setStyle(GRAY)).append(Text.translatable(translationKey + ".skillPoint.guide").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))).append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+5 Maximum HP")) {
-                resultText.append(Text.translatable(translationKey + ".healthPoint").setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append("\n");
+                resultText.append(Text.translatable(translationKey + ".healthPoint").setStyle(GRAY)).append("\n");
                 continue;
             }
             if(getSibling(i).getString().contains("+ New Quest")) {
@@ -79,16 +79,16 @@ public class LevelUp extends WynnChatText implements ISpaceProvider {
                     questText = Text.literal(getSibling(i).getString().substring(16)).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY));
                 }
 
-                resultText.append(Text.translatable(keyNewQuest).setStyle(Style.EMPTY.withColor(Formatting.GRAY))).append(questText).append("\n");
+                resultText.append(Text.translatable(keyNewQuest).setStyle(GRAY)).append(questText).append("\n");
                 continue;
             }
             String hashOtherReward = DigestUtils.sha1Hex(getSibling(i).getString()).substring(0, 4);
-            MutableText otherReward = Text.literal("+ ").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            MutableText otherReward = Text.literal("+ ").setStyle(GRAY);
             String keyOtherReward = "wytr.level." + m2.group(1) + "." + hashOtherReward;
             String valOtherReward = getSibling(i).getString().substring(4);
 
             if(WTS.checkTranslationExist(keyOtherReward, valOtherReward)) {
-                otherReward.append(Text.translatable(keyOtherReward).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+                otherReward.append(Text.translatable(keyOtherReward).setStyle(GRAY));
             }
             else {
                 otherReward.append(valOtherReward);

@@ -48,7 +48,7 @@ public class KickFromServer extends WynnChatText {
         else resultText.append(getSibling(1));
 
         if(!kickWhileConnect) {
-            resultText.append(Text.translatable(translationKey + ".to", fallbackServer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            resultText.append(Text.translatable(translationKey + ".to", fallbackServer).setStyle(GRAY));
         }
     }
 

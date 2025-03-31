@@ -25,6 +25,7 @@ public class EquipmentSkillRequirement extends WynnSystemText {
         Matcher matcher = Pattern.compile("Your (.+) skill").matcher(getContentString(0));
         boolean ignore = matcher.find();
         this.equipName = new ItemName(getSibling(-1).getString().replaceAll("\\n", ""))
+                .setNoTranslationAddiction()
                 .textAsMutable().setStyle(Style.EMPTY.withColor(Formatting.RED));
         this.skill = CharacterSkill.getSkill(matcher.group(1));
         this.level = getSibling(1);
@@ -37,7 +38,7 @@ public class EquipmentSkillRequirement extends WynnSystemText {
 
     @Override
     protected void build() {
-        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)).append(header);
-        resultText.append(newTranslateWithSplit(translationKey, skill, level, equipName));
+        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
+        resultText.append(Text.translatable(translationKey, skill, level, equipName));
     }
 }

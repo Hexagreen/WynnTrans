@@ -74,7 +74,7 @@ public class SecretDiscovery extends WynnChatText implements ISpaceProvider {
             loreLines = valAreaLore.split("\n");
         }
         for(String str : loreLines) {
-            Text line = Text.literal(str).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            Text line = Text.literal(str).setStyle(GRAY);
             resultText.append(centerAlign(line)).append("\n");
         }
     }

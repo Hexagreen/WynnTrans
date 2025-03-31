@@ -2,7 +2,7 @@ package net.hexagreen.wynntrans.text.tooltip;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
-import net.minecraft.client.MinecraftClient;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -26,9 +26,9 @@ public class DrawTooltipHandler {
     public void toggleRecordMode() {
         this.recordMode = !recordMode;
         if(recordMode)
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.tooltipForceRecordMode.enable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.tooltipForceRecordMode.enable"));
         else
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.tooltipForceRecordMode.disable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.tooltipForceRecordMode.disable"));
     }
 
     public List<Text> translateTooltipText(List<Text> texts) {

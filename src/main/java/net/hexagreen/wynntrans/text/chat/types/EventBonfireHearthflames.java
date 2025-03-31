@@ -37,7 +37,7 @@ public class EventBonfireHearthflames extends SimpleSystemText {
     }
 
     @Override
-    protected MutableText newTranslateWithSplit(String key) {
-        return Text.translatable(key, splitter, num);
+    protected MutableText newTranslate(String key) {
+        return Text.translatable(key, num);
     }
 }

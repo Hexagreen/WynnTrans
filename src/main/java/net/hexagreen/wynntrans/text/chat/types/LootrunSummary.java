@@ -27,7 +27,7 @@ public class LootrunSummary extends WynnChatText implements ILootrun {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
-        Text desc = Text.translatable(translationKey + ".desc").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text desc = Text.translatable(translationKey + ".desc").setStyle(GRAY);
 
         List<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
@@ -64,7 +64,7 @@ public class LootrunSummary extends WynnChatText implements ILootrun {
                 case 2 -> key = translationKey + ".reward.sacrifice";
                 case 3 -> key = translationKey + ".reward.experience";
             }
-            if(key != null) result.add(Text.translatable(key, number).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            if(key != null) result.add(Text.translatable(key, number).setStyle(GRAY));
         }
 
         return result;
@@ -84,7 +84,7 @@ public class LootrunSummary extends WynnChatText implements ILootrun {
                 case 2 -> key = translationKey + ".stat.chest";
                 case 3 -> key = translationKey + ".stat.challenge";
             }
-            if(key != null) result.add(Text.translatable(key, number).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+            if(key != null) result.add(Text.translatable(key, number).setStyle(GRAY));
         }
 
         return result;

@@ -2,7 +2,7 @@ package net.hexagreen.wynntrans.text.display;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
-import net.minecraft.client.MinecraftClient;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.Text;
 
 public class DisplayEntityHandler {
@@ -15,9 +15,9 @@ public class DisplayEntityHandler {
     public void toggleRecordMode() {
         this.recordMode = !recordMode;
         if(recordMode)
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.displayForceRecordMode.enable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.displayForceRecordMode.enable"));
         else
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.translatable("wytr.command.displayForceRecordMode.disable"));
+            WynnTransText.transportMessage(Text.translatable("wytr.command.displayForceRecordMode.disable"));
     }
 
     public Text translateDisplayText(Text text) {

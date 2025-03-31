@@ -26,7 +26,7 @@ public class LootrunMissionComplete extends WynnChatText implements ILootrun {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true));
         String clearedMissions = getSibling(1).getString().replaceAll("§.", "").replaceAll("\\D", "");
-        Text desc = Text.translatable(translationKey + ".desc", clearedMissions).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text desc = Text.translatable(translationKey + ".desc", clearedMissions).setStyle(GRAY);
 
         resultText = Text.empty()
                 .append(centerAlign(title)).append("\n")
@@ -51,7 +51,7 @@ public class LootrunMissionComplete extends WynnChatText implements ILootrun {
         Style missionStyle = parseStyleCode(text.getSiblings().getFirst().getString());
 
         result.add(Text.translatable("wytr.lootrun.mission." + missionName).setStyle(missionStyle));
-        result.addAll(wrapLine(Text.translatable("wytr.lootrun.mission." + missionName + ".desc").setStyle(Style.EMPTY.withColor(Formatting.GRAY)), 160));
+        result.addAll(wrapLine(Text.translatable("wytr.lootrun.mission." + missionName + ".desc").setStyle(GRAY), 160));
 
         return result;
     }

@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.enums.ItemRarity;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Text;
 
@@ -21,31 +22,47 @@ public class Identifier extends WynnSystemText {
     }
 
     @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
+    }
+
+    @Override
     protected String setTranslationKey() {
         return rootKey + "func.identifier";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
         resultText.append(Text.translatable(translationKey).append(": "));
 
         switch(messageType) {
-            case ILLEGAL_ITEM ->
-                    resultText.append(newTranslateWithSplit(translationKey + ".illegalItem", ItemRarity.UNIQUE.getRarity(), ItemRarity.RARE.getRarity(), ItemRarity.LEGENDARY.getRarity(), ItemRarity.SET.getRarity(), ItemRarity.FABLED.getRarity(), ItemRarity.MYTHIC.getRarity()).setStyle(getStyle(1)));
+            case ILLEGAL_ITEM -> resultText.append(Text.translatable(translationKey + ".illegalItem",
+                    ItemRarity.UNIQUE.getRarity(),
+                    ItemRarity.RARE.getRarity(),
+                    ItemRarity.LEGENDARY.getRarity(),
+                    ItemRarity.SET.getRarity(),
+                    ItemRarity.FABLED.getRarity(),
+                    ItemRarity.MYTHIC.getRarity()).setStyle(getStyle(1)));
 
             case AUGMENT_FIRST ->
-                    resultText.append(newTranslateWithSplit(translationKey + ".augmentFirst").setStyle(getStyle(1)));
+                    resultText.append(Text.translatable(translationKey + ".augmentFirst").setStyle(getStyle(1)));
             case NULL -> throw new TextTranslationFailException(this.getClass().getName());
         }
     }
 
     private enum MessageType {
-        ILLEGAL_ITEM(Pattern.compile("I can't identify")), AUGMENT_FIRST(Pattern.compile("You cannot add")), NULL(null);
+        ILLEGAL_ITEM(Pattern.compile("I can't identify")),
+        AUGMENT_FIRST(Pattern.compile("You cannot add")),
+        NULL(null);
         private final Pattern regex;
 
         private static Identifier.MessageType getType(Text text) {
-            return Arrays.stream(Identifier.MessageType.values()).filter(messageType -> Objects.nonNull(messageType.regex)).filter(messageType -> messageType.regex.matcher(text.getString()).find()).findFirst().orElse(NULL);
+            return Arrays.stream(Identifier.MessageType.values())
+                    .filter(messageType -> Objects.nonNull(messageType.regex))
+                    .filter(messageType -> messageType.regex.matcher(text.getString()).find())
+                    .findFirst()
+                    .orElse(NULL);
         }
 
         MessageType(Pattern regex) {

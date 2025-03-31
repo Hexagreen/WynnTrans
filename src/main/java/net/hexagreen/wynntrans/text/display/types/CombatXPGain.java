@@ -39,7 +39,7 @@ public class CombatXPGain extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        resultText = Text.empty().setStyle(GRAY);
         if(multiplier != null) {
             resultText.append(multiplier);
         }

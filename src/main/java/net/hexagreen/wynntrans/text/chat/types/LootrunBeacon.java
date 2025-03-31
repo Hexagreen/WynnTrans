@@ -43,7 +43,7 @@ public class LootrunBeacon extends WynnChatText implements ILootrun {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
-        Text desc = Text.translatable(translationKey + ".desc").setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+        Text desc = Text.translatable(translationKey + ".desc").setStyle(GRAY);
         Text reroll = null;
         Text rerollCount = null;
 
@@ -100,7 +100,7 @@ public class LootrunBeacon extends WynnChatText implements ILootrun {
         }
 
         Text beaconDesc = Text.translatable("wytr.lootrun.beacon." + getColorStringForKey(beaconNameString) + ".desc", numbers.toArray(Object[]::new))
-                .setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                .setStyle(GRAY);
 
         List<Text> result = wrapLine(beaconDesc, (int) CHAT_HUD_WIDTH / 3);
         result.addFirst(beaconName);

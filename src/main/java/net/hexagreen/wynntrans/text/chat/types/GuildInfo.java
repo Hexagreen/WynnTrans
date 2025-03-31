@@ -34,21 +34,21 @@ public class GuildInfo extends WynnSystemText {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+        resultText = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.AQUA));
 
         switch(infoType) {
             case WEEK_OBJ_COMPLETE ->
-                    resultText.append(newTranslateWithSplit(translationKey + ".weekObj.complete", infoType.matcher.group(1)));
+                    resultText.append(Text.translatable(translationKey + ".weekObj.complete", infoType.matcher.group(1)));
             case WEEK_OBJ_EXPIRE -> {
                 Text time = ITime.translateTime(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-                resultText.append(newTranslateWithSplit(translationKey + ".weekObj.expire", time));
+                resultText.append(Text.translatable(translationKey + ".weekObj.expire", time));
             }
             case WEEK_OBJ_NEW -> {
-                resultText.append(newTranslateWithSplit(translationKey + ".weekObj.new"));
+                resultText.append(Text.translatable(translationKey + ".weekObj.new"));
             }
             case SEASON_END -> {
                 Text time = Text.literal(getContentString(1).replaceAll("\n", "")).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
-                resultText.append(newTranslateWithSplit(translationKey + ".season.end", time));
+                resultText.append(Text.translatable(translationKey + ".season.end", time));
             }
             default -> {
                 debugClass.writeTextAsJSON(inputText, "UnknownGuildInfo");
@@ -58,12 +58,18 @@ public class GuildInfo extends WynnSystemText {
     }
 
     private enum GuildInformation {
-        WEEK_OBJ_COMPLETE(Pattern.compile("(.+) has finished their weekly objective")), WEEK_OBJ_EXPIRE(Pattern.compile("Only (.+)left to complete the Weekly Guild Objectives!")), WEEK_OBJ_NEW(Pattern.compile("New Weekly Guild Objectives are being assigned")), SEASON_END(Pattern.compile("The current guild season will end in"));
+        WEEK_OBJ_COMPLETE(Pattern.compile("(.+) has finished their weekly objective")),
+        WEEK_OBJ_EXPIRE(Pattern.compile("Only (.+)left to complete the Weekly Guild Objectives!")),
+        WEEK_OBJ_NEW(Pattern.compile("New Weekly Guild Objectives are being assigned")),
+        SEASON_END(Pattern.compile("The current guild season will end in"));
         private final Pattern infoRegex;
         private Matcher matcher;
 
         private static GuildInformation findAndGet(Text text) {
-            return Arrays.stream(GuildInformation.values()).filter(guildInformation -> guildInformation.find(text)).findFirst().orElse(null);
+            return Arrays.stream(GuildInformation.values())
+                    .filter(guildInformation -> guildInformation.find(text))
+                    .findFirst()
+                    .orElse(null);
         }
 
         GuildInformation(Pattern infoRegex) {

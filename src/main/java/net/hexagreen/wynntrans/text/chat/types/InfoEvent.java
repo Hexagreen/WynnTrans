@@ -3,9 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.regex.Pattern;
@@ -74,7 +72,7 @@ public class InfoEvent extends WynnChatText {
             }
         }
 
-        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(GRAY));
     }
 
     private Text initTimer(Text text) {

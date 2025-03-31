@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -28,6 +29,11 @@ public class TradePartial extends WynnSystemText {
     }
 
     @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
+    }
+
+    @Override
     protected String setTranslationKey() {
         return rootKey + "func.tradePartial.";
     }
@@ -36,14 +42,14 @@ public class TradePartial extends WynnSystemText {
     protected void build() {
         resultText = Text.empty();
         if(buyingMode) {
-            resultText.append(newTranslateWithSplit(translationKey + "buy", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            resultText.append(Text.translatable(translationKey + "buy", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             return;
         }
-        resultText.append(newTranslateWithSplit(translationKey + "sell", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText.append(Text.translatable(translationKey + "sell", tradeAmount, item).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 
     private Text parseItem() {
-        MutableText item = Text.empty().append(header).setStyle(getStyle());
+        MutableText item = Text.empty().setStyle(getStyle());
         String content = getContentString(1).replaceAll("À§d.+?$", "");
         item.append(Text.literal(content).setStyle(getStyle(1)));
         return item;

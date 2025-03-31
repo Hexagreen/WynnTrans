@@ -4,7 +4,6 @@ import net.hexagreen.wynntrans.enums.Dungeons;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.Locale;
 
@@ -34,7 +33,7 @@ public class DungeonTitle extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty().setStyle(getStyle());
-        resultText.append(getSibling(0)).append("\n").append(Text.translatable(translationKey, dungeonName, difficulty, level).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(getSibling(0)).append("\n").append(Text.translatable(translationKey, dungeonName, difficulty, level).setStyle(GRAY));
     }
 
     private Text getDungeonName(String string) {

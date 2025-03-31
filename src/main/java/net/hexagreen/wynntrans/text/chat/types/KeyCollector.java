@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Style;
@@ -23,29 +24,38 @@ public class KeyCollector extends WynnSystemText {
     }
 
     @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
+    }
+
+    @Override
     protected String setTranslationKey() {
         return rootKey + "func.keyCollector";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
 
         resultText.append(Text.translatable(translationKey).append(": "));
 
         switch(messageType) {
             case GIVE_ME_KEY ->
-                    resultText.append(newTranslateWithSplit(translationKey + ".giveMeKey", parseDungeonKey(getSibling(2))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
-            case KEY_PASSED ->
-                    resultText.append(newTranslateWithSplit(translationKey + ".keyPassed").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(Text.translatable(translationKey + ".giveMeKey", parseDungeonKey(getSibling(2)))
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+            case KEY_PASSED -> resultText.append(Text.translatable(translationKey + ".keyPassed")
+                    .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case NEED_KEY ->
-                    resultText.append(newTranslateWithSplit(translationKey + ".needKey", parseDungeonKey(getSibling(2))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(Text.translatable(translationKey + ".needKey", parseDungeonKey(getSibling(2)))
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
             case PARTY_PASS -> {
                 if(getSiblings().size() == 6) {
-                    resultText.append(newTranslateWithSplit(translationKey + ".partyPass", parsePlayerName(getSibling(0)), parseTimeUnit(getSibling(2), getSibling(3)), parseNumber(getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(Text.translatable(translationKey + ".partyPass", parsePlayerName(getSibling(0)), parseTimeUnit(getSibling(2), getSibling(3)), parseNumber(getSibling(4)))
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
                 }
                 else {
-                    resultText.append(newTranslateWithSplit(translationKey + ".partyPass", getSibling(1), parseTimeUnit(getSibling(3), getSibling(4)), parseNumber(getSibling(5))).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+                    resultText.append(Text.translatable(translationKey + ".partyPass", getSibling(1), parseTimeUnit(getSibling(3), getSibling(4)), parseNumber(getSibling(5)))
+                            .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
                 }
             }
             case NULL -> throw new TextTranslationFailException("KeyCollector.class");
@@ -73,11 +83,19 @@ public class KeyCollector extends WynnSystemText {
     }
 
     private enum MessageType {
-        GIVE_ME_KEY(Pattern.compile("Bring me")), KEY_PASSED(Pattern.compile("You have access")), NEED_KEY(Pattern.compile("You cannot enter")), PARTY_PASS(Pattern.compile("has already opened")), NULL(null);
+        GIVE_ME_KEY(Pattern.compile("Bring me")),
+        KEY_PASSED(Pattern.compile("You have access")),
+        NEED_KEY(Pattern.compile("You cannot enter")),
+        PARTY_PASS(Pattern.compile("has already opened")),
+        NULL(null);
         private final Pattern regex;
 
         private static MessageType getType(Text text) {
-            return Arrays.stream(MessageType.values()).filter(messageType -> Objects.nonNull(messageType.regex)).filter(messageType -> messageType.regex.matcher(text.getString().replaceAll("\\n", "")).find()).findFirst().orElse(NULL);
+            return Arrays.stream(MessageType.values())
+                    .filter(messageType -> Objects.nonNull(messageType.regex))
+                    .filter(messageType -> messageType.regex.matcher(text.getString().replaceAll("\\n", "")).find())
+                    .findFirst()
+                    .orElse(NULL);
         }
 
         MessageType(Pattern regex) {

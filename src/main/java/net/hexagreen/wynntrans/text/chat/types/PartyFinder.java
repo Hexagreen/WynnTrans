@@ -29,8 +29,8 @@ public class PartyFinder extends WynnSystemText {
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
-        resultText.append(newTranslateWithSplit(translationKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)).append(": "))
-                .append(newTranslateWithSplit(translationKey + ".message", playerName, partyName, players).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
+        resultText = Text.empty().setStyle(getStyle());
+        resultText.append(Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)).append(": "))
+                .append(Text.translatable(translationKey + ".message", playerName, partyName, players).setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
     }
 }

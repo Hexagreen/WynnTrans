@@ -32,7 +32,7 @@ public class PartyLeaved extends WynnSystemText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException {
-        resultText = Text.empty().setStyle(getStyle()).append(header);
+        resultText = Text.empty().setStyle(getStyle());
 
         resultText.append(Text.translatable(translationKey, playerName));
     }

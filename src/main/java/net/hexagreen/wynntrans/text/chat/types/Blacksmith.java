@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -19,29 +20,34 @@ public class Blacksmith extends WynnSystemText {
     }
 
     @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
+    }
+
+    @Override
     protected String setTranslationKey() {
         return rootKey + "func.blacksmith";
     }
 
     @Override
     protected void build() {
-        resultText = Text.empty().append(header).setStyle(getStyle());
+        resultText = Text.empty().setStyle(getStyle());
 
         resultText.append(Text.translatable(translationKey).append(": "));
 
         if(getContentString(1).contains("I can't buy")) {
-            resultText.append(newTranslateWithSplit(translationKey + ".no").setStyle(getStyle(1)));
+            resultText.append(Text.translatable(translationKey + ".no").setStyle(getStyle(1)));
         }
         else if(getContentString(1).contains("You have sold")) {
             Text soldAmount = getSoldAmount();
             Text earnedEmerald = getEarnedEmerald();
-            resultText.append(newTranslateWithSplit(translationKey + ".sold", soldAmount, earnedEmerald).setStyle(getStyle(1)));
+            resultText.append(Text.translatable(translationKey + ".sold", soldAmount, earnedEmerald).setStyle(getStyle(1)));
         }
         else if(getContentString(1).contains("You have repaired")) {
             Text[] parsed = getRepairing();
             Text repairedItem = parsed[0];
             Text repairCost = parsed[1];
-            resultText.append(newTranslateWithSplit(translationKey + ".repair", repairedItem, repairCost).setStyle(getStyle(1)));
+            resultText.append(Text.translatable(translationKey + ".repair", repairedItem, repairCost).setStyle(getStyle(1)));
         }
 
         else throw new TextTranslationFailException("Blacksmith.class");

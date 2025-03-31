@@ -4,7 +4,6 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.tooltip.types.SimpleTooltip;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -97,13 +96,13 @@ public abstract class WynnTooltipText extends WynnTransText {
     }
 
     protected int getLongestWidth(List<Text> lines, Text criteria) {
-        return getLongestWidth(lines, MinecraftClient.getInstance().textRenderer.getWidth(criteria));
+        return getLongestWidth(lines, TEXT_RENDERER.getWidth(criteria));
     }
 
     protected int getLongestWidth(List<Text> lines, int criteria) {
         int max = criteria;
         for(Text line : lines) {
-            max = Math.max(max, MinecraftClient.getInstance().textRenderer.getWidth(line));
+            max = Math.max(max, TEXT_RENDERER.getWidth(line));
         }
         return max;
     }

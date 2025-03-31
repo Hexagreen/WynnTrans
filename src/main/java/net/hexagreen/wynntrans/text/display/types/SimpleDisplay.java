@@ -6,8 +6,6 @@ import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -105,13 +103,14 @@ public class SimpleDisplay extends WynnDisplayText {
 
             List<Text> visited = new ArrayList<>();
             Style[] styles = {Style.EMPTY, Style.EMPTY};
+            Identifier defaultFont = Identifier.of("minecraft:default");
             text.visit((s, t) -> {
                 visited.add(Text.literal(t).setStyle(s));
-                if(!blankChecker(t) && styles[0] == Style.EMPTY) {
+                if(blankChecker(t) || !s.getFont().equals(defaultFont)) return Optional.empty();
+                if(styles[0] == Style.EMPTY) {
                     styles[0] = s;
                 }
-                if(!blankChecker(t) && Objects.equals(TextColor.fromFormatting(Formatting.GRAY), s.getColor())
-                        && s.getFont().equals(Identifier.of("minecraft:default"))) {
+                if(Objects.equals(GRAY.getColor(), s.getColor())) {
                     styles[1] = s;
                 }
                 return Optional.empty();

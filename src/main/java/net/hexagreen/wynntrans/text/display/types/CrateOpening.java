@@ -1,9 +1,7 @@
 package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 public class CrateOpening extends WynnDisplayText {
     private final Text crateName;
@@ -26,6 +24,6 @@ public class CrateOpening extends WynnDisplayText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         resultText = Text.empty();
-        resultText.append(crateName).append("\n").append(Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
+        resultText.append(crateName).append("\n").append(Text.translatable(translationKey).setStyle(GRAY));
     }
 }
