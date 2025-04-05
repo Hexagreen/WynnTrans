@@ -35,7 +35,7 @@ public class SimpleSystemText extends WynnSystemText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         if(valText.isEmpty() || valText.equals(" ")) {
-            resultText = originText.copy();
+            resultText = Text.literal(" ");
             return;
         }
 

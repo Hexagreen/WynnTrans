@@ -1,4 +1,6 @@
 {
+	"wytr.wynnTrans": "WynnTrans",
+	"wytr.key.showOriginalTooltip": "Show Original Tooltip",
 	"wytr.command.registerBackgroundTextMode.enable": "Background text registration §aEnabled",
 	"wytr.command.registerBackgroundTextMode.disable": "Background text registration §4Disabled",
 	"wytr.command.chatForceRecordMode.enable": "Incoming chat text recording §aEnabled",

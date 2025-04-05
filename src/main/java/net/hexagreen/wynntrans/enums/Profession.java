@@ -4,23 +4,24 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public enum Profession {
-    COOKING(Text.literal("§fⒶ"), "cooking"),
-    MINING(Text.literal("Ⓑ"), "mining", Text.translatable("wytr.profession.mining.tool")),
-    WOODCUTTING(Text.literal("Ⓒ"), "woodcutting", Text.translatable("wytr.profession.woodcutting.tool")),
-    JEWELING(Text.literal("§fⒹ"), "jeweling"),
-    SCRIBING(Text.literal("§fⒺ"), "scribing"),
-    TAILORING(Text.literal("§fⒻ"), "tailoring"),
-    WEAPONSMITHING(Text.literal("§fⒼ"), "weaponsmithing"),
-    ARMOURING(Text.literal("§fⒽ"), "armouring"),
-    WOODWORKING(Text.literal("§fⒾ"), "woodworking"),
-    FARMING(Text.literal("Ⓙ"), "farming", Text.translatable("wytr.profession.farming.tool")),
-    FISHING(Text.literal("Ⓚ"), "fishing", Text.translatable("wytr.profession.fishing.tool")),
-    ALCHEMISM(Text.literal("§fⓁ"), "alchemism");
+    COOKING(Text.literal("§fⒶ"), Text.translatable("wytr.profession.cooking")),
+    MINING(Text.literal("Ⓑ"), Text.translatable("wytr.profession.mining"), Text.translatable("wytr.profession.mining.tool")),
+    WOODCUTTING(Text.literal("Ⓒ"), Text.translatable("wytr.profession.woodcutting"), Text.translatable("wytr.profession.woodcutting.tool")),
+    JEWELING(Text.literal("§fⒹ"), Text.translatable("wytr.profession.jeweling")),
+    SCRIBING(Text.literal("§fⒺ"), Text.translatable("wytr.profession.scribing")),
+    TAILORING(Text.literal("§fⒻ"), Text.translatable("wytr.profession.tailoring")),
+    WEAPONSMITHING(Text.literal("§fⒼ"), Text.translatable("wytr.profession.weaponsmithing")),
+    ARMOURING(Text.literal("§fⒽ"), Text.translatable("wytr.profession.armouring")),
+    WOODWORKING(Text.literal("§fⒾ"), Text.translatable("wytr.profession.woodworking")),
+    FARMING(Text.literal("Ⓙ"), Text.translatable("wytr.profession.farming"), Text.translatable("wytr.profession.farming.tool")),
+    FISHING(Text.literal("Ⓚ"), Text.translatable("wytr.profession.fishing"), Text.translatable("wytr.profession.fishing.tool")),
+    ALCHEMISM(Text.literal("§fⓁ"), Text.translatable("wytr.profession.alchemism"));
 
+    private final MutableText icon;
     private final MutableText text;
-    private final String key;
     private final MutableText tool;
 
     public static Profession getProfession(char icon) {
@@ -45,36 +46,39 @@ public enum Profession {
     }
 
     public static Profession getProfession(String profName) {
-        return Arrays.stream(values()).filter(profession -> profession.key.equals(profName.toLowerCase())).findFirst().orElse(null);
+        return Arrays.stream(values())
+                .filter(profession -> profession.toString().equals(profName.toUpperCase(Locale.ENGLISH)))
+                .findFirst()
+                .orElse(null);
     }
 
-    Profession(MutableText text, String key) {
+    Profession(MutableText icon, MutableText text) {
+        this.icon = icon;
         this.text = text;
-        this.key = key;
         this.tool = null;
     }
 
-    Profession(MutableText text, String key, MutableText tool) {
+    Profession(MutableText icon, MutableText text, MutableText tool) {
+        this.icon = icon;
         this.text = text;
-        this.key = key;
         this.tool = tool;
     }
 
     public MutableText getTextWithIcon() {
-        MutableText result = this.text.copy().append(" ");
-        return result.append(Text.translatable("wytr.profession." + this.key));
+        MutableText result = this.icon.copy().append(" ");
+        return result.append(this.text.copy());
     }
 
     public MutableText getIcon() {
-        return this.text.copy();
+        return this.icon.copy();
     }
 
     public String getKey() {
-        return this.key;
+        return this.toString().toLowerCase(Locale.ENGLISH);
     }
 
     public MutableText getText() {
-        return Text.translatable("wytr.profession." + this.key);
+        return this.text.copy();
     }
 
     public MutableText getTool(String tier) {

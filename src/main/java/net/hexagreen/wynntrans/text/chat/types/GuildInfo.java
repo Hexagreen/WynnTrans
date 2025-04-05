@@ -43,9 +43,7 @@ public class GuildInfo extends WynnSystemText {
                 Text time = ITime.translateTime(infoType.matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
                 resultText.append(Text.translatable(translationKey + ".weekObj.expire", time));
             }
-            case WEEK_OBJ_NEW -> {
-                resultText.append(Text.translatable(translationKey + ".weekObj.new"));
-            }
+            case WEEK_OBJ_NEW -> resultText.append(Text.translatable(translationKey + ".weekObj.new"));
             case SEASON_END -> {
                 Text time = Text.literal(getContentString(1).replaceAll("\n", "")).setStyle(Style.EMPTY.withColor(Formatting.DARK_AQUA));
                 resultText.append(Text.translatable(translationKey + ".season.end", time));

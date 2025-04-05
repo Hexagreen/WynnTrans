@@ -106,8 +106,9 @@ public abstract class WynnSystemText extends WynnChatText {
     public WynnSystemText(Text text, boolean isGlued) {
         super(preprocessSystemChat(text, isGlued));
         this.originText = text;
-        Style boxColor = text.getStyle().withFont(Identifier.of("minecraft:chat"));
-        this.header = extractHeader(text.getSiblings().getFirst()).setStyle(boxColor);
+        Style boxColor = isGlued ? text.getSiblings().getFirst().getStyle() : text.getStyle();
+        boxColor = boxColor.withFont(Identifier.of("minecraft:chat"));
+        this.header = extractHeader(text.getSiblings().getFirst(), isGlued).setStyle(boxColor);
         this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06 ").setStyle(boxColor);
         this.wrappingWidth = setLineWrappingWidth();
     }
@@ -145,8 +146,8 @@ public abstract class WynnSystemText extends WynnChatText {
         return string.replaceAll("\\n", "");
     }
 
-    private MutableText extractHeader(Text headerSibling) {
-        String content = ((PlainTextContent) headerSibling.getContent()).string();
+    private MutableText extractHeader(Text headerSibling, boolean isGlued) {
+        String content = isGlued ? headerSibling.getSiblings().getFirst().getString() : ((PlainTextContent) headerSibling.getContent()).string();
         return Text.literal(content + " ").setStyle(headerSibling.getStyle());
     }
 

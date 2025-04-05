@@ -32,8 +32,7 @@ public class WorldEventComplete extends WynnSystemText implements ISpaceProvider
                 .append(getSystemTextCenterIndent(t1).append(t1)).append("\n")
                 .append("\n")
                 .append(getSystemTextCenterIndent(t3).append(t3)).append("\n")
-                .append(getSystemTextCenterIndent(t4).append(t4)).append("\n")
-                .append("\n");
+                .append(getSystemTextCenterIndent(t4).append(t4)).append("\n");
     }
 
     private String initExperience(Text text) {

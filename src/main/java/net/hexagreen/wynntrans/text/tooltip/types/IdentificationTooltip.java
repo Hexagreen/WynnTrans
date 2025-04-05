@@ -8,9 +8,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class IdentificationTooltip extends WynnTooltipText {
 
@@ -25,7 +23,7 @@ public class IdentificationTooltip extends WynnTooltipText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<Text> lines = new ArrayList<>(getSiblings());
+        Deque<Text> lines = new ArrayDeque<>(getSiblings());
         while(!lines.isEmpty()) {
             Text line = lines.removeFirst();
             if(line.getString().isBlank()) {
@@ -39,13 +37,17 @@ public class IdentificationTooltip extends WynnTooltipText {
                 resultText.append(translateRangedID(line));
                 continue;
             }
+            else if(siblings.size() > 3 && siblings.get(2).contains(Text.literal("to"))) {
+                resultText.append(translateIngredientRangedID(line));
+                continue;
+            }
             else if(str.matches("[+-]\\d+(%|/[35]s| tier)?")) {
                 resultText.append(translateStaticID(line));
                 continue;
             }
             else if(str.matches("\\+.+: ")) {
                 lines.addFirst(line);
-                resultText.append(translateMajorID(lines));
+                resultText.append(translateMajorID(new ArrayList<>(lines)));
                 break;
             }
 
@@ -55,7 +57,7 @@ public class IdentificationTooltip extends WynnTooltipText {
 
     private Text translateStaticID(Text text) {
         MutableText result = Text.empty();
-        List<Text> siblings = new ArrayList<>(text.getSiblings());
+        Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
 
         Text _idValue = siblings.removeFirst();
         result.append(extractIDValue(_idValue));
@@ -91,7 +93,7 @@ public class IdentificationTooltip extends WynnTooltipText {
 
     private Text translateRangedID(Text text) {
         MutableText result = Text.empty();
-        List<Text> siblings = new ArrayList<>(text.getSiblings());
+        Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
 
         Text _firstIDValue = siblings.removeFirst();
         Text firstIDValue = extractIDValue(_firstIDValue);
@@ -102,6 +104,32 @@ public class IdentificationTooltip extends WynnTooltipText {
         Text secondIDValue = extractIDValue(_secondIDValue);
 
         result.append(Text.translatable("wytr.tooltip.equipment.rangedID", firstIDValue, secondIDValue).setStyle(to.getStyle()));
+
+        MutableText id = Text.literal(" ");
+        Text idType = siblings.removeFirst();
+        id.append(Identifications.findIdentification(idType.getString()).getTranslatedText().setStyle(idType.getStyle()));
+        result.append(id);
+
+        return result;
+    }
+
+    private Text translateIngredientRangedID(Text text) {
+        MutableText result = Text.empty();
+        Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
+
+        Text _firstValue = siblings.removeFirst();
+        Text firstValue = extractIDValue(_firstValue);
+
+        siblings.removeFirst();
+
+        Text to = siblings.removeFirst();
+
+        siblings.removeFirst();
+
+        Text _secondValue = siblings.removeFirst();
+        Text secondValue = extractIDValue(_secondValue);
+
+        result.append(Text.translatable("wytr.tooltip.equipment.rangedID", firstValue, secondValue).setStyle(to.getStyle()));
 
         MutableText id = Text.literal(" ");
         Text idType = siblings.removeFirst();

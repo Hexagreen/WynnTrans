@@ -9,10 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class SimpleDisplay extends WynnDisplayText {
     private final DisplayCarrier carrier;
@@ -101,7 +98,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 return;
             }
 
-            List<Text> visited = new ArrayList<>();
+            Deque<Text> visited = new ArrayDeque<>();
             Style[] styles = {Style.EMPTY, Style.EMPTY};
             Identifier defaultFont = Identifier.of("minecraft:default");
             text.visit((s, t) -> {

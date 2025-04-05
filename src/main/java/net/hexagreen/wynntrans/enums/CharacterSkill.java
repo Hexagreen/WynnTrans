@@ -1,8 +1,11 @@
 package net.hexagreen.wynntrans.enums;
 
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+
+import java.util.Locale;
 
 public enum CharacterSkill {
     STR(Text.translatable("wytr.skill.strength").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))),
@@ -13,25 +16,25 @@ public enum CharacterSkill {
 
     private final Text stat;
 
-    public static Text getSkill(String name) {
-        switch(name) {
+    public static MutableText getSkill(String name) {
+        switch(name.toLowerCase(Locale.ENGLISH)) {
             case "strength" -> {
-                return STR.stat;
+                return STR.stat.copy();
             }
             case "dexterity" -> {
-                return DEX.stat;
+                return DEX.stat.copy();
             }
             case "intelligence" -> {
-                return INT.stat;
+                return INT.stat.copy();
             }
             case "defence" -> {
-                return DEF.stat;
+                return DEF.stat.copy();
             }
             case "agility" -> {
-                return AGI.stat;
+                return AGI.stat.copy();
             }
         }
-        return null;
+        return Text.literal("UNKNOWN");
     }
 
     CharacterSkill(Text stat) {

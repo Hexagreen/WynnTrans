@@ -15,7 +15,7 @@ public class ItemGiveAndTake extends WynnChatText {
     private final String item;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^(?:§.)?\\[([+-])(\\d+) (.+)]$").matcher(text.getString()).find();
+        return Pattern.compile("^(?:§[^a])?\\[([+-])(\\d+) (.+)]$").matcher(text.getString()).find();
     }
 
     public ItemGiveAndTake(Text text) {

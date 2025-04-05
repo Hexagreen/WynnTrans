@@ -7,9 +7,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +15,7 @@ import java.util.regex.Pattern;
 public abstract class TextNormalizer {
     public final Text originalText;
     private final Rulebooks.NormalizerRulebook rulebook;
-    protected List<Text> copiedSiblings;
+    protected Deque<Text> copiedSiblings;
     /**
      * Normalized text. May contain string replacer for arguments
      */
@@ -33,7 +31,7 @@ public abstract class TextNormalizer {
 
     protected TextNormalizer(Text text, Rulebooks.NormalizerRulebook rulebook) {
         this.originalText = text;
-        this.copiedSiblings = text.getSiblings() == null ? new ArrayList<>() : new ArrayList<>(text.getSiblings());
+        this.copiedSiblings = text.getSiblings() == null ? new ArrayDeque<>() : new ArrayDeque<>(text.getSiblings());
         this.rulebook = rulebook;
         normalize(text);
     }
@@ -67,8 +65,8 @@ public abstract class TextNormalizer {
             }
             i -= nestedCount;
         }
-        List<Text> nestedArgs = _nestedArgs.reversed();
-        List<Boolean> nestedFlags = _nestedFlags.reversed();
+        Deque<Text> nestedArgs = new ArrayDeque<>(_nestedArgs.reversed());
+        Deque<Boolean> nestedFlags = new ArrayDeque<>(_nestedFlags.reversed());
 
         for(int i = 0; i < args.size(); i++) {
             if(flags.get(i)) continue;
@@ -85,7 +83,7 @@ public abstract class TextNormalizer {
                     argsCount++;
                 }
 
-                List<Text> selectedArgs = new ArrayList<>();
+                Deque<Text> selectedArgs = new ArrayDeque<>();
                 String saltedKey = baseKey + "." + (i + 1) + "_" + DigestUtils.sha1Hex(value).substring(0, 4);
                 for(int j = 1; j <= argsCount; j++) {
                     Text arg = nestedArgs.removeFirst();
@@ -145,7 +143,7 @@ public abstract class TextNormalizer {
         }
     }
 
-    protected ArgsRecord siblingsToArgs(List<Text> textBody, Style desiredStyle) {
+    protected ArgsRecord siblingsToArgs(Deque<Text> textBody, Style desiredStyle) {
         String wholeText = originalText.getString();
         List<Text> args = new ArrayList<>();
         List<Boolean> flags = new ArrayList<>();

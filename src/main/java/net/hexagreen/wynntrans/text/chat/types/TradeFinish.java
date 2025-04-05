@@ -50,7 +50,7 @@ public class TradeFinish extends WynnSystemText {
             item.append(Text.literal(content).setStyle(getStyle(1)));
         }
         else {
-            String content = getContentString(0).replaceAll("^.+ §5|À\\.", "");
+            String content = getContentString(0).replaceAll("^.+ §5|\\n|À\\.", "");
             item.append(Text.literal(content));
         }
         return item;

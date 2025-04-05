@@ -13,6 +13,7 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
 
@@ -166,7 +167,7 @@ public interface IFocusText extends ISpaceProvider {
             this.flags = argsRecord.flags();
         }
 
-        private Style findDesiredStyle(List<Text> siblings) {
+        private Style findDesiredStyle(Deque<Text> siblings) {
             for(Text sibling : siblings) {
                 if(Objects.equals(TextColor.fromFormatting(Formatting.GRAY), sibling.getStyle().getColor()))
                     return sibling.getStyle();

@@ -16,6 +16,8 @@ public enum TooltipType {
     CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
+    INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
+    INGREDIENT(Ingredient::new, Ingredient::typeChecker),
     ITEM_NAME(ItemName::new, ItemName::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);

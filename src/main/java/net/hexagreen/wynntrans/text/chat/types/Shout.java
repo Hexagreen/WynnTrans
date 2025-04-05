@@ -17,7 +17,7 @@ public class Shout extends WynnChatText {
 
     public Shout(Text text) {
         super(text);
-        this.name = inputText.getString().replaceFirst("^(.+) \\[.+", "$1");
+        this.name = inputText.getString().replaceFirst("^(.+?) \\[(?:NA|EU|AS).+", "$1");
         this.server = inputText.getString().replaceFirst(".+\\[((?:NA|EU|AS)\\d+)].+", "$1");
     }
 

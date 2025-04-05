@@ -132,7 +132,7 @@ public class NpcDialog extends WynnChatText {
             static Style findDialogStyle(Style nameStyle) {
                 return Arrays.stream(DialogColor.values())
                         .filter(type -> Objects.equals(type.nameColor.getColor(), nameStyle.getColor()))
-                        .findFirst().orElse(BASIC).dialogColor;
+                        .findFirst().orElse(BASIC).dialogColor.withParent(nameStyle);
             }
 
             DialogColor(Style nameColor, Style dialogColor) {

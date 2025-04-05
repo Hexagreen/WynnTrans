@@ -11,9 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ContentTracking extends WynnScoreboardText {
@@ -38,7 +36,7 @@ public class ContentTracking extends WynnScoreboardText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<Text> texts = new ArrayList<>(getSiblings());
+        Deque<Text> texts = new ArrayDeque<>(getSiblings());
         Text trackedTarget = getTrackedTarget(texts.removeFirst());
         Text head = Text.translatable(translationKey, trackedTarget).setStyle(style.withBold(true));
         resultText.append(head);
@@ -75,7 +73,7 @@ public class ContentTracking extends WynnScoreboardText {
         if(texts.isEmpty()) return;
 
 
-        Text desc = mergeTextStyleSide(texts);
+        Text desc = mergeTextStyleSide(new ArrayList<>(texts));
         Text translatedDesc = descSection(desc);
 
         wrapLine(translatedDesc).forEach(resultText::append);

@@ -8,9 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,7 +82,7 @@ public interface ILootrun extends ISpaceProvider {
     }
 
     default List<Text> placeTextToBiSection(List<List<Text>> modifiedTextLists) {
-        List<List<Text>> textLists = new ArrayList<>(modifiedTextLists);
+        Deque<List<Text>> textLists = new ArrayDeque<>(modifiedTextLists);
         List<Text> result = new ArrayList<>();
 
         while(textLists.size() >= 2) {

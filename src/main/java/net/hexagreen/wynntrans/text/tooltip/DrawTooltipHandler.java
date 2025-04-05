@@ -12,6 +12,7 @@ public class DrawTooltipHandler {
     private List<Text> cacheKey;
     private List<Text> cacheVal;
     private boolean recordMode;
+    private boolean showOriginal;
 
     public DrawTooltipHandler() {
         this.cacheKey = new ArrayList<>();
@@ -31,8 +32,15 @@ public class DrawTooltipHandler {
             WynnTransText.transportMessage(Text.translatable("wytr.command.tooltipForceRecordMode.disable"));
     }
 
+    public void toggleShowOriginal() {
+        this.showOriginal = !showOriginal;
+    }
+
     public List<Text> translateTooltipText(List<Text> texts) {
         try {
+            if(showOriginal) {
+                return texts;
+            }
             return getCacheOrTranslate(texts);
         }
         catch(Exception e) {

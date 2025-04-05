@@ -94,7 +94,7 @@ public class ProxySimpleDisplay extends SimpleDisplay {
                     boolean ignore = m.find();
                     return new String[]{m.group(1), m.group(2)};
                 }),
-        FES_HEROES_PERFORMANCE_RUNNING(text -> text.getString().matches("(?s)A §dperformance §7is currently active.+"),
+        FES_HEROES_PERFORMANCE_RUNNING(text -> text.getString().matches("(?s)§7A §dperformance §7is currently active.+"),
                 text -> text.getString().replaceFirst("§a.+?§7", "%1\\$s§7"),
                 text -> {
                     Matcher m = Pattern.compile("(§a.+?)§7").matcher(text.getString());
