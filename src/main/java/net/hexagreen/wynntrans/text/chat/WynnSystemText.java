@@ -132,7 +132,7 @@ public abstract class WynnSystemText extends WynnChatText {
     }
 
     protected int setLineWrappingWidth() {
-        return (int) ISpaceProvider.CHAT_HUD_WIDTH;
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH - 10;
     }
 
     /**

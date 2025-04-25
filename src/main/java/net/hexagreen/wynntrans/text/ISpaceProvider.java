@@ -16,17 +16,7 @@ public interface ISpaceProvider {
     default MutableText getSystemTextCenterIndent(Text alignTargetText) {
         int textWidth = TEXT_RENDERER.getWidth(alignTargetText);
 
-        StringBuilder spaces = new StringBuilder();
-        for(int pixels = CENTER - (int) (0.5 + textWidth / 2.0) - SPLITTER_WIDTH; pixels > 0; ) {
-            if(pixels >= SPACE_WIDTH) {
-                spaces.append(" ");
-                pixels -= SPACE_WIDTH;
-            }
-            else {
-                spaces.append("À");
-                pixels -= 1;
-            }
-        }
+        StringBuilder spaces = getBlanks(CENTER - (int) (0.5 + textWidth / 2.0) - SPLITTER_WIDTH);
 
         return Text.literal(spaces.toString());
     }
@@ -35,17 +25,7 @@ public interface ISpaceProvider {
         int textWidth = TEXT_RENDERER.getWidth(target);
         if(textWidth >= criteriaWidth) return Text.empty();
 
-        StringBuilder spaces = new StringBuilder();
-        for(int pixels = (criteriaWidth / 2) - (int) (0.5 + textWidth / 2.0); pixels > 0; ) {
-            if(pixels >= SPACE_WIDTH) {
-                spaces.append(" ");
-                pixels -= SPACE_WIDTH;
-            }
-            else {
-                spaces.append("À");
-                pixels -= 1;
-            }
-        }
+        StringBuilder spaces = getBlanks((criteriaWidth / 2) - (int) (0.5 + textWidth / 2.0));
 
         return Text.literal(spaces.toString());
     }
@@ -64,47 +44,30 @@ public interface ISpaceProvider {
 
         int frontWidth = renderer.getWidth(front);
 
-        StringBuilder frontSpace = new StringBuilder();
-        for(int pixels = (int) (CHAT_HUD_WIDTH / 4 - (0.5 + frontWidth) / 2.0); pixels > 0; ) {
-            if(pixels >= SPACE_WIDTH) {
-                frontSpace.append(" ");
-                pixels -= SPACE_WIDTH;
-            }
-            else {
-                frontSpace.append("À");
-                pixels -= 1;
-            }
-        }
+        StringBuilder frontSpace = getBlanks((int) (CHAT_HUD_WIDTH / 4 - (0.5 + frontWidth) / 2.0));
         result.append(frontSpace.toString()).append(front);
 
         int tmpWidth = renderer.getWidth(result);
         int rearWidth = renderer.getWidth(rear);
 
-        StringBuilder rearSpace = new StringBuilder();
-        for(int pixels = (int) (CHAT_HUD_WIDTH * 0.75 - (0.5 + rearWidth) / 2.0) - tmpWidth; pixels > 0; ) {
-            if(pixels >= SPACE_WIDTH) {
-                rearSpace.append(" ");
-                pixels -= SPACE_WIDTH;
-            }
-            else {
-                rearSpace.append("À");
-                pixels -= 1;
-            }
-        }
+        StringBuilder rearSpace = getBlanks((int) (CHAT_HUD_WIDTH * 0.75 - (0.5 + rearWidth) / 2.0) - tmpWidth);
         result.append(rearSpace.toString()).append(rear);
 
         return result;
     }
 
-    default MutableText getRearSpace(Text front, Text criteria) {
-        return getRearSpace(front, TEXT_RENDERER.getWidth(criteria));
-    }
-
     default MutableText getRearSpace(Text front, int maxFrontWidth) {
         int frontWidth = TEXT_RENDERER.getWidth(front);
 
+        StringBuilder spaces = getBlanks(maxFrontWidth - frontWidth);
+        spaces.append(" ");
+
+        return Text.literal(spaces.toString());
+    }
+
+    default StringBuilder getBlanks(int spaceWidth) {
         StringBuilder spaces = new StringBuilder();
-        for(int pixels = maxFrontWidth - frontWidth; pixels > 0; ) {
+        for(int pixels = spaceWidth; pixels > 0; ) {
             if(pixels >= SPACE_WIDTH) {
                 spaces.append(" ");
                 pixels -= SPACE_WIDTH;
@@ -114,8 +77,6 @@ public interface ISpaceProvider {
                 pixels -= 1;
             }
         }
-        spaces.append(" ");
-
-        return Text.literal(spaces.toString());
+        return spaces;
     }
 }

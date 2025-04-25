@@ -14,7 +14,7 @@ public class DailyObjective extends WynnScoreboardText {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() <= 1) return false;
-        return texts.getFirst().getString().equals("§c§lDaily Objective:");
+        return texts.getFirst().getString().matches("(§d⭑ )?§c§lDaily Objective:");
     }
 
     public DailyObjective(List<Text> texts) {
@@ -29,9 +29,9 @@ public class DailyObjective extends WynnScoreboardText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<Text> texts = new ArrayList<>(getSiblings());
-        texts.removeFirst();
+        Text star = texts.removeFirst().getString().contains("⭑ ") ? Text.literal("§d⭑ ") : Text.empty();
         Text head = Text.translatable(translationKey).setStyle(style.withBold(true));
-        resultText.append(head);
+        resultText.append(Text.empty().append(star).append(head));
 
         List<Text> lines = extractUniqueLines(texts).stream()
                 .map(this::mergeTextStyleSide)

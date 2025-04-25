@@ -16,6 +16,7 @@
     "MixinMessageHandler",
     "MixinSignBlockEntity",
     "MixinSignText",
+    "MixinTranslatableTextContent",
     "MixinTranslationStorage"
   ],
   "injectors": {

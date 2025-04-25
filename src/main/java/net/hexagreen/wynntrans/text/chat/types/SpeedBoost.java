@@ -36,6 +36,7 @@ public class SpeedBoost extends WynnChatText {
             Text time = Text.literal("+").append(ITime.translateTime(getContentString(0).replace("+", "")))
                     .setStyle(Style.EMPTY.withColor(Formatting.AQUA));
             resultText = Text.translatable(translationKey + ".self", time).setStyle(getStyle());
+            return;
         }
 
         Text buffTime = Text.literal("+").setStyle(Style.EMPTY.withColor(Formatting.AQUA)).append(duration);

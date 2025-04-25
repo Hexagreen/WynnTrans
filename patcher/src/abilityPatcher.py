@@ -52,12 +52,15 @@ def run_update():
         normalized_name = re.sub(r"[ .'À֎’:&%\"-]", "", name)
 
         if row['type'] == 1:
-            output_data[f"wytr.ability.arch.{normalized_name}"] = name
+            output_data[f"wytr.ability.archetype.{normalized_name}"] = name
         else:
             output_data[f"wytr.ability.node.{normalized_name}"] = name
 
     # 기존 JSON 파일과 비교 및 업데이트
     folder_path = './lang/ability'
+    
+    # 읽어오기 대상 정규식
+    pattern = re.compile(r'^wytr\.ability\.(node|archetype)\.[A-Za-z]+$')
     for file_name in os.listdir(folder_path):
         file_path = os.path.join(folder_path, file_name)
 
@@ -65,7 +68,7 @@ def run_update():
             file_data = json.load(f)
 
         # 기존 K-V 쌍을 확인
-        existing_keys = set(file_data.keys())
+        existing_keys = {key for key in file_data.keys() if pattern.match(key)}
         new_keys = set(output_data.keys())
 
         # 새로 추가해야 할 K-V 쌍
@@ -74,12 +77,21 @@ def run_update():
         # 제거해야 할 K-V 쌍
         to_remove = existing_keys - new_keys
 
+        # to_remove 키로 시작하는 모든 하위 키들도 추가로 삭제
+        extended_to_remove = set(to_remove)  # 원본 to_remove 복사
+        for key in file_data.keys():
+            for prefix in to_remove:
+                if key.startswith(prefix + "."):  # 점(.)을 붙여 정확한 prefix 확인
+                    extended_to_remove.add(key)
+
         # 파일 업데이트
         for key in to_add:
             file_data[key] = output_data[key]
 
-        for key in to_remove:
-            del file_data[key]
+        for key in extended_to_remove:
+            if key in file_data:
+                print(f"어빌리티 제거됨: {key}")
+                del file_data[key]
 
         # 파일 덮어쓰기
         with open(file_path, 'w', encoding='utf-8') as f:

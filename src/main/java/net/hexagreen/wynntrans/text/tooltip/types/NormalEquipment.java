@@ -31,7 +31,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     private static final Pattern POWDER_SPECIAL_REGEX =
             Pattern.compile(" (.+) [IV]+");
     private final List<Text> tempText;
-    private final List<Integer> wrapTargetIdx;
+    private final Deque<Integer> wrapTargetIdx;
     private int longestWidth;
     private String itemNameKey = "";
 
@@ -49,7 +49,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     public NormalEquipment(List<Text> texts) {
         super(ITooltipSplitter.correctSplitter(texts));
         this.tempText = new ArrayList<>();
-        this.wrapTargetIdx = new ArrayList<>();
+        this.wrapTargetIdx = new ArrayDeque<>();
         this.longestWidth = 150;
     }
 
@@ -268,11 +268,13 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
             line.append(siblings.removeFirst());
 
             String _effect = siblings.removeFirst().getString();
-            Matcher numFinder = Pattern.compile("\\+?(?:\\d+\\.\\d+|\\d+)+[s%]?").matcher(_effect);
+            Matcher numFinder = Pattern.compile("\\+?(?:\\d+\\.\\d+|\\d+)+(s|%| Blocks)?").matcher(_effect);
             if(numFinder.find()) {
                 String num = numFinder.group();
                 String effectFormat = _effect.replace(num, "%s").replaceFirst(" ?$", " ");
-                if(num.contains("s")) num = ITime.translateTime(num).getString();
+                if(num.matches(".+ Blocks$"))
+                    num = Text.translatable("wytr.unit.block", num.replaceFirst(" Blocks", "")).getString();
+                else if(num.contains("s")) num = ITime.translateTime(num).getString();
                 String effectKey = "wytr.tooltip.powderSpecial." + normalizeStringForKey(_effect.split(":")[0]);
                 WTS.checkTranslationExist(effectKey, effectFormat);
                 line.append(Text.translatableWithFallback(effectKey, _effect, num).setStyle(GRAY));

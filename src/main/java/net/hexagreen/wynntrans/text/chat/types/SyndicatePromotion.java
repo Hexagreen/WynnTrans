@@ -9,6 +9,13 @@ import java.util.Locale;
 
 public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
 
+    public static Text getTranslatedRankName(String rankNameString) {
+        String valRank = rankNameString.replaceAll("§.", "").replaceAll(" I+$", "");
+        String keyRank = "wytr.syndicate.rank." + valRank.toLowerCase(Locale.ENGLISH);
+        String bar = rankNameString.replaceFirst(".+( I+)$", "$1");
+        return Text.translatable(keyRank).setStyle(parseStyleCode(rankNameString)).append(bar);
+    }
+
     public SyndicatePromotion(Text text) {
         super(text);
     }
@@ -25,10 +32,7 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
         Text t2 = new SimpleText(getSibling(2).getSiblings().getLast()).text();
 
         Text rankOrigin = getSibling(4).getSiblings().getLast();
-        String valRank = rankOrigin.getString().replaceAll("§.", "").replaceAll(" I+$", "");
-        String keyRank = translationKey + valRank.toLowerCase(Locale.ENGLISH);
-        String bar = rankOrigin.getString().replaceFirst(".+( I+)$", "$1");
-        Text rank = Text.translatable(keyRank).setStyle(parseStyleCode(rankOrigin.getString())).append(bar);
+        Text rank = getTranslatedRankName(rankOrigin.getString());
 
         resultText = Text.empty();
         resultText.append(centerAlign(t0)).append("\n")

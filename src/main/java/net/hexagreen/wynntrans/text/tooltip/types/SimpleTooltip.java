@@ -26,12 +26,13 @@ public class SimpleTooltip extends WynnTooltipText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        for(Text text : original) {
+        for(int i = 0, originalSize = original.size(); i < originalSize; i++) {
+            Text text = getSiblings().get(i);
             if(hasTranslation(text) || pressedAddTranslationKey()) {
                 resultText.append(applyTranslation(text));
             }
             else {
-                resultText.append(text);
+                resultText.append(original.get(i));
             }
         }
     }
@@ -54,8 +55,7 @@ public class SimpleTooltip extends WynnTooltipText {
 
     private boolean pressedAddTranslationKey() {
         long handle = MinecraftClient.getInstance().getWindow().getHandle();
-        return GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1
-                && GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_LEFT_CONTROL) == 1;
+        return GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_KP_ADD) == 1;
     }
 
     private Text applyTranslation(Text text) {

@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.text.sign.WynnSign;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
@@ -20,6 +21,9 @@ abstract public class MixinEntityRenderer {
         if(!(entityRenderState instanceof PlayerEntityRenderState)) {
             if(text.getString().matches("§f.+§7's horse")) {
                 return Text.translatable("wytr.label.horse", text.getString().replaceFirst("§7's.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+            }
+            if(text.getString().matches("(§.)?\\[?Lv\\. \\d+]?")) {
+                return WynnSign.translateRecommendLevel(text);
             }
 
             String valContent = text.getString();

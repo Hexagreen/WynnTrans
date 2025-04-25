@@ -8,6 +8,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.message.MessageHandler;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,6 @@ public abstract class WynnTransText {
     protected static final TextRenderer TEXT_RENDERER = MinecraftClient.getInstance().textRenderer;
     protected static final TextHandler TEXT_HANDLER = TEXT_RENDERER.getTextHandler();
     private static final MessageHandler MESSAGE_HANDLER = MinecraftClient.getInstance().getMessageHandler();
-    private static final Pattern colorParser = Pattern.compile("(?:§.)*(?<!§)[^§]+");
     protected final String translationKey;
     protected final MutableText inputText;
     protected MutableText resultText;
@@ -45,43 +45,29 @@ public abstract class WynnTransText {
 
     protected static Text colorCodedToStyled(Text text) {
         List<Text> list = new ArrayList<>();
-        text.visit((style, asString) -> {
-            if(asString.isEmpty()) return Optional.empty();
-            if(!asString.contains("§")) {
-                list.add(Text.literal(asString).setStyle(style));
-                return Optional.empty();
+        StringBuilder stringBuilder = new StringBuilder();
+        Style[] currentStyle = {Style.EMPTY};
+        Language.getInstance().reorder(text).accept((index, style, codePoint) -> {
+            if(!style.equals(currentStyle[0]) && !stringBuilder.isEmpty()) {
+                list.add(Text.literal(stringBuilder.toString()).setStyle(currentStyle[0]));
+                stringBuilder.setLength(0);
             }
-            list.addAll(colorCodedToStyled(asString, style));
-            return Optional.empty();
-        }, Style.EMPTY);
+            stringBuilder.appendCodePoint(codePoint);
+            currentStyle[0] = style;
+            return true;
+        });
+        if(!stringBuilder.isEmpty()) list.add(Text.literal(stringBuilder.toString()).setStyle(currentStyle[0]));
 
         return siblingsToText(list);
     }
 
-    private static List<Text> colorCodedToStyled(String textAsString, Style parentStyle) {
-        Matcher matcher = colorParser.matcher(textAsString);
-        List<String> segments = new ArrayList<>();
-        while(matcher.find()) {
-            segments.add(matcher.group());
-        }
-        List<Text> result = new ArrayList<>();
-        for(String segment : segments) {
-            String content = segment.replaceFirst("(?:§.)+", "");
-            Style style = parseStyleCode(segment).withParent(parentStyle);
-            result.add(Text.literal(content).setStyle(style));
-        }
-        return result;
-    }
-
     protected static MutableText siblingsToText(List<Text> texts) {
         MutableText result = Text.empty();
-        for(Text text : texts) {
-            result.append(text);
-        }
+        texts.forEach(result::append);
         return result;
     }
 
-    protected static Style parseStyleCode(String codeOrTextString) {
+    public static Style parseStyleCode(String codeOrTextString) {
         Matcher matcher = Pattern.compile("^((?:§[0123456789abcdefklnmor])+)").matcher(codeOrTextString.replaceFirst("^\\s+", ""));
         if(!matcher.find()) return Style.EMPTY;
         String styleCode = matcher.group(1);
@@ -205,11 +191,11 @@ public abstract class WynnTransText {
         boolean codeAppended = false;
 
         for(Text text : siblings) {
-            Style style = text.getStyle();
+            Style style = text.getStyle().withParent(overrideStyle);
             TextColor color = style.getColor();
 
             if(codeAppended) {
-                stringBuilder.append(Formatting.RESET);
+                if(style.equals(overrideStyle.withParent(style))) stringBuilder.append(Formatting.RESET);
                 codeAppended = false;
             }
             if(color != null && !color.equals(oColor)) {

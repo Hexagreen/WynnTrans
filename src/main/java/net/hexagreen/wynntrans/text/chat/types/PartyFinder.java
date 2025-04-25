@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -20,6 +21,11 @@ public class PartyFinder extends WynnSystemText {
         this.playerName = getContentString(1).replaceFirst("(?s)Hey (.+),.+", "$1");
         this.partyName = getSibling(2);
         this.players = getSibling(4);
+    }
+
+    @Override
+    protected int setLineWrappingWidth() {
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH / 2;
     }
 
     @Override

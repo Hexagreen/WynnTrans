@@ -17,6 +17,8 @@ public class WynnTranslationStorage {
     public void onLanguageReloaded(Map<String, String> translationMap) {
         wynnTransDict.clear();
         unregisteredTextSet.clear();
+        unregisteredTooltipSet.clear();
+        unregisteredEntityLabelSet.clear();
 
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());

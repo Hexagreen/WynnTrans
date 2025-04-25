@@ -15,7 +15,7 @@ public class GuildObjective extends WynnScoreboardText {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() <= 1) return false;
-        return texts.getFirst().getString().matches("§b§lGuild Obj: .+");
+        return texts.getFirst().getString().matches("(§d⭑ )?§b§lGuild Obj: .+");
     }
 
     public GuildObjective(List<Text> texts) {
@@ -30,14 +30,16 @@ public class GuildObjective extends WynnScoreboardText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<Text> texts = new ArrayList<>(getSiblings());
-        String counter = texts.removeFirst().getString().replaceFirst(".+: ", "");
+        String headString = texts.removeFirst().getString();
+        String counter = headString.replaceFirst(".+: ", "");
+        Text star = headString.contains("⭑ ") ? Text.literal("§d⭑ ") : Text.empty();
         Text head = Text.translatable(translationKey, counter).setStyle(style.withBold(true));
-        resultText.append(head);
+        resultText.append(Text.empty().append(star).append(head));
 
         boolean completed = false;
         Text command = Text.empty();
         if(getSiblings().size() > 3) {
-            command = texts.removeLast();
+            command = Text.literal("/guild rewards").setStyle(Style.EMPTY.withColor(Formatting.AQUA));
             texts.removeLast();
             texts.removeLast();
             completed = true;

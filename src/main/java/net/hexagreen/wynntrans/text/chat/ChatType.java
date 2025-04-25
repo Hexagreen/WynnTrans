@@ -94,6 +94,7 @@ public enum ChatType {
     TRINKET_ON_ACTIVE(TrinketOnActive::new, TrinketOnActive::typeChecker),
     PLAYER_EFFECT_APPLIED(PlayerEffectApplied::new, PlayerEffectApplied::typeChecker),
     FRIEND_LIST(FriendList::new, FriendList::typeChecker),
+    LOGIN_SCENE_UNLOCK(LoginSceneUnlocked::new, LoginSceneUnlocked::typeChecker),
 
     PROXY_SYSTEM_TEXT(ProxySystemText::new, ProxySystemText::typeChecker),
     EVENT_BONFIRE(EventBonfireHearthflames::new, EventBonfireHearthflames::typeChecker),

@@ -415,7 +415,9 @@ public class ContentBookNodes extends WynnTooltipText {
                 Text blocks = infoText.getSiblings().getLast();
                 String strBlocks = blocks.getString().replaceFirst(" ?\\((\\d+\\+?) Blocks\\)", "$1");
                 Style styleBlocks = blocks.getStyle();
-                Text blocksTranslated = Text.translatable("wytr.distance.blocks", strBlocks).setStyle(styleBlocks);
+                Text blocksTranslated = Text.literal("(").setStyle(styleBlocks)
+                        .append(Text.translatable("wytr.unit.block", strBlocks).setStyle(styleBlocks))
+                        .append(")");
                 return Text.empty().append(distTranslated).append(" ").append(blocksTranslated);
             }
             return Text.empty().append(distTranslated);
@@ -435,9 +437,9 @@ public class ContentBookNodes extends WynnTooltipText {
             if(infoText.getSiblings().size() == 3) {
                 Text time = infoText.getSiblings().getLast();
                 Style styleTime = time.getStyle();
-                Text blocksTranslated = Text.empty().setStyle(styleTime).append("(")
+                Text timeTranslated = Text.empty().setStyle(styleTime).append("(")
                         .append(ITime.translateTime(time.getString().replaceAll("[()]", "")).setStyle(styleTime)).append(")");
-                return Text.empty().append(lengthTranslated).append(" ").append(blocksTranslated);
+                return Text.empty().append(lengthTranslated).append(" ").append(timeTranslated);
             }
             return Text.empty().append(lengthTranslated);
         }

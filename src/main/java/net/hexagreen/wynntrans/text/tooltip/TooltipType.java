@@ -17,8 +17,16 @@ public enum TooltipType {
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
+    EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
     INGREDIENT(Ingredient::new, Ingredient::typeChecker),
     ITEM_NAME(ItemName::new, ItemName::typeChecker),
+    ABILITY_SHARD(AbilityShard::new, AbilityShard::typeChecker),
+    ABILITY_TREE_NODE(AbilityTreeNode::new, AbilityTreeNode::typeChecker),
+    ABILITY_TREE_ORB(AbilityTreeOrb::new, AbilityTreeOrb::typeChecker),
+    ABILITY_TREE_ARCHETYPES(AbilityTreeArchetypes::new, AbilityTreeArchetypes::typeChecker),
+    ABILITY_TREE_SELECTOR(AbilityTreeSelector::new, AbilityTreeSelector::typeChecker),
+    ABILITY_TREE_RESET(AbilityTreeReset::new, AbilityTreeReset::typeChecker),
+    ABILITY_TREE_ASPECT(AbilityTreeAspectSocket::new, AbilityTreeAspectSocket::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

@@ -61,7 +61,7 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
             else if(firstLineString.matches("[+-]\\d+% Ingredient Effectiveness")) {
                 translateEffectiveness(seg);
             }
-            else if(firstLineString.matches("[+-]\\d+s? (Durability|Duration|Charges|.+ Min\\.).*")) {
+            else if(firstLineString.matches("[+-]\\d+s? (Durability|Duration|Charges?|.+ Min\\.).*")) {
                 translateSideEffect(seg);
             }
             else if(firstLineString.matches("([+-]?\\d+ to )?[+-]?\\d+(%|/[35]s| tier)? .+")) {
@@ -82,8 +82,11 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
         for(Text t : segment) {
             if(t.getString().contains("[✫✫✫]")) {
                 Deque<Text> mutableSiblings = new ArrayDeque<>(t.getSiblings());
-                Text ingredientName = new ItemName(mutableSiblings.removeFirst()).textAsMutable().setStyle(GRAY);
+                String _ingredientName = mutableSiblings.removeFirst().getString();
+                boolean trailingBracket = _ingredientName.contains(" [");
+                Text ingredientName = new ItemName(_ingredientName.replaceFirst(" \\[$", "")).textAsMutable().setStyle(GRAY);
                 MutableText nameLine = Text.empty().append(ingredientName);
+                if(trailingBracket) nameLine.append(Text.literal(" [").setStyle(GRAY));
                 mutableSiblings.forEach(nameLine::append);
                 dump.add(nameLine);
             }
@@ -135,7 +138,7 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
             else if(string.contains("Dura")) {
                 dump.add(getDurabilityOrDuration(siblings.getFirst()));
             }
-            else if(string.contains("Charges")) {
+            else if(string.contains("Charge")) {
                 Text charge = siblings.getFirst();
                 String num = charge.getString().split(" ", 2)[0];
                 dump.add(Text.translatable("wytr.tooltip.ingredient.charge", num).setStyle(charge.getStyle()));
