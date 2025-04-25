@@ -33,7 +33,10 @@ public enum Dungeons {
             Text.translatable("wytr.dungeon.fallenFactory.fragment")),
     ELDRITCH_OUTLOOK(Text.translatable("wytr.dungeon.eldritchOutlook"),
             Text.translatable("wytr.dungeon.eldritchOutlook.bossReward"),
-            Text.translatable("wytr.dungeon.eldritchOutlook.fragment"));
+            Text.translatable("wytr.dungeon.eldritchOutlook.fragment")),
+    UNKNOWN(Text.literal("Unknown"),
+            Text.literal("Unknown"),
+            Text.literal("Unknown"));
 
     private static final Text corrupted = Text.translatable("wytr.dungeon.corrupted");
     private final Text dungeonName;
@@ -41,13 +44,37 @@ public enum Dungeons {
     private final Text dungeonFragment;
     private boolean isCorrupted = false;
 
+    public static Dungeons getDungeons(String dungeonName) {
+        boolean isCorrupted = dungeonName.contains("Corrupted") || dungeonName.contains("corrupted");
+        String stripped = dungeonName.replaceFirst("[Cc]orrupted", "")
+                .replace("À", "").replace("'", "").replace("-", "")
+                .toLowerCase();
+        Dungeons dungeons = match(stripped);
+        if(isCorrupted) dungeons.setCorrupted();
+        return dungeons;
+    }
+
+    private static Dungeons match(String name) {
+        if(name.contains("decrepit")) return DECREPIT_SEWERS;
+        if(name.contains("infested")) return INFESTED_PIT;
+        if(name.contains("underworld")) return UNDERWORLD_CRYPT;
+        if(name.contains("sanctum")) return TIMELOST_SANCTUM;
+        if(name.contains("sand")) return SAND_SWEPT_TOMB;
+        if(name.contains("barrows")) return ICE_BARROWS;
+        if(name.contains("undergrowth")) return UNDERGROWTH_RUINS;
+        if(name.contains("galleons")) return GALLEONS_GRAVEYARD;
+        if(name.contains("fallen")) return FALLEN_FACTORY;
+        if(name.contains("eldritch")) return ELDRITCH_OUTLOOK;
+        else return UNKNOWN;
+    }
+
     Dungeons(Text dungeonName, Text dungeonBossReward, Text dungeonFragment) {
         this.dungeonName = dungeonName;
         this.dungeonBossReward = dungeonBossReward;
         this.dungeonFragment = dungeonFragment;
     }
 
-    public Text getDungeonName() {
+    public MutableText getDungeonName() {
         MutableText out = Text.empty();
         if(this.isCorrupted) return out.append(corrupted).append(dungeonName);
         return out.append(dungeonName);
@@ -63,31 +90,6 @@ public enum Dungeons {
         MutableText out = Text.empty();
         if(this.isCorrupted) return out.append(corrupted).append(dungeonFragment);
         return out.append(dungeonFragment);
-    }
-
-    public static Dungeons getDungeons(String dungeonName) {
-        boolean isCorrupted = dungeonName.contains("Corrupted");
-        String stripped = dungeonName.replace("Corrupted", "")
-                .replace("À", "").replace("'", "").replace("-", "")
-                .toLowerCase();
-        Dungeons dungeons = match(stripped);
-        if (dungeons == null) return null;
-        if (isCorrupted) dungeons.setCorrupted();
-        return dungeons;
-    }
-
-    private static Dungeons match(String name) {
-        if (name.contains("decrepit")) return DECREPIT_SEWERS;
-        if (name.contains("infested")) return INFESTED_PIT;
-        if (name.contains("underworld")) return UNDERWORLD_CRYPT;
-        if (name.contains("sanctum")) return TIMELOST_SANCTUM;
-        if (name.contains("sand")) return SAND_SWEPT_TOMB;
-        if (name.contains("barrows")) return ICE_BARROWS;
-        if (name.contains("undergrowth")) return UNDERGROWTH_RUINS;
-        if (name.contains("galleons")) return GALLEONS_GRAVEYARD;
-        if (name.contains("fallen")) return FALLEN_FACTORY;
-        if (name.contains("eldritch")) return ELDRITCH_OUTLOOK;
-        else return null;
     }
 
     private void setCorrupted() {

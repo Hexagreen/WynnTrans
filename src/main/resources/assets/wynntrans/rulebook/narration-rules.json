@@ -1,0 +1,8 @@
+{"rules": [
+  {
+    "selector": "Cast your [\\w ]+ by clicking .+ while holding your \\w+!",
+    "pattern": "your (\\w+)!",
+    "replace": "your %s!",
+    "register": true
+  }
+]}

@@ -1,0 +1,8 @@
+{"rules": [
+  {
+    "selector": ". (Left|Right)\\-Click with (Spear|Dagger|Bow|Wand|Relik) to use\nMain Attack",
+    "pattern": " (Left|Right)-Click ",
+    "replace": " %s-Click ",
+    "register": true
+  }
+]}

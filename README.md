@@ -38,7 +38,7 @@ Sign block's texts aren't be recorded automatically. If you meet untranslated si
 
 Logged texts will save in `(Minecraft Directory)\WynnTrans\`. There will be 5 files there.
 - `scannedTexts.json` file will store texts that WynnTrans has detected but unregistered in resource pack.
-- `getString.txt`, `literal.txt` and `json.txt` will record texts WynnTrans cannot detect.
+- `json.txt` will record texts WynnTrans cannot detect.
 - `exception.txt` contains error occured texts while mod works.
 
 `scannedTexts.json` has translation key-value pair. You can move these to resource pack lang file and translation into your language.

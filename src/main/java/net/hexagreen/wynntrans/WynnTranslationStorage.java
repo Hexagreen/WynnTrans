@@ -1,28 +1,55 @@
 package net.hexagreen.wynntrans;
 
-import com.mojang.logging.LogUtils;
+import net.hexagreen.wynntrans.text.chat.Rulebooks;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class WynnTranslationStorage {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = WynnTrans.LOGGER;
     private final Map<String, String> wynnTransDict = new HashMap<>();
     private final Set<String> unregisteredTextSet = new HashSet<>();
+    private final Set<List<Text>> unregisteredTooltipSet = new HashSet<>();
+    private final Set<Text> unregisteredEntityLabelSet = new HashSet<>();
+    private Rulebooks rulebooks;
 
     public void onLanguageReloaded(Map<String, String> translationMap) {
         wynnTransDict.clear();
         unregisteredTextSet.clear();
+        unregisteredTooltipSet.clear();
+        unregisteredEntityLabelSet.clear();
 
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
-        LOGGER.info("[WynnTrans] Reloaded Wynncraft Text Language Map.");
+        rulebooks = new Rulebooks();
+
+        WynnTrans.drawTooltipHandler.clearCache();
+        WynnTrans.scoreboardSidebarHandler.clearCache();
+
+        LOGGER.info("Reloaded Wynncraft Text Language Map.");
+    }
+
+    public void recordUnregisteredTooltip(List<Text> text, String tag) {
+        if(this.unregisteredTooltipSet.contains(text)) {
+            return;
+        }
+        this.unregisteredTooltipSet.add(text);
+        debugClass.writeString2File("", "json.txt");
+        for(Text line : text) debugClass.writeTextAsJSON(line, tag);
+        debugClass.writeString2File("", "json.txt");
+    }
+
+    public void recordUnregisteredEntity(Text text, String tag) {
+        if(this.unregisteredEntityLabelSet.contains(text)) {
+            return;
+        }
+        this.unregisteredEntityLabelSet.add(text);
+        debugClass.writeTextAsJSON(text, tag);
     }
 
     public boolean checkTranslationExist(String key, String value) {
+        if(value.isBlank()) return false;
         String v = this.wynnTransDict.get(key);
         if(v == null) {
             this.recordUnregisteredText(key, value);
@@ -36,6 +63,10 @@ public class WynnTranslationStorage {
         return !(v == null);
     }
 
+    public Rulebooks getRulebooks() {
+        return rulebooks;
+    }
+
     private void recordUnregisteredText(String key, String value) {
         if(this.unregisteredTextSet.contains(key)) {
             return;
@@ -43,9 +74,9 @@ public class WynnTranslationStorage {
         this.unregisteredTextSet.add(key);
         boolean recorded = WynnTransFileManager.addTranslation(key, value);
         if(!recorded) {
-            LOGGER.warn("[WynnTrans] Failed to record translation.");
-            LOGGER.warn("[WynnTrans] key: {}", key);
-            LOGGER.warn("[WynnTrans] value: {}", value);
+            LOGGER.warn("Failed to record translation.");
+            LOGGER.warn("key: {}", key);
+            LOGGER.warn("value: {}", value);
         }
     }
 }

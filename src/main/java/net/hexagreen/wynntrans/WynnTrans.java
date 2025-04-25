@@ -1,63 +1,144 @@
 package net.hexagreen.wynntrans;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.hexagreen.wynntrans.chat.IncomeTextHandler;
-import net.hexagreen.wynntrans.entity.sign.UseBlockHandler;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.text.Text;
+import net.fabricmc.loader.api.FabricLoader;
+import net.hexagreen.wynntrans.text.chat.OnGameMessageHandler;
+import net.hexagreen.wynntrans.text.display.DisplayEntityHandler;
+import net.hexagreen.wynntrans.text.scoreboard.ScoreboardSidebarHandler;
+import net.hexagreen.wynntrans.text.sign.UseBlockHandler;
+import net.hexagreen.wynntrans.text.title.TitleHandler;
+import net.hexagreen.wynntrans.text.tooltip.DrawTooltipHandler;
 import org.slf4j.Logger;
-
-import java.util.Iterator;
-import java.util.List;
+import org.slf4j.LoggerFactory;
 
 public class WynnTrans implements ModInitializer {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public static IncomeTextHandler incomeTextHandler;
+    public static final Logger LOGGER = LoggerFactory.getLogger("WynnTrans");
     public static WynnTranslationStorage wynnTranslationStorage;
+    public static OnGameMessageHandler onGameMessageHandler;
+    public static DisplayEntityHandler displayEntityHandler;
+    public static DrawTooltipHandler drawTooltipHandler;
+    public static TitleHandler titleHandler;
+    public static ScoreboardSidebarHandler scoreboardSidebarHandler;
     public static boolean translationTargetSignMarker;
-    private static Iterator<String> debugString;
+    public static boolean playerNameCacheExpired;
+    public static boolean wynntilsLoaded;
+    public static String wynnPlayerName;
+    public static String currentScreen;
+
+    public static void refreshWynnPlayerName() {
+        WynnTransFileManager.whoAmI();
+        playerNameCacheExpired = false;
+    }
+
+    public static void expireWynnPlayerName() {
+        playerNameCacheExpired = true;
+    }
 
     @Override
     public void onInitialize() {
-        incomeTextHandler = new IncomeTextHandler();
         wynnTranslationStorage = new WynnTranslationStorage();
+        onGameMessageHandler = new OnGameMessageHandler();
+        displayEntityHandler = new DisplayEntityHandler();
+        drawTooltipHandler = new DrawTooltipHandler();
+        titleHandler = new TitleHandler();
+        scoreboardSidebarHandler = new ScoreboardSidebarHandler();
         translationTargetSignMarker = false;
+        playerNameCacheExpired = true;
+        wynnPlayerName = "DummyEmptyPlayerName";
+        currentScreen = "";
 
-        LOGGER.info("[WynnTrans] Hello, Wynn!");
+        LOGGER.info("Hello, Wynn!");
 
-        debugString = List.of(debugClass.readTextListFromJSON()).iterator();
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(CommandManager.literal("readJson")
-                .executes(context -> {
-                    if(debugString.hasNext()) {
-                        Text readText = Text.Serializer.fromJson(debugString.next());
-                        context.getSource().sendMessage(readText);
-                    }
-                    return 1;
-                })));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleBackgroundTextRegistration.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleRecordMode.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleDisplayTextRecordMode.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTooltipTextRecordMode.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTitleTextRecordMode.register(dispatcher));
 
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> WriteCommentClass.register(dispatcher));
-
-        ClientTickEvents.START_WORLD_TICK.register((StartTick) -> incomeTextHandler.onStartWorldTick());
+        ClientTickEvents.START_WORLD_TICK.register((StartTick) -> onGameMessageHandler.onStartWorldTick());
 
         UseBlockCallback.EVENT.register(new UseBlockHandler());
+        ScreenEvents.AFTER_INIT.register((c, s, w, h) -> {
+            currentScreen = s != null ? s.getTitle().getString() : "";
+            if("\uDAFF\uDFD5\uE01F".equals(currentScreen)) expireWynnPlayerName();
+        });
+
+        wynntilsLoaded = FabricLoader.getInstance().isModLoaded("wynntils");
     }
-    private static class WriteCommentClass {
+
+    private static class CommandToggleRecordMode {
         private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-            dispatcher.register(ClientCommandManager.literal("wynntrans")
-                    .then(ClientCommandManager.literal("comment")
-                            .executes(context -> newComment())));
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("recordMode")
+                                    .executes(context -> run())));
         }
 
-        private static int newComment() {
-            WynnTransFileManager.addSpace("");
+        private static int run() {
+            onGameMessageHandler.toggleRecordMode();
+            return 1;
+        }
+    }
+
+    private static class CommandToggleBackgroundTextRegistration {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("registerBT")
+                                    .executes(context -> run())));
+        }
+
+        private static int run() {
+            onGameMessageHandler.toggleBTRegisterMode();
+            return 1;
+        }
+    }
+
+    private static class CommandToggleDisplayTextRecordMode {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("recordDisplay")
+                                    .executes(context -> run())));
+        }
+
+        private static int run() {
+            displayEntityHandler.toggleRecordMode();
+            return 1;
+        }
+    }
+
+    private static class CommandToggleTooltipTextRecordMode {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("recordTooltip")
+                                    .executes(context -> run())));
+        }
+
+        private static int run() {
+            drawTooltipHandler.toggleRecordMode();
+            return 1;
+        }
+    }
+
+    private static class CommandToggleTitleTextRecordMode {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("recordTitle")
+                                    .executes(context -> run())));
+        }
+
+        private static int run() {
+            titleHandler.toggleRecordMode();
             return 1;
         }
     }

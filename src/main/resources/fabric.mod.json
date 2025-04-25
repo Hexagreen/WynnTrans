@@ -4,12 +4,14 @@
   "version": "${version}",
   "name": "WynnTrans",
   "description": "Resource pack based Wynncraft text translation.",
-  "authors": ["Hexagreen329"],
+  "authors": [
+    "Hexagreen329"
+  ],
   "contact": {
     "homepage": "https://github.com/Hexagreen/WynnTrans"
   },
   "license": "MIT",
-  "icon": "assets/WynnTrans/icon.png",
+  "icon": "assets/wynntrans/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -22,7 +24,6 @@
   "mixins": [
     "wynntrans.mixins.json"
   ],
-  "accessWidener": "wynntrans.accesswidener",
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",

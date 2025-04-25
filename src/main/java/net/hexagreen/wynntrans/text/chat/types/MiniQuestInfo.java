@@ -1,0 +1,30 @@
+package net.hexagreen.wynntrans.text.chat.types;
+
+import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+public class MiniQuestInfo extends WynnChatText {
+    private final boolean gatheringQuest;
+
+    public MiniQuestInfo(Text text) {
+        super(text);
+        this.gatheringQuest = text.getString().contains("Gathering");
+    }
+
+    @Override
+    protected String setTranslationKey() {
+        return rootKey + "func.miniQuestInfo";
+    }
+
+    @Override
+    protected void build() {
+        resultText = Text.empty();
+        if(gatheringQuest) {
+            resultText.append(Text.translatable(translationKey + ".gathering", getSibling(0), getSibling(2), getSibling(4))).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
+            return;
+        }
+        resultText.append(Text.translatable(translationKey + ".slaying", getSibling(0), getSibling(2)).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+    }
+}

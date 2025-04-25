@@ -23,3 +23,11 @@ bin/
 # fabric
 
 run/
+/remappedSrc/
+
+# python venv
+
+patcher/venv
+patcher/src/__pycache__
+/libs/*.jar
+/libs/*.zip

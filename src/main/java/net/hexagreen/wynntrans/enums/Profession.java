@@ -2,59 +2,87 @@ package net.hexagreen.wynntrans.enums;
 
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public enum Profession {
-    COOKING(Text.literal("§fⒶ "), "cooking"),
-    MINING(Text.literal("Ⓑ "), "mining", MutableText.of(new TranslatableTextContent("wytr.profession.mining.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    WOODCUTTING(Text.literal("Ⓒ "), "woodcutting", MutableText.of(new TranslatableTextContent("wytr.profession.woodcutting.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    JEWELING(Text.literal("§fⒹ "), "jeweling"),
-    SCRIBING(Text.literal("§fⒺ "), "scribing"),
-    TAILORING(Text.literal("§fⒻ "), "tailoring"),
-    WEAPONSMITHING(Text.literal("§fⒼ "), "weaponsmithing"),
-    ARMOURING(Text.literal("§fⒽ "), "armouring"),
-    WOODWORKING(Text.literal("§fⒾ "), "woodworking"),
-    FARMING(Text.literal("Ⓙ "), "farming", MutableText.of(new TranslatableTextContent("wytr.profession.farming.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    FISHING(Text.literal("Ⓚ "), "fishing", MutableText.of(new TranslatableTextContent("wytr.profession.fishing.tool", null, TranslatableTextContent.EMPTY_ARGUMENTS))),
-    ALCHEMISM(Text.literal("§fⓁ "), "alchemism");
+    COOKING(Text.literal("§fⒶ"), Text.translatable("wytr.profession.cooking")),
+    MINING(Text.literal("Ⓑ"), Text.translatable("wytr.profession.mining"), Text.translatable("wytr.profession.mining.tool")),
+    WOODCUTTING(Text.literal("Ⓒ"), Text.translatable("wytr.profession.woodcutting"), Text.translatable("wytr.profession.woodcutting.tool")),
+    JEWELING(Text.literal("§fⒹ"), Text.translatable("wytr.profession.jeweling")),
+    SCRIBING(Text.literal("§fⒺ"), Text.translatable("wytr.profession.scribing")),
+    TAILORING(Text.literal("§fⒻ"), Text.translatable("wytr.profession.tailoring")),
+    WEAPONSMITHING(Text.literal("§fⒼ"), Text.translatable("wytr.profession.weaponsmithing")),
+    ARMOURING(Text.literal("§fⒽ"), Text.translatable("wytr.profession.armouring")),
+    WOODWORKING(Text.literal("§fⒾ"), Text.translatable("wytr.profession.woodworking")),
+    FARMING(Text.literal("Ⓙ"), Text.translatable("wytr.profession.farming"), Text.translatable("wytr.profession.farming.tool")),
+    FISHING(Text.literal("Ⓚ"), Text.translatable("wytr.profession.fishing"), Text.translatable("wytr.profession.fishing.tool")),
+    ALCHEMISM(Text.literal("§fⓁ"), Text.translatable("wytr.profession.alchemism"));
 
+    private final MutableText icon;
     private final MutableText text;
-    private final String key;
     private final MutableText tool;
-
-    Profession(MutableText text, String key) {
-        this.text = text;
-        this.key = key;
-        this.tool = null;
-    }
-
-    Profession(MutableText text, String key, MutableText tool) {
-        this.text = text;
-        this.key = key;
-        this.tool = tool;
-    }
 
     public static Profession getProfession(char icon) {
         int index = icon - 'Ⓐ';
+        if(index >= 12) {
+            switch(icon - 57344) {
+                case 0 -> {
+                    return FARMING;
+                }
+                case 1 -> {
+                    return FISHING;
+                }
+                case 2 -> {
+                    return MINING;
+                }
+                case 3 -> {
+                    return WOODCUTTING;
+                }
+            }
+        }
         return values()[index];
     }
 
     public static Profession getProfession(String profName) {
         return Arrays.stream(values())
-                .filter(profession -> profession.key.equals(profName.toLowerCase()))
-                .findFirst().orElse(null);
+                .filter(profession -> profession.toString().equals(profName.toUpperCase(Locale.ENGLISH)))
+                .findFirst()
+                .orElse(null);
+    }
+
+    Profession(MutableText icon, MutableText text) {
+        this.icon = icon;
+        this.text = text;
+        this.tool = null;
+    }
+
+    Profession(MutableText icon, MutableText text, MutableText tool) {
+        this.icon = icon;
+        this.text = text;
+        this.tool = tool;
+    }
+
+    public MutableText getTextWithIcon() {
+        MutableText result = this.icon.copy().append(" ");
+        return result.append(this.text.copy());
+    }
+
+    public MutableText getIcon() {
+        return this.icon.copy();
+    }
+
+    public String getKey() {
+        return this.toString().toLowerCase(Locale.ENGLISH);
     }
 
     public MutableText getText() {
-        MutableText result = this.text.copy();
-        return result.append(MutableText.of(
-                        new TranslatableTextContent("wytr.profession." + this.key, null, TranslatableTextContent.EMPTY_ARGUMENTS)));
+        return this.text.copy();
     }
 
-    public MutableText getTool(char tier) {
-        if (this.tool != null) {
+    public MutableText getTool(String tier) {
+        if(this.tool != null) {
             MutableText result = this.tool.copy();
             return result.append(" T" + tier);
         }
