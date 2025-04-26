@@ -8,6 +8,7 @@ import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -154,7 +155,6 @@ public class ContentBookNodes extends WynnTooltipText {
             contentName.append(categoryText);
 
             result.add(contentName);
-            result.add(name.copy().fillStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
         }
 
         private void nameSectionStatus(Text line) {
@@ -494,6 +494,10 @@ public class ContentBookNodes extends WynnTooltipText {
                     if(string.isEmpty()) return Optional.empty();
                     if(style.getFont().equals(Identifier.of("minecraft:space"))) return Optional.empty();
                     if(!style.isItalic()) style = style.withItalic(false);
+                    if(!style.isBold()) style = style.withBold(false);
+                    if(!style.isUnderlined()) style = style.withUnderline(false);
+                    if(!style.isStrikethrough()) style = style.withStrikethrough(false);
+                    if(!style.isObfuscated()) style = style.withObfuscated(false);
                     if(!nowStyle.get().equals(style)) {
                         if(!nowString.get().isEmpty()) {
                             finalNewLine.append(Text.literal(nowString.get().toString()).setStyle(nowStyle.get()));
@@ -540,10 +544,55 @@ public class ContentBookNodes extends WynnTooltipText {
                 String key;
                 for(int i = 1, size = text.getSiblings().size(); i < size; i++) {
                     String subKey;
-                    if(size == 2) subKey = "";
+                    if(size == 2) {
+                        subKey = "";
+                        String _itemName;
+                        if(val.matches("^\\+\\d+ .+")) {
+                            String[] split = val.split(" ", 2);
+                            String num = split[0];
+                            _itemName = split[1];
+                            line.append(num + " ");
+                            val = val.replaceFirst("^\\+\\d+ ", "");
+                            hash = DigestUtils.sha1Hex(val).substring(0, 4);
+                        }
+                        else {
+                            _itemName = val.replaceFirst("^\\+", "");
+                            val = _itemName;
+                            hash = DigestUtils.sha1Hex(val).substring(0, 4);
+                            line.append("+");
+                        }
+                        Text itemName = new ItemName(_itemName).setNoTranslationAddiction().textAsMutable();
+                        if(itemName.getSiblings().getFirst().getContent() instanceof TranslatableTextContent) {
+                            line.append(itemName);
+                            continue;
+                        }
+                    }
                     else {
                         subKey = "." + i;
                         val = text.getSiblings().get(i).getString();
+                        Text _val = text.getSiblings().get(i);
+
+                        if(val.matches("\\+\\d+ ")) {
+                            line.append(_val);
+                            continue;
+                        }
+                        Text normalEquip = NormalEquipment.getTranslatedItemName(_val);
+                        if(normalEquip != null) {
+                            line.append(normalEquip);
+                            continue;
+                        }
+                        Text unidentifiedEquip = UnidentifiedEquipment.getTranslatedItemName(_val);
+                        if(unidentifiedEquip != null) {
+                            line.append(unidentifiedEquip);
+                            continue;
+                        }
+                        MutableText _iName = Text.empty();
+                        text.getSiblings().subList(1, size).forEach(_iName::append);
+                        Text ingredient = Ingredient.getTranslatedItemName(_iName);
+                        if(ingredient != null) {
+                            line.append(ingredient);
+                            continue;
+                        }
                     }
 
                     switch(category) {

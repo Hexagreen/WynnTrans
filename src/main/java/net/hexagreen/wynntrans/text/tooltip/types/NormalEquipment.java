@@ -29,7 +29,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
-            Pattern.compile(" (.+) [IV]+");
+            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+");
     private final List<Text> tempText;
     private final Deque<Integer> wrapTargetIdx;
     private int longestWidth;
@@ -44,6 +44,22 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         return WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized);
+    }
+
+    public static MutableText getTranslatedItemName(Text text) {
+        List<Text> textBowl = new ArrayList<>();
+        textBowl.add(text);
+        textBowl.add(Text.empty());
+        String itemName = text.getString().replaceAll("^Unidentified |^Perfect |^Defective |§f⬡ Shiny |\\[.+%]$", "");
+        String normalized = normalizeStringForKey(itemName);
+        if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
+                WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
+                WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized)) {
+            NormalEquipment equipment = new NormalEquipment(textBowl);
+            equipment.translateNameSection(equipment.inputText.getSiblings());
+            return equipment.tempText.getFirst().copy();
+        }
+        else return null;
     }
 
     public NormalEquipment(List<Text> texts) {

@@ -23,6 +23,18 @@ public class UnidentifiedEquipment extends WynnTooltipText implements ITooltipSp
         return texts.getFirst().getString().matches("Unidentified (Helmet|Chestplate|Leggings|Boots|Ring|Necklace|Bracelet|Spear|Dagger|Bow|Wand|Relik)");
     }
 
+    public static MutableText getTranslatedItemName(Text text) {
+        List<Text> textBowl = new ArrayList<>();
+        textBowl.add(text);
+        textBowl.add(Text.empty());
+        if(typeChecker(textBowl)) {
+            UnidentifiedEquipment equipment = new UnidentifiedEquipment(textBowl);
+            equipment.translateNameSection(equipment.inputText.getSiblings());
+            return equipment.tempText.getFirst().copy();
+        }
+        else return null;
+    }
+
     public UnidentifiedEquipment(List<Text> texts) {
         super(texts);
         this.tempText = new ArrayList<>();

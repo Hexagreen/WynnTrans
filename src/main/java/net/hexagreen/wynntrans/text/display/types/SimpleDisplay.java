@@ -3,9 +3,14 @@ package net.hexagreen.wynntrans.text.display.types;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.chat.TextNormalizer;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
+import net.hexagreen.wynntrans.text.tooltip.types.Ingredient;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
+import net.hexagreen.wynntrans.text.tooltip.types.NormalEquipment;
+import net.hexagreen.wynntrans.text.tooltip.types.UnidentifiedEquipment;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -46,6 +51,27 @@ public class SimpleDisplay extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         if(blankChecker(valText)) {
             resultText = inputText;
+            return;
+        }
+        Text _val = Text.literal(valText).setStyle(styleText);
+        MutableText normalEquip = NormalEquipment.getTranslatedItemName(_val);
+        if(normalEquip != null) {
+            resultText = normalEquip;
+            return;
+        }
+        MutableText unidentifiedEquip = UnidentifiedEquipment.getTranslatedItemName(_val);
+        if(unidentifiedEquip != null) {
+            resultText = unidentifiedEquip;
+            return;
+        }
+        MutableText ingredient = Ingredient.getTranslatedItemName(_val);
+        if(ingredient != null) {
+            resultText = ingredient;
+            return;
+        }
+        MutableText itemName = new ItemName(_val).setNoTranslationAddiction().textAsMutable();
+        if(itemName.getSiblings().getFirst().getContent() instanceof TranslatableTextContent) {
+            resultText = itemName;
             return;
         }
 

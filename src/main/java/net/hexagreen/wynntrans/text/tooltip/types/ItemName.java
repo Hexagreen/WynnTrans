@@ -60,13 +60,11 @@ public class ItemName extends WynnTooltipText {
         else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
             resultText.append(Text.translatable("wytr.item.charm." + normalizedName).setStyle(getStyle(0)));
         }
+        else if(checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
+            resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(getStyle(0)));
+        }
         else {
-            if(checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
-                resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(getStyle(0)));
-            }
-            else {
-                resultText.append(getSibling(0).copy());
-            }
+            resultText.append(getSibling(0).copy());
         }
     }
 
