@@ -25,6 +25,17 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
         return texts.get(1).getString().equals("§8Crafting Ingredient") || texts.get(5).getString().equals("§7§8Crafting Ingredient");
     }
 
+    public static MutableText getTranslatedItemName(Text text) {
+        String _iName = text.getString().replaceFirst(" \\[✫✫✫]", "");
+        if(!WTS.checkTranslationDoNotRegister("wytr.ingredient." + normalizeStringForKey(_iName))) return null;
+        List<Text> textBowl = new ArrayList<>();
+        textBowl.add(text);
+        textBowl.add(Text.empty());
+        Ingredient ingredient = new Ingredient(textBowl);
+        ingredient.translateNameSection(ingredient.inputText.getSiblings());
+        return ingredient.tempText.getFirst().copy();
+    }
+
     public Ingredient(List<Text> texts) {
         super(ITooltipSplitter.correctSplitter(texts));
         this.tempText = new ArrayList<>();
