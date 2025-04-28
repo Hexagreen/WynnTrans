@@ -1,65 +1,51 @@
 # WynnTrans
 
-Thanks to [kyaco](https://github.com/kyaco/WynnTextReplacer)
+Thanks to [kyaco](https://github.com/kyaco)
 
-## About
+**WynnTrans** is a third-party i18n project for the **Wynncraft, The Minecraft MMORPG**. This mod modifies in-game text during the text packet receiving or rendering phase on the client-side, making it possible to translate text and support multiple languages using Minecraft's translation system and resource packs.
 
-This mod reconstructs [Wynncraft](https://wynncraft.com/) text into a translatable form.
-<br>
-Each Wynncraft text objects are used to generate a translation map, and recorded in resource pack as language file.
+## Working Structure
 
-Most features are WIP.
+This client-side mod modifies in-game text that appears on the **Wynncraft server** by converting it into a translatable form during the **text packet receiving** or **rendering** stages. It supports multiple languages by using Minecraft's **translation system** and **resource packs**.
 
 ## Implemented Features
 
-- Text rebuilding into translatable text.
-- Recording of text that is not registered in a resource pack
-- Translating Sign block's text
+- Chat message translation
+- Text Display translation
+- Title text translation
+- Item tooltip translation
+- Sign block text translation
+- Logging of untranslated text key-value pairs (untranslated text is saved in the `scannedTexts.json` file)
 
-## How to Use
+(Note: The translation base is prepared for each section, but not all text can be translated.)
 
-- Mod jar file and Resource Pack : [Releases](https://github.com/Hexagreen/WynnTrans/releases)
+## Installation
 
-1. You must apply downloaded resource pack before connect to Wynncraft server.
-2. Mod will detect translatable texts and replace it into selected Minecraft language if translation exist in resource pack.
+1. Set up your Minecraft and Fabric environment by following the instructions on the [Release page](https://github.com/Hexagreen/WynnTrans/releases).
+2. Download and apply the mod and resource pack.
 
-If you use [Wynntils/Artemis](https://github.com/Wynntils/Artemis) you should follow these settings.
-> Chat - Chat Tabs feature must be disabled.
->
-> Chat - Chat Mentions - Highlight Mentions feature must be disabled.
+## Usage
 
-Several Wynntils features, especially control chatting texts, may conflict with this mod.
+1. Activate the resource pack before connecting to the server with the mod enabled.
+2. Make sure the mod is active and the resource pack is enabled before entering the server.
 
-## About Text Mining and Resource Pack
+Some features of [**Wynntils**](https://github.com/Wynntils/Wynntils) may not work as expected. For detailed information, refer to the recommended settings and limitations listed on the Release page.
 
-Exclusive resource pack contains Wynncraft's text (dialogs, informational texts or sign texts...) for register translation keys in Minecraft translation storage.
-This mod records unregistered text automatically, but translation resource pack should be made by hands.
-Sign block's texts aren't be recorded automatically. If you meet untranslated sign, right-click with soul point on sign.
+## Translation Contribution
 
-Logged texts will save in `(Minecraft Directory)\WynnTrans\`. There will be 5 files there.
-- `scannedTexts.json` file will store texts that WynnTrans has detected but unregistered in resource pack.
-- `json.txt` will record texts WynnTrans cannot detect.
-- `exception.txt` contains error occured texts while mod works.
+To contribute to translations, refer to the README in the [WynnTrans Language Pack](https://github.com/Hexagreen/WynnTrans-Language-Pack) repository.
 
-`scannedTexts.json` has translation key-value pair. You can move these to resource pack lang file and translation into your language.
-Resource pack's lang file must be named `LANGCODE.json` likes `ko_kr.json` for Korean or `en_us.json` for English.
+## About Text Recording and Resource Pack
 
-If your .txt files in WynnTrans directory contains some new data, it would be helpful if you could report it.
+- The resource pack contains lang files for translating various texts in Wynncraft.
+- New texts that are not found in the lang files will be saved in the `scannedTexts.json` file, located in the `(Minecraft Directory)\WynnTrans\` directory.
+- Texts that encountered errors during translation will be saved in the `json.txt` file.
+- The key-value pairs in the `scannedTexts.json` file follow the same format as those in the resource pack's lang files. If you're not interested in contributing translations, you can safely delete these files periodically.
 
-## I Want to Upload my Translations!
+## Forge Version?
 
-Upload it [Issue Page](https://github.com/Hexagreen/WynnTrans/issues) with Translation Upload tag.
-It will be approved when I notice that.
-But please don't scam with that. I cannot understand all language and your country's players will be angry to scamming.
-
-## Where is Forge Version? / Updates Too Late Bro
-
-Sorry. This mod is my first project, and I don't have much free time. Really sorry for snail-speed updates.
-
-It's hard to care about Forge version.
-(I thought about Architectury at first, but I couldn't find enough references. I was soooooo newbie, so I gave it up that time.)
-If someone can code/fork into Forge is there, free to fork this mod.
+Since this is my first modding project, managing both environments has been challenging. While I might consider a Forge version in the future, it is unlikely to be available in the short term.
 
 ## License
 
-This mod is licenced under the MIT licence, see LICENSE.
+This project is licensed under the **MIT License**.
