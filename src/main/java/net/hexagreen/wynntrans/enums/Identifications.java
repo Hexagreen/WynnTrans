@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.enums;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
@@ -8,11 +9,12 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public enum Identifications {
-    STRENGTH("strength", "wytr.skill.strength", "Strength"),
-    DEXTERITY("dexterity", "wytr.skill.dexterity", "Dexterity"),
-    INTELLIGENCE("intelligence", "wytr.skill.intelligence", "Intelligence"),
-    DEFENCE("defence", "wytr.skill.defence", "Defence"),
-    AGILITY("agility", "wytr.skill.agility", "Agility"),
+    STRENGTH("(?i)strength", "wytr.skill.strength", "Strength"),
+    DEXTERITY("(?i)dexterity", "wytr.skill.dexterity", "Dexterity"),
+    INTELLIGENCE("(?i)intelligence", "wytr.skill.intelligence", "Intelligence"),
+    DEFENCE("(?i)defence", "wytr.skill.defence", "Defence"),
+    AGILITY("(?i)agility", "wytr.skill.agility", "Agility"),
+    SPELL_COST("^[A-z]+Cost$", "wytr.id.spellCost", null),
     NO_TYPE(null, null, null),
     UNKNOWN_MAJOR(null, null, null, true);
 
@@ -56,6 +58,10 @@ public enum Identifications {
     public MutableText getTranslatedText() {
         String k = getKey();
         String v = getVal();
+        if(this == SPELL_COST) {
+            Text spellName = Text.translatable("wytr.ability.node." + WynnTransText.normalizeStringForKey(v));
+            return Text.translatable(k, spellName);
+        }
         if(WynnTrans.wynnTranslationStorage.checkTranslationExist(k, v)) {
             return Text.translatable(k);
         }
@@ -74,7 +80,7 @@ public enum Identifications {
     private String getKey() {
         if(!this.major) {
             return switch(this) {
-                case STRENGTH, DEXTERITY, INTELLIGENCE, DEFENCE, AGILITY -> this.key;
+                case STRENGTH, DEXTERITY, INTELLIGENCE, DEFENCE, AGILITY, SPELL_COST -> this.key;
                 case NO_TYPE -> "wytr.id." + testInput.replaceAll("[^0-9A-z]", "");
                 default -> "wytr.id." + key;
             };
@@ -88,6 +94,7 @@ public enum Identifications {
     private String getVal() {
         if(this == NO_TYPE) return testInput.replaceAll("^ +| +$", "");
         if(this == UNKNOWN_MAJOR) return testInput.replaceAll("^\\+|: $", "");
+        if(this == SPELL_COST) return testInput.replaceAll("^ +| Cost( ?)+$", "");
         return val;
     }
 
@@ -96,7 +103,8 @@ public enum Identifications {
             this.testInput = string;
             return false;
         }
-        return this.matches.equals(string.toLowerCase(Locale.ENGLISH).replaceAll(" ", ""));
+        this.testInput = string;
+        return string.replaceAll(" ", "").matches(this.matches);
     }
 
     private boolean isMatch(String idName, String idDesc) {
@@ -105,6 +113,6 @@ public enum Identifications {
             this.testInputSub = idDesc;
             return false;
         }
-        return this.matches.equals(idName.toLowerCase(Locale.ENGLISH).replaceAll("[^a-z]", ""));
+        return idName.toLowerCase(Locale.ENGLISH).replaceAll("[^a-z]", "").matches(this.matches);
     }
 }

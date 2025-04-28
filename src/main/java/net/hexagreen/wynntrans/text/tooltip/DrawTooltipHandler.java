@@ -17,6 +17,7 @@ public class DrawTooltipHandler {
     public DrawTooltipHandler() {
         this.cacheKey = new ArrayList<>();
         this.cacheVal = new ArrayList<>();
+        this.showOriginal = false;
     }
 
     public void clearCache() {
@@ -34,6 +35,10 @@ public class DrawTooltipHandler {
 
     public void toggleShowOriginal() {
         this.showOriginal = !showOriginal;
+    }
+
+    public boolean getShowOriginal() {
+        return showOriginal;
     }
 
     public List<Text> translateTooltipText(List<Text> texts) {

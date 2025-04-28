@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ContentBookNodes extends WynnTooltipText {
     private static final Text EMPTY_LINE = Text.empty().append(Text.literal(" ")
@@ -138,7 +140,27 @@ public class ContentBookNodes extends WynnTooltipText {
 
         private void nameSectionTitle(Text name) {
             MutableText contentName = Text.empty();
-            if(!category.equals("Dungeon")) {
+            if(category.equals("Mini-Quest") && normalizedName.matches("^Gather.+")) {
+                Matcher matcher = Pattern.compile("^Gather(.+?)(Logs)?(Ore)?([IV]+)?$").matcher(normalizedName);
+                if(matcher.find()) {
+                    String _resource = matcher.group(1);
+                    boolean isLog = matcher.group(2) != null;
+                    boolean isOre = matcher.group(3) != null;
+                    String stage = matcher.group(4) != null ? matcher.group(4) : "";
+                    _resource = switch(_resource) {
+                        case "Diamonds", "Oats", "Piranhas" -> _resource.replaceFirst("s$", "");
+                        default -> _resource;
+                    };
+                    Text resource = Text.translatableWithFallback("wytr.resource." + _resource, _resource.replaceAll("(\\w)(?=[A-Z])", "$1 "));
+                    if(isLog)
+                        contentName.append(Text.translatable("wytr.quest.gatherLog", resource, stage).setStyle(name.getStyle()).append(" "));
+                    else if(isOre)
+                        contentName.append(Text.translatable("wytr.quest.gatherOre", resource, stage).setStyle(name.getStyle()).append(" "));
+                    else
+                        contentName.append(Text.translatable("wytr.quest.gather", resource, stage).setStyle(name.getStyle()).append(" "));
+                }
+            }
+            else if(!category.equals("Dungeon")) {
                 if(WTS.checkTranslationExist(baseKey + normalizedName, name.getString().replaceFirst(" $", ""))) {
                     contentName.append(Text.translatable(baseKey + normalizedName).setStyle(name.getStyle())).append(" ");
                 }
