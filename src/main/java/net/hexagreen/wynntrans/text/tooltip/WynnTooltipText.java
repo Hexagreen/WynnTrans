@@ -48,6 +48,8 @@ public abstract class WynnTooltipText extends WynnTransText {
             WynnTrans.LOGGER.warn("Unprocessed tooltip message.\n", e);
             return new SimpleTooltip(getSiblings()).text();
         }
+        catch(NullPointerException ignore) {
+        }
         return getSiblings();
     }
 

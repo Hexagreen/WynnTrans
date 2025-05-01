@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.mixin;
 
+import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,21 +23,22 @@ import java.util.function.Consumer;
 abstract public class MixinItemStack {
     @Inject(method = "appendTooltip", at = @At("HEAD"), cancellable = true)
     <T extends TooltipAppender> void appendTooltipMixin(ComponentType<T> componentType, Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, CallbackInfo ci) {
-        if(componentType != DataComponentTypes.LORE) {
+        if(!WynnTrans.drawTooltipHandler.getShowOriginal() && componentType != DataComponentTypes.LORE) {
             ci.cancel();
         }
     }
 
     @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/List;Lnet/minecraft/item/tooltip/TooltipType;)V"))
     void item$appendTooltipMixin(Item instance, ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        if(WynnTrans.drawTooltipHandler.getShowOriginal()) {
+            instance.appendTooltip(stack, context, tooltip, type);
+        }
     }
 
-    @Redirect(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendAttributeModifiersTooltip(Ljava/util/function/Consumer;Lnet/minecraft/entity/player/PlayerEntity;)V"))
-    void appendAttributeModifiersTooltipMixin(ItemStack instance, Consumer<Text> textConsumer, @Nullable PlayerEntity player) {
+    @Inject(method = "appendAttributeModifiersTooltip", at = @At(value = "HEAD"), cancellable = true)
+    void appendAttributeModifiersTooltipMixin(Consumer<Text> textConsumer, @Nullable PlayerEntity player, CallbackInfo ci) {
+        if(!WynnTrans.drawTooltipHandler.getShowOriginal()) {
+            ci.cancel();
+        }
     }
-//
-//    @Inject(method = "getTooltip", at = @At("TAIL"), cancellable = true)
-//    public void getTooltipMixin(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir) {
-//        cir.setReturnValue(WynnTrans.drawTooltipHandler.translateTooltipText(cir.getReturnValue()));
-//    }
 }

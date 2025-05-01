@@ -83,7 +83,7 @@ public abstract class WynnTransText {
         return Style.EMPTY.withFormatting(formatting);
     }
 
-    protected static String normalizeStringForKey(String string) {
+    public static String normalizeStringForKey(String string) {
         return string.replaceAll("[ .,'À֎’:&%()\"-]", "");
     }
 

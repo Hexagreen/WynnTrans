@@ -7,6 +7,7 @@ import java.util.List;
 
 public class ItemName extends WynnTooltipText {
     private boolean addiction = true;
+    private boolean returnNull = false;
 
     public static boolean typeChecker(List<Text> texts) {
         return false;
@@ -24,7 +25,13 @@ public class ItemName extends WynnTooltipText {
         this(Text.literal(itemName));
     }
 
-    public ItemName setNoTranslationAddiction() {
+    public ItemName noAddictionMode() {
+        this.addiction = false;
+        return this;
+    }
+
+    public ItemName returnNullMode() {
+        this.returnNull = true;
         this.addiction = false;
         return this;
     }
@@ -64,7 +71,25 @@ public class ItemName extends WynnTooltipText {
             resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(getStyle(0)));
         }
         else {
-            resultText.append(getSibling(0).copy());
+            Text _val = getSibling(0);
+            Text normalEquip = NormalEquipment.getTranslatedItemName(_val);
+            Text unidentifiedEquip = UnidentifiedEquipment.getTranslatedItemName(_val);
+            Text ingredient = Ingredient.getTranslatedItemName(_val);
+            if(normalEquip != null) {
+                resultText.append(normalEquip);
+                return;
+            }
+            else if(unidentifiedEquip != null) {
+                resultText.append(unidentifiedEquip);
+                return;
+            }
+            else if(ingredient != null) {
+                resultText.append(ingredient);
+                return;
+            }
+
+            if(returnNull) resultText = null;
+            else resultText.append(getSibling(0).copy());
         }
     }
 

@@ -37,10 +37,6 @@ public class StarterObjective extends WynnScoreboardText {
                 .map(this::mergeTextStyleSide)
                 .toList();
 
-        if(merged.getFirst().getString().matches("^- .+: \\d+/\\d+")) {
-            throw new TextTranslationFailException("StarterObjective");
-        }
-
         List<Text> lines = new ArrayList<>();
         for(Text l : merged) {
             List<Text> siblings = l.getSiblings();

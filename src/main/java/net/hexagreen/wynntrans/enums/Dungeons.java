@@ -13,6 +13,9 @@ public enum Dungeons {
     UNDERWORLD_CRYPT(Text.translatable("wytr.dungeon.underworldCrypt"),
             Text.translatable("wytr.dungeon.underworldCrypt.bossReward"),
             Text.translatable("wytr.dungeon.underworldCrypt.fragment")),
+    LOST_SANCTUARY(Text.translatable("wytr.dungeon.lostSanctuary"),
+            Text.translatable("wytr.dungeon.lostSanctuary.bossReward"),
+            Text.translatable("wytr.dungeon.lostSanctuary.fragment")),
     TIMELOST_SANCTUM(Text.translatable("wytr.dungeon.timelostSanctum"),
             Text.translatable("wytr.dungeon.timelostSanctum.bossReward"),
             Text.translatable("wytr.dungeon.timelostSanctum.fragment")),
@@ -50,7 +53,7 @@ public enum Dungeons {
                 .replace("À", "").replace("'", "").replace("-", "")
                 .toLowerCase();
         Dungeons dungeons = match(stripped);
-        if(isCorrupted) dungeons.setCorrupted();
+        dungeons.setCorrupted(isCorrupted);
         return dungeons;
     }
 
@@ -58,6 +61,7 @@ public enum Dungeons {
         if(name.contains("decrepit")) return DECREPIT_SEWERS;
         if(name.contains("infested")) return INFESTED_PIT;
         if(name.contains("underworld")) return UNDERWORLD_CRYPT;
+        if(name.contains("sanctuary")) return LOST_SANCTUARY;
         if(name.contains("sanctum")) return TIMELOST_SANCTUM;
         if(name.contains("sand")) return SAND_SWEPT_TOMB;
         if(name.contains("barrows")) return ICE_BARROWS;
@@ -92,8 +96,8 @@ public enum Dungeons {
         return out.append(dungeonFragment);
     }
 
-    private void setCorrupted() {
-        this.isCorrupted = true;
+    private void setCorrupted(boolean corrupted) {
+        this.isCorrupted = corrupted;
     }
 
 }
