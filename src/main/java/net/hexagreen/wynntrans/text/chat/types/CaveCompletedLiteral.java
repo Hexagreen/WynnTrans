@@ -2,14 +2,10 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
-import net.hexagreen.wynntrans.text.tooltip.types.Ingredient;
 import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
-import net.hexagreen.wynntrans.text.tooltip.types.NormalEquipment;
-import net.hexagreen.wynntrans.text.tooltip.types.UnidentifiedEquipment;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -97,29 +93,8 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
                 valExclusiveReward = valExclusiveReward.replaceFirst("^\\+", "");
             }
             Text _val = Text.literal(valExclusiveReward).setStyle(GRAY);
-            Text normalEquip = NormalEquipment.getTranslatedItemName(_val);
-            if(normalEquip != null) {
-                resultText.append("           - ").setStyle(LIGHT_PURPLE);
-                resultText.append(Text.literal(num).setStyle(GRAY));
-                resultText.append(normalEquip).append("\n");
-                continue;
-            }
-            Text unidentifiedEquip = UnidentifiedEquipment.getTranslatedItemName(_val);
-            if(unidentifiedEquip != null) {
-                resultText.append("           - ").setStyle(LIGHT_PURPLE);
-                resultText.append(Text.literal(num).setStyle(GRAY));
-                resultText.append(unidentifiedEquip).append("\n");
-                continue;
-            }
-            Text ingredient = Ingredient.getTranslatedItemName(_val);
-            if(ingredient != null) {
-                resultText.append("           - ").setStyle(LIGHT_PURPLE);
-                resultText.append(Text.literal(num).setStyle(GRAY));
-                resultText.append(ingredient).append("\n");
-                continue;
-            }
-            Text itemName = new ItemName(_val).setNoTranslationAddiction().textAsMutable();
-            if(itemName.getSiblings().getFirst().getContent() instanceof TranslatableTextContent) {
+            Text itemName = new ItemName(_val).returnNullMode().textAsMutable();
+            if(itemName != null) {
                 resultText.append("           - ").setStyle(LIGHT_PURPLE);
                 resultText.append(Text.literal(num).setStyle(GRAY));
                 resultText.append(itemName).append("\n");
@@ -130,6 +105,7 @@ public class CaveCompletedLiteral extends WynnChatText implements ISpaceProvider
             String keyExclusiveReward = keyCaveName + ".reward." + hash;
             if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
                 resultText.append("           - ").setStyle(LIGHT_PURPLE);
+                resultText.append(Text.literal(num).setStyle(GRAY));
                 resultText.append(Text.translatable(keyExclusiveReward).setStyle(GRAY));
             }
             else {

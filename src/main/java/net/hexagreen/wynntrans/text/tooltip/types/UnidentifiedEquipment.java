@@ -105,7 +105,7 @@ public class UnidentifiedEquipment extends WynnTooltipText implements ITooltipSp
                         String nameString = itemName.getString();
                         if(nameString.equals(", ")) guessLine.append(itemName);
                         else
-                            guessLine.append(new ItemName(itemName).setNoTranslationAddiction().textAsMutable().setStyle(itemName.getStyle()));
+                            guessLine.append(new ItemName(itemName).noAddictionMode().textAsMutable().setStyle(itemName.getStyle()));
                         if(guessLine.getSiblings().size() == 9 || guessLine.getSiblings().size() == 8)
                             wrappingWidth = Math.max(wrappingWidth, TEXT_RENDERER.getWidth(guessLine) + 10);
                     }

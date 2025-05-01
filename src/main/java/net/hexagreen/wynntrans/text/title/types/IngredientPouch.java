@@ -22,7 +22,7 @@ public class IngredientPouch extends WynnTitleText {
         Matcher matcher = Pattern.compile("§a\\+(\\d+) §7(.+)§a to pouch").matcher(getContentString());
         boolean ignore = matcher.find();
         this.count = matcher.group(1);
-        this.ingredient = new ItemName(matcher.group(2)).setNoTranslationAddiction().textAsMutable().setStyle(GRAY);
+        this.ingredient = new ItemName(matcher.group(2)).noAddictionMode().textAsMutable().setStyle(GRAY);
     }
 
     @Override

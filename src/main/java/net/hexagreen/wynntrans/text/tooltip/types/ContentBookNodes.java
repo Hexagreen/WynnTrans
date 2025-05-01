@@ -8,7 +8,6 @@ import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -583,8 +582,8 @@ public class ContentBookNodes extends WynnTooltipText {
                             hash = DigestUtils.sha1Hex(val).substring(0, 4);
                             line.append("+");
                         }
-                        Text itemName = new ItemName(_itemName).setNoTranslationAddiction().textAsMutable();
-                        if(itemName.getSiblings().getFirst().getContent() instanceof TranslatableTextContent) {
+                        Text itemName = new ItemName(_itemName).returnNullMode().textAsMutable();
+                        if(itemName != null) {
                             line.append(itemName);
                             continue;
                         }
@@ -598,21 +597,9 @@ public class ContentBookNodes extends WynnTooltipText {
                             line.append(_val);
                             continue;
                         }
-                        Text normalEquip = NormalEquipment.getTranslatedItemName(_val);
-                        if(normalEquip != null) {
-                            line.append(normalEquip);
-                            continue;
-                        }
-                        Text unidentifiedEquip = UnidentifiedEquipment.getTranslatedItemName(_val);
-                        if(unidentifiedEquip != null) {
-                            line.append(unidentifiedEquip);
-                            continue;
-                        }
-                        MutableText _iName = Text.empty();
-                        text.getSiblings().subList(1, size).forEach(_iName::append);
-                        Text ingredient = Ingredient.getTranslatedItemName(_iName);
-                        if(ingredient != null) {
-                            line.append(ingredient);
+                        MutableText itemName = new ItemName(_val).returnNullMode().textAsMutable();
+                        if(itemName != null) {
+                            line.append(itemName);
                             continue;
                         }
                     }
