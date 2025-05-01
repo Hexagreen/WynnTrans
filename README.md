@@ -29,11 +29,11 @@ This client-side mod modifies in-game text that appears on the **Wynncraft serve
 1. Activate the resource pack before connecting to the server with the mod enabled.
 2. Make sure the mod is active and the resource pack is enabled before entering the server.
 
-Some features of [**Wynntils**](https://github.com/Wynntils/Wynntils) may not work as expected. For detailed information, refer to the recommended settings and limitations listed on the Release page.
+Some features of [**Wynntils**](https://github.com/Wynntils/Wynntils) may not work as expected. For detailed information, see the recommended settings and limitations listed on the Release page.
 
 ## Translation Contribution
 
-To contribute to translations, refer to the README in the [WynnTrans Language Pack](https://github.com/Hexagreen/WynnTrans-Language-Pack) repository.
+To contribute to translations, see the README in the [WynnTrans Language Pack](https://github.com/Hexagreen/WynnTrans-Language-Pack) repository.
 
 ## About Text Recording and Resource Pack
 
