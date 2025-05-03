@@ -111,6 +111,9 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
             else if(seg.getFirst().getSiblings().getFirst().getString().matches("[+-]\\d+(%|/[35]s| Tiers)?")) {
                 translateIDSection(seg);
             }
+            else if(seg.getFirst().getSiblings().getFirst().getString().matches("^\\+.+: $")) {
+                translateIDSection(seg);
+            }
             else if(seg.getFirst().getString().matches(".+ Set \\(\\d/\\d\\)")) {
                 translateSetPartsSection(seg);
             }

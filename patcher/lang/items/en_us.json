@@ -5873,5 +5873,12 @@
     "wytr.item.weapon.Zero": "Zero",
     "wytr.item.weapon.Zero.lore": "The unstable power within this bow is capable of great destruction, but seems to zero out at the most crucial moments in battle. Only the most skillful archers can wield this weapon with confidence.",
     "wytr.item.weapon.Zipper": "Zipper",
-    "wytr.item.weapon.ZombifiedBranch": "Zombified Branch"
+    "wytr.item.weapon.ZombifiedBranch": "Zombified Branch",
+    "wytr.item.armour.Apophenia": "Apophenia",
+    "wytr.item.armour.DarkMatter": "Dark Matter\u058e",
+    "wytr.item.armour.DarkMatter.lore": "It permeates around you, so subtly, enveloping your very being with a shroud on the cusp of impalpability.  Nothing can affect you now - the incorporeal hiding in plain sight.",
+    "wytr.item.weapon.ShredderClub": "Shredder Club",
+    "wytr.item.weapon.ShredderClub.lore": "There's a scrawling etched onto the handle: \"UNGA BUNGA'S. NO TOUCH.\"",
+    "wytr.item.armour.BuoyantBalmorals": "Buoyant Balmorals",
+    "wytr.item.armour.BuoyantBalmorals.lore": "These are congealed and rather gross, but they leave you with an undeniable bounce in your step."
 }
