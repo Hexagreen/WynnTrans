@@ -265,7 +265,8 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
         segment.forEach(t -> {
             Deque<Text> siblings = new ArrayDeque<>(t.getSiblings());
             if(siblings.getFirst().getString().matches("  ÀÀÀÀ\\(?")) {
-                dump.add(processDamageInfo(siblings));
+                if(t.getString().contains(":")) dump.add(processDamageInfo(siblings));
+                else dump.add(processAnnotation(siblings));
             }
             else if(siblings.getFirst().getString().matches("[ À]{20,}.+")) {
                 dump.add(processDanglingAttributeInfo(siblings, dump.getLast()));
@@ -292,6 +293,19 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
         }
         result.append(Text.literal(": ").setStyle(lastStyle));
         result.append(Text.literal(values[1]).setStyle(lastStyle));
+
+        return result;
+    }
+
+    private Text processAnnotation(Deque<Text> siblings) {
+        MutableText result = Text.empty();
+        result.append(siblings.removeFirst());
+        Style style = siblings.getFirst().getStyle();
+        Text colorCoded = styleToColorCode(siblings.stream().toList(), style);
+        String v = colorCoded.getString();
+        String k = "wytr.ability.effectDesc." + DigestUtils.sha1Hex(v).substring(0, 6);
+        WTS.checkTranslationExist(k, v);
+        result.append(Text.translatableWithFallback(k, v).setStyle(style));
 
         return result;
     }
