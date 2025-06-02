@@ -11,9 +11,11 @@ import java.util.function.Predicate;
 
 public enum TooltipType {
     DIALOG_HISTORY(DialogHistory::new, DialogHistory::typeChecker),
+    CONTENT_BOOK(ContentBook::new, ContentBook::typeChecker),
     CONTENT_BOOK_FILTER_AND_SORT(ContentBookFilterAndSort::new, ContentBookFilterAndSort::typeChecker),
     CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress::new, ContentBookProgress::typeChecker),
     CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
+    COMPASS_MENU(Compass::new, Compass::typeChecker),
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),

@@ -63,6 +63,7 @@ public enum ChatType {
     SKIN_APPLIED(SkinApplied::new, SkinApplied::typeChecker),
     CHARACTER_CLASS_CHANGE(CharacterClassChange::new, CharacterClassChange::typeChecker),
     QUICK_TRADE(QuickTrade::new, QuickTrade::typeChecker),
+    QUICK_DUEL(QuickDuel::new, QuickDuel::typeChecker),
     CAVE_COMPLETE_LITERAL(CaveCompletedLiteral::new, CaveCompletedLiteral::typeChecker),
     BOMB_BELL(BombBell::new, BombBell::typeChecker),
     NOT_YOUR_WEAPON(NotYourWeapon::new, NotYourWeapon::typeChecker),
