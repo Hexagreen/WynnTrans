@@ -17,9 +17,9 @@ public class GoToStore extends WynnChatText {
     }
 
     public GoToStore(Text text) {
-        super(text);
+        super(!text.getSiblings().isEmpty() ? text : colorCodedToStyled(text));
         this.linkText = findLinkText();
-        this.val = inputText.getString().replaceFirst("wynncraft\\.com/store[\\w/]*", "%s");
+        this.val = text.getString().replaceFirst("wynncraft\\.com/store[\\w/]*", "%s");
         this.key = translationKey + DigestUtils.sha1Hex(val);
     }
 

@@ -8,36 +8,47 @@ import net.minecraft.util.Formatting;
 import java.util.Locale;
 
 public enum CharacterSkill {
-    STR(Text.translatable("wytr.skill.strength").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))),
-    DEX(Text.translatable("wytr.skill.dexterity").setStyle(Style.EMPTY.withColor(Formatting.YELLOW))),
-    INT(Text.translatable("wytr.skill.intelligence").setStyle(Style.EMPTY.withColor(Formatting.AQUA))),
-    DEF(Text.translatable("wytr.skill.defence").setStyle(Style.EMPTY.withColor(Formatting.RED))),
-    AGI(Text.translatable("wytr.skill.agility").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+    STR(Text.translatable("wytr.skill.strength").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)), Elements.EARTH),
+    DEX(Text.translatable("wytr.skill.dexterity").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)), Elements.THUNDER),
+    INT(Text.translatable("wytr.skill.intelligence").setStyle(Style.EMPTY.withColor(Formatting.AQUA)), Elements.WATER),
+    DEF(Text.translatable("wytr.skill.defence").setStyle(Style.EMPTY.withColor(Formatting.RED)), Elements.FIRE),
+    AGI(Text.translatable("wytr.skill.agility").setStyle(Style.EMPTY.withColor(Formatting.WHITE)), Elements.AIR),
+    UNKNOWN(Text.literal("UNKNOWN"), null);
 
     private final Text stat;
+    private final Elements relativeElement;
 
-    public static MutableText getSkill(String name) {
+    public static CharacterSkill getSkill(String name) {
         switch(name.toLowerCase(Locale.ENGLISH)) {
             case "strength" -> {
-                return STR.stat.copy();
+                return STR;
             }
             case "dexterity" -> {
-                return DEX.stat.copy();
+                return DEX;
             }
             case "intelligence" -> {
-                return INT.stat.copy();
+                return INT;
             }
             case "defence" -> {
-                return DEF.stat.copy();
+                return DEF;
             }
             case "agility" -> {
-                return AGI.stat.copy();
+                return AGI;
             }
         }
-        return Text.literal("UNKNOWN");
+        return UNKNOWN;
     }
 
-    CharacterSkill(Text stat) {
+    CharacterSkill(Text stat, Elements relativeElement) {
         this.stat = stat;
+        this.relativeElement = relativeElement;
+    }
+
+    public MutableText getStat() {
+        return stat.copy();
+    }
+
+    public Elements getRelativeElement() {
+        return relativeElement;
     }
 }

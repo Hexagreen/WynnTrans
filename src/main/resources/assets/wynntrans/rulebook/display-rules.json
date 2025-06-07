@@ -4,5 +4,17 @@
     "pattern": " (Left|Right)-Click ",
     "replace": " %s-Click ",
     "register": true
+  },
+  {
+    "selector": "§aHousing Island\n§7by §f.+",
+    "pattern": "§7by (§f.+)",
+    "replace": "§7by %s",
+    "register": false
+  },
+  {
+    "selector": "§aThanks!\n§7\\d+ Upvote",
+    "pattern": "(§7\\d+) Upvote",
+    "replace": "%s §7Upvote",
+    "register": false
   }
 ]}

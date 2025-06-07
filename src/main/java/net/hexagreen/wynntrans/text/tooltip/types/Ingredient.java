@@ -158,7 +158,7 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
                 Text req = siblings.getFirst();
                 String[] slices = req.getString().split(" ");
                 String num = slices[0];
-                Text skill = CharacterSkill.getSkill(slices[1]).setStyle(req.getStyle());
+                Text skill = CharacterSkill.getSkill(slices[1]).getStat().setStyle(req.getStyle());
                 dump.add(Text.translatable("wytr.tooltip.ingredient.requirement", num, skill).setStyle(req.getStyle()));
             }
             else {

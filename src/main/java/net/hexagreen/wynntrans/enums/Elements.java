@@ -44,6 +44,6 @@ public enum Elements {
     }
 
     public Text getElement() {
-        return element;
+        return element.copy();
     }
 }

@@ -350,7 +350,7 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
             previousHeader.append(previousSiblings.getFirst());
         }
 
-        result.append(getBlanks(WynnTransText.TEXT_RENDERER.getWidth(previousHeader)).toString());
+        result.append(getBlanks(WynnTransText.TEXT_RENDERER.getWidth(previousHeader)));
         Text first = siblings.getFirst();
         if(!first.getString().matches("[ À]+")) {
             String shouldNextSibling = first.getString().replaceAll("^[ À]+", "");

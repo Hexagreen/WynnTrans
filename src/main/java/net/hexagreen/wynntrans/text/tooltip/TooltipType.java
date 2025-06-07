@@ -16,6 +16,7 @@ public enum TooltipType {
     CONTENT_BOOK_CONTENT_PROGRESS(ContentBookProgress::new, ContentBookProgress::typeChecker),
     CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
     COMPASS_MENU(Compass::new, Compass::typeChecker),
+    COMPASS_ITEMS(CompassItems::new, CompassItems::typeChecker),
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),

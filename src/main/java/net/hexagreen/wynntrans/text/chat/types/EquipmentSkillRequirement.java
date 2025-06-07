@@ -27,7 +27,7 @@ public class EquipmentSkillRequirement extends WynnSystemText {
         this.equipName = new ItemName(getSibling(-1).getString().replaceAll("\\n", ""))
                 .noAddictionMode()
                 .textAsMutable().setStyle(Style.EMPTY.withColor(Formatting.RED));
-        this.skill = CharacterSkill.getSkill(matcher.group(1));
+        this.skill = CharacterSkill.getSkill(matcher.group(1)).getStat();
         this.level = getSibling(1);
     }
 
