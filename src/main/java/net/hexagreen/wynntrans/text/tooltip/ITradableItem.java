@@ -1,0 +1,37 @@
+package net.hexagreen.wynntrans.text.tooltip;
+
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+public interface ITradableItem {
+
+    Style GOLD = Style.EMPTY.withColor(Formatting.GOLD);
+    MutableText PRICE_TEXT = Text.translatable("wytr.func.price").setStyle(GOLD);
+
+    default void insertPriceSection(List<List<Text>> segments, Consumer<Text> appender, IterationStep step) {
+        boolean priceSectionFound = false;
+        for(int i = 0, size = segments.size(); i < size; i++) {
+            List<Text> seg = segments.get(i);
+            if(!priceSectionFound && seg.getFirst().getString().contains("Price:")) {
+                priceSectionFound = true;
+                seg.forEach(t -> {
+                    if(t.getString().equals("Price:")) appender.accept(PRICE_TEXT);
+                    else appender.accept(t);
+                });
+                appender.accept(ITooltipSplitter.SPLITTER);
+                continue;
+            }
+            step.process(seg, i);
+        }
+    }
+
+    @FunctionalInterface
+    interface IterationStep {
+        void process(List<Text> currentSegment, int index);
+    }
+}

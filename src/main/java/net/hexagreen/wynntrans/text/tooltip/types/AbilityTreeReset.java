@@ -19,7 +19,7 @@ public class AbilityTreeReset extends WynnTooltipText implements ITooltipSplitte
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
         if(!Pattern.compile("\uE001").matcher(WynnTrans.currentScreen).find()) return false;
-        return texts.getFirst().getString().matches("§[8a]§l(Empty Socket|Waiting for Shards|Confirm Sacrifice)");
+        return texts.getFirst().getString().matches("§[8a]§l(Empty Socket|Waiting for Shards)|Confirm Sacrifice");
     }
 
     public AbilityTreeReset(List<Text> texts) {
@@ -34,10 +34,14 @@ public class AbilityTreeReset extends WynnTooltipText implements ITooltipSplitte
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text _head = getSibling(0).getSiblings().getFirst();
+        boolean confirm = false;
         String k = switch(_head.getString()) {
             case "Empty Socket" -> translationKey + ".emptySocket";
             case "Waiting for Shards" -> translationKey + ".waitingShard";
-            case "Confirm Sacrifice" -> translationKey + ".resetReady";
+            case "Confirm Sacrifice" -> {
+                confirm = true;
+                yield translationKey + ".resetReady";
+            }
             default -> "";
         };
         if(k.isEmpty()) {
@@ -46,12 +50,14 @@ public class AbilityTreeReset extends WynnTooltipText implements ITooltipSplitte
         }
 
         resultText.append(Text.translatable(k).setStyle(_head.getStyle()));
+        if(confirm) resultText.append(" ");
         wrapLine(Text.translatable(k + ".desc").setStyle(GRAY), 150).forEach(resultText::append);
         resultText.append(" ");
 
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments, ArrayList::new);
-        Deque<Text> _tail = new ArrayDeque<>(segments.get(2).getFirst().getSiblings());
+        if(confirm) segments.removeFirst();
+        Deque<Text> _tail = new ArrayDeque<>(segments.get(1).getFirst().getSiblings());
         MutableText translated = Text.empty().append(_tail.removeFirst());
         String k1 = switch(_tail.removeFirst().getString().replaceAll("[^A-z]", "")) {
             case "AvailableShards" -> translationKey + ".shardExist";
@@ -59,7 +65,7 @@ public class AbilityTreeReset extends WynnTooltipText implements ITooltipSplitte
             default -> "";
         };
         if(k1.isEmpty()) {
-            resultText.append(segments.get(2).getFirst());
+            resultText.append(segments.get(1).getFirst());
             return;
         }
 
@@ -67,9 +73,9 @@ public class AbilityTreeReset extends WynnTooltipText implements ITooltipSplitte
         _tail.forEach(translated::append);
         resultText.append(translated);
 
-        if(segments.size() == 4) {
+        if(confirm) {
             resultText.append(" ");
-            segments.get(3).forEach(t -> {
+            segments.get(2).forEach(t -> {
                 Text icon = t.getSiblings().getFirst();
                 String k2 = switch(t.getSiblings().getLast().getString()) {
                     case " Left-Click to reset the tree" -> translationKey + ".reset";

@@ -4,8 +4,8 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.ITime;
-import net.hexagreen.wynntrans.text.tooltip.IPricedItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
+import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringDefectiveItem;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringPerfectItem;
 
-public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter, IPricedItem {
+public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter, ITradableItem {
     private static final Pattern NAME_ATTACHMENT_REGEX =
             Pattern.compile("Attack Speed|This item's powers have");
     private static final Pattern ITEM_TAIL_REGEX =
@@ -29,7 +29,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
-            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+");
+            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+$");
     private final List<Text> tempText;
     private final Deque<Integer> wrapTargetIdx;
     private int longestWidth;
@@ -78,57 +78,49 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        ItemTooltipPriceSection priceSection = detachPriceSection(segments);
-        int priceSectionIndex = priceSection.position();
-
-        for(int i = 0, size = segments.size(); i < size; i++) {
+        insertPriceSection(segments, this::addAndRecordWidth, (seg, i) -> {
+            String firstLine = seg.getFirst().getString();
+            String firstSibling = seg.getFirst().getSiblings().getFirst().getString();
             if(i == 0) {
-                translateNameSection(segments.getFirst());
-                tempText.add(SPLITTER);
-                continue;
-            }
-            else if(i == priceSectionIndex) {
-                priceSection.priceTexts().forEach(this::addAndRecordWidth);
-                tempText.add(SPLITTER);
-            }
-
-            List<Text> seg = segments.get(i);
-            if(NAME_ATTACHMENT_REGEX.matcher(seg.getFirst().getString()).find()) {
                 translateNameSection(seg);
             }
-            else if(BASE_STAT_REGEX.matcher(seg.getFirst().getString()).find()) {
+            else if(NAME_ATTACHMENT_REGEX.matcher(firstLine).find()) {
+                translateNameSection(seg);
+            }
+            else if(BASE_STAT_REGEX.matcher(firstLine).find()) {
                 translateBaseStatSection(seg);
             }
-            else if(POWDER_SPECIAL_REGEX.matcher(seg.getFirst().getSiblings().getLast().getString()).find()) {
+            else if(POWDER_SPECIAL_REGEX.matcher(firstLine).find()) {
                 translatePowderSpecialSection(seg);
             }
-            else if(seg.getFirst().getSiblings().getFirst().getString().matches("[✔✖] ?")) {
+            else if(firstSibling.matches("[✔✖] ?")) {
                 translateReqSection(seg);
             }
-            else if(seg.getFirst().getSiblings().getFirst().getString().equals("⬡ ")) {
+            else if(firstSibling.equals("⬡ ")) {
                 translateShinySection(seg);
             }
-            else if(seg.getFirst().getSiblings().getFirst().getString().matches("[+-]\\d+(%|/[35]s| Tiers)?")) {
+            else if(firstSibling.matches("[+-]\\d+(%|/[35]s| Tiers)?")) {
                 translateIDSection(seg);
             }
-            else if(seg.getFirst().getSiblings().getFirst().getString().matches("^\\+.+: $")) {
+            else if(firstSibling.matches("^\\+.+: $")) {
                 translateIDSection(seg);
             }
-            else if(seg.getFirst().getString().matches(".+ Set \\(\\d/\\d\\)")) {
+            else if(firstLine.matches(".+ Set \\(\\d/\\d\\)")) {
                 translateSetPartsSection(seg);
             }
-            else if(seg.getFirst().getString().equals("Set Bonus:")) {
+            else if(firstLine.equals("Set Bonus:")) {
                 translateSetBonusSection(seg);
             }
-            else if(ITEM_TAIL_REGEX.matcher(seg.getFirst().getString()).find()) {
+            else if(ITEM_TAIL_REGEX.matcher(firstLine).find()) {
                 translateTailSection(seg);
-                break;
+                return;
             }
             else {
                 appendUnknowns(seg);
             }
             tempText.add(SPLITTER);
-        }
+        });
+
         wrapTargetIdx.add(-1);
 
         for(int i = 0, size = tempText.size(); i < size; i++) {

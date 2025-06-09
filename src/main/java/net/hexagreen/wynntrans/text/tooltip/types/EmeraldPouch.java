@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
-import net.hexagreen.wynntrans.text.tooltip.IPricedItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
+import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmeraldPouch extends WynnTooltipText implements IPricedItem, ITooltipSplitter {
+public class EmeraldPouch extends WynnTooltipText implements ITradableItem, ITooltipSplitter {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
@@ -33,24 +33,12 @@ public class EmeraldPouch extends WynnTooltipText implements IPricedItem, IToolt
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        ItemTooltipPriceSection priceSection = detachPriceSection(segments);
-        int priceSectionIndex = priceSection.position();
-
-        for(int i = 0, size = segments.size(); i < size; i++) {
+        insertPriceSection(segments, resultText::append, (seg, i) -> {
+            String firstLine = seg.getFirst().getString();
             if(i == 0) {
                 translateNameSection(segments.getFirst());
-                resultText.append(SPLITTER);
-                continue;
             }
-
-            if(i == priceSectionIndex) {
-                priceSection.priceTexts().forEach(resultText::append);
-                resultText.append(SPLITTER);
-            }
-
-            List<Text> seg = segments.get(i);
-            String firstLine = seg.getFirst().getString();
-            if(firstLine.equals("Emerald Pouches allows the wearer")) {
+            else if(firstLine.equals("Emerald Pouches allows the wearer")) {
                 translateInfoSection(seg);
             }
             else if(firstLine.matches("^- .+")) {
@@ -62,8 +50,8 @@ public class EmeraldPouch extends WynnTooltipText implements IPricedItem, IToolt
             else {
                 seg.forEach(resultText::append);
             }
-            if(i != size - 1) resultText.append(SPLITTER);
-        }
+            if(i != segments.size() - 1) resultText.append(SPLITTER);
+        });
     }
 
     private void translateNameSection(List<Text> segment) {

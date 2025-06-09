@@ -3,8 +3,8 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.enums.CharacterSkill;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.ITime;
-import net.hexagreen.wynntrans.text.tooltip.IPricedItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
+import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltipSplitter {
-    private final List<Text> tempText;
+public class Ingredient extends WynnTooltipText implements ITradableItem, ITooltipSplitter {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 6) return false;
@@ -33,12 +32,11 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
         textBowl.add(Text.empty());
         Ingredient ingredient = new Ingredient(textBowl);
         ingredient.translateNameSection(ingredient.inputText.getSiblings());
-        return ingredient.tempText.getFirst().copy();
+        return ingredient.resultText.getSiblings().getFirst().copy();
     }
 
     public Ingredient(List<Text> texts) {
         super(ITooltipSplitter.correctSplitter(texts));
-        this.tempText = new ArrayList<>();
     }
 
     @Override
@@ -50,46 +48,32 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        ItemTooltipPriceSection priceSection = detachPriceSection(segments);
-        int priceSectionIndex = priceSection.position();
-
-        for(int i = 0, size = segments.size(); i < size; i++) {
+        insertPriceSection(segments, resultText::append, (seg, i) -> {
+            String firstLine = seg.getFirst().getString();
             if(i == 0) {
-                translateNameSection(segments.getFirst());
-                tempText.add(SPLITTER);
-                continue;
-            }
-            else if(i == priceSectionIndex) {
-                tempText.addAll(priceSection.priceTexts());
-                tempText.add(SPLITTER);
-            }
-
-            List<Text> seg = segments.get(i);
-            String firstLineString = seg.getFirst().getString();
-            if(firstLineString.equals("Crafting Ingredient")) {
                 translateNameSection(seg);
             }
-            else if(firstLineString.matches("[+-]\\d+% Ingredient Effectiveness")) {
+            else if(firstLine.equals("Crafting Ingredient")) {
+                translateNameSection(seg);
+            }
+            else if(firstLine.matches("[+-]\\d+% Ingredient Effectiveness")) {
                 translateEffectiveness(seg);
             }
-            else if(firstLineString.matches("[+-]\\d+s? (Durability|Duration|Charges?|.+ Min\\.).*")) {
+            else if(firstLine.matches("[+-]\\d+s? (Durability|Duration|Charges?|.+ Min\\.).*")) {
                 translateSideEffect(seg);
             }
-            else if(firstLineString.matches("([+-]?\\d+ to )?[+-]?\\d+(%|/[35]s| tier)? .+")) {
+            else if(firstLine.matches("([+-]?\\d+ to )?[+-]?\\d+(%|/[35]s| tier)? .+")) {
                 translateIDSection(seg);
             }
-            else if(firstLineString.matches("[✔✖] Crafting Lv\\. Min: \\d+")) {
+            else if(firstLine.matches("[✔✖] Crafting Lv\\. Min: \\d+")) {
                 translateTargetProfession(seg);
-                break;
+                return;
             }
-            tempText.add(SPLITTER);
-        }
-
-        tempText.forEach(resultText::append);
+            resultText.append(SPLITTER);
+        });
     }
 
     private void translateNameSection(List<Text> segment) {
-        List<Text> dump = new ArrayList<>();
         for(Text t : segment) {
             if(t.getString().contains("[✫✫✫]")) {
                 Deque<Text> mutableSiblings = new ArrayDeque<>(t.getSiblings());
@@ -99,73 +83,65 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
                 MutableText nameLine = Text.empty().append(ingredientName);
                 if(trailingBracket) nameLine.append(Text.literal(" [").setStyle(GRAY));
                 mutableSiblings.forEach(nameLine::append);
-                dump.add(nameLine);
+                resultText.append(nameLine);
             }
             else if(t.getString().equals("Crafting Ingredient")) {
-                dump.add(Text.translatable("wytr.tooltip.craftingIngredient").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                resultText.append(Text.translatable("wytr.tooltip.craftingIngredient").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
             }
             else {
-                dump.add(t);
+                resultText.append(t);
             }
         }
-
-        tempText.addAll(dump);
     }
 
     private void translateIDSection(List<Text> segment) {
-        List<Text> translatedIDs = new IdentificationTooltip(colorCodedToStyledBatch(segment)).text();
-        tempText.addAll(translatedIDs);
+        new IdentificationTooltip(colorCodedToStyledBatch(segment)).text().forEach(resultText::append);
     }
 
     private void translateEffectiveness(List<Text> segment) {
-        List<Text> dump = new ArrayList<>();
         for(Text t : segment) {
             List<Text> siblings = t.getSiblings();
             if(siblings.size() == 2) {
                 Text body = Text.translatable("wytr.id.IngredientEffectiveness").setStyle(GRAY);
-                dump.add(Text.empty().append(siblings.getFirst()).append(body));
+                resultText.append(Text.empty().append(siblings.getFirst()).append(body));
             }
             else {
                 String v = t.getString().replaceAll("[()]", "");
                 String k = "wytr.tooltip.ingredient.effectiveness." + DigestUtils.sha1Hex(v).substring(0, 4);
                 WTS.checkTranslationExist(k, v);
-                dump.add(Text.empty().setStyle(GRAY).append("(").append(Text.translatableWithFallback(k, v)).append(")"));
+                resultText.append(Text.empty().setStyle(GRAY).append("(").append(Text.translatableWithFallback(k, v)).append(")"));
             }
         }
-
-        tempText.addAll(dump);
     }
 
     private void translateSideEffect(List<Text> segment) {
-        List<Text> dump = new ArrayList<>();
         for(Text t : segment) {
             List<Text> siblings = t.getSiblings();
             String string = t.getString();
             if(siblings.size() == 3) {
-                dump.add(Text.translatable("wytr.tooltip.ingredient.selective",
+                resultText.append(Text.translatable("wytr.tooltip.ingredient.selective",
                         getDurabilityOrDuration(siblings.getFirst()),
                         getDurabilityOrDuration(siblings.getLast())).setStyle(GRAY));
             }
             else if(string.contains("Dura")) {
-                dump.add(getDurabilityOrDuration(siblings.getFirst()));
+                resultText.append(getDurabilityOrDuration(siblings.getFirst()));
             }
             else if(string.contains("Charge")) {
                 Text charge = siblings.getFirst();
                 String num = charge.getString().split(" ", 2)[0];
-                dump.add(Text.translatable("wytr.tooltip.ingredient.charge", num).setStyle(charge.getStyle()));
+                resultText.append(Text.translatable("wytr.tooltip.ingredient.charge", num).setStyle(charge.getStyle()));
             }
             else if(string.contains("Min.")) {
                 Text req = siblings.getFirst();
                 String[] slices = req.getString().split(" ");
                 String num = slices[0];
                 Text skill = CharacterSkill.getSkill(slices[1]).getStat().setStyle(req.getStyle());
-                dump.add(Text.translatable("wytr.tooltip.ingredient.requirement", num, skill).setStyle(req.getStyle()));
+                resultText.append(Text.translatable("wytr.tooltip.ingredient.requirement", num, skill).setStyle(req.getStyle()));
             }
             else {
-                dump.add(t);
+                resultText.append(t);
             }
         }
-        tempText.addAll(dump);
     }
 
     private Text getDurabilityOrDuration(Text text) {
@@ -185,19 +161,17 @@ public class Ingredient extends WynnTooltipText implements IPricedItem, ITooltip
     }
 
     private void translateTargetProfession(List<Text> segment) {
-        List<Text> dump = new ArrayList<>();
         for(int i = 0, size = segment.size(); i < size; i++) {
             List<Text> siblings = segment.get(i).getSiblings();
             if(i == 0) {
                 String level = siblings.getLast().getString().replaceAll("\\D", "");
-                dump.add(Text.empty().append(siblings.getFirst()).append(" ")
+                resultText.append(Text.empty().append(siblings.getFirst()).append(" ")
                         .append(Text.translatable("wytr.tooltip.ingredient.craftingLevel", level).setStyle(GRAY)));
             }
             else {
-                dump.add(Text.empty().append(siblings.getFirst()).append(siblings.get(1))
+                resultText.append(Text.empty().append(siblings.getFirst()).append(siblings.get(1))
                         .append(Profession.getProfession(siblings.get(2).getString().charAt(0)).getTextWithIcon().setStyle(GRAY)));
             }
         }
-        tempText.addAll(dump);
     }
 }

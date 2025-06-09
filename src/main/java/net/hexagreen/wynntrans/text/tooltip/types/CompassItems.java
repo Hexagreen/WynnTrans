@@ -498,7 +498,6 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
         getSiblings().forEach(resultText::append);
     }
 
-
     private enum Items {
         ABILITY_TREE("§b§lAbility Tree", "Ability Tree"),
         SKILL_CRYSTAL("§2§lSkill Crystal", "Skill Crystal"),

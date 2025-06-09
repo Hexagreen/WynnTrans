@@ -1,9 +1,13 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 public class ItemName extends WynnTooltipText {
     private boolean addiction = true;
@@ -72,29 +76,39 @@ public class ItemName extends WynnTooltipText {
         }
         else {
             Text _val = getSibling(0);
-            Text normalEquip = NormalEquipment.getTranslatedItemName(_val);
-            Text unidentifiedEquip = UnidentifiedEquipment.getTranslatedItemName(_val);
-            Text ingredient = Ingredient.getTranslatedItemName(_val);
-            if(normalEquip != null) {
-                resultText.append(normalEquip);
-                return;
-            }
-            else if(unidentifiedEquip != null) {
-                resultText.append(unidentifiedEquip);
-                return;
-            }
-            else if(ingredient != null) {
-                resultText.append(ingredient);
+
+            Text uniformedItemName = UniformedItemNames.getTranslatedName(_val);
+            if(uniformedItemName != null) {
+                resultText.append(uniformedItemName);
                 return;
             }
 
             if(returnNull) resultText = null;
-            else resultText.append(getSibling(0).copy());
+            else resultText.append(_val.copy());
         }
     }
 
     private boolean checkTranslation(String key, String val) {
         if(addiction) return WTS.checkTranslationExist(key, val);
         return WTS.checkTranslationDoNotRegister(key);
+    }
+
+    private enum UniformedItemNames {
+        IdentifiedEquipmentName(NormalEquipment::getTranslatedItemName),
+        UnidentifiedEquipmentName(UnidentifiedEquipment::getTranslatedItemName),
+        IngredientName(Ingredient::getTranslatedItemName);
+
+        private final Function<Text, MutableText> nameGetter;
+
+        private static Text getTranslatedName(Text val) {
+            return Arrays.stream(values())
+                    .map(names -> names.nameGetter.apply(val))
+                    .filter(Objects::nonNull)
+                    .findFirst().orElse(null);
+        }
+
+        UniformedItemNames(Function<Text, MutableText> nameGetter) {
+            this.nameGetter = nameGetter;
+        }
     }
 }
