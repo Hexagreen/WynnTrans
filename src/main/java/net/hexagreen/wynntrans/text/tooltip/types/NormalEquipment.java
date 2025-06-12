@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringDefectiveItem;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringPerfectItem;
 
-public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter, ITradableItem {
+public class NormalEquipment extends WynnTooltipText implements ITradableItem {
     private static final Pattern NAME_ATTACHMENT_REGEX =
             Pattern.compile("Attack Speed|This item's powers have");
     private static final Pattern ITEM_TAIL_REGEX =
@@ -113,12 +113,11 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
             }
             else if(ITEM_TAIL_REGEX.matcher(firstLine).find()) {
                 translateTailSection(seg);
-                return;
             }
             else {
                 appendUnknowns(seg);
             }
-            tempText.add(SPLITTER);
+            if(i != segments.size() - 1) tempText.add(SPLITTER);
         });
 
         wrapTargetIdx.add(-1);

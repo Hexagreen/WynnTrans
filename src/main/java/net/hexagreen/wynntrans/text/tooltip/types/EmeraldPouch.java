@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmeraldPouch extends WynnTooltipText implements ITradableItem, ITooltipSplitter {
+public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
@@ -55,7 +55,11 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem, IToo
     }
 
     private void translateNameSection(List<Text> segment) {
-        String tier = "§2" + segment.getFirst().getString().replaceFirst(".+ \\[Tier ([IVX]+)].*", "$1");
+        Text tier = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))
+                .append("[")
+                .append(Text.translatable("wytr.unit.tier",
+                        segment.getFirst().getString().replaceFirst(".+ \\[Tier ([IVX]+)].*", "$1")))
+                .append("]");
         Text name = Text.translatable(translationKey, tier).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
         resultText.append(name);
 

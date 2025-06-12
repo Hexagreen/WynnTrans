@@ -29,7 +29,7 @@ public class Resistance extends WynnChatText {
     protected void build() {
         MutableText buffs = Text.empty().append(Text.translatable(translationKey + ".res", resValue).setStyle(getStyle(2)));
         if(getSiblings().size() == 6) {
-            buffs.append(Text.translatable(translationKey + ".and").setStyle(getStyle(3))).append(Text.translatable(translationKey + ".str", strValue).setStyle(getStyle(4)));
+            buffs.append(Text.translatable("wytr.and").setStyle(getStyle(3))).append(Text.translatable(translationKey + ".str", strValue).setStyle(getStyle(4)));
         }
 
         resultText = Text.empty();

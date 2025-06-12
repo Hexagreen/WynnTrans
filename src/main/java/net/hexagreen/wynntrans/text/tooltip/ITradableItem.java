@@ -8,7 +8,7 @@ import net.minecraft.util.Formatting;
 import java.util.List;
 import java.util.function.Consumer;
 
-public interface ITradableItem {
+public interface ITradableItem extends ITooltipSplitter {
 
     Style GOLD = Style.EMPTY.withColor(Formatting.GOLD);
     MutableText PRICE_TEXT = Text.translatable("wytr.func.price").setStyle(GOLD);
@@ -23,7 +23,7 @@ public interface ITradableItem {
                     if(t.getString().equals("Price:")) appender.accept(PRICE_TEXT);
                     else appender.accept(t);
                 });
-                appender.accept(ITooltipSplitter.SPLITTER);
+                if(i != size - 1) appender.accept(SPLITTER);
                 continue;
             }
             step.process(seg, i);

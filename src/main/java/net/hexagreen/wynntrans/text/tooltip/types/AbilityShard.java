@@ -1,7 +1,6 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.text.sign.WynnSign;
-import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.Style;
@@ -11,7 +10,7 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbilityShard extends WynnTooltipText implements ITooltipSplitter, ITradableItem {
+public class AbilityShard extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;

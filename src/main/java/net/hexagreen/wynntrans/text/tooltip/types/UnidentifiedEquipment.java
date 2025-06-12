@@ -1,6 +1,6 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
-import net.hexagreen.wynntrans.enums.Equipments;
+import net.hexagreen.wynntrans.enums.EquipmentAndConsumables;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
@@ -69,7 +69,7 @@ public class UnidentifiedEquipment extends WynnTooltipText implements ITooltipSp
     }
 
     private void translateNameSection(List<Text> texts) {
-        equip = Equipments.getText(texts.getFirst().getString().replaceFirst("Unidentified ", ""));
+        equip = EquipmentAndConsumables.getText(texts.getFirst().getString().replaceFirst("Unidentified ", ""));
         Text head = Text.translatable("wytr.tooltip.equipment.unidentified", equip).setStyle(texts.getFirst().getSiblings().getFirst().getStyle());
         tempText.add(head);
         wrappingWidth = Math.max(wrappingWidth, TEXT_RENDERER.getWidth(head));

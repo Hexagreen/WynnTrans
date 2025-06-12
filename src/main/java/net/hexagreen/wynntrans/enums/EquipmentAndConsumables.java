@@ -1,10 +1,11 @@
 package net.hexagreen.wynntrans.enums;
 
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.Locale;
 
-public enum Equipments {
+public enum EquipmentAndConsumables {
     HELMET(Text.translatable("wytr.equipment.helmet")),
     CHESTPLATE(Text.translatable("wytr.equipment.chestplate")),
     LEGGINGS(Text.translatable("wytr.equipment.leggings")),
@@ -16,19 +17,22 @@ public enum Equipments {
     BOW(CharacterClass.ARCHER.getWeapon()),
     WAND(CharacterClass.MAGE.getWeapon()),
     DAGGER(CharacterClass.ASSASSIN.getWeapon()),
-    RELIK(CharacterClass.SHAMAN.getWeapon());
+    RELIK(CharacterClass.SHAMAN.getWeapon()),
+    POTION(Text.translatable("wytr.consumable.potion")),
+    SCROLL(Text.translatable("wytr.consumable.scroll")),
+    FOOD(Text.translatable("wytr.consumable.food"));
 
     private final Text text;
 
-    Equipments(Text text) {
+    public static MutableText getText(String equip) {
+        return valueOf(equip.toUpperCase(Locale.ENGLISH)).text.copy();
+    }
+
+    EquipmentAndConsumables(Text text) {
         this.text = text;
     }
 
-    public Text getText() {
+    public MutableText getText() {
         return this.text.copy();
-    }
-
-    public static Text getText(String equip) {
-        return valueOf(equip.toUpperCase(Locale.ENGLISH)).text.copy();
     }
 }

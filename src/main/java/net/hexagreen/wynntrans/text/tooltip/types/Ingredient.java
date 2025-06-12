@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-public class Ingredient extends WynnTooltipText implements ITradableItem, ITooltipSplitter {
+public class Ingredient extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 6) return false;
@@ -67,9 +67,8 @@ public class Ingredient extends WynnTooltipText implements ITradableItem, IToolt
             }
             else if(firstLine.matches("[✔✖] Crafting Lv\\. Min: \\d+")) {
                 translateTargetProfession(seg);
-                return;
             }
-            resultText.append(SPLITTER);
+            if(i != segments.size() - 1) resultText.append(SPLITTER);
         });
     }
 
