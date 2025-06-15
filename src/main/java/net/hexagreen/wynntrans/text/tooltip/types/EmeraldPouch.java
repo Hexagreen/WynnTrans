@@ -56,7 +56,7 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
 
     private void translateNameSection(List<Text> segment) {
         Text tier = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))
-                .append("[")
+                .append(" [")
                 .append(Text.translatable("wytr.unit.tier",
                         segment.getFirst().getString().replaceFirst(".+ \\[Tier ([IVX]+)].*", "$1")))
                 .append("]");

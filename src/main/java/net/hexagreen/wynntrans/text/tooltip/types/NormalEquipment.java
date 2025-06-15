@@ -391,7 +391,12 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
         Text head = Text.translatable("wytr.tooltip.equipment.setFamily", setName).setStyle(siblings.getFirst().getStyle())
                 .append(" ").append(siblings.getLast());
         addAndRecordWidth(head);
-        texts.subList(1, texts.size()).forEach(this::addAndRecordWidth);
+        texts.subList(1, texts.size()).forEach(t -> {
+            Text itemName = t.getSiblings().getLast();
+            MutableText line = t.getSiblings().getFirst().copy()
+                    .append(new ItemName(itemName).noAddictionMode().textAsMutable().setStyle(itemName.getStyle()));
+            addAndRecordWidth(line);
+        });
     }
 
     private void translateSetBonusSection(List<Text> texts) {

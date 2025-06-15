@@ -96,6 +96,7 @@ public class ItemName extends WynnTooltipText {
     private enum UniformedItemNames {
         IdentifiedEquipmentName(NormalEquipment::getTranslatedItemName),
         UnidentifiedEquipmentName(UnidentifiedEquipment::getTranslatedItemName),
+        EmeraldName(Emeralds::getTranslatedItemName),
         MaterialName(Material::getTranslatedItemName),
         IngredientName(Ingredient::getTranslatedItemName),
         PowderName(ElementPowder::getTranslatedItemName),

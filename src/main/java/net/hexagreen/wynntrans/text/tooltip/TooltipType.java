@@ -20,6 +20,7 @@ public enum TooltipType {
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
+    EMERALDS(Emeralds::new, Emeralds::typeChecker),
     MATERIAL(Material::new, Material::typeChecker),
     INGREDIENT(Ingredient::new, Ingredient::typeChecker),
     GATHERING_TOOL(GatheringTool::new, GatheringTool::typeChecker),

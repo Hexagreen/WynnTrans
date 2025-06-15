@@ -26,6 +26,19 @@ public interface ITradableItem extends ITooltipSplitter {
                 if(i != size - 1) appender.accept(SPLITTER);
                 continue;
             }
+            else if(seg.getFirst().getString().equals("Click to buy 1")) {
+                seg.forEach(t -> {
+                    switch(t.getString()) {
+                        case "Click to buy 1" -> appender.accept(Text.translatable("wytr.func.clickToBuy"));
+                        case "Shift + Left-Click to buy 5" ->
+                                appender.accept(Text.translatable("wytr.func.clickToBuy5"));
+                        case "Shift + Right-Click to buy All" ->
+                                appender.accept(Text.translatable("wytr.func.clickToBuyAll"));
+                    }
+                });
+                if(i != size - 1) appender.accept(SPLITTER);
+                continue;
+            }
             step.process(seg, i);
         }
     }
