@@ -26,7 +26,7 @@ public class Ingredient extends WynnTooltipText implements ITradableItem {
 
     public static MutableText getTranslatedItemName(Text text) {
         String _iName = text.getString().replaceFirst(" \\[✫✫✫]", "");
-        if(!WTS.checkTranslationDoNotRegister("wytr.ingredient." + normalizeStringForKey(_iName))) return null;
+        if(!WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizeStringForKey(_iName))) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
@@ -85,7 +85,7 @@ public class Ingredient extends WynnTooltipText implements ITradableItem {
                 resultText.append(nameLine);
             }
             else if(t.getString().equals("Crafting Ingredient")) {
-                resultText.append(Text.translatable("wytr.tooltip.craftingIngredient").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                resultText.append(Text.translatable("wytr.tooltip.ingredient").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
             }
             else {
                 resultText.append(t);

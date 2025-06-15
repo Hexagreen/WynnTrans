@@ -17,13 +17,12 @@ public enum TooltipType {
     CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
     COMPASS_MENU(Compass::new, Compass::typeChecker),
     COMPASS_ITEMS(CompassItems::new, CompassItems::typeChecker),
-    NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
-    UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
     MATERIAL(Material::new, Material::typeChecker),
     INGREDIENT(Ingredient::new, Ingredient::typeChecker),
+    GATHERING_TOOL(GatheringTool::new, GatheringTool::typeChecker),
     ITEM_NAME(ItemName::new, ItemName::typeChecker),
     ABILITY_SHARD(AbilityShard::new, AbilityShard::typeChecker),
     ABILITY_TREE_NODE(AbilityTreeNode::new, AbilityTreeNode::typeChecker),
@@ -32,6 +31,9 @@ public enum TooltipType {
     ABILITY_TREE_SELECTOR(AbilityTreeSelector::new, AbilityTreeSelector::typeChecker),
     ABILITY_TREE_RESET(AbilityTreeReset::new, AbilityTreeReset::typeChecker),
     ABILITY_TREE_ASPECT(AbilityTreeAspectSocket::new, AbilityTreeAspectSocket::typeChecker),
+    NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
+    UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
+    CRAFTED_EQUIPMENT(CraftedEquipment::new, CraftedEquipment::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

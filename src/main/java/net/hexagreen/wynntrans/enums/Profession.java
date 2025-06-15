@@ -8,21 +8,21 @@ import java.util.Locale;
 
 public enum Profession {
     COOKING(Text.literal("§fⒶ"), Text.translatable("wytr.profession.cooking")),
-    MINING(Text.literal("Ⓑ"), Text.translatable("wytr.profession.mining"), Text.translatable("wytr.profession.mining.tool")),
-    WOODCUTTING(Text.literal("Ⓒ"), Text.translatable("wytr.profession.woodcutting"), Text.translatable("wytr.profession.woodcutting.tool")),
+    MINING(Text.literal("Ⓑ"), Text.translatable("wytr.profession.mining"), "wytr.profession.mining.tool"),
+    WOODCUTTING(Text.literal("Ⓒ"), Text.translatable("wytr.profession.woodcutting"), "wytr.profession.woodcutting.tool"),
     JEWELING(Text.literal("§fⒹ"), Text.translatable("wytr.profession.jeweling")),
     SCRIBING(Text.literal("§fⒺ"), Text.translatable("wytr.profession.scribing")),
     TAILORING(Text.literal("§fⒻ"), Text.translatable("wytr.profession.tailoring")),
     WEAPONSMITHING(Text.literal("§fⒼ"), Text.translatable("wytr.profession.weaponsmithing")),
     ARMOURING(Text.literal("§fⒽ"), Text.translatable("wytr.profession.armouring")),
     WOODWORKING(Text.literal("§fⒾ"), Text.translatable("wytr.profession.woodworking")),
-    FARMING(Text.literal("Ⓙ"), Text.translatable("wytr.profession.farming"), Text.translatable("wytr.profession.farming.tool")),
-    FISHING(Text.literal("Ⓚ"), Text.translatable("wytr.profession.fishing"), Text.translatable("wytr.profession.fishing.tool")),
+    FARMING(Text.literal("Ⓙ"), Text.translatable("wytr.profession.farming"), "wytr.profession.farming.tool"),
+    FISHING(Text.literal("Ⓚ"), Text.translatable("wytr.profession.fishing"), "wytr.profession.fishing.tool"),
     ALCHEMISM(Text.literal("§fⓁ"), Text.translatable("wytr.profession.alchemism"));
 
     private final MutableText icon;
     private final MutableText text;
-    private final MutableText tool;
+    private final String tool;
 
     public static Profession getProfession(char icon) {
         int index = icon - 'Ⓐ';
@@ -58,7 +58,7 @@ public enum Profession {
         this.tool = null;
     }
 
-    Profession(MutableText icon, MutableText text, MutableText tool) {
+    Profession(MutableText icon, MutableText text, String tool) {
         this.icon = icon;
         this.text = text;
         this.tool = tool;
@@ -83,8 +83,7 @@ public enum Profession {
 
     public MutableText getTool(String tier) {
         if(this.tool != null) {
-            MutableText result = this.tool.copy();
-            return result.append(" T" + tier);
+            return Text.translatable(this.tool, tier);
         }
         return Text.empty();
     }

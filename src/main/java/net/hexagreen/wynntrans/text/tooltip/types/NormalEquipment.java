@@ -10,6 +10,7 @@ import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -24,14 +25,13 @@ import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringPerfectIte
 public class NormalEquipment extends WynnTooltipText implements ITradableItem {
     private static final Pattern NAME_ATTACHMENT_REGEX =
             Pattern.compile("Attack Speed|This item's powers have");
-    private static final Pattern ITEM_TAIL_REGEX =
-            Pattern.compile(".+ Item( \\[\\d+])?$|Powder Slots");
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
-            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+$");
-    private final List<Text> tempText;
-    private final Deque<Integer> wrapTargetIdx;
+            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+(?: \\[(.+)])?$");
+    protected final List<Text> tempText;
+    protected final Deque<Integer> wrapTargetIdx;
+    protected Pattern itemTailRegex;
     private int longestWidth;
     private String itemNameKey = "";
 
@@ -67,6 +67,7 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
         this.tempText = new ArrayList<>();
         this.wrapTargetIdx = new ArrayDeque<>();
         this.longestWidth = 150;
+        this.itemTailRegex = Pattern.compile(".+ Item( \\[\\d+])?$|Powder Slots");
     }
 
     @Override
@@ -111,7 +112,7 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
             else if(firstLine.equals("Set Bonus:")) {
                 translateSetBonusSection(seg);
             }
-            else if(ITEM_TAIL_REGEX.matcher(firstLine).find()) {
+            else if(itemTailRegex.matcher(firstLine).find()) {
                 translateTailSection(seg);
             }
             else {
@@ -135,27 +136,32 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
 
     private void translateNameSection(List<Text> texts) {
         for(Text t : texts) {
-            String itemNameString = t.getString().replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny | \\[.+%]$", "");
+            String string = t.getString().replaceAll("À", "");
+            String itemNameString = string.replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny | \\[.+%]$", "");
             String normalized = normalizeStringForKey(itemNameString);
-            boolean shiny = t.getString().matches(".*⬡ Shiny.+");
-            boolean unidentified = t.getString().matches("^Unidentified .+");
-            boolean wynntilsPerfect = t.getString().matches("^Perfect .+");
-            boolean wynntilsDefective = t.getString().matches("^Defective .+");
-            boolean wynntilsPercentage = t.getString().matches(".+ \\[.+%]$");
-            MutableText itemName = Text.empty();
-            if(shiny) {
-                itemName.append(Text.translatable("wytr.tooltip.equipment.shiny"));
-            }
+
             if(normalized.equals("Thisitemspowershave")) {
                 tempText.add(Text.translatable("wytr.tooltip.equipment.identifyGuide").setStyle(GRAY));
                 wrapTargetIdx.add(tempText.size() - 1);
                 break;
             }
             else if(normalized.matches(".+AttackSpeed$")) {
-                addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed." + normalized.replaceFirst("AttackSpeed", "")).setStyle(GRAY));
+                Text speed = Text.translatable("wytr.speed." + normalized.replaceFirst("AttackSpeed", ""));
+                addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed", speed).setStyle(GRAY));
                 continue;
             }
-            else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized)) {
+
+            boolean isCraftedItem = Objects.equals(t.getSiblings().getFirst().getStyle().getColor(), TextColor.fromFormatting(Formatting.DARK_AQUA));
+            boolean shiny = !isCraftedItem && string.matches(".*⬡ Shiny.+");
+            boolean unidentified = !isCraftedItem && string.matches("^Unidentified .+");
+            boolean wynntilsPerfect = !isCraftedItem && string.matches("^Perfect .+");
+            boolean wynntilsDefective = !isCraftedItem && string.matches("^Defective .+");
+            boolean itemPercentage = string.matches(".+ \\[.+%]$");
+
+            MutableText itemName = Text.empty();
+            if(shiny) itemName.append(Text.translatable("wytr.tooltip.equipment.shiny"));
+
+            if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized)) {
                 itemNameKey = "wytr.item.weapon." + normalized;
                 itemName.append(Text.translatable(itemNameKey));
             }
@@ -190,9 +196,7 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
                 else translated = itemName.copy().setStyle(t.getSiblings().getFirst().getStyle());
             }
 
-            if(wynntilsPercentage) {
-                translated.append(t.getSiblings().getLast());
-            }
+            if(itemPercentage) translated.append(t.getSiblings().getLast());
 
             addAndRecordWidth(translated);
         }
@@ -397,7 +401,7 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
         dump.forEach(this::addAndRecordWidth);
     }
 
-    private void translateTailSection(List<Text> texts) {
+    protected void translateTailSection(List<Text> texts) {
         for(int i = 0, size = texts.size(); i < size; i++) {
             Text t = texts.get(i);
             String string = t.getString();
@@ -430,7 +434,6 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
                 return;
             }
         }
-
     }
 
     private void appendUnknowns(List<Text> texts) {
@@ -444,7 +447,7 @@ public class NormalEquipment extends WynnTooltipText implements ITradableItem {
         longestWidth = Math.max(longestWidth, width);
     }
 
-    private void addAndRecordWidth(Text text) {
+    protected void addAndRecordWidth(Text text) {
         updateLongestWidth(TEXT_RENDERER.getWidth(text));
         tempText.add(text);
     }

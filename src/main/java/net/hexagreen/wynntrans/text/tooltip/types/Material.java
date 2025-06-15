@@ -19,9 +19,20 @@ public class Material extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        String materialName = texts.getFirst().getString()
+        String materialName = texts.getFirst().getString().replaceAll("À", "")
                 .replaceAll("§.", "").replaceFirst(" \\[✫✫✫]", "");
         return WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizeStringForKey(materialName));
+    }
+
+    public static MutableText getTranslatedItemName(Text text) {
+        String _iName = text.getString().replaceFirst(" \\[✫✫✫]", "");
+        if(!WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizeStringForKey(_iName))) return null;
+        List<Text> textBowl = new ArrayList<>();
+        textBowl.add(text);
+        textBowl.add(Text.empty());
+        Material material = new Material(textBowl);
+        material.translateNameSection(material.inputText.getSiblings());
+        return material.resultText.getSiblings().getFirst().copy();
     }
 
     public Material(List<Text> texts) {
@@ -59,14 +70,14 @@ public class Material extends WynnTooltipText implements ITradableItem {
     private void translateNameSection(List<Text> texts) {
         texts.forEach(t -> {
             String _string = t.getString();
-            if(_string.matches(".+ \\[✫✫✫]$")) {
+            if(_string.replaceAll("À", "").matches(".+ \\[✫✫✫]$")) {
                 MutableText materialName = new ItemName(t.getSiblings().getFirst().getString()).textAsMutable()
                         .setStyle(t.getSiblings().getFirst().getStyle());
                 t.getSiblings().subList(1, t.getSiblings().size()).forEach(materialName::append);
                 resultText.append(materialName);
             }
             else if(t.getString().equals("Crafting Material")) {
-                resultText.append(Text.translatable("wytr.tooltip.craftingMaterial").setStyle(GRAY));
+                resultText.append(Text.translatable("wytr.tooltip.material").setStyle(GRAY));
             }
             else {
                 resultText.append(t);

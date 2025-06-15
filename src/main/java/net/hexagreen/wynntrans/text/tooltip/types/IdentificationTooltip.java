@@ -35,23 +35,22 @@ public class IdentificationTooltip extends WynnTooltipText {
             String str = siblings.getFirst().getString();
             if(siblings.size() > 2 && siblings.get(1).contains(Text.literal(" to "))) {
                 resultText.append(translateRangedID(line));
-                continue;
             }
             else if(siblings.size() > 3 && siblings.get(2).contains(Text.literal("to"))) {
                 resultText.append(translateIngredientRangedID(line));
-                continue;
+            }
+            else if(line.getString().matches("[+-]\\d+(%|/[35]s| tier)?/[+-]?\\d+(%|/[35]s| tier)? .+")) {
+                resultText.append(translateCraftedItemID(line));
             }
             else if(str.matches("[+-]\\d+(%|/[35]s| tier)?")) {
                 resultText.append(translateStaticID(line));
-                continue;
             }
             else if(str.matches("\\+.+: ")) {
                 lines.addFirst(line);
                 resultText.append(translateMajorID(new ArrayList<>(lines)));
                 break;
             }
-
-            resultText.append(line);
+            else resultText.append(line);
         }
     }
 
@@ -130,6 +129,29 @@ public class IdentificationTooltip extends WynnTooltipText {
         Text secondValue = extractIDValue(_secondValue);
 
         result.append(Text.translatable("wytr.tooltip.equipment.rangedID", firstValue, secondValue).setStyle(to.getStyle()));
+
+        MutableText id = Text.literal(" ");
+        Text idType = siblings.removeFirst();
+        id.append(Identifications.findIdentification(idType.getString()).getTranslatedText().setStyle(idType.getStyle()));
+        result.append(id);
+
+        return result;
+    }
+
+    private Text translateCraftedItemID(Text text) {
+        MutableText result = Text.empty();
+        Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
+
+        Text _currentValue = siblings.removeFirst();
+        Text currentValue = extractIDValue(_currentValue);
+
+        Text _maxValue = siblings.removeFirst();
+        String _maxValueStr = _maxValue.getString().replaceFirst("^/", "");
+        Style _maxValueStyle = _maxValue.getStyle();
+        Text maxValue = Text.literal("/").setStyle(_maxValueStyle)
+                .append(extractIDValue(Text.literal(_maxValueStr).setStyle(_maxValueStyle)));
+
+        result.append(currentValue).append(maxValue);
 
         MutableText id = Text.literal(" ");
         Text idType = siblings.removeFirst();
