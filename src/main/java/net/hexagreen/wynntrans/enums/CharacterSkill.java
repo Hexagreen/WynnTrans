@@ -48,6 +48,14 @@ public enum CharacterSkill {
         return stat.copy();
     }
 
+    public MutableText getIcon() {
+        return relativeElement.getIcon();
+    }
+
+    public MutableText getStatWithIcon() {
+        return getIcon().append(" ").append(stat.copy());
+    }
+
     public Elements getRelativeElement() {
         return relativeElement;
     }

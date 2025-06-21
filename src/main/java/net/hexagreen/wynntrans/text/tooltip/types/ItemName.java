@@ -96,7 +96,8 @@ public class ItemName extends WynnTooltipText {
         MaterialName(Material::getTranslatedItemName),
         IngredientName(Ingredient::getTranslatedItemName),
         PowderName(ElementPowder::getTranslatedItemName),
-        GatheringToolName(GatheringTool::getTranslatedItemName);
+        GatheringToolName(GatheringTool::getTranslatedItemName),
+        PotionName(NormalPotion::getTranslatedItemName);
 
         private final Function<Text, MutableText> nameGetter;
 

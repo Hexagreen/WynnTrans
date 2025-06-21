@@ -23,7 +23,7 @@ public abstract class AbstractWynnItem extends WynnTooltipText implements ITrada
     }
 
     @Override
-    protected final void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
         insertPriceSection(segments, textAppender, this::buildStep);

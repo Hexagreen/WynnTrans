@@ -22,12 +22,9 @@ public abstract class ConsumableItem extends AbstractWynnItem {
         else if(_string.matches("^[✔✖] .+")) translateReqSection(seg);
         else additionalStep(_string, seg);
         if(step != lastIndex) textAppender.accept(SPLITTER);
-        else postStep();
     }
 
     protected abstract void additionalStep(String _string, List<Text> seg);
-
-    protected abstract void postStep();
 
     protected abstract void translateNameSection(List<Text> texts);
 
@@ -38,16 +35,16 @@ public abstract class ConsumableItem extends AbstractWynnItem {
         effects.forEach(t -> {
             Deque<Text> siblings = new ArrayDeque<>(t.getSiblings());
             Text bar = siblings.removeFirst();
-            Text info = siblings.removeFirst();
+            Text type = siblings.removeFirst();
             MutableText body = Text.empty().append(bar);
-            if(info.getString().equals("Duration: ")) {
-                body.append(Text.translatable("wytr.tooltip.consumable.duration"));
+            if(type.getString().equals("Duration: ")) {
+                body.append(Text.translatable("wytr.tooltip.consumable.duration").setStyle(type.getStyle()));
                 body.append(ITime.translateTime(siblings.removeFirst()));
             }
-            else buildEffectBody(body, info, siblings);
+            else buildEffectBody(body, type, siblings);
             textAppender.accept(body);
         });
     }
 
-    protected abstract void buildEffectBody(MutableText body, Text info, Deque<Text> siblings);
+    protected abstract void buildEffectBody(MutableText body, Text type, Deque<Text> siblings);
 }

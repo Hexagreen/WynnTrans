@@ -22,7 +22,7 @@ import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringPerfectIte
 
 public class NormalEquipment extends AbstractWynnItem {
     private static final Pattern NAME_ATTACHMENT_REGEX =
-            Pattern.compile("Attack Speed|This item's powers have");
+            Pattern.compile("(Slow|Normal|Fast) Attack Speed|This item's powers have");
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
@@ -97,7 +97,7 @@ public class NormalEquipment extends AbstractWynnItem {
         else if(firstSibling.equals("⬡ ")) {
             translateShinySection(seg);
         }
-        else if(firstSibling.matches("[+-]\\d+(%|/[35]s| Tiers)?")) {
+        else if(firstSibling.matches("[+-]\\d+(%|/[35]s| tier)?")) {
             translateIDSection(seg);
         }
         else if(firstSibling.matches("^\\+.+: $")) {

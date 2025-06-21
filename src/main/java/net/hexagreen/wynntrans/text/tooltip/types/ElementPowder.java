@@ -100,10 +100,7 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                 resultText.append(Text.translatable("wytr.item.misc.elementPowder", element, tier)
                         .setStyle(_element.getStyle()));
             }
-            else if(_string.contains("Use this item at the") || _string.contains("Powder Exchange")) {
-                return;
-            }
-            else {
+            else if(!(_string.contains("Use this item at the") || _string.contains("Powder Exchange"))) {
                 resultText.append(t);
             }
         });
