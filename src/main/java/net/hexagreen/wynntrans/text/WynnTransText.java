@@ -154,8 +154,8 @@ public abstract class WynnTransText {
     /**
      * Get {@code Text} from {@code inputText}'s sibling.
      *
-     * @param siblingIndex Index of target, it allows negative value (ex. -1 will return last one)
-     * @return Some sibling that index refers.
+     * @param siblingIndex Index of target, it allows negative value (ex. -1 will return the last one)
+     * @return Some sibling that index refers to.
      */
     protected Text getSibling(int siblingIndex) {
         siblingIndex = siblingIndex < 0 ? getSiblings().size() + siblingIndex : siblingIndex;
@@ -232,8 +232,8 @@ public abstract class WynnTransText {
         String[] rainbows = {"§4", "§c", "§6", "§e", "§a", "§2", "§b", "§9", "§5", "§d"};
         StringBuilder sb = new StringBuilder();
         int ignore = text.getString().codePoints().reduce(0, (index, cp) -> {
-            if(cp == " ".codePointAt(0)) {
-                sb.append(rainbows[index]).append(Character.toChars(cp));
+            if(cp != " ".codePointAt(0)) {
+                sb.append(rainbows[index % rainbows.length]).append(Character.toChars(cp));
                 return index + 1;
             }
             else {

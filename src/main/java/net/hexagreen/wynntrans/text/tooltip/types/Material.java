@@ -1,10 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.EquipmentAndConsumables;
-import net.hexagreen.wynntrans.enums.Profession;
-import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
-import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
-import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
+import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -15,7 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Material extends WynnTooltipText implements ITradableItem {
+public class Material extends AbstractWynnItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
@@ -36,7 +33,7 @@ public class Material extends WynnTooltipText implements ITradableItem {
     }
 
     public Material(List<Text> texts) {
-        super(ITooltipSplitter.correctSplitter(texts));
+        super(texts);
     }
 
     @Override
@@ -45,26 +42,21 @@ public class Material extends WynnTooltipText implements ITradableItem {
     }
 
     @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<List<Text>> segments = new ArrayList<>();
-        splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, resultText::append, (seg, i) -> {
-            String _string = seg.getFirst().getString();
-            if(i == 0 || _string.equals("Crafting Material")) {
-                translateNameSection(seg);
-            }
-            else if(_string.matches("^[✔✖].+")) {
-                translateReqSection(seg);
-            }
-            else if(_string.equals("Use this material to purchase")) {
-                translateUseSection(seg);
-            }
-            else {
-                seg.forEach(resultText::append);
-            }
-            if(i != segments.size() - 1) resultText.append(SPLITTER);
-        });
-
+    protected void buildStep(List<Text> seg, int step, final int lastIndex) {
+        String _string = seg.getFirst().getString();
+        if(step == 0 || _string.equals("Crafting Material")) {
+            translateNameSection(seg);
+        }
+        else if(_string.matches("^[✔✖].+")) {
+            translateReqSection(seg);
+        }
+        else if(_string.equals("Use this material to purchase")) {
+            translateUseSection(seg);
+        }
+        else {
+            seg.forEach(resultText::append);
+        }
+        if(step != lastIndex) resultText.append(SPLITTER);
     }
 
     private void translateNameSection(List<Text> texts) {
@@ -78,25 +70,6 @@ public class Material extends WynnTooltipText implements ITradableItem {
             }
             else if(t.getString().equals("Crafting Material")) {
                 resultText.append(Text.translatable("wytr.tooltip.material").setStyle(GRAY));
-            }
-            else {
-                resultText.append(t);
-            }
-        });
-    }
-
-    private void translateReqSection(List<Text> texts) {
-        texts.forEach(t -> {
-            if(t.getString().contains("Lv. Min: ")) {
-                Text check = t.getSiblings().getFirst();
-                Profession _profession = Profession.getProfession(t.getSiblings().get(2).getString().charAt(0));
-                Text profession = _profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE))
-                        .append(" ")
-                        .append(_profession.getText().setStyle(GRAY));
-                String level = t.getString().replaceAll("\\D", "");
-                Text line = Text.empty().setStyle(GRAY).append(check).append(" ")
-                        .append(Text.translatable("wytr.requirement.profession", profession, level));
-                resultText.append(line);
             }
             else {
                 resultText.append(t);

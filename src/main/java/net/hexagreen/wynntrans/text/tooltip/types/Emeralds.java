@@ -39,14 +39,14 @@ public class Emeralds extends WynnTooltipText implements ITradableItem {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, resultText::append, (seg, i) -> {
+        insertPriceSection(segments, resultText::append, (seg, i, lastIndex) -> {
             if(i == 0) {
                 translateNameSection(seg);
             }
             else {
                 seg.forEach(resultText::append);
             }
-            if(i != segments.size() - 1) resultText.append(SPLITTER);
+            if(i != lastIndex) resultText.append(SPLITTER);
         });
     }
 

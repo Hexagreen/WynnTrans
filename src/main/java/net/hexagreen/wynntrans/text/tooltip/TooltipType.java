@@ -24,7 +24,6 @@ public enum TooltipType {
     MATERIAL(Material::new, Material::typeChecker),
     INGREDIENT(Ingredient::new, Ingredient::typeChecker),
     GATHERING_TOOL(GatheringTool::new, GatheringTool::typeChecker),
-    ITEM_NAME(ItemName::new, ItemName::typeChecker),
     ABILITY_SHARD(AbilityShard::new, AbilityShard::typeChecker),
     ABILITY_TREE_NODE(AbilityTreeNode::new, AbilityTreeNode::typeChecker),
     ABILITY_TREE_ORB(AbilityTreeOrb::new, AbilityTreeOrb::typeChecker),

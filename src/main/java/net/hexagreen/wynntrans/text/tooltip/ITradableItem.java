@@ -39,12 +39,12 @@ public interface ITradableItem extends ITooltipSplitter {
                 if(i != size - 1) appender.accept(SPLITTER);
                 continue;
             }
-            step.process(seg, i);
+            step.process(seg, i, size - 1);
         }
     }
 
     @FunctionalInterface
     interface IterationStep {
-        void process(List<Text> currentSegment, int index);
+        void process(List<Text> currentSegment, int index, int lastIndex);
     }
 }

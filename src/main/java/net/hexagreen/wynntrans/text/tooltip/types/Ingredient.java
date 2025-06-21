@@ -3,9 +3,8 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.enums.CharacterSkill;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.ITime;
+import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
-import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
-import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-public class Ingredient extends WynnTooltipText implements ITradableItem {
+public class Ingredient extends AbstractWynnItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 6) return false;
@@ -45,31 +44,27 @@ public class Ingredient extends WynnTooltipText implements ITradableItem {
     }
 
     @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<List<Text>> segments = new ArrayList<>();
-        splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, resultText::append, (seg, i) -> {
-            String firstLine = seg.getFirst().getString();
-            if(i == 0) {
-                translateNameSection(seg);
-            }
-            else if(firstLine.equals("Crafting Ingredient")) {
-                translateNameSection(seg);
-            }
-            else if(firstLine.matches("[+-]\\d+% Ingredient Effectiveness")) {
-                translateEffectiveness(seg);
-            }
-            else if(firstLine.matches("[+-]\\d+s? (Durability|Duration|Charges?|.+ Min\\.).*")) {
-                translateSideEffect(seg);
-            }
-            else if(firstLine.matches("([+-]?\\d+ to )?[+-]?\\d+(%|/[35]s| tier)? .+")) {
-                translateIDSection(seg);
-            }
-            else if(firstLine.matches("[✔✖] Crafting Lv\\. Min: \\d+")) {
-                translateTargetProfession(seg);
-            }
-            if(i != segments.size() - 1) resultText.append(SPLITTER);
-        });
+    protected void buildStep(List<Text> seg, int step, final int lastIndex) {
+        String firstLine = seg.getFirst().getString();
+        if(step == 0) {
+            translateNameSection(seg);
+        }
+        else if(firstLine.equals("Crafting Ingredient")) {
+            translateNameSection(seg);
+        }
+        else if(firstLine.matches("[+-]\\d+% Ingredient Effectiveness")) {
+            translateEffectiveness(seg);
+        }
+        else if(firstLine.matches("[+-]\\d+s? (Durability|Duration|Charges?|.+ Min\\.).*")) {
+            translateSideEffect(seg);
+        }
+        else if(firstLine.matches("([+-]?\\d+ to )?[+-]?\\d+(%|/[35]s| tier)? .+")) {
+            translateIDSection(seg);
+        }
+        else if(firstLine.matches("[✔✖] Crafting Lv\\. Min: \\d+")) {
+            translateTargetProfession(seg);
+        }
+        if(step != lastIndex) resultText.append(SPLITTER);
     }
 
     private void translateNameSection(List<Text> segment) {
@@ -91,10 +86,6 @@ public class Ingredient extends WynnTooltipText implements ITradableItem {
                 resultText.append(t);
             }
         }
-    }
-
-    private void translateIDSection(List<Text> segment) {
-        new IdentificationTooltip(colorCodedToStyledBatch(segment)).text().forEach(resultText::append);
     }
 
     private void translateEffectiveness(List<Text> segment) {

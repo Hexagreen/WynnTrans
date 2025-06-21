@@ -7,7 +7,6 @@ import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 public enum Identifications {
     STRENGTH("(?i)strength", "wytr.skill.strength", "Strength"),
@@ -35,11 +34,9 @@ public enum Identifications {
     }
 
     public static Identifications findMajorID(String idName, String idDesc) {
-        return Arrays.stream(Identifications.values())
-                .filter(ids -> ids.major)
-                .filter(ids -> ids.isMatch(idName, idDesc))
-                .findFirst()
-                .orElse(UNKNOWN_MAJOR);
+        UNKNOWN_MAJOR.testInput = idName;
+        UNKNOWN_MAJOR.testInputSub = idDesc;
+        return UNKNOWN_MAJOR;
     }
 
     Identifications(String matches, String key, String val) {
@@ -108,14 +105,5 @@ public enum Identifications {
         }
         this.testInput = string;
         return string.replaceAll(" ", "").matches(this.matches);
-    }
-
-    private boolean isMatch(String idName, String idDesc) {
-        if(this == UNKNOWN_MAJOR) {
-            this.testInput = idName;
-            this.testInputSub = idDesc;
-            return false;
-        }
-        return idName.toLowerCase(Locale.ENGLISH).replaceAll("[^a-z]", "").matches(this.matches);
     }
 }

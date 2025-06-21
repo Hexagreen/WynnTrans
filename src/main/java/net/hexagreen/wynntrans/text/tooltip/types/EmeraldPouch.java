@@ -33,7 +33,7 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, resultText::append, (seg, i) -> {
+        insertPriceSection(segments, resultText::append, (seg, i, lastIndex) -> {
             String firstLine = seg.getFirst().getString();
             if(i == 0) {
                 translateNameSection(segments.getFirst());
@@ -50,7 +50,7 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
             else {
                 seg.forEach(resultText::append);
             }
-            if(i != segments.size() - 1) resultText.append(SPLITTER);
+            if(i != lastIndex) resultText.append(SPLITTER);
         });
     }
 

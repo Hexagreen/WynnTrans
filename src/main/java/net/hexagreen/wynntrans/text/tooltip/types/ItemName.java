@@ -13,10 +13,6 @@ public class ItemName extends WynnTooltipText {
     private boolean addiction = true;
     private boolean returnNull = false;
 
-    public static boolean typeChecker(List<Text> texts) {
-        return false;
-    }
-
     public ItemName(List<Text> texts) {
         super(texts);
     }

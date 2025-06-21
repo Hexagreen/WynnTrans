@@ -1,9 +1,8 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.Profession;
+import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
-import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
-import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -12,7 +11,7 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatheringTool extends WynnTooltipText implements ITradableItem {
+public class GatheringTool extends AbstractWynnItem {
     private final Profession profession;
 
     public static boolean typeChecker(List<Text> texts) {
@@ -42,28 +41,24 @@ public class GatheringTool extends WynnTooltipText implements ITradableItem {
     }
 
     @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<List<Text>> segments = new ArrayList<>();
-        splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, resultText::append, (seg, i) -> {
-            String _string = seg.getFirst().getString();
-            if(i == 0 || _string.matches("Tier \\d+")) {
-                translateNameSection(seg);
-            }
-            else if(_string.contains("Gathering Speed: ")) {
-                translateToolSpeedSection(seg);
-            }
-            else if(_string.matches("^[✔✖].+")) {
-                translateReqSection(seg);
-            }
-            else if(_string.matches("^Gathering Tool .+ Durability]$")) {
-                translateTailSection(seg);
-            }
-            else {
-                seg.forEach(resultText::append);
-            }
-            if(i != segments.size() - 1) resultText.append(SPLITTER);
-        });
+    protected void buildStep(List<Text> seg, int step, final int lastIndex) {
+        String _string = seg.getFirst().getString();
+        if(step == 0 || _string.matches("Tier \\d+")) {
+            translateNameSection(seg);
+        }
+        else if(_string.contains("Gathering Speed: ")) {
+            translateToolSpeedSection(seg);
+        }
+        else if(_string.matches("^[✔✖].+")) {
+            translateReqSection(seg);
+        }
+        else if(_string.matches("^Gathering Tool .+ Durability]$")) {
+            translateTailSection(seg);
+        }
+        else {
+            seg.forEach(resultText::append);
+        }
+        if(step != lastIndex) resultText.append(SPLITTER);
     }
 
     private void translateNameSection(List<Text> texts) {
@@ -92,23 +87,6 @@ public class GatheringTool extends WynnTooltipText implements ITradableItem {
                 .append(speedTier));
     }
 
-    private void translateReqSection(List<Text> texts) {
-        texts.forEach(t -> {
-            if(t.getString().contains("Lv. Min: ")) {
-                Text check = t.getSiblings().getFirst();
-                Text profession = this.profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE))
-                        .append(" ")
-                        .append(this.profession.getText().setStyle(GRAY));
-                String level = t.getString().replaceAll("\\D", "");
-                Text line = Text.empty().setStyle(GRAY).append(check).append(" ")
-                        .append(Text.translatable("wytr.requirement.profession", profession, level));
-                resultText.append(line);
-            }
-            else {
-                resultText.append(t);
-            }
-        });
-    }
 
     private void translateTailSection(List<Text> texts) {
         List<Text> siblings = texts.getFirst().getSiblings();

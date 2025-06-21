@@ -61,8 +61,7 @@ public class CraftedEquipment extends NormalEquipment {
                 addAndRecordWidth(body);
             }
             else {
-                tempText.add(mergeTextStyleSide(texts.subList(i, size)));
-                wrapTargetIdx.add(tempText.size() - 1);
+                addAndMarkWrapTarget(mergeTextStyleSide(texts.subList(i, size)));
                 return;
             }
         }

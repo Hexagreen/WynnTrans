@@ -45,7 +45,7 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, resultText::append, (seg, i) -> {
+        insertPriceSection(segments, resultText::append, (seg, i, lastIndex) -> {
             String firstLine = seg.getFirst().getString();
             if(i == 0 || firstLine.matches("^Tier \\d .+") || firstLine.matches("^Use this item at the$")) {
                 translateNameSection(seg);
@@ -66,7 +66,7 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
             else {
                 seg.forEach(resultText::append);
             }
-            if(i != segments.size() - 1) resultText.append(" ");
+            if(i != lastIndex) resultText.append(SPLITTER);
         });
     }
 
