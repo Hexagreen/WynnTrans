@@ -25,12 +25,12 @@ public class NormalPotion extends ConsumableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        return Pattern.compile("Potion of (Healing|Mana|§.[✤✦❉✹❋])").matcher(texts.getFirst().getString()).find();
+        return Pattern.compile("Potion of (Healing|Mana|Wisdom|§.[✤✦❉✹❋])").matcher(texts.getFirst().getString()).find();
     }
 
     public static MutableText getTranslatedItemName(Text text) {
         String _iName = text.getString();
-        if(!Pattern.compile("Potion of (Healing|Mana|§.[✤✦❉✹❋])").matcher(_iName).find()) return null;
+        if(!Pattern.compile("Potion of (Healing|Mana|Wisdom|§.[✤✦❉✹❋])").matcher(_iName).find()) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
@@ -82,10 +82,11 @@ public class NormalPotion extends ConsumableItem {
         Deque<Text> nameSiblings = new ArrayDeque<>(texts.getFirst().getSiblings());
         Text _name = nameSiblings.removeFirst();
         Text count;
-        if(nameSiblings.getLast().getString().matches(" \\[\\d/\\d]")) count = nameSiblings.removeLast();
+        if(!nameSiblings.isEmpty() && nameSiblings.getLast().getString().matches(" \\[\\d/\\d]À*"))
+            count = nameSiblings.removeLast();
         else count = Text.empty();
         Text name;
-        switch(_name.getString()) {
+        switch(_name.getString().replaceAll("À", "")) {
             case "Potion of Healing" -> {
                 key = "wytr.item.misc.healPotion";
                 potionElement = null;
@@ -96,12 +97,21 @@ public class NormalPotion extends ConsumableItem {
                 potionElement = null;
                 name = Text.translatable(key).setStyle(_name.getStyle()).append(count);
             }
+            case "Potion of Wisdom" -> {
+                key = "wytr.item.misc.expPotion";
+                potionElement = null;
+                name = Text.translatable(key).setStyle(_name.getStyle());
+            }
             case "Potion of " -> {
                 key = "wytr.item.misc.statPotion";
                 potionElement = CharacterSkill.getSkill(nameSiblings.getFirst().getString().replaceFirst("[✤✦❉✹❋] ", ""));
                 name = Text.translatable(key, potionElement.getStatWithIcon()).setStyle(_name.getStyle()).append(count);
             }
-            default -> throw new TextTranslationFailException("Unknown potion name");
+            default -> {
+                key = "";
+                potionElement = null;
+                name = _name.copy().append(count);
+            }
         }
         addAndRecordWidth(name);
     }
@@ -121,6 +131,7 @@ public class NormalPotion extends ConsumableItem {
             else {
                 String[] split = last.getString().split(" ", 2);
                 Text num = Text.literal(split[0]).setStyle(last.getStyle());
+                if(split[1].equals("XP")) split[1] = "XP Bonus";
                 Text id = Identifications.findIdentification(split[1]).getTranslatedText().setStyle(last.getStyle());
                 body.append(num).append(" ").append(id);
                 descArgs.add(id.getString());
@@ -146,12 +157,12 @@ public class NormalPotion extends ConsumableItem {
         longestWidth = Math.max(longestWidth, width);
     }
 
-    private void addAndRecordWidth(Text text) {
+    protected void addAndRecordWidth(Text text) {
         updateLongestWidth(TEXT_RENDERER.getWidth(text));
         tempText.add(text);
     }
 
-    private void addAndMarkWrapTarget(Text text) {
+    protected void addAndMarkWrapTarget(Text text) {
         tempText.add(text);
         wrapTargetIdx.add(tempText.size() - 1);
     }

@@ -2,7 +2,6 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.EquipmentAndConsumables;
 import net.hexagreen.wynntrans.enums.ItemRarity;
-import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -23,7 +22,7 @@ public class CraftedEquipment extends NormalEquipment {
     }
 
     public CraftedEquipment(List<Text> texts) {
-        super(ITooltipSplitter.correctSplitter(texts));
+        super(texts);
         itemTailRegex = Pattern.compile("^Crafted .+ \\[\\d+/\\d+ Durability]$|Powder Slots");
     }
 
