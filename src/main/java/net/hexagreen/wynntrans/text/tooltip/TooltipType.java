@@ -37,6 +37,7 @@ public enum TooltipType {
     NORMAL_POTION(NormalPotion::new, NormalPotion::typeChecker),
     CRAFTED_POTION(CraftedPotion::new, CraftedPotion::typeChecker),
     POTION_BUNDLE(PotionBundle::new, PotionBundle::typeChecker),
+    DUNGEON_ITEMS(DungeonItems::new, DungeonItems::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

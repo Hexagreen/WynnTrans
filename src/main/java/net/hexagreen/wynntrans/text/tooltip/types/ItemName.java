@@ -49,10 +49,7 @@ public class ItemName extends WynnTooltipText {
         String normalizedName = normalizeStringForKey(itemName);
         Text uniformedItemName = UniformedItemNames.getTranslatedName(getSibling(0));
         resultText = Text.empty();
-        if(uniformedItemName != null) {
-            resultText.append(uniformedItemName);
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
+        if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
             resultText.append(Text.translatable("wytr.item.ingredient." + normalizedName).setStyle(getStyle(0)));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizedName)) {
@@ -72,6 +69,9 @@ public class ItemName extends WynnTooltipText {
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
             resultText.append(Text.translatable("wytr.item.charm." + normalizedName).setStyle(getStyle(0)));
+        }
+        else if(uniformedItemName != null) {
+            resultText.append(uniformedItemName);
         }
         else if(checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
             resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(getStyle(0)));
@@ -100,6 +100,7 @@ public class ItemName extends WynnTooltipText {
         GatheringToolName(GatheringTool::getTranslatedItemName),
         PotionName(NormalPotion::getTranslatedItemName),
         PotionBundleName(PotionBundle::getTranslatedItemName),
+        DungeonItemsName(DungeonItems::getTranslatedItemName),
         Else(UniformedItemNames::processSimpleItemNames);
 
         private final Function<Text, MutableText> nameGetter;
@@ -113,11 +114,11 @@ public class ItemName extends WynnTooltipText {
 
         private static MutableText processSimpleItemNames(Text text) {
             String _string = text.getString();
-            if(_string.equals("§bCharacter Info")) {
+            if(_string.equals("Character Info")) {
                 return Text.translatable("wytr.tooltip.compassMenu")
                         .setStyle(Style.EMPTY.withColor(Formatting.AQUA));
             }
-            else if(_string.equals("§7Content Book")) {
+            else if(_string.equals("Content Book")) {
                 return Text.translatable("wytr.tooltip.contentBook")
                         .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
             }
