@@ -3,6 +3,8 @@ package net.hexagreen.wynntrans.text.tooltip;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.List;
 public class DrawTooltipHandler {
     private List<Text> cacheKey;
     private List<Text> cacheVal;
+    private MutableText heldItemCacheKey;
+    private MutableText heldItemCacheVal;
     private boolean recordMode;
     private boolean showOriginal;
 
@@ -59,10 +63,36 @@ public class DrawTooltipHandler {
 
     private List<Text> getCacheOrTranslate(List<Text> texts) {
         if(!texts.equals(cacheKey)) {
-            if(recordMode) WynnTrans.wynnTranslationStorage.recordUnregisteredTooltip(texts, "Tooltip");
+            if(recordMode) WynnTrans.wynnTranslationStorage.recordTooltipAsJSON(texts, "Tooltip");
             cacheKey = texts;
             cacheVal = TooltipType.findAndRun(texts);
         }
         return cacheVal;
+    }
+
+    public MutableText translateHeldItemTooltipText(MutableText text) {
+        try {
+            if(showOriginal) {
+                return text;
+            }
+            return getHeldItemCacheOrTranslate(text);
+        }
+        catch(Exception e) {
+            debugClass.writeTextAsJSON(text, "TooltipException");
+            WynnTrans.LOGGER.error("Exception thrown in translating held item tooltip text\n", e);
+            return text;
+        }
+    }
+
+    private MutableText getHeldItemCacheOrTranslate(MutableText text) {
+        if(!text.equals(heldItemCacheKey)) {
+            heldItemCacheKey = text;
+            heldItemCacheVal = new ItemName(text).noAddictionMode().returnNullMode().textAsMutable();
+        }
+        if(heldItemCacheVal == null) {
+            if(recordMode) WynnTrans.wynnTranslationStorage.recordTextAsJSON(text, "HeldItem");
+            return text;
+        }
+        else return heldItemCacheVal.setStyle(text.getSiblings().getFirst().getStyle());
     }
 }

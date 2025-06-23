@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 public class SkillRefreshed extends WynnChatText {
     private static final String icon = "§8[§7⬤§8] ";
-    private final String skillName;
 
     public static boolean typeChecker(Text text) {
         return Pattern.compile("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$").matcher(text.getString()).find();
@@ -17,7 +16,6 @@ public class SkillRefreshed extends WynnChatText {
 
     public SkillRefreshed(Text text) {
         super(text);
-        this.skillName = "§7" + inputText.getString().replaceFirst("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$", "$1");
     }
 
     @Override
@@ -28,6 +26,16 @@ public class SkillRefreshed extends WynnChatText {
     @Override
     protected void build() {
         resultText = Text.literal(icon);
+
+        String _skill = inputText.getString().replaceFirst("^§.\\[§.⬤§.] §.(.+)§. has been refreshed!$", "$1");
+        String nSkill = normalizeStringForKey(_skill);
+        Text skillName;
+        if(WTS.checkTranslationDoNotRegister("wytr.ability.node." + nSkill))
+            skillName = Text.translatable("wytr.ability.node." + nSkill).setStyle(GRAY);
+        else if(WTS.checkTranslationDoNotRegister("wytr.ability.object." + nSkill))
+            skillName = Text.translatable("wytr.ability.object." + nSkill).setStyle(GRAY);
+        else skillName = Text.literal(_skill).setStyle(GRAY);
+
         resultText.append(Text.translatable(translationKey, skillName).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
     }
 }

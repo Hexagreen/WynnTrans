@@ -4,6 +4,7 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.ITime;
+import net.hexagreen.wynntrans.text.chat.types.SimpleText;
 import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -56,6 +57,10 @@ public class NormalEquipment extends AbstractWynnItem {
             NormalEquipment equipment = new NormalEquipment(textBowl);
             equipment.translateNameSection(equipment.inputText.getSiblings());
             return equipment.tempText.getFirst().copy();
+        }
+        else if(itemName.contains(" spell cast! ") || itemName.contains("You don't have enough ")) {
+            NormalEquipment equipment = new NormalEquipment(textBowl);
+            return equipment.translateSkillCastedMessage(equipment.getSibling(0));
         }
         else return null;
     }
@@ -380,6 +385,20 @@ public class NormalEquipment extends AbstractWynnItem {
                 return;
             }
         }
+    }
+
+    private MutableText translateSkillCastedMessage(Text text) {
+        if(text.getString().contains("You don't have enough ")) {
+            return new SimpleText(text.getSiblings().getFirst()).text().setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
+        }
+        Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
+        String _skillName = siblings.removeFirst().getString().replaceFirst(" spell cast! ", "");
+        Text skillName = Text.translatable("wytr.ability.node." + normalizeStringForKey(_skillName));
+        MutableText line = Text.empty().setStyle(GRAY);
+        line.append(Text.translatable("wytr.func.skillCasted", skillName).setStyle(GRAY));
+        line.append(" ");
+        siblings.forEach(line::append);
+        return line;
     }
 
     private void appendUnknowns(List<Text> texts) {

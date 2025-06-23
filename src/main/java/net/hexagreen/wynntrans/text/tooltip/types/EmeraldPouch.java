@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -18,6 +19,16 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
         return texts.getFirst().getString().matches("§aEmerald Pouch§2 \\[Tier [IVX]+].*");
+    }
+
+    public static MutableText getTranslatedItemName(Text text) {
+        if(!text.getString().matches("Emerald Pouch \\[Tier [IVX]+].*")) return null;
+        List<Text> textBowl = new ArrayList<>();
+        textBowl.add(text);
+        textBowl.add(Text.empty());
+        EmeraldPouch pouch = new EmeraldPouch(textBowl);
+        pouch.translateNameSection(pouch.inputText.getSiblings());
+        return pouch.resultText.getSiblings().getFirst().copy();
     }
 
     public EmeraldPouch(List<Text> texts) {

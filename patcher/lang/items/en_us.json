@@ -5880,5 +5880,8 @@
     "wytr.item.weapon.ShredderClub": "Shredder Club",
     "wytr.item.weapon.ShredderClub.lore": "There's a scrawling etched onto the handle: \"UNGA BUNGA'S. NO TOUCH.\"",
     "wytr.item.armour.BuoyantBalmorals": "Buoyant Balmorals",
-    "wytr.item.armour.BuoyantBalmorals.lore": "These are congealed and rather gross, but they leave you with an undeniable bounce in your step."
+    "wytr.item.armour.BuoyantBalmorals.lore": "These are congealed and rather gross, but they leave you with an undeniable bounce in your step.",
+    "wytr.item.armour.Myopia": "Myopia",
+    "wytr.item.armour.Myopia.lore": "In such a sinister and wicked expanse, one wonders if the best solution is to give up your eyes and replace them with a pair that does not indulge in such evils, cleansing them from your idyllic field of view while the wider world around you withers away.",
+    "wytr.item.armour.Alpenglow": "Alpenglow"
 }
