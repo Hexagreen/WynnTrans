@@ -93,6 +93,6 @@ public class DrawTooltipHandler {
             if(recordMode) WynnTrans.wynnTranslationStorage.recordTextAsJSON(text, "HeldItem");
             return text;
         }
-        else return heldItemCacheVal.setStyle(text.getSiblings().getFirst().getStyle());
+        else return heldItemCacheVal;
     }
 }

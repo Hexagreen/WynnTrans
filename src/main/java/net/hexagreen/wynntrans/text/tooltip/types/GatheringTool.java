@@ -16,12 +16,12 @@ public class GatheringTool extends AbstractWynnItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        return texts.getFirst().getString().matches(". Gathering (Rod|Pickaxe|Axe|Scythe) T\\d");
+        return texts.getFirst().getString().matches(". Gathering (Rod|Pickaxe|Axe|Scythe) T\\d+À*");
     }
 
     public static MutableText getTranslatedItemName(Text text) {
         String _iName = text.getString();
-        if(!_iName.matches(". Gathering (Rod|Pickaxe|Axe|Scythe) T\\d")) return null;
+        if(!_iName.matches(". Gathering (Rod|Pickaxe|Axe|Scythe) T\\d+")) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());

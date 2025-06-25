@@ -3,7 +3,6 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -14,16 +13,6 @@ public class Emeralds extends WynnTooltipText implements ITradableItem {
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
         return texts.getFirst().getString().matches("§aLiquid Emerald|§aEmerald Block|§aEmerald");
-    }
-
-    public static MutableText getTranslatedItemName(Text text) {
-        if(!text.getString().matches("Liquid Emerald|Emerald Block|Emerald")) return null;
-        List<Text> textBowl = new ArrayList<>();
-        textBowl.add(text);
-        textBowl.add(Text.empty());
-        Emeralds emeralds = new Emeralds(textBowl);
-        emeralds.translateNameSection(emeralds.inputText.getSiblings());
-        return emeralds.resultText.getSiblings().getFirst().copy();
     }
 
     public Emeralds(List<Text> texts) {

@@ -9,6 +9,7 @@ import net.minecraft.util.Formatting;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class ItemName extends WynnTooltipText {
@@ -45,42 +46,45 @@ public class ItemName extends WynnTooltipText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        String itemName = getSibling(0).getString();
+        Text _itemName = inputText.visit(((style, asString) -> {
+            if(!asString.isBlank()) return Optional.of(Text.literal(asString).setStyle(style));
+            return Optional.empty();
+        }), Style.EMPTY).orElseGet(Text::empty);
+        String itemName = _itemName.getString();
+        Style nameStyle = _itemName.getStyle();
         String normalizedName = normalizeStringForKey(itemName);
-        Text uniformedItemName = UniformedItemNames.getTranslatedName(getSibling(0));
+        Text uniformedItemName = UniformedItemNames.getTranslatedName(inputText);
         resultText = Text.empty();
         if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.ingredient." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.ingredient." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.material." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.material." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.armour." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.armour." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.weapon." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.weapon." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.accessory." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.accessory." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.tome." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.tome." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.tome." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.charm." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.charm." + normalizedName).setStyle(nameStyle));
         }
         else if(uniformedItemName != null) {
             resultText.append(uniformedItemName);
         }
         else if(checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
-            resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(getStyle(0)));
+            resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(nameStyle));
         }
         else {
-            Text _val = getSibling(0);
-
             if(returnNull) resultText = null;
-            else resultText.append(_val.copy());
+            else resultText.append(_itemName.copy());
         }
     }
 
@@ -93,7 +97,6 @@ public class ItemName extends WynnTooltipText {
         IdentifiedEquipmentName(NormalEquipment::getTranslatedItemName),
         UnidentifiedEquipmentName(UnidentifiedEquipment::getTranslatedItemName),
         EmeraldPouchName(EmeraldPouch::getTranslatedItemName),
-        EmeraldName(Emeralds::getTranslatedItemName),
         MaterialName(Material::getTranslatedItemName),
         IngredientName(Ingredient::getTranslatedItemName),
         PowderName(ElementPowder::getTranslatedItemName),
@@ -101,6 +104,7 @@ public class ItemName extends WynnTooltipText {
         PotionName(NormalPotion::getTranslatedItemName),
         PotionBundleName(PotionBundle::getTranslatedItemName),
         DungeonItemsName(DungeonItems::getTranslatedItemName),
+        TeleportationScrollName(TeleportationScroll::getTranslatedItemName),
         Else(UniformedItemNames::processSimpleItemNames);
 
         private final Function<Text, MutableText> nameGetter;

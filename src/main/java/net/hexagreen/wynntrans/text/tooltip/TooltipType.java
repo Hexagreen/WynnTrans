@@ -38,6 +38,8 @@ public enum TooltipType {
     CRAFTED_POTION(CraftedPotion::new, CraftedPotion::typeChecker),
     POTION_BUNDLE(PotionBundle::new, PotionBundle::typeChecker),
     DUNGEON_ITEMS(DungeonItems::new, DungeonItems::typeChecker),
+    RUNES(Rune::new, Rune::typeChecker),
+    TELEPORTATION_SCROLL(TeleportationScroll::new, TeleportationScroll::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 
