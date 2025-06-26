@@ -609,12 +609,11 @@ public class ContentBookNodes extends WynnTooltipText {
                                 key = baseKey + normalizedName + ".reward." + hash + subKey;
                         case "World Event", "Raid" -> key = baseKey + "reward." + hash + subKey;
                         case "Dungeon" -> {
-                            String num = val.replaceAll("\\D", "");
                             Dungeons dungeon = Dungeons.getDungeons(normalizedName);
                             Text item;
                             if(val.contains("Fragments")) item = dungeon.getDungeonFragment();
                             else item = dungeon.getDungeonBossReward();
-                            return line.append(Text.translatable("wytr.tooltip.contentReward.dungeon", num, item));
+                            return line.append(item);
                         }
                         default -> key = "wytr.tooltip.contentReward." + hash + subKey;
                     }

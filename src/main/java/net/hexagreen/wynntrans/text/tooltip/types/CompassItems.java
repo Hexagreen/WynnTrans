@@ -55,22 +55,30 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                 .setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
         wrapLine(Text.translatable("wytr.tooltip.compassItems.abilityTree.desc").setStyle(GRAY), 300)
                 .forEach(resultText::append);
-        resultText.append(" ");
+        resultText.append(SPLITTER);
         resultText.append(Text.translatable("wytr.tooltip.compassItems.abilityTree.unusedPoint", unusedPoint)
                 .setStyle(getSibling(4).getSiblings().getFirst().getStyle()));
-        resultText.append(" ");
+        resultText.append(SPLITTER);
         resultText.append(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
     }
 
     private void buildSkillCrystal() {
-        Text unusedPoint = getSibling(2).getSiblings().get(1);
-
         resultText.append(Text.translatable("wytr.tooltip.compassItems.skillCrystal")
                 .setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
-        resultText.append(" ");
+        if(!getSibling(1).getString().isBlank()) {
+            wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.warn").setStyle(GRAY), 300)
+                    .forEach(resultText::append);
+            resultText.append(SPLITTER);
+            resultText.append(Text.translatable("wytr.func.clickToConfirm").formatted(Formatting.GREEN));
+            return;
+        }
+
+        Text unusedPoint = getSibling(2).getSiblings().get(1);
+
+        resultText.append(SPLITTER);
         wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.desc", unusedPoint).setStyle(GRAY), 300)
                 .forEach(resultText::append);
-        resultText.append(" ");
+        resultText.append(SPLITTER);
         if(getSiblings().size() == 6) {
             resultText.append(Text.translatable("wytr.tooltip.compassItems.skillCrystal.reset").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)));
         }
@@ -82,10 +90,19 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
 
     private void buildUpgradeSkill() {
         Text _skill = getSibling(0).getSiblings().get(1);
-        MutableText icon = Text.literal(_skill.getString().replaceFirst("^(. ).+", "$1")).setStyle(_skill.getStyle());
         CharacterSkill skill = CharacterSkill.getSkill(_skill.getString().replaceFirst("^. ", ""));
-        Text stat = icon.copy().append(skill.getStat());
-        Text element = icon.copy().append(skill.getRelativeElement().getElement());
+        Text stat = skill.getStatWithIcon().setStyle(_skill.getStyle());
+        Text element = skill.getIcon().copy().setStyle(_skill.getStyle()).append(skill.getRelativeElement().getElement());
+
+        if(getSibling(1).getString().equals("Removing Skill Points may")) {
+            resultText.append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill", stat)
+                    .setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
+            wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.warn").setStyle(GRAY), 300)
+                    .forEach(resultText::append);
+            resultText.append(SPLITTER);
+            resultText.append(Text.translatable("wytr.func.clickToConfirm").formatted(Formatting.GREEN));
+            return;
+        }
 
         Deque<Deque<Text>> segments = new ArrayDeque<>();
         splitTooltipToSegments(getSiblings(), segments, ArrayDeque::new);
@@ -136,15 +153,15 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                 ));
             }
         });
-        resultText.append(" ");
+        resultText.append(SPLITTER);
         segments.removeFirst();
         wrapLine(Text.translatable("wytr.tooltip.compassItems.upgradeSkill." + skill.name().toLowerCase(Locale.ENGLISH), element).setStyle(GRAY), tooltipWidth)
                 .forEach(resultText::append);
-        resultText.append(" ");
+        resultText.append(SPLITTER);
         if(segments.getFirst().getFirst().getString().contains("Spell Cost Reduction: ")) {
             Text reduction = segments.removeFirst().getFirst().getSiblings().getLast();
             resultText.append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.spellCostReduction", reduction));
-            resultText.append(" ");
+            resultText.append(SPLITTER);
         }
         segments.removeFirst().forEach(s -> {
             if(s.getString().contains("Left-Click")) {

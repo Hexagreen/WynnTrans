@@ -17,6 +17,8 @@ public enum TooltipType {
     CONTENT_BOOK_CONTENTS(ContentBookNodes::new, ContentBookNodes::typeChecker),
     COMPASS_MENU(Compass::new, Compass::typeChecker),
     COMPASS_ITEMS(CompassItems::new, CompassItems::typeChecker),
+    RECRUIT_PAGE(FriendRecruit::new, FriendRecruit::typeChecker),
+    MASTERY_TOME_PAGE(MasteryTomeSlot::new, MasteryTomeSlot::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
@@ -36,10 +38,12 @@ public enum TooltipType {
     CRAFTED_EQUIPMENT(CraftedEquipment::new, CraftedEquipment::typeChecker),
     NORMAL_POTION(NormalPotion::new, NormalPotion::typeChecker),
     CRAFTED_POTION(CraftedPotion::new, CraftedPotion::typeChecker),
+    MASTERY_TOME(MasteryTome::new, MasteryTome::typeChecker),
     POTION_BUNDLE(PotionBundle::new, PotionBundle::typeChecker),
     DUNGEON_ITEMS(DungeonItems::new, DungeonItems::typeChecker),
     RUNES(Rune::new, Rune::typeChecker),
     TELEPORTATION_SCROLL(TeleportationScroll::new, TeleportationScroll::typeChecker),
+    HORSE(Horse::new, Horse::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

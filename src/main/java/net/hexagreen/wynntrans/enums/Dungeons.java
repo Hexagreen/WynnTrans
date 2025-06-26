@@ -49,7 +49,8 @@ public enum Dungeons {
     public static Dungeons getDungeons(String dungeonOrRewardName) {
         boolean isCorrupted = dungeonOrRewardName.contains("Corrupted") || dungeonOrRewardName.contains("corrupted");
         String stripped = dungeonOrRewardName.replaceFirst("[Cc]orrupted ?", "")
-                .replace("À", "").replace("'", "").replace("-", "")
+                .replace("À", "").replace("'", "")
+                .replace("-", "").replace(" ", "")
                 .toLowerCase();
         Dungeons dungeons = match(stripped);
         dungeons.setCorrupted(isCorrupted);
@@ -57,18 +58,20 @@ public enum Dungeons {
     }
 
     private static Dungeons match(String name) {
-        if(name.contains("decrepit") || name.equals("witherheads rib")) return DECREPIT_SEWERS;
-        if(name.contains("infested") || name.equals("arakadicus eye")) return INFESTED_PIT;
-        if(name.contains("underworld") || name.equals("charons brain")) return UNDERWORLD_CRYPT;
-        if(name.contains("sanctuary") || name.equals("garoths breath")) return LOST_SANCTUARY;
-        if(name.contains("sanctum") || name.equals("garoths writings")) return TIMELOST_SANCTUM;
-        if(name.contains("sand") || name.equals("hashrs bone")) return SAND_SWEPT_TOMB;
-        if(name.contains("barrows") || name.equals("theoricks ice shard")) return ICE_BARROWS;
-        if(name.contains("undergrowth") || name.equals("slykaars heart")) return UNDERGROWTH_RUINS;
-        if(name.contains("galleons") || name.equals("redbeards hair")) return GALLEONS_GRAVEYARD;
-        if(name.contains("fallen") || name.equals("antikythera supercomputers chip")) return FALLEN_FACTORY;
-        if(name.contains("eldritch") || name.equals("the eyes pupil")) return ELDRITCH_OUTLOOK;
-        else return UNKNOWN;
+        return switch(name) {
+            case "decrepitsewers", "witherheadsrib" -> DECREPIT_SEWERS;
+            case "infestedpit", "arakadicuseye" -> INFESTED_PIT;
+            case "underworldcrypt", "charonsbrain" -> UNDERWORLD_CRYPT;
+            case "lostsanctuary", "garothsbreath" -> LOST_SANCTUARY;
+            case "timelostsanctum", "garothswritings" -> TIMELOST_SANCTUM;
+            case "sandswepttomb", "hashrsbone" -> SAND_SWEPT_TOMB;
+            case "icebarrows", "theoricksiceshard" -> ICE_BARROWS;
+            case "undergrowthruins", "slykaarsheart" -> UNDERGROWTH_RUINS;
+            case "galleonsgraveyard", "redbeardshair" -> GALLEONS_GRAVEYARD;
+            case "fallenfactory", "antikytherasupercomputerschip" -> FALLEN_FACTORY;
+            case "eldritchoutlook", "theeyespupil" -> ELDRITCH_OUTLOOK;
+            default -> UNKNOWN;
+        };
     }
 
     Dungeons(Text dungeonName, Text dungeonBossReward, Text dungeonFragment) {
