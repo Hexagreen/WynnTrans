@@ -11,14 +11,14 @@ public class WynnTranslationStorage {
     private final Map<String, String> wynnTransDict = new HashMap<>();
     private final Set<String> unregisteredTextSet = new HashSet<>();
     private final Set<List<Text>> unregisteredTooltipSet = new HashSet<>();
-    private final Set<Text> unregisteredEntityLabelSet = new HashSet<>();
+    private final Set<Text> unregisteredTextJsonSet = new HashSet<>();
     private Rulebooks rulebooks;
 
     public void onLanguageReloaded(Map<String, String> translationMap) {
         wynnTransDict.clear();
         unregisteredTextSet.clear();
         unregisteredTooltipSet.clear();
-        unregisteredEntityLabelSet.clear();
+        unregisteredTextJsonSet.clear();
 
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
@@ -30,7 +30,7 @@ public class WynnTranslationStorage {
         LOGGER.info("Reloaded Wynncraft Text Language Map.");
     }
 
-    public void recordUnregisteredTooltip(List<Text> text, String tag) {
+    public void recordTooltipAsJSON(List<Text> text, String tag) {
         if(this.unregisteredTooltipSet.contains(text)) {
             return;
         }
@@ -40,11 +40,11 @@ public class WynnTranslationStorage {
         debugClass.writeString2File("", "json.txt");
     }
 
-    public void recordUnregisteredEntity(Text text, String tag) {
-        if(this.unregisteredEntityLabelSet.contains(text)) {
+    public void recordTextAsJSON(Text text, String tag) {
+        if(this.unregisteredTextJsonSet.contains(text)) {
             return;
         }
-        this.unregisteredEntityLabelSet.add(text);
+        this.unregisteredTextJsonSet.add(text);
         debugClass.writeTextAsJSON(text, tag);
     }
 

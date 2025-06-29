@@ -175,6 +175,11 @@ public abstract class TextNormalizer {
 
             Rulebooks.NormalizerRule rule = rulebook.findRule(wholeText, ruleNumber[0]);
             if(rule != null) {
+                if(string.contains("%p")) {
+                    string = string.replaceAll("%p", playerName);
+                    args.removeLast();
+                    flags.removeLast();
+                }
                 Matcher matcher = Pattern.compile(rule.pattern()).matcher(string);
                 if(matcher.find()) {
                     ruleNumber[0]++;

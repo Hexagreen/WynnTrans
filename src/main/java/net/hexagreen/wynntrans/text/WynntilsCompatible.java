@@ -110,8 +110,8 @@ public class WynntilsCompatible {
                 ItemStatInfoFeature info = Managers.Feature.getFeatureInstance(ItemStatInfoFeature.class);
                 if(!info.perfect.get()) throw new Exception();
                 Class<?> componentUtils = ComponentUtils.class;
-                Method rainbow = componentUtils.getMethod("makeRainbowStyle", String.class);
-                Object result = rainbow.invoke(null, text.getString());
+                Method rainbow = componentUtils.getMethod("makeRainbowStyle", String.class, boolean.class);
+                Object result = rainbow.invoke(null, text.getString(), true);
                 return (MutableText) result;
             }
             catch(Exception ignore) {

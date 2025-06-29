@@ -4,6 +4,7 @@ import net.hexagreen.wynntrans.enums.Dungeons;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
+import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ContentBookNodes extends WynnTooltipText {
+public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitter {
     private static final Text EMPTY_LINE = Text.empty().append(Text.literal(" ")
             .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.DARK_PURPLE)));
 
@@ -51,7 +52,8 @@ public class ContentBookNodes extends WynnTooltipText {
     }
 
     private List<Text> processTextChunk() {
-        List<List<Text>> chunks = splitTextChunk();
+        List<List<Text>> chunks = new ArrayList<>();
+        splitTooltipToSegments(getSiblings(), chunks);
         Collector collector = new Collector();
         for(int i = 0; i < chunks.size(); i++) {
             List<Text> chunk = chunks.get(i);
@@ -70,20 +72,11 @@ public class ContentBookNodes extends WynnTooltipText {
             else if(chunk.getFirst().getString().contains("CLICK TO")) {
                 collector.processCTTSection(chunk);
             }
+            else {
+                collector.processElse(chunk);
+            }
         }
         return collector.getResult();
-    }
-
-    private List<List<Text>> splitTextChunk() {
-        List<List<Text>> result = new ArrayList<>();
-        List<Text> target = new ArrayList<>(getSiblings());
-        while(target.contains(EMPTY_LINE)) {
-            int emptyLineIndex = target.indexOf(EMPTY_LINE);
-            if(emptyLineIndex > 0) result.add(new ArrayList<>(target.subList(0, emptyLineIndex)));
-            target = new ArrayList<>(target.subList(emptyLineIndex + 1, target.size()));
-        }
-        if(!target.isEmpty()) result.add(target);
-        return result;
     }
 
     private class Collector implements ISpaceProvider {
@@ -609,12 +602,11 @@ public class ContentBookNodes extends WynnTooltipText {
                                 key = baseKey + normalizedName + ".reward." + hash + subKey;
                         case "World Event", "Raid" -> key = baseKey + "reward." + hash + subKey;
                         case "Dungeon" -> {
-                            String num = val.replaceAll("\\D", "");
                             Dungeons dungeon = Dungeons.getDungeons(normalizedName);
                             Text item;
                             if(val.contains("Fragments")) item = dungeon.getDungeonFragment();
                             else item = dungeon.getDungeonBossReward();
-                            return line.append(Text.translatable("wytr.tooltip.contentReward.dungeon", num, item));
+                            return line.append(item);
                         }
                         default -> key = "wytr.tooltip.contentReward." + hash + subKey;
                     }
@@ -639,6 +631,11 @@ public class ContentBookNodes extends WynnTooltipText {
             int totalWidth = getLongestWidth(result);
             result.add(Text.literal(" "));
             result.add(centerAlign(ctt, totalWidth));
+        }
+
+        private void processElse(List<Text> chunk) {
+            result.add(Text.literal(" "));
+            result.addAll(chunk);
         }
 
         private Text getIndentation(Text infoText) {

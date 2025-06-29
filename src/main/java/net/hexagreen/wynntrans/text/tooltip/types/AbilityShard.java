@@ -1,8 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.text.sign.WynnSign;
-import net.hexagreen.wynntrans.text.tooltip.IPricedItem;
-import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
+import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -11,7 +10,7 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbilityShard extends WynnTooltipText implements ITooltipSplitter, IPricedItem {
+public class AbilityShard extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
@@ -36,10 +35,9 @@ public class AbilityShard extends WynnTooltipText implements ITooltipSplitter, I
         if(selling) {
             List<List<Text>> segments = new ArrayList<>();
             splitTooltipToSegments(getSiblings(), segments);
-            ItemTooltipPriceSection ps = detachPriceSection(segments);
             dump.add(SPLITTER);
-            dump.addAll(ps.priceTexts());
-            dump.add(SPLITTER);
+            insertPriceSection(segments, dump::add, (seg, i, lastIndex) -> {
+            });
         }
 
         Text lastText = getSibling(-1);

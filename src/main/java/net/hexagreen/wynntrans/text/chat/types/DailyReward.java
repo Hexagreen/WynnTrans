@@ -36,7 +36,7 @@ public class DailyReward extends WynnChatText {
         if(emeralds != null) {
             resultText.append(Text.translatable(translationKey + ".emerald", emeralds).setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
             if(items != null) {
-                resultText.append(Text.translatable(translationKey + ".and").setStyle(GRAY)).append(Text.translatable(translationKey + ".item", items).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
+                resultText.append(Text.translatable("wytr.and").setStyle(GRAY)).append(Text.translatable(translationKey + ".item", items).setStyle(Style.EMPTY.withColor(Formatting.AQUA)));
             }
         }
         else {

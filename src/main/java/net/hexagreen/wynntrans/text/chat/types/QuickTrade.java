@@ -19,7 +19,7 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
 
     public QuickTrade(Text text) {
         super(text);
-        this.playerName = inputText.getString().replaceFirst("^\n(.+) would.+", "$1");
+        this.playerName = inputText.getString().replaceFirst("^(?s)\n(.+) would.+", "$1");
         this.command = "/trade " + playerName;
     }
 
@@ -34,6 +34,10 @@ public class QuickTrade extends WynnChatText implements ICommonTooltip {
     }
 
     private Text buildCommand() {
-        return Text.literal(command).setStyle(Style.EMPTY.withUnderline(true).withColor(Formatting.GOLD).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command)).withHoverEvent(getHoverRunCommand()));
+        return Text.literal(command).setStyle(
+                Style.EMPTY.withUnderline(true).withColor(Formatting.GOLD)
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
+                        .withHoverEvent(getHoverRunCommand())
+        );
     }
 }

@@ -4,9 +4,9 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 public enum Identifications {
     STRENGTH("(?i)strength", "wytr.skill.strength", "Strength"),
@@ -34,11 +34,9 @@ public enum Identifications {
     }
 
     public static Identifications findMajorID(String idName, String idDesc) {
-        return Arrays.stream(Identifications.values())
-                .filter(ids -> ids.major)
-                .filter(ids -> ids.isMatch(idName, idDesc))
-                .findFirst()
-                .orElse(UNKNOWN_MAJOR);
+        UNKNOWN_MAJOR.testInput = idName;
+        UNKNOWN_MAJOR.testInputSub = idDesc;
+        return UNKNOWN_MAJOR;
     }
 
     Identifications(String matches, String key, String val) {
@@ -59,7 +57,9 @@ public enum Identifications {
         String k = getKey();
         String v = getVal();
         if(this == SPELL_COST) {
-            Text spellName = Text.translatable("wytr.ability.node." + WynnTransText.normalizeStringForKey(v));
+            v = WynnTransText.normalizeStringForKey(v);
+            if(v.equals("MultiHit")) v = "Multihit";
+            Text spellName = Text.translatable("wytr.ability.node." + v);
             return Text.translatable(k, spellName);
         }
         if(WynnTrans.wynnTranslationStorage.checkTranslationExist(k, v)) {
@@ -69,8 +69,8 @@ public enum Identifications {
     }
 
     public MutableText getMajorDesc() {
-        String k = getKey() + ".desc";
         String v = testInputSub;
+        String k = getKey() + ".desc." + DigestUtils.sha1Hex(v).substring(0, 4);
         if(WynnTrans.wynnTranslationStorage.checkTranslationExist(k, v)) {
             return Text.translatable(k);
         }
@@ -105,14 +105,5 @@ public enum Identifications {
         }
         this.testInput = string;
         return string.replaceAll(" ", "").matches(this.matches);
-    }
-
-    private boolean isMatch(String idName, String idDesc) {
-        if(this == UNKNOWN_MAJOR) {
-            this.testInput = idName;
-            this.testInputSub = idDesc;
-            return false;
-        }
-        return idName.toLowerCase(Locale.ENGLISH).replaceAll("[^a-z]", "").matches(this.matches);
     }
 }

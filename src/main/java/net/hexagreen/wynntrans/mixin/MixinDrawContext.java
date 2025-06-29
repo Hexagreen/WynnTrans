@@ -23,6 +23,10 @@ import java.util.List;
 
 @Mixin(DrawContext.class)
 abstract public class MixinDrawContext {
+    @Final
+    @Shadow
+    private MatrixStack matrices;
+
     @ModifyVariable(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;IILnet/minecraft/util/Identifier;)V",
             at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public List<Text> mixinDrawTooltip(List<Text> text) {
@@ -30,9 +34,12 @@ abstract public class MixinDrawContext {
         return WynnTrans.drawTooltipHandler.translateTooltipText(text);
     }
 
-    @Final
-    @Shadow
-    private MatrixStack matrices;
+    @ModifyVariable(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;II)V",
+            at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    public List<Text> mixinWynntilsDrawTooltip(List<Text> text) {
+        if(MinecraftClient.getInstance().options.advancedItemTooltips) return text;
+        return WynnTrans.drawTooltipHandler.translateTooltipText(text);
+    }
 
     @Shadow
     public abstract int getScaledWindowWidth();

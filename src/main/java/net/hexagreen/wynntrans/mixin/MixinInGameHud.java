@@ -2,7 +2,10 @@ package net.hexagreen.wynntrans.mixin;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.component.ComponentType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.ScoreboardEntry;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,5 +32,18 @@ abstract public class MixinInGameHud {
     public Stream<ScoreboardEntry> mixinRenderScoreboardSidebar(Stream<ScoreboardEntry> stream, long l) {
         List<ScoreboardEntry> limited = stream.limit(l).toList();
         return WynnTrans.scoreboardSidebarHandler.translateScoreboardSidebar(limited).stream();
+    }
+
+    @ModifyVariable(method = "renderHeldItemTooltip", at = @At("STORE"), ordinal = 0)
+    private MutableText mixinRenderHeldItemTooltip(MutableText mutableText) {
+        if(!WynnTrans.drawTooltipHandler.getShowOriginal()) {
+            return WynnTrans.drawTooltipHandler.translateHeldItemTooltipText(mutableText);
+        }
+        return mutableText;
+    }
+
+    @Redirect(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"))
+    public boolean disruptTextTilt(ItemStack instance, ComponentType<?> componentType) {
+        return false;
     }
 }

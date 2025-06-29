@@ -21,7 +21,7 @@ public class ItemSkillRequirement extends WynnSystemText {
         super(text);
         Matcher matcher = Pattern.compile("This item requires your (.+) skill to be at least §c(\\d+)\\.").matcher(inputText.getString().replaceAll("\n", ""));
         boolean ignore = matcher.find();
-        this.skill = CharacterSkill.getSkill(matcher.group(1));
+        this.skill = CharacterSkill.getSkill(matcher.group(1)).getStat();
         this.level = Text.literal(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }
 

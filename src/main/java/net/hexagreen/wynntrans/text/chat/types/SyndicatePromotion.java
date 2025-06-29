@@ -2,6 +2,8 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -9,7 +11,7 @@ import java.util.Locale;
 
 public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
 
-    public static Text getTranslatedRankName(String rankNameString) {
+    public static MutableText getTranslatedRankName(String rankNameString) {
         String valRank = rankNameString.replaceAll("§.", "").replaceAll(" I+$", "");
         String keyRank = "wytr.syndicate.rank." + valRank.toLowerCase(Locale.ENGLISH);
         String bar = rankNameString.replaceFirst(".+( I+)$", "$1");
@@ -29,7 +31,13 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text t0 = new SimpleText(getSibling(0).getSiblings().getLast()).text();
         Text t1 = new SimpleText(getSibling(1).getSiblings().getLast()).text();
-        Text t2 = new SimpleText(getSibling(2).getSiblings().getLast()).text();
+        Text division = getSibling(2).getSiblings().getLast();
+        Style divisionStyle = colorCodedToStyled(division).getSiblings().getFirst().getStyle();
+        String _divisionName = division.getString().replaceAll("§.", "").replaceFirst(" Division", "");
+        String k = "wytr.syndicate.division." + _divisionName.toLowerCase(Locale.ENGLISH);
+        WTS.checkTranslationExist(k, _divisionName);
+        Text divisionName = Text.translatableWithFallback(k, _divisionName).setStyle(divisionStyle);
+        Text t2 = Text.translatable("wytr.syndicate.division", divisionName).setStyle(divisionStyle);
 
         Text rankOrigin = getSibling(4).getSiblings().getLast();
         Text rank = getTranslatedRankName(rankOrigin.getString());

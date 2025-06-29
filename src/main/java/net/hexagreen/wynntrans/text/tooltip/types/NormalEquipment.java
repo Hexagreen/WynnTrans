@@ -4,12 +4,12 @@ import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.ITime;
-import net.hexagreen.wynntrans.text.tooltip.IPricedItem;
-import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
-import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
+import net.hexagreen.wynntrans.text.chat.types.SimpleText;
+import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -21,17 +21,16 @@ import java.util.regex.Pattern;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringDefectiveItem;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringPerfectItem;
 
-public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter, IPricedItem {
+public class NormalEquipment extends AbstractWynnItem {
     private static final Pattern NAME_ATTACHMENT_REGEX =
-            Pattern.compile("Attack Speed|This item's powers have");
-    private static final Pattern ITEM_TAIL_REGEX =
-            Pattern.compile(".+ Item( \\[\\d+])?$|Powder Slots");
+            Pattern.compile("(Slow|Normal|Fast) Attack Speed|This item's powers have");
     private static final Pattern BASE_STAT_REGEX =
             Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
-            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+");
+            Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+(?: \\[(.+)])?$");
     private final List<Text> tempText;
     private final Deque<Integer> wrapTargetIdx;
+    protected Pattern itemTailRegex;
     private int longestWidth;
     private String itemNameKey = "";
 
@@ -59,14 +58,21 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
             equipment.translateNameSection(equipment.inputText.getSiblings());
             return equipment.tempText.getFirst().copy();
         }
+        else if(itemName.contains(" spell cast! ") || itemName.contains("You don't have enough ")) {
+            NormalEquipment equipment = new NormalEquipment(textBowl);
+            return equipment.translateSkillCastedMessage(equipment.getSibling(0));
+        }
         else return null;
     }
 
     public NormalEquipment(List<Text> texts) {
-        super(ITooltipSplitter.correctSplitter(texts));
+        super(texts);
         this.tempText = new ArrayList<>();
         this.wrapTargetIdx = new ArrayDeque<>();
         this.longestWidth = 150;
+        this.itemTailRegex = Pattern.compile(".+ Item( \\[\\d+])?$|Powder Slots");
+        this.textAppender = this::addAndRecordWidth;
+        this.optionalTextAppender = this::addAndMarkWrapTarget;
     }
 
     @Override
@@ -75,93 +81,88 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
     }
 
     @Override
-    protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<List<Text>> segments = new ArrayList<>();
-        splitTooltipToSegments(getSiblings(), segments);
-        ItemTooltipPriceSection priceSection = detachPriceSection(segments);
-        int priceSectionIndex = priceSection.position();
-
-        for(int i = 0, size = segments.size(); i < size; i++) {
-            if(i == 0) {
-                translateNameSection(segments.getFirst());
-                tempText.add(SPLITTER);
-                continue;
-            }
-            else if(i == priceSectionIndex) {
-                priceSection.priceTexts().forEach(this::addAndRecordWidth);
-                tempText.add(SPLITTER);
-            }
-
-            List<Text> seg = segments.get(i);
-            if(NAME_ATTACHMENT_REGEX.matcher(seg.getFirst().getString()).find()) {
-                translateNameSection(seg);
-            }
-            else if(BASE_STAT_REGEX.matcher(seg.getFirst().getString()).find()) {
-                translateBaseStatSection(seg);
-            }
-            else if(POWDER_SPECIAL_REGEX.matcher(seg.getFirst().getSiblings().getLast().getString()).find()) {
-                translatePowderSpecialSection(seg);
-            }
-            else if(seg.getFirst().getSiblings().getFirst().getString().matches("[✔✖] ?")) {
-                translateReqSection(seg);
-            }
-            else if(seg.getFirst().getSiblings().getFirst().getString().equals("⬡ ")) {
-                translateShinySection(seg);
-            }
-            else if(seg.getFirst().getSiblings().getFirst().getString().matches("[+-]\\d+(%|/[35]s| Tiers)?")) {
-                translateIDSection(seg);
-            }
-            else if(seg.getFirst().getString().matches(".+ Set \\(\\d/\\d\\)")) {
-                translateSetPartsSection(seg);
-            }
-            else if(seg.getFirst().getString().equals("Set Bonus:")) {
-                translateSetBonusSection(seg);
-            }
-            else if(ITEM_TAIL_REGEX.matcher(seg.getFirst().getString()).find()) {
-                translateTailSection(seg);
-                break;
-            }
-            else {
-                appendUnknowns(seg);
-            }
-            tempText.add(SPLITTER);
+    protected void buildStep(List<Text> seg, int step, final int lastIndex) {
+        String firstLine = seg.getFirst().getString();
+        String firstSibling = seg.getFirst().getSiblings().getFirst().getString();
+        if(step == 0) {
+            translateNameSection(seg);
         }
-        wrapTargetIdx.add(-1);
+        else if(NAME_ATTACHMENT_REGEX.matcher(firstLine).find()) {
+            translateNameSection(seg);
+        }
+        else if(BASE_STAT_REGEX.matcher(firstLine).find()) {
+            translateBaseStatSection(seg);
+        }
+        else if(POWDER_SPECIAL_REGEX.matcher(firstLine).find()) {
+            translatePowderSpecialSection(seg);
+        }
+        else if(firstSibling.matches("[✔✖] ?")) {
+            translateReqSection(seg);
+        }
+        else if(firstSibling.equals("⬡ ")) {
+            translateShinySection(seg);
+        }
+        else if(firstSibling.matches("[+-]\\d+(%|/[35]s| tier)?")) {
+            translateIDSection(seg);
+        }
+        else if(firstSibling.matches("^\\+.+: $")) {
+            translateIDSection(seg);
+        }
+        else if(firstLine.matches(".+ Set \\(\\d/\\d\\)")) {
+            translateSetPartsSection(seg);
+        }
+        else if(firstLine.equals("Set Bonus:")) {
+            translateSetBonusSection(seg);
+        }
+        else if(itemTailRegex.matcher(firstLine).find()) {
+            translateTailSection(seg);
+        }
+        else {
+            appendUnknowns(seg);
+        }
+        if(step != lastIndex) tempText.add(SPLITTER);
+        else {
+            wrapTargetIdx.add(-1);
 
-        for(int i = 0, size = tempText.size(); i < size; i++) {
-            if(i == wrapTargetIdx.getFirst()) {
-                wrapLine(tempText.get(i), longestWidth).forEach(resultText::append);
-                wrapTargetIdx.removeFirst();
-            }
-            else {
-                resultText.append(tempText.get(i));
+            for(int j = 0, size = tempText.size(); j < size; j++) {
+                if(j == wrapTargetIdx.getFirst()) {
+                    wrapLine(tempText.get(j), longestWidth).forEach(resultText::append);
+                    wrapTargetIdx.removeFirst();
+                }
+                else {
+                    resultText.append(tempText.get(j));
+                }
             }
         }
     }
 
     private void translateNameSection(List<Text> texts) {
         for(Text t : texts) {
-            String itemNameString = t.getString().replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny | \\[.+%]$", "");
+            String string = t.getString().replaceAll("À", "");
+            String itemNameString = string.replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny | \\[.+%]$", "");
             String normalized = normalizeStringForKey(itemNameString);
-            boolean shiny = t.getString().matches(".*⬡ Shiny.+");
-            boolean unidentified = t.getString().matches("^Unidentified .+");
-            boolean wynntilsPerfect = t.getString().matches("^Perfect .+");
-            boolean wynntilsDefective = t.getString().matches("^Defective .+");
-            boolean wynntilsPercentage = t.getString().matches(".+ \\[.+%]$");
-            MutableText itemName = Text.empty();
-            if(shiny) {
-                itemName.append(Text.translatable("wytr.tooltip.equipment.shiny"));
-            }
+
             if(normalized.equals("Thisitemspowershave")) {
-                tempText.add(Text.translatable("wytr.tooltip.equipment.identifyGuide").setStyle(GRAY));
-                wrapTargetIdx.add(tempText.size() - 1);
+                addAndMarkWrapTarget(Text.translatable("wytr.tooltip.equipment.identifyGuide").setStyle(GRAY));
                 break;
             }
             else if(normalized.matches(".+AttackSpeed$")) {
-                addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed." + normalized.replaceFirst("AttackSpeed", "")).setStyle(GRAY));
+                Text speed = Text.translatable("wytr.speed." + normalized.replaceFirst("AttackSpeed", ""));
+                addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed", speed).setStyle(GRAY));
                 continue;
             }
-            else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized)) {
+
+            boolean isCraftedItem = Objects.equals(t.getSiblings().getFirst().getStyle().getColor(), TextColor.fromFormatting(Formatting.DARK_AQUA));
+            boolean shiny = !isCraftedItem && string.matches(".*⬡ Shiny.+");
+            boolean unidentified = !isCraftedItem && string.matches("^Unidentified .+");
+            boolean wynntilsPerfect = !isCraftedItem && string.matches("^Perfect .+");
+            boolean wynntilsDefective = !isCraftedItem && string.matches("^Defective .+");
+            boolean itemPercentage = string.matches(".+ \\[.+%]$");
+
+            MutableText itemName = Text.empty();
+            if(shiny) itemName.append(Text.translatable("wytr.tooltip.equipment.shiny"));
+
+            if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized)) {
                 itemNameKey = "wytr.item.weapon." + normalized;
                 itemName.append(Text.translatable(itemNameKey));
             }
@@ -196,9 +197,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
                 else translated = itemName.copy().setStyle(t.getSiblings().getFirst().getStyle());
             }
 
-            if(wynntilsPercentage) {
-                translated.append(t.getSiblings().getLast());
-            }
+            if(itemPercentage) translated.append(t.getSiblings().getLast());
 
             addAndRecordWidth(translated);
         }
@@ -316,47 +315,6 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         dump.forEach(this::addAndRecordWidth);
     }
 
-    private void translateReqSection(List<Text> texts) {
-        List<Text> dump = new ArrayList<>();
-        texts.forEach(t -> {
-            String[] headAndNum = t.getSiblings().getLast().getString().split(": ");
-            Text icon = t.getSiblings().getFirst();
-            Text reformedIcon = Text.literal(icon.getString().replaceFirst(" ", "")).setStyle(icon.getStyle());
-            Text body;
-            if(headAndNum[0].contains("Class Req")) {
-                String className = headAndNum[1].split("/")[0].toLowerCase(Locale.ENGLISH);
-                Text reqClass = Text.translatable("wytr.class." + className)
-                        .append("/").append(Text.translatable("wytr.class." + className + "_alt"));
-                body = Text.translatable("wytr.requirement.class", reqClass);
-            }
-            else if(headAndNum[0].contains("Combat Lv. Min")) {
-                body = Text.translatable("wytr.requirement.combat", headAndNum[1]);
-            }
-            else if(headAndNum[0].matches(" (Strength|Dexterity|Intelligence|Defence|Agility) Min")) {
-                String skillName = headAndNum[0].split(" ")[1].toLowerCase(Locale.ENGLISH);
-                Text reqSkill = Text.translatable("wytr.skill." + skillName);
-                body = Text.translatable("wytr.requirement.skill", reqSkill, headAndNum[1]);
-            }
-            else if(headAndNum[0].contains("Quest Req")) {
-                String questVal = headAndNum[1];
-                String questKey = "wytr.quest." + normalizeStringForKey(questVal);
-                WTS.checkTranslationExist(questKey, questVal);
-                Text questName = Text.translatableWithFallback(questKey, questVal);
-                body = Text.translatable("wytr.requirement.quest", questName);
-            }
-            else {
-                dump.add(t);
-                return;
-            }
-
-            Text line = Text.empty().setStyle(GRAY)
-                    .append(reformedIcon).append(" ").append(body);
-            dump.add(line);
-        });
-
-        dump.forEach(this::addAndRecordWidth);
-    }
-
     private void translateShinySection(List<Text> texts) {
         List<Text> dump = new ArrayList<>();
         texts.forEach(t -> {
@@ -371,19 +329,6 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         dump.forEach(this::addAndRecordWidth);
     }
 
-    private void translateIDSection(List<Text> texts) {
-        List<Text> translatedIDs = new IdentificationTooltip(texts).text();
-        translatedIDs.forEach(t -> {
-            tempText.add(t);
-            if(t.getContent().toString().equals("empty")) {
-                updateLongestWidth(TEXT_RENDERER.getWidth(t));
-            }
-            else {
-                wrapTargetIdx.add(tempText.size() - 1);
-            }
-        });
-    }
-
     private void translateSetPartsSection(List<Text> texts) {
         List<Text> siblings = texts.getFirst().getSiblings();
         String setNameVal = siblings.getFirst().getString().replaceFirst(" Set $", "");
@@ -393,7 +338,12 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         Text head = Text.translatable("wytr.tooltip.equipment.setFamily", setName).setStyle(siblings.getFirst().getStyle())
                 .append(" ").append(siblings.getLast());
         addAndRecordWidth(head);
-        texts.subList(1, texts.size()).forEach(this::addAndRecordWidth);
+        texts.subList(1, texts.size()).forEach(t -> {
+            Text itemName = t.getSiblings().getLast();
+            MutableText line = t.getSiblings().getFirst().copy()
+                    .append(new ItemName(itemName).noAddictionMode().textAsMutable().setStyle(itemName.getStyle()));
+            addAndRecordWidth(line);
+        });
     }
 
     private void translateSetBonusSection(List<Text> texts) {
@@ -403,7 +353,7 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         dump.forEach(this::addAndRecordWidth);
     }
 
-    private void translateTailSection(List<Text> texts) {
+    protected void translateTailSection(List<Text> texts) {
         for(int i = 0, size = texts.size(); i < size; i++) {
             Text t = texts.get(i);
             String string = t.getString();
@@ -431,12 +381,24 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
             else {
                 Text lore = mergeTextStyleSide(texts.subList(i, size));
                 body = Text.translatableWithFallback(itemNameKey + ".lore", lore.getString()).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY));
-                tempText.add(body);
-                wrapTargetIdx.add(tempText.size() - 1);
+                addAndMarkWrapTarget(body);
                 return;
             }
         }
+    }
 
+    private MutableText translateSkillCastedMessage(Text text) {
+        if(text.getString().contains("You don't have enough ")) {
+            return new SimpleText(text.getSiblings().getFirst()).text().setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
+        }
+        Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
+        String _skillName = siblings.removeFirst().getString().replaceFirst(" spell cast! ", "");
+        Text skillName = Text.translatable("wytr.ability.node." + normalizeStringForKey(_skillName));
+        MutableText line = Text.empty().setStyle(GRAY);
+        line.append(Text.translatable("wytr.func.skillCasted", skillName).setStyle(GRAY));
+        line.append(" ");
+        siblings.forEach(line::append);
+        return line;
     }
 
     private void appendUnknowns(List<Text> texts) {
@@ -450,8 +412,13 @@ public class NormalEquipment extends WynnTooltipText implements ITooltipSplitter
         longestWidth = Math.max(longestWidth, width);
     }
 
-    private void addAndRecordWidth(Text text) {
+    protected void addAndRecordWidth(Text text) {
         updateLongestWidth(TEXT_RENDERER.getWidth(text));
         tempText.add(text);
+    }
+
+    protected void addAndMarkWrapTarget(Text text) {
+        tempText.add(text);
+        wrapTargetIdx.add(tempText.size() - 1);
     }
 }
