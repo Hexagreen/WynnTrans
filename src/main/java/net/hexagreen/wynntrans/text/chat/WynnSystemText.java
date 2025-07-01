@@ -131,6 +131,14 @@ public abstract class WynnSystemText extends WynnChatText {
         return originText.copy();
     }
 
+    @Override
+    public boolean print() {
+        Text printLine = text();
+        if(printLine == null) return true;
+        transportMessage(originText, printLine);
+        return true;
+    }
+
     protected int setLineWrappingWidth() {
         return (int) ISpaceProvider.CHAT_HUD_WIDTH - 10;
     }

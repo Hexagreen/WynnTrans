@@ -17,9 +17,12 @@
     "MixinSignBlockEntity",
     "MixinSignText",
     "MixinTranslatableTextContent",
-    "MixinTranslationStorage"
+    "MixinTranslationStorage",
+    "MixinWynntilsActivityModel",
+    "MixinWynntilsContentBookScreen"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "net.hexagreen.wynntrans.mixin.WynnTransMixinPlugin"
 }

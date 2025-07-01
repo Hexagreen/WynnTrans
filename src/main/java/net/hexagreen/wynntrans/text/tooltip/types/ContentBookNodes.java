@@ -22,8 +22,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitter {
-    private static final Text EMPTY_LINE = Text.empty().append(Text.literal(" ")
-            .setStyle(Style.EMPTY.withItalic(false).withColor(Formatting.DARK_PURPLE)));
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
@@ -36,7 +34,84 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
     }
 
     public ContentBookNodes(List<Text> texts) {
-        super(texts);
+        super(ITooltipSplitter.correctSplitter(texts, "^$"));
+    }
+
+    public WynntilsContentBookNode processWynntilsContentNode(String type, String name, Text description, List<MutableText> accessReward, List<MutableText> itemReward) {
+        Collector collector = new Collector();
+        collector.category = type;
+        collector.normalizedName = normalizeStringForKey(name);
+        collector.initBaseKey();
+        String newName = collector.nameSectionTitle(Text.literal(name)).getString();
+        Text newDesc;
+        if(description != null) {
+            collector.preProcessDescSection(mergeTextStyleSide(description));
+            newDesc = collector.desc;
+        }
+        else newDesc = null;
+        List<MutableText> newAccessReward;
+        List<MutableText> newItemReward;
+        if(accessReward != null) {
+            newAccessReward = new ArrayList<>();
+            accessReward.forEach(reward -> {
+                String string = "+" + reward.getString();
+                Text reformed = Text.empty().append("- ").append(string);
+                Text translated = collector.rewardSectionTranslate(reformed);
+                newAccessReward.add(Text.literal(translated.getString().replaceFirst("^ - \\+", "")));
+            });
+        }
+        else newAccessReward = null;
+        if(itemReward != null) {
+            newItemReward = new ArrayList<>();
+            itemReward.forEach(reward -> {
+                String string = "+" + reward.getString().replaceFirst(" \\[✫✫✫]", "");
+                Text reformed = Text.empty().append("- ").append(string);
+                Text translated = collector.rewardSectionTranslate(reformed);
+                newItemReward.add(Text.literal(translated.getString().replaceFirst("^ - \\+", "")));
+            });
+        }
+        else newItemReward = null;
+        return new WynntilsContentBookNode(newName, newDesc, newAccessReward, newItemReward);
+    }
+
+    public String processWynntilsActivityModelName(Object[] collectorInstance, String name) {
+        String timerRemoved = name.replaceFirst(" \\(.+ left\\)", "");
+        String timer = name.replace(timerRemoved, "").replaceAll(" \\(| left\\)", "");
+        Collector collector = new Collector();
+        collector.normalizedName = normalizeStringForKey(timerRemoved);
+        String normalizedName = collector.normalizedName;
+        String trackedType;
+        if(normalizedName.matches("^(Gather|Slay).+")) trackedType = "Mini-Quest";
+        else if(Dungeons.getDungeons(timerRemoved) != Dungeons.UNKNOWN) trackedType = "Dungeon";
+        else if(WTS.checkTranslationDoNotRegister("wytr.quest." + normalizedName)) trackedType = "Quest";
+        else if(WTS.checkTranslationDoNotRegister("wytr.worldEvent." + normalizedName)) trackedType = "World Event";
+        else if(WTS.checkTranslationDoNotRegister("wytr.discovery." + normalizedName)) trackedType = "Secret Discovery";
+        else if(WTS.checkTranslationDoNotRegister("wytr.area." + normalizedName)) trackedType = "World Discovery";
+        else if(WTS.checkTranslationDoNotRegister("wytr.cave." + normalizedName)) trackedType = "Cave";
+        else if(WTS.checkTranslationDoNotRegister("wytr.raid." + normalizedName)) trackedType = "Raid";
+        else if(WTS.checkTranslationDoNotRegister("wytr.bossAltar." + normalizedName)) trackedType = "Boss Altar";
+        else if(WTS.checkTranslationDoNotRegister("wytr.lootrun." + normalizedName)) trackedType = "Lootrun Camp";
+        else trackedType = "Quest";
+        collector.category = trackedType;
+        collector.initBaseKey();
+
+        Text time = ITime.translateTime(timer);
+        String translatedTimer = time.getString().isEmpty() ?
+                "" : " " + Text.translatable("wytr.func.wynntilsCompat.trackedWorldEventTimer", time).getString();
+
+        collectorInstance[0] = collector;
+        return collector.nameSectionTitle(Text.literal(name)).getString() + translatedTimer;
+    }
+
+    public Text processWynntilsActivityModelDesc(Object[] collectorInstance, Text desc) {
+        Collector collector = (Collector) collectorInstance[0];
+        Text newDesc;
+        if(desc != null) {
+            collector.preProcessDescSection(mergeTextStyleSide(desc));
+            newDesc = collector.desc;
+        }
+        else newDesc = null;
+        return newDesc;
     }
 
     @Override
@@ -61,7 +136,7 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
                 collector.processNameSection(chunk);
             }
             else if(i == 1 && !chunk.getFirst().getString().matches("^[✔✖].+")) {
-                collector.preProcessDescSection(chunk);
+                collector.preProcessDescSection(mergeTextStyleSide(chunk));
             }
             else if(chunk.getFirst().getString().matches("^[✔✖].+")) {
                 collector.processInfoSection(chunk);
@@ -77,6 +152,10 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
             }
         }
         return collector.getResult();
+    }
+
+    public record WynntilsContentBookNode(String name, Text description, List<MutableText> accessReward,
+                                          List<MutableText> itemReward) {
     }
 
     private class Collector implements ISpaceProvider {
@@ -114,7 +193,7 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
             Text name = chunk.getFirst().getSiblings().getFirst();
             this.normalizedName = normalizeStringForKey(name.getString());
             initBaseKey();
-            nameSectionTitle(name);
+            result.add(nameSectionTitle(name).append(nameSectionTitleCategoryText()));
             if(category.equals("World Event")) {
                 Text eventArea = chunk.get(1);
                 String areaName = eventArea.getString();
@@ -130,7 +209,7 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
             nameSectionStatus(chunk.getLast());
         }
 
-        private void nameSectionTitle(Text name) {
+        private MutableText nameSectionTitle(Text name) {
             MutableText contentName = Text.empty();
             if(category.equals("Mini-Quest") && normalizedName.matches("^Gather.+")) {
                 Matcher matcher = Pattern.compile("^Gather(.+?)(Logs)?(Ore)?([IV]+)?$").matcher(normalizedName);
@@ -145,30 +224,32 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
                     };
                     Text resource = Text.translatableWithFallback("wytr.resource." + _resource, _resource.replaceAll("(\\w)(?=[A-Z])", "$1 "));
                     if(isLog)
-                        contentName.append(Text.translatable("wytr.quest.gatherLog", resource, stage).setStyle(name.getStyle()).append(" "));
+                        contentName.append(Text.translatable("wytr.quest.gatherLog", resource, stage).setStyle(name.getStyle()));
                     else if(isOre)
-                        contentName.append(Text.translatable("wytr.quest.gatherOre", resource, stage).setStyle(name.getStyle()).append(" "));
+                        contentName.append(Text.translatable("wytr.quest.gatherOre", resource, stage).setStyle(name.getStyle()));
                     else
-                        contentName.append(Text.translatable("wytr.quest.gather", resource, stage).setStyle(name.getStyle()).append(" "));
+                        contentName.append(Text.translatable("wytr.quest.gather", resource, stage).setStyle(name.getStyle()));
                 }
             }
             else if(!category.equals("Dungeon")) {
                 if(WTS.checkTranslationExist(baseKey + normalizedName, name.getString().replaceFirst(" $", ""))) {
-                    contentName.append(Text.translatable(baseKey + normalizedName).setStyle(name.getStyle())).append(" ");
+                    contentName.append(Text.translatable(baseKey + normalizedName).setStyle(name.getStyle()));
                 }
                 else {
-                    contentName.append(name);
+                    contentName.append(Text.literal(name.getString().replaceFirst(" $", "")).setStyle(name.getStyle()));
                 }
             }
             else {
-                contentName.append(Dungeons.getDungeons(normalizedName).getDungeonName().setStyle(name.getStyle())).append(" ");
+                contentName.append(Dungeons.getDungeons(normalizedName).getDungeonName().setStyle(name.getStyle()));
             }
-            MutableText categoryText = Text.literal("[").setStyle(GRAY)
+
+            return contentName;
+        }
+
+        private MutableText nameSectionTitleCategoryText() {
+            return Text.literal(" [").setStyle(GRAY)
                     .append(Text.translatableWithFallback("wytr.content." + normalizeStringForKey(category), category))
                     .append("]");
-            contentName.append(categoryText);
-
-            result.add(contentName);
         }
 
         private void nameSectionStatus(Text line) {
@@ -213,8 +294,8 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
             result.add(status);
         }
 
-        private void preProcessDescSection(List<Text> chunk) {
-            Text merged = mergeTextStyleSide(chunk);
+        private void preProcessDescSection(Text merged) {
+            if(merged.getSiblings().isEmpty()) return;
             switch(category) {
                 case "Quest", "Mini-Quest" -> descSectionQuest(merged);
                 case "Secret Discovery", "World Discovery" -> descSectionDiscovery(merged);
@@ -522,7 +603,7 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
                     nowString.get().append(string);
                     return Optional.empty();
                 }, Style.EMPTY);
-                nowString.set(new StringBuilder(nowString.get().toString().replaceFirst(" +$", "") + " "));
+                nowString.set(new StringBuilder(nowString.get().toString().replaceFirst("\\[✫✫✫]", "").replaceFirst(" +$", "") + " "));
             }
             if(!nowString.get().isEmpty()) {
                 newLine.append(Text.literal(nowString.get().toString()).setStyle(nowStyle.get()));

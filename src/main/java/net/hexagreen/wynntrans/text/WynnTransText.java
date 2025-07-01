@@ -32,6 +32,18 @@ public abstract class WynnTransText {
         MESSAGE_HANDLER.onGameMessage(text, false);
     }
 
+    public static void transportMessage(Text original, Text modified) {
+        if(WynnTrans.wynntilsLoaded) {
+            WynntilsCompatible.WynntilsEventMessage status = WynntilsCompatible.tossToWynntilsTextHandleEvent(original);
+            switch(status) {
+                case MODIFIED, CANCELED -> {
+                    return;
+                }
+            }
+        }
+        transportMessage(modified);
+    }
+
     protected static Text flatText(Text text) {
         MutableText linear = text.copyContentOnly().setStyle(text.getStyle());
         for(Text sibling : text.getSiblings()) {
@@ -43,7 +55,7 @@ public abstract class WynnTransText {
         return linear;
     }
 
-    protected static Text colorCodedToStyled(Text text) {
+    public static Text colorCodedToStyled(Text text) {
         List<Text> list = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
         Style[] currentStyle = {Style.EMPTY};

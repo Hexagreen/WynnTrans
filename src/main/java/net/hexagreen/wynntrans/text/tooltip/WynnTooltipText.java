@@ -77,12 +77,13 @@ public abstract class WynnTooltipText extends WynnTransText {
     protected Text mergeTextStyleSide(List<Text> texts) {
         MutableText result = Text.empty();
         AtomicReference<StringBuilder> newBody = new AtomicReference<>(new StringBuilder());
-        AtomicReference<Style> newStyle = new AtomicReference<>(texts.getFirst().getSiblings().getFirst().getStyle());
+        AtomicReference<Style> newStyle = new AtomicReference<>(Style.EMPTY);
         for(Text text : texts) {
             text.visit((style, string) -> {
                 if(string.isEmpty()) return Optional.empty();
                 if(!style.equals(newStyle.get())) {
-                    result.append(Text.literal(newBody.get().toString()).setStyle(newStyle.get()));
+                    if(!newBody.get().isEmpty())
+                        result.append(Text.literal(newBody.get().toString()).setStyle(newStyle.get()));
                     newBody.set(new StringBuilder());
                     newStyle.set(style);
                 }

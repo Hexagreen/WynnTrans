@@ -151,6 +151,10 @@ public class NormalEquipment extends AbstractWynnItem {
                 addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed", speed).setStyle(GRAY));
                 continue;
             }
+            else if(normalized.matches("Fromchat")) {
+                addAndRecordWidth(Text.translatable("wytr.func.wynntilsCompat.sharedGearStat.fromChat").formatted(Formatting.ITALIC, Formatting.DARK_GRAY));
+                continue;
+            }
 
             boolean isCraftedItem = Objects.equals(t.getSiblings().getFirst().getStyle().getColor(), TextColor.fromFormatting(Formatting.DARK_AQUA));
             boolean shiny = !isCraftedItem && string.matches(".*⬡ Shiny.+");
