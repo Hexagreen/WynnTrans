@@ -135,8 +135,7 @@ public class WynntilsCompatible {
 
         Method fromComponent = (Method) cachedMethods.computeIfAbsent("fromComponent", k -> {
             try {
-                //noinspection JavaReflectionMemberAccess
-                return StyledText.class.getMethod("fromComponent", Class.forName("net.minecraft.text.Text"));
+                return StyledText.class.getMethod("fromComponent", Class.forName("net.minecraft.class_2561"));
             }
             catch(NoSuchMethodException | ClassNotFoundException e) {
                 return null;

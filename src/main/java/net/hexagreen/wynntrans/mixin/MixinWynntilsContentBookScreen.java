@@ -1,6 +1,5 @@
 package net.hexagreen.wynntrans.mixin;
 
-import com.mojang.logging.LogUtils;
 import com.wynntils.core.text.StyledText;
 import com.wynntils.models.activities.type.ActivityInfo;
 import com.wynntils.models.activities.type.ActivityRewardType;
@@ -44,7 +43,6 @@ public abstract class MixinWynntilsContentBookScreen {
 
     @Redirect(method = "reloadContentBookWidgets", at = @At(value = "INVOKE", target = "Lcom/wynntils/screens/activities/ContentBookHolder;getTrackedActivityInfo()Ljava/util/Optional;"), remap = false)
     public Optional<ActivityInfo> getTrackedActivityInfoMixin(ContentBookHolder instance) {
-        LogUtils.getLogger().warn("Tracked activity refreshed!");
         if(trackedActivityInfoCache != null) return Optional.of(trackedActivityInfoCache);
         else return Optional.empty();
     }
