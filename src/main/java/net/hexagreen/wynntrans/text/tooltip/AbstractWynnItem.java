@@ -47,8 +47,8 @@ public abstract class AbstractWynnItem extends WynnTooltipText implements ITrada
             else if(headAndNum[0].contains("Combat Lv. Min")) {
                 body = Text.translatable("wytr.requirement.combat", headAndNum[1]);
             }
-            else if(headAndNum[0].matches(" (Strength|Dexterity|Intelligence|Defence|Agility) Min")) {
-                Text reqSkill = CharacterSkill.getSkill(headAndNum[0].split(" ")[1]).getStat().copyContentOnly();
+            else if(headAndNum[0].matches(" ?(Strength|Dexterity|Intelligence|Defence|Agility) Min")) {
+                Text reqSkill = CharacterSkill.getSkill(headAndNum[0].trim().split(" ")[0]).getStat().copyContentOnly();
                 body = Text.translatable("wytr.requirement.skill", reqSkill, headAndNum[1]);
             }
             else if(headAndNum[0].contains("Quest Req")) {

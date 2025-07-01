@@ -9,8 +9,6 @@ import net.minecraft.text.Text;
 
 import java.util.Locale;
 
-import static net.hexagreen.wynntrans.text.WynntilsCompatible.tossToWynntilsTextHandleEvent;
-
 public abstract class WynnChatText extends WynnTransText {
     public WynnChatText(Text text) {
         super(text);
@@ -19,11 +17,7 @@ public abstract class WynnChatText extends WynnTransText {
     public boolean print() {
         Text printLine = text();
         if(printLine == null) return true;
-        if(WynnTrans.wynntilsLoaded) {
-            if(tossToWynntilsTextHandleEvent(printLine))
-                return true;
-        }
-        transportMessage(printLine);
+        transportMessage(inputText, printLine);
         return true;
     }
 
