@@ -13,7 +13,6 @@
     "MixinHandledScreen",
     "MixinInGameHud",
     "MixinItemStack",
-    "MixinMessageHandler",
     "MixinSignBlockEntity",
     "MixinSignText",
     "MixinTranslatableTextContent",

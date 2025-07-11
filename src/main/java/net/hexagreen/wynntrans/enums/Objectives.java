@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 public enum Objectives {
     TIERED_LOOT_CHEST(Pattern.compile("Loot Chests T(\\d)\\+"), "LootChestsTiered", "Loot Chests T%s+"),
     SLAY_LEVELED_MOBS(Pattern.compile("Slay Lv\\. (\\d+)\\+ Mobs"), "SlayLeveledMobs", "Slay Lv. %s+ Mobs"),
+    TRADE_WITH_NEWBIE(Pattern.compile("Trade (.+) with Lv\\. (.+) Newbie"), "TradeWithNewbie", "Trade %s with Lv. %s Newbie"),
     NO_TYPE(null, null, null);
 
     private final Pattern regex;
@@ -71,7 +72,7 @@ public enum Objectives {
         if(m.find()) {
             int groups = m.groupCount();
             for(int i = 0; i < groups; i++) {
-                args.add(m.group(1));
+                args.add(m.group(i + 1));
             }
             this.normalizedArg = args.toArray(Object[]::new);
             return true;

@@ -12,6 +12,8 @@ import java.util.List;
 
 public class GuildObjective extends WynnScoreboardText {
     private static final Style style = Style.EMPTY.withColor(Formatting.AQUA);
+    private static final Style objectiveNameStyle = Style.EMPTY.withFormatting(Formatting.GRAY)
+            .withBold(false).withItalic(false).withUnderline(false).withStrikethrough(false).withObfuscated(false);
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() <= 1) return false;
@@ -46,6 +48,7 @@ public class GuildObjective extends WynnScoreboardText {
         }
 
         List<Text> lines = extractUniqueLines(texts).stream()
+                .map(tl -> tl.stream().map(text -> (Text) text.copy().setStyle(text.getStyle().withParent(objectiveNameStyle))).toList())
                 .map(this::mergeTextStyleSide)
                 .toList();
 

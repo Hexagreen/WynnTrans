@@ -19,6 +19,8 @@ public enum TooltipType {
     COMPASS_ITEMS(CompassItems::new, CompassItems::typeChecker),
     RECRUIT_PAGE(FriendRecruit::new, FriendRecruit::typeChecker),
     MASTERY_TOME_PAGE(MasteryTomeSlot::new, MasteryTomeSlot::typeChecker),
+    BLACKSMITH(Blacksmith::new, Blacksmith::typeChecker),
+    IDENTIFIER(Identifier::new, Identifier::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),

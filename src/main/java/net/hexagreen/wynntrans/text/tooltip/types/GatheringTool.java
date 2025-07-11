@@ -66,7 +66,7 @@ public class GatheringTool extends AbstractWynnItem {
             String _string = t.getString();
             if(_string.contains(" Gathering ")) {
                 resultText.append(profession.getTool(_string.replaceAll("\\D", ""))
-                        .setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+                        .setStyle(Style.EMPTY.withColor(t.getSiblings().getFirst().getStyle().getColor())));
             }
             else if(_string.matches("Tier \\d+")) {
                 resultText.append(Text.translatable("wytr.unit.tier", _string.replaceAll("\\D", "")).setStyle(GRAY));

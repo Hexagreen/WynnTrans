@@ -29,6 +29,7 @@ public enum GlueType {
     LOOTRUN_CHALLENGE_FAIL(LootrunChallengeFailGlue::new, LootrunChallengeFailGlue::typeChecker),
     LOOTRUN_MISSION_COMPLETE(LootrunMissionCompleteGlue::new, LootrunMissionCompleteGlue::typeChecker),
     LOOTRUN_SUMMARY(LootrunSummaryGlue::new, LootrunSummaryGlue::typeChecker),
+    HOUSING_ENTER(HousingEnterGlue::new, HousingEnterGlue::typeChecker),
 
     NO_TYPE(null, null);
 

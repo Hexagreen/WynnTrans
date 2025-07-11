@@ -49,7 +49,7 @@ public class NormalEquipment extends AbstractWynnItem {
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
-        String itemName = text.getString().replaceAll("^Unidentified |^Perfect |^Defective |§f⬡ Shiny |\\[.+%]$", "");
+        String itemName = text.getString().replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny |\\[.+%]$", "");
         String normalized = normalizeStringForKey(itemName);
         if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||

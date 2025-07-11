@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text;
 import com.wynntils.core.components.Managers;
 import com.wynntils.core.text.StyledText;
 import com.wynntils.features.tooltips.ItemStatInfoFeature;
+import net.fabricmc.loader.api.FabricLoader;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -135,7 +136,8 @@ public class WynntilsCompatible {
 
         Method fromComponent = (Method) cachedMethods.computeIfAbsent("fromComponent", k -> {
             try {
-                return StyledText.class.getMethod("fromComponent", Class.forName("net.minecraft.class_2561"));
+                String textClassName = FabricLoader.getInstance().isDevelopmentEnvironment() ? "net.minecraft.text.Text" : "net.minecraft.class_2561";
+                return StyledText.class.getMethod("fromComponent", Class.forName(textClassName));
             }
             catch(NoSuchMethodException | ClassNotFoundException e) {
                 return null;

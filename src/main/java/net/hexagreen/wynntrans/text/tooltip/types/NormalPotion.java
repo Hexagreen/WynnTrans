@@ -30,13 +30,13 @@ public class NormalPotion extends ConsumableItem {
 
     public static MutableText getTranslatedItemName(Text text) {
         String _iName = text.getString();
-        if(!Pattern.compile("Potion of (Healing|Mana|Wisdom|§.[✤✦❉✹❋])").matcher(_iName).find()) return null;
+        if(!Pattern.compile("Potion of (Healing|Mana|Wisdom|[✤✦❉✹❋])").matcher(_iName).find()) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
         NormalPotion potion = new NormalPotion(textBowl);
         potion.translateNameSection(potion.inputText.getSiblings());
-        return potion.resultText.getSiblings().getFirst().copy();
+        return potion.tempText.getFirst().copy();
     }
 
     public NormalPotion(List<Text> texts) {

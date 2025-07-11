@@ -69,7 +69,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
             wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.warn").setStyle(GRAY), 300)
                     .forEach(resultText::append);
             resultText.append(SPLITTER);
-            resultText.append(Text.translatable("wytr.func.clickToConfirm").formatted(Formatting.GREEN));
+            resultText.append(Text.translatable("wytr.func.clickAgainToConfirm").formatted(Formatting.GREEN));
             return;
         }
 
@@ -100,7 +100,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
             wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.warn").setStyle(GRAY), 300)
                     .forEach(resultText::append);
             resultText.append(SPLITTER);
-            resultText.append(Text.translatable("wytr.func.clickToConfirm").formatted(Formatting.GREEN));
+            resultText.append(Text.translatable("wytr.func.clickAgainToConfirm").formatted(Formatting.GREEN));
             return;
         }
 
