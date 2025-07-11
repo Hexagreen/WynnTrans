@@ -94,7 +94,7 @@ public class Identifier extends WynnTooltipText implements ITooltipSplitter {
                         Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
                         line.append(itemName);
                         if(split.length == 2) {
-                            line.append(Text.literal(split[1]).setStyle(_lastText.getStyle()));
+                            line.append(" ").append(Text.literal(split[1]).setStyle(_lastText.getStyle()));
                         }
                         resultText.append(line);
                     }

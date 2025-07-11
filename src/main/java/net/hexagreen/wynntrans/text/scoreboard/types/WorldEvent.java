@@ -56,6 +56,8 @@ public class WorldEvent extends WynnScoreboardText {
             case "Targets Remaining: " ->
                     result.append(Text.translatable(translationKey + ".target", siblings.getLast())
                             .setStyle(GRAY));
+            case "Prepare to start" ->
+                    result.append(Text.translatable(translationKey + ".ready").formatted(Formatting.GRAY));
             default -> text;
         };
     }

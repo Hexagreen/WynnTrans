@@ -106,14 +106,16 @@ public class Blacksmith extends WynnTooltipText implements ITooltipSplitter {
                     Text _lastText = siblings.removeLast();
                     String[] split = _lastText.getString().split(" (?=\\[\\d+])");
                     Text lastText = Text.literal(split[0]).setStyle(_lastText.getStyle());
-                    Text num = Text.literal(split[1]).setStyle(_lastText.getStyle());
                     siblings.addLast(lastText);
                     MutableText line = Text.empty();
                     line.append(siblings.removeFirst());
                     MutableText _itemName = Text.empty();
                     siblings.forEach(_itemName::append);
                     Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
-                    line.append(itemName).append(" ").append(num);
+                    line.append(itemName);
+                    if(split.length == 2) {
+                        line.append(" ").append(Text.literal(split[1]).setStyle(_lastText.getStyle()));
+                    }
                     resultText.append(line);
                 }
             }
