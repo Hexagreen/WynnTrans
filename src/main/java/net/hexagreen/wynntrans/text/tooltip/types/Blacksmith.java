@@ -103,9 +103,13 @@ public class Blacksmith extends WynnTooltipText implements ITooltipSplitter {
             else if(_string.matches("^- .+")) {
                 for(Text text : seg) {
                     Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
+                    Text _firstText = siblings.removeFirst();
+                    String[] fSplit = _firstText.getString().split("(?<=-) ", 2);
+                    if(fSplit.length == 2) siblings.addFirst(Text.literal(fSplit[1]).setStyle(_firstText.getStyle()));
+                    siblings.addFirst(Text.literal(fSplit[0] + " ").setStyle(_firstText.getStyle()));
                     Text _lastText = siblings.removeLast();
-                    String[] split = _lastText.getString().split(" (?=\\[\\d+])");
-                    Text lastText = Text.literal(split[0]).setStyle(_lastText.getStyle());
+                    String[] lSplit = _lastText.getString().split(" (?=\\[\\d+])");
+                    Text lastText = Text.literal(lSplit[0]).setStyle(_lastText.getStyle());
                     siblings.addLast(lastText);
                     MutableText line = Text.empty();
                     line.append(siblings.removeFirst());
@@ -113,8 +117,8 @@ public class Blacksmith extends WynnTooltipText implements ITooltipSplitter {
                     siblings.forEach(_itemName::append);
                     Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
                     line.append(itemName);
-                    if(split.length == 2) {
-                        line.append(" ").append(Text.literal(split[1]).setStyle(_lastText.getStyle()));
+                    if(lSplit.length == 2) {
+                        line.append(" ").append(Text.literal(lSplit[1]).setStyle(_lastText.getStyle()));
                     }
                     resultText.append(line);
                 }

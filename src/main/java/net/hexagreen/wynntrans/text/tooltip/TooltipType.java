@@ -46,6 +46,7 @@ public enum TooltipType {
     RUNES(Rune::new, Rune::typeChecker),
     TELEPORTATION_SCROLL(TeleportationScroll::new, TeleportationScroll::typeChecker),
     HORSE(Horse::new, Horse::typeChecker),
+    CORKIAN_AUGMENT(CorkianAugment::new, CorkianAugment::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

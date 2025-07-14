@@ -100,13 +100,13 @@ public class UnidentifiedEquipment extends WynnTooltipText implements ITooltipSp
                 }
                 case "- " -> {
                     MutableText guessLine = Text.empty();
-                    siblings.subList(0, 7).forEach(guessLine::append);
-                    for(Text itemName : siblings.subList(7, siblings.size())) {
+                    siblings.subList(0, 6).forEach(guessLine::append);
+                    for(Text itemName : siblings.subList(6, siblings.size())) {
                         String nameString = itemName.getString();
                         if(nameString.equals(", ")) guessLine.append(itemName);
                         else
                             guessLine.append(new ItemName(itemName).noAddictionMode().textAsMutable().setStyle(itemName.getStyle()));
-                        if(guessLine.getSiblings().size() == 9 || guessLine.getSiblings().size() == 8)
+                        if(guessLine.getSiblings().size() >= 6 || guessLine.getSiblings().size() <= 9)
                             wrappingWidth = Math.max(wrappingWidth, TEXT_RENDERER.getWidth(guessLine) + 10);
                     }
                     tempText.add(guessLine);

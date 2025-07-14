@@ -105,6 +105,7 @@ public class ItemName extends WynnTooltipText {
         PotionBundleName(PotionBundle::getTranslatedItemName),
         DungeonItemsName(DungeonItems::getTranslatedItemName),
         TeleportationScrollName(TeleportationScroll::getTranslatedItemName),
+        CorkianAugmentName(CorkianAugment::getTranslatedItemName),
         Else(UniformedItemNames::processSimpleItemNames);
 
         private final Function<Text, MutableText> nameGetter;
