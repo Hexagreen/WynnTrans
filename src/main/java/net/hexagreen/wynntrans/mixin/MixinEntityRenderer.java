@@ -6,7 +6,6 @@ import net.hexagreen.wynntrans.text.sign.WynnSign;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,10 +19,15 @@ abstract public class MixinEntityRenderer {
     protected <S extends EntityRenderState> Text mixinRenderLabelIfPresent(Text text, @Local(argsOnly = true) S entityRenderState) {
         if(!(entityRenderState instanceof PlayerEntityRenderState)) {
             if(text.getString().matches("§f.+§7's horse")) {
-                return Text.translatable("wytr.label.horse", text.getString().replaceFirst("§7's.+", "")).setStyle(Style.EMPTY.withColor(Formatting.GRAY));
+                String owner = text.getString().replaceFirst("§7's.+", "");
+                return Text.translatable("wytr.label.horse", owner).formatted(Formatting.GRAY);
             }
             if(text.getString().matches("(§.)?\\[?Lv\\. \\d+]?")) {
                 return WynnSign.translateRecommendLevel(text);
+            }
+            if(text.getString().matches(".+§7 \\[Disguised]")) {
+                String player = text.getString().replaceFirst("§7 \\[Disguised]", "");
+                return Text.translatable("wytr.label.disguised", player).formatted(Formatting.GRAY);
             }
 
             String valContent = text.getString();
