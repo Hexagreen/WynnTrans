@@ -33,6 +33,7 @@ public class NormalEquipment extends AbstractWynnItem {
     protected Pattern itemTailRegex;
     private int longestWidth;
     private String itemNameKey = "";
+    private boolean nameAppended = false;
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 2) return false;
@@ -142,18 +143,21 @@ public class NormalEquipment extends AbstractWynnItem {
             String itemNameString = string.replaceAll("^Unidentified |^Perfect |^Defective |⬡ Shiny | \\[.+%]$", "");
             String normalized = normalizeStringForKey(itemNameString);
 
-            if(normalized.equals("Thisitemspowershave")) {
-                addAndMarkWrapTarget(Text.translatable("wytr.tooltip.equipment.identifyGuide").setStyle(GRAY));
-                break;
-            }
-            else if(normalized.matches(".+AttackSpeed$")) {
-                Text speed = Text.translatable("wytr.speed." + normalized.replaceFirst("AttackSpeed", ""));
-                addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed", speed).setStyle(GRAY));
-                continue;
-            }
-            else if(normalized.matches("Fromchat")) {
-                addAndRecordWidth(Text.translatable("wytr.func.wynntilsCompat.sharedGearStat.fromChat").formatted(Formatting.ITALIC, Formatting.DARK_GRAY));
-                continue;
+            if(nameAppended) {
+                if(normalized.equals("Thisitemspowershave")) {
+                    addAndMarkWrapTarget(Text.translatable("wytr.tooltip.equipment.identifyGuide").setStyle(GRAY));
+                    break;
+                }
+                else if(normalized.matches(".+AttackSpeed$")) {
+                    Text speed = Text.translatable("wytr.speed." + normalized.replaceFirst("AttackSpeed", ""));
+                    addAndRecordWidth(Text.translatable("wytr.tooltip.attackSpeed", speed).setStyle(GRAY));
+                    continue;
+                }
+                else if(normalized.matches("Fromchat")) {
+                    addAndRecordWidth(Text.translatable("wytr.func.wynntilsCompat.sharedGearStat.fromChat").formatted(Formatting.ITALIC, Formatting.DARK_GRAY));
+                    continue;
+                }
+                else addAndRecordWidth(t);
             }
 
             boolean isCraftedItem = Objects.equals(t.getSiblings().getFirst().getStyle().getColor(), TextColor.fromFormatting(Formatting.DARK_AQUA));
@@ -203,6 +207,7 @@ public class NormalEquipment extends AbstractWynnItem {
 
             if(itemPercentage) translated.append(t.getSiblings().getLast());
 
+            nameAppended = true;
             addAndRecordWidth(translated);
         }
     }

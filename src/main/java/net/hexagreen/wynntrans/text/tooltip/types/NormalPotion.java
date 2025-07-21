@@ -114,6 +114,8 @@ public class NormalPotion extends ConsumableItem {
             }
         }
         addAndRecordWidth(name);
+        texts.removeFirst();
+        texts.forEach(this::addAndRecordWidth);
     }
 
     @Override

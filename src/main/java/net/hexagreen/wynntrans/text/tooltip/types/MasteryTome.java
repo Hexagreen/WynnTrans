@@ -12,7 +12,7 @@ public class MasteryTome extends AbstractWynnItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        String tomeName = normalizeStringForKey(texts.getFirst().getString()).replaceFirst("I+$", "");
+        String tomeName = normalizeStringForKey(texts.getFirst().getString()).replaceFirst("I+(?: \\[.+%])?$", "");
         return WTS.checkTranslationDoNotRegister("wytr.item.tome." + tomeName);
     }
 
@@ -46,11 +46,13 @@ public class MasteryTome extends AbstractWynnItem {
 
     private void translateNameSection(List<Text> seg) {
         Text _name = seg.getFirst().getSiblings().getFirst();
-        String tier = _name.getString().replaceAll("֎", "").replaceAll(".+?( I+)?$", "$1");
+        String tier = _name.getString().replaceAll("֎", "").replaceAll(".+?( I+)?(?: \\[.+%])?$", "$1");
         Text name = Text.empty().setStyle(_name.getStyle())
                 .append(Text.translatable("wytr.item.tome." + normalizeStringForKey(_name.getString()).replaceFirst("I+$", "")))
                 .append(tier);
         resultText.append(name);
+        seg.removeFirst();
+        seg.forEach(resultText::append);
     }
 
     protected void translateTailSection(List<Text> texts) {

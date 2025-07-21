@@ -25,9 +25,9 @@ public class Rune extends WynnTooltipText implements ITradableItem {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<List<Text>> siblings = new ArrayList<>();
-        splitTooltipToSegments(getSiblings(), siblings);
-        insertPriceSection(siblings, resultText::append, (seg, i, lastIndex) -> {
+        List<List<Text>> segments = new ArrayList<>();
+        splitTooltipToSegments(getSiblings(), segments);
+        insertPriceSection(segments, resultText::append, (seg, i, lastIndex) -> {
             if(i == 0 || seg.getFirst().getString().equals("Use this item to enter Raids")) translateNameSection(seg);
             else seg.forEach(resultText::append);
             if(i != lastIndex) resultText.append(SPLITTER);
@@ -45,6 +45,8 @@ public class Rune extends WynnTooltipText implements ITradableItem {
                 wrapLine(Text.translatable("wytr.item.misc.Rune.desc").setStyle(GRAY), 200)
                         .forEach(resultText::append);
             }
+            else if(_string.contains("or craft a")) return;
+            else resultText.append(t);
         });
     }
 }

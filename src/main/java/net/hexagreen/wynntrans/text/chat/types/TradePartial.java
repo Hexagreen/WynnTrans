@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -50,8 +51,18 @@ public class TradePartial extends WynnSystemText {
 
     private Text parseItem() {
         MutableText item = Text.empty().setStyle(getStyle());
-        String content = getContentString(1).replaceAll("À§d.+?$", "");
-        item.append(Text.literal(content).setStyle(getStyle(1)));
-        return item;
+        String content;
+        Style style;
+        if(getSiblings().size() >= 2) {
+            content = getContentString(1).replaceAll("À§d.+?$", "");
+            style = getStyle(1);
+        }
+        else {
+            content = getContentString(0).replaceAll("À§d.+?$", "")
+                    .replaceFirst("^\\d+x ", "");
+            style = getStyle(0);
+        }
+        item.append(Text.literal(content).setStyle(style));
+        return new ItemName(item).noAddictionMode().textAsMutable();
     }
 }

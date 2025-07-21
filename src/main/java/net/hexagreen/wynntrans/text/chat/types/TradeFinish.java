@@ -2,7 +2,7 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
-import net.minecraft.text.MutableText;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -44,15 +44,13 @@ public class TradeFinish extends WynnSystemText {
     }
 
     private Text parseItem() {
-        MutableText item = Text.empty();
         if(getSiblings().size() == 2) {
             String content = getContentString(1).replaceAll("\\n|À\\.", "");
-            item.append(Text.literal(content).setStyle(getStyle(1)));
+            return new ItemName(Text.literal(content).setStyle(getStyle(1))).noAddictionMode().textAsMutable();
         }
         else {
             String content = getContentString(0).replaceAll("^.+ §5|\\n|À\\.", "");
-            item.append(Text.literal(content));
+            return new ItemName(Text.literal(content)).noAddictionMode().textAsMutable();
         }
-        return item;
     }
 }

@@ -20,10 +20,16 @@ public class Ingredient extends AbstractWynnItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 6) return false;
+        String name = texts.getFirst().getString().replaceAll("§.", "");
+        if(name.matches(".+ \\[✫✫✫]À?")) {
+            return WTS.checkTranslationDoNotRegister(
+                    "wytr.item.ingredient." + normalizeStringForKey(name.replaceFirst(" \\[✫✫✫]", "")));
+        }
         return texts.get(1).getString().equals("§8Crafting Ingredient") || texts.get(5).getString().equals("§7§8Crafting Ingredient");
     }
 
     public static MutableText getTranslatedItemName(Text text) {
+        if(!text.getString().contains(" [✫✫✫]")) return null;
         String _iName = text.getString().replaceFirst(" \\[✫✫✫]", "");
         if(!WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizeStringForKey(_iName))) return null;
         List<Text> textBowl = new ArrayList<>();
@@ -64,6 +70,7 @@ public class Ingredient extends AbstractWynnItem {
         else if(firstLine.matches("[✔✖] Crafting Lv\\. Min: \\d+")) {
             translateTargetProfession(seg);
         }
+        else seg.forEach(resultText::append);
         if(step != lastIndex) resultText.append(SPLITTER);
     }
 

@@ -37,6 +37,10 @@ public class AbilityShard extends WynnTooltipText implements ITradableItem {
             splitTooltipToSegments(getSiblings(), segments);
             dump.add(SPLITTER);
             insertPriceSection(segments, dump::add, (seg, i, lastIndex) -> {
+                if(i == 0) {
+                    seg.removeFirst();
+                    dump.addAll(seg);
+                }
             });
         }
 

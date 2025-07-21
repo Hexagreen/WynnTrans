@@ -55,7 +55,10 @@ public class ItemName extends WynnTooltipText {
         String normalizedName = normalizeStringForKey(itemName);
         Text uniformedItemName = UniformedItemNames.getTranslatedName(inputText);
         resultText = Text.empty();
-        if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
+        if(uniformedItemName != null) {
+            resultText.append(uniformedItemName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
             resultText.append(Text.translatable("wytr.item.ingredient." + normalizedName).setStyle(nameStyle));
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizedName)) {
@@ -75,9 +78,6 @@ public class ItemName extends WynnTooltipText {
         }
         else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
             resultText.append(Text.translatable("wytr.item.charm." + normalizedName).setStyle(nameStyle));
-        }
-        else if(uniformedItemName != null) {
-            resultText.append(uniformedItemName);
         }
         else if(checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
             resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(nameStyle));

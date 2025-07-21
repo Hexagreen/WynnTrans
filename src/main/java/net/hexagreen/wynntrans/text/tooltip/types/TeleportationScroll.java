@@ -40,9 +40,9 @@ public class TeleportationScroll extends WynnTooltipText implements ITradableIte
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        List<List<Text>> siblings = new ArrayList<>();
-        splitTooltipToSegments(getSiblings(), siblings);
-        insertPriceSection(siblings, resultText::append, (seg, i, lastIndex) -> {
+        List<List<Text>> segments = new ArrayList<>();
+        splitTooltipToSegments(getSiblings(), segments);
+        insertPriceSection(segments, resultText::append, (seg, i, lastIndex) -> {
             String _string = seg.getFirst().getString();
             if(i == 0 || _string.contains("Warps to ")) translateName(seg);
             else if(_string.contains(" Right-Click to use")) translateKeybind(seg);
@@ -78,6 +78,7 @@ public class TeleportationScroll extends WynnTooltipText implements ITradableIte
                 siblings.forEach(destination::append);
                 resultText.append(Text.translatable("wytr.item.misc.teleportationScroll.dest", destination).setStyle(_name.getStyle()));
             }
+            else resultText.append(t);
         });
     }
 

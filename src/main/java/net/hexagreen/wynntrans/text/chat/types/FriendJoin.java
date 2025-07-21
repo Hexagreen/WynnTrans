@@ -19,7 +19,7 @@ public class FriendJoin extends WynnChatText {
         super(text);
         this.playerName = getSibling(0);
         this.worldChannel = getSibling(2);
-        this.charClass = CharacterClass.getClassName(inputText.getString().replaceFirst("as an? (.+)$", "$1")).setStyle(getStyle(4));
+        this.charClass = CharacterClass.getClassName(getSibling(4).getString().replaceFirst("an? (.+)$", "$1")).setStyle(getStyle(4));
     }
 
     @Override
