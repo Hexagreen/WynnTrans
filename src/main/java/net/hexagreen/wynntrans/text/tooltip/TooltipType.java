@@ -35,6 +35,7 @@ public enum TooltipType {
     ABILITY_TREE_SELECTOR(AbilityTreeSelector::new, AbilityTreeSelector::typeChecker),
     ABILITY_TREE_RESET(AbilityTreeReset::new, AbilityTreeReset::typeChecker),
     ABILITY_TREE_ASPECT(AbilityTreeAspectSocket::new, AbilityTreeAspectSocket::typeChecker),
+    BANK(Bank::new, Bank::typeChecker),
     TRADE_MARKET_LIST(TradeMarketList::new, TradeMarketList::typeChecker),
     TRADE_MARKET_SLOTS(TradeMarketTradeSlots::new, TradeMarketTradeSlots::typeChecker),
     TRADE_MARKET_MAKE_DEAL(TradeMarketMakeDeal::new, TradeMarketMakeDeal::typeChecker),
@@ -51,6 +52,7 @@ public enum TooltipType {
     RUNES(Rune::new, Rune::typeChecker),
     TELEPORTATION_SCROLL(TeleportationScroll::new, TeleportationScroll::typeChecker),
     HORSE(Horse::new, Horse::typeChecker),
+    CHARM(Charm::new, Charm::typeChecker),
     CORKIAN_AUGMENT(CorkianAugment::new, CorkianAugment::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);

@@ -15,6 +15,7 @@ public enum EquipmentAndConsumables {
     NECKLACE(Text.translatable("wytr.equipment.necklace")),
     BRACELET(Text.translatable("wytr.equipment.bracelet")),
     TOME(Text.translatable("wytr.equipment.tome")),
+    MASTERY_TOME(Text.translatable("wytr.equipment.tome")),
     CHARM(Text.translatable("wytr.equipment.charm")),
     SPEAR(CharacterClass.WARRIOR.getWeapon()),
     BOW(CharacterClass.ARCHER.getWeapon()),
@@ -28,7 +29,7 @@ public enum EquipmentAndConsumables {
     private final Text text;
 
     public static MutableText getText(String equip) {
-        return valueOf(equip.toUpperCase(Locale.ENGLISH)).text.copy();
+        return valueOf(equip.replaceAll(" ", "_").toUpperCase(Locale.ENGLISH)).text.copy();
     }
 
     EquipmentAndConsumables(Text text) {

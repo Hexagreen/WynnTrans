@@ -6,10 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 public class ItemName extends WynnTooltipText {
@@ -52,40 +49,73 @@ public class ItemName extends WynnTooltipText {
         }), Style.EMPTY).orElseGet(Text::empty);
         String itemName = _itemName.getString();
         Style nameStyle = _itemName.getStyle();
-        String normalizedName = normalizeStringForKey(itemName);
         Text uniformedItemName = UniformedItemNames.getTranslatedName(inputText);
         resultText = Text.empty();
         if(uniformedItemName != null) {
             resultText.append(uniformedItemName);
         }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.ingredient." + normalizedName).setStyle(nameStyle));
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.material." + normalizedName).setStyle(nameStyle));
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.armour." + normalizedName).setStyle(nameStyle));
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.weapon." + normalizedName).setStyle(nameStyle));
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.accessory." + normalizedName).setStyle(nameStyle));
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.tome." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.tome." + normalizedName).setStyle(nameStyle));
-        }
-        else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
-            resultText.append(Text.translatable("wytr.item.charm." + normalizedName).setStyle(nameStyle));
-        }
-        else if(checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
-            resultText.append(Text.translatable("wytr.item.misc." + normalizedName).setStyle(nameStyle));
-        }
         else {
+            MutableText singularName = findSingularItemName(itemName);
+            if(singularName != null) {
+                resultText.append(singularName.setStyle(nameStyle));
+                return;
+            }
+            MutableText foundName = findItemName(itemName, true);
+            if(foundName != null) {
+                resultText.append(foundName.setStyle(nameStyle));
+                return;
+            }
             if(returnNull) resultText = null;
             else resultText.append(_itemName.copy());
         }
+    }
+
+    private MutableText findSingularItemName(String itemName) {
+        List<String> singularForms = new ArrayList<>();
+        if(itemName.matches(".+s$")) singularForms.add(itemName.replaceFirst("s$", ""));
+        if(itemName.matches(".+es$")) singularForms.add(itemName.replaceFirst("es$", ""));
+        if(itemName.matches(".+ies$")) singularForms.add(itemName.replaceFirst("ies$", "y"));
+
+        if(singularForms.isEmpty()) return null;
+        for(String singularForm : singularForms) {
+            MutableText name = findItemName(singularForm, false);
+            if(name == null) continue;
+            return name;
+        }
+        return null;
+    }
+
+    private MutableText findItemName(String itemName, boolean addiction) {
+        String normalizedName = normalizeStringForKey(itemName);
+
+        if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
+            return Text.translatable("wytr.item.ingredient." + normalizedName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizedName)) {
+            return Text.translatable("wytr.item.material." + normalizedName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalizedName)) {
+            return Text.translatable("wytr.item.armour." + normalizedName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalizedName)) {
+            return Text.translatable("wytr.item.weapon." + normalizedName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalizedName)) {
+            return Text.translatable("wytr.item.accessory." + normalizedName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.tome." + normalizedName)) {
+            return Text.translatable("wytr.item.tome." + normalizedName);
+        }
+        else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
+            return Text.translatable("wytr.item.charm." + normalizedName);
+        }
+        else if(!addiction && WTS.checkTranslationDoNotRegister("wytr.item.misc." + normalizedName)) {
+            return Text.translatable("wytr.item.misc." + normalizedName);
+        }
+        else if(addiction && checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
+            return Text.translatable("wytr.item.misc." + normalizedName);
+        }
+        return null;
     }
 
     private boolean checkTranslation(String key, String val) {

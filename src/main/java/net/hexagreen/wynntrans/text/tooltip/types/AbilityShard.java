@@ -72,7 +72,7 @@ public class AbilityShard extends WynnTooltipText implements ITradableItem {
                 wrapLine(Text.translatable(translationKey + ".desc.using").setStyle(GRAY), 200)
                         .forEach(resultText::append);
             }
-            else if(!(_s.contains("Ability Tree") && _s.contains("present on"))) {
+            else if(!(_s.contains("Ability Tree") || _s.contains("present on"))) {
                 resultText.append(t);
             }
         }

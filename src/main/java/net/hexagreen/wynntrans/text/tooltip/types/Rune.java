@@ -45,8 +45,7 @@ public class Rune extends WynnTooltipText implements ITradableItem {
                 wrapLine(Text.translatable("wytr.item.misc.Rune.desc").setStyle(GRAY), 200)
                         .forEach(resultText::append);
             }
-            else if(_string.contains("or craft a")) return;
-            else resultText.append(t);
+            else if(!_string.contains("or craft a")) resultText.append(t);
         });
     }
 }
