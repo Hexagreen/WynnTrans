@@ -1,18 +1,19 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.ItemRarity;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
 
-public class MasteryTome extends AbstractWynnItem {
+public class MasteryTome extends AbstractIdentifiableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        String tomeName = normalizeStringForKey(texts.getFirst().getString()).replaceFirst("I+$", "");
+        String tomeName = normalizeStringForKey(texts.getFirst().getString().replaceFirst(" \\[.+%]$", ""))
+                .replaceFirst("I+$", "");
         return WTS.checkTranslationDoNotRegister("wytr.item.tome." + tomeName);
     }
 
@@ -46,11 +47,16 @@ public class MasteryTome extends AbstractWynnItem {
 
     private void translateNameSection(List<Text> seg) {
         Text _name = seg.getFirst().getSiblings().getFirst();
-        String tier = _name.getString().replaceAll("֎", "").replaceAll(".+?( I+)?$", "$1");
+        Text percent;
+        if(seg.getFirst().getSiblings().size() != 1) percent = seg.getFirst().getSiblings().getLast();
+        else percent = Text.empty();
+        String tier = _name.getString().replaceAll("֎", "").replaceAll(".+?( I+)?(?: \\[.+%])?$", "$1");
         Text name = Text.empty().setStyle(_name.getStyle())
                 .append(Text.translatable("wytr.item.tome." + normalizeStringForKey(_name.getString()).replaceFirst("I+$", "")))
-                .append(tier);
+                .append(tier).append(percent);
         resultText.append(name);
+        seg.removeFirst();
+        seg.forEach(resultText::append);
     }
 
     protected void translateTailSection(List<Text> texts) {

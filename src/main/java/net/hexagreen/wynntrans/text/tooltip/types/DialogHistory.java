@@ -41,8 +41,8 @@ public class DialogHistory extends WynnTooltipText {
         resultText.append(" ")
                 .append(getPageCounter())
                 .append(" ")
-                .append(Text.translatable("wytr.tooltip.nextPage"))
-                .append(Text.translatable("wytr.tooltip.previousPage"));
+                .append(Text.translatable("wytr.tooltip.ui.nextPage"))
+                .append(Text.translatable("wytr.tooltip.ui.previousPage"));
     }
 
     private Text getPageCounter() {

@@ -5,8 +5,8 @@ import net.minecraft.text.Text;
 
 public class PetName extends WynnDisplayText {
     public static boolean typeChecker(Text text) {
-        if(!text.getSiblings().isEmpty()) return false;
-        return text.getString().matches("^§7.+'s .+\\n§2Lv\\. §a\\d+") || text.getString().matches("^§2Lv\\. §a\\d+§f .+\\n§7\\[.+]");
+        if(text.getSiblings().isEmpty()) return false;
+        return text.getString().contains("\uE00F\uE004\uE013\uDB00\uDC02");
     }
 
     public PetName(Text text) {

@@ -15,6 +15,9 @@ public enum Identifications {
     DEFENCE("(?i)defence", "wytr.skill.defence", "Defence"),
     AGILITY("(?i)agility", "wytr.skill.agility", "Agility"),
     SPELL_COST("^[A-z]+Cost$", "wytr.id.spellCost", null),
+    XP_ON_LEVEL("XPfromLv\\..+content", "wytr.id.xpOnLevel", null),
+    LOOT_ON_LEVEL("LootfromLv\\..+content", "wytr.id.lootOnLevel", null),
+    DAMAGE_TAKEN("Damagetakenfrommobs", "wytr.id.damageFromMob", "Damage taken from mobs"),
     NO_TYPE(null, null, null),
     UNKNOWN_MAJOR(null, null, null, true);
 
@@ -62,6 +65,10 @@ public enum Identifications {
             Text spellName = Text.translatable("wytr.ability.node." + v);
             return Text.translatable(k, spellName);
         }
+        if(this == XP_ON_LEVEL || this == LOOT_ON_LEVEL) {
+            Object[] num = v.replaceAll("[^\\d-]", "").split("-");
+            return Text.translatable(k, num);
+        }
         if(WynnTrans.wynnTranslationStorage.checkTranslationExist(k, v)) {
             return Text.translatable(k);
         }
@@ -80,7 +87,8 @@ public enum Identifications {
     private String getKey() {
         if(!this.major) {
             return switch(this) {
-                case STRENGTH, DEXTERITY, INTELLIGENCE, DEFENCE, AGILITY, SPELL_COST -> this.key;
+                case STRENGTH, DEXTERITY, INTELLIGENCE, DEFENCE, AGILITY, SPELL_COST, XP_ON_LEVEL, LOOT_ON_LEVEL,
+                     DAMAGE_TAKEN -> this.key;
                 case NO_TYPE -> "wytr.id." + testInput.replaceAll("[^0-9A-z]", "");
                 default -> "wytr.id." + key;
             };
@@ -95,6 +103,8 @@ public enum Identifications {
         if(this == NO_TYPE) return testInput.replaceAll("^ +| +$", "");
         if(this == UNKNOWN_MAJOR) return testInput.replaceAll("^\\+|: $", "");
         if(this == SPELL_COST) return testInput.replaceAll("^ +| Cost( ?)+$", "");
+        if(this == XP_ON_LEVEL) return testInput.replaceAll("^ +| +$", "");
+        if(this == LOOT_ON_LEVEL) return testInput.replaceAll("^ +| +$", "");
         return val;
     }
 

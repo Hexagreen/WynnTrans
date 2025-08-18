@@ -6,10 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +26,7 @@ public class LootrunChallengeComplete extends WynnChatText implements ILootrun {
         Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GREEN).withBold(true));
         Text desc = Text.translatable(translationKey + ".desc").setStyle(GRAY);
 
-        List<List<Text>> textChunks = getTextChunks(getSiblings());
+        Deque<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
         resultText = Text.empty()
                 .append(centerAlign(title)).append("\n")
@@ -37,13 +34,12 @@ public class LootrunChallengeComplete extends WynnChatText implements ILootrun {
         if(textChunks.isEmpty()) return;
         else resultText.append("\n");
 
-        if(textChunks.getFirst().getFirst().getString().matches("§7.§7\\[\\+\\d+%.+")) {
+        if(textChunks.getFirst().getFirst().getString().matches("§7.\\[\\+\\d+%?.+")) {
             List<Text> effectsBody = textChunks.removeFirst();
-            Style effectStyle = GRAY;
-            Text damageInc = translateEffect(effectsBody.getFirst().getSiblings().getLast().getString()).setStyle(effectStyle);
-            Text healthInc = translateEffect(effectsBody.getLast().getSiblings().getLast().getString()).setStyle(effectStyle);
-            resultText.append(centerAlign(damageInc)).append("\n")
-                    .append(centerAlign(healthInc).append("\n"));
+            for(Text t : effectsBody) {
+                Text line = translateEffect(t.getSiblings().getLast().getString()).setStyle(GRAY);
+                resultText.append(centerAlign(line)).append("\n");
+            }
             if(textChunks.isEmpty()) return;
             else resultText.append("\n");
         }
@@ -63,22 +59,22 @@ public class LootrunChallengeComplete extends WynnChatText implements ILootrun {
         List<Text> siblings = text.getSiblings();
 
         String rewardTypeString = siblings.getFirst().getString();
-        Style rewardTypeStyle = parseStyleCode(rewardTypeString);
+        Style rewardTypeStyle = siblings.getFirst().getStyle();
 
         List<Text> result = new ArrayList<>();
-        if(rewardTypeString.contains("§6§lBoon")) {
+        if(rewardTypeString.contains("Boon")) {
             result.add(Text.translatable("wytr.lootrun.boon").setStyle(rewardTypeStyle));
             String boon = normalizeStringForKey(siblings.getLast().getString().replaceAll("§.", ""));
             result.add(Text.translatable("wytr.lootrun.boon." + boon).setStyle(GRAY));
         }
-        else if(rewardTypeString.contains("§5§lCurses")) {
+        else if(rewardTypeString.contains("Curses")) {
             result.add(Text.translatable("wytr.lootrun.curse").setStyle(rewardTypeStyle));
             Matcher effectMatcher = Pattern.compile("\\[.+?]").matcher(siblings.getLast().getString());
             while(effectMatcher.find()) {
                 result.add(translateEffect(effectMatcher.group()).setStyle(GRAY));
             }
         }
-        else if(rewardTypeString.contains("§b§lMission Started")) {
+        else if(rewardTypeString.contains("Mission Started")) {
             result.add(Text.translatable("wytr.lootrun.mission").setStyle(rewardTypeStyle));
             String mission = normalizeStringForKey(siblings.getLast().getString().replaceAll("§.", ""));
             result.add(Text.translatable("wytr.lootrun.mission." + mission).setStyle(GRAY));

@@ -10,6 +10,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,13 +31,13 @@ public abstract class WynnScoreboardText extends WynnTransText {
             build();
             return resultText.getSiblings();
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OOB - Scoreboard");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed scoreboard message.\n", e);
             return new SimpleTooltip(getSiblings()).text();
+        }
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "ScoreboardExc");
         }
         return getSiblings();
     }
@@ -68,7 +69,7 @@ public abstract class WynnScoreboardText extends WynnTransText {
         return result;
     }
 
-    protected List<List<Text>> extractUniqueLines(List<Text> textsWithoutHead) {
+    protected List<List<Text>> extractUniqueLines(Collection<Text> textsWithoutHead) {
         List<List<Text>> uniqueLines = new ArrayList<>();
         List<Text> uniqueLine = new ArrayList<>();
         for(Text line : textsWithoutHead) {

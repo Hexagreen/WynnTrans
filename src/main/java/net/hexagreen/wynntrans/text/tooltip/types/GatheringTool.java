@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.Profession;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -11,7 +11,7 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatheringTool extends AbstractWynnItem {
+public class GatheringTool extends AbstractIdentifiableItem {
     private final Profession profession;
 
     public static boolean typeChecker(List<Text> texts) {
@@ -66,7 +66,7 @@ public class GatheringTool extends AbstractWynnItem {
             String _string = t.getString();
             if(_string.contains(" Gathering ")) {
                 resultText.append(profession.getTool(_string.replaceAll("\\D", ""))
-                        .setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+                        .setStyle(Style.EMPTY.withColor(t.getSiblings().getFirst().getStyle().getColor())));
             }
             else if(_string.matches("Tier \\d+")) {
                 resultText.append(Text.translatable("wytr.unit.tier", _string.replaceAll("\\D", "")).setStyle(GRAY));

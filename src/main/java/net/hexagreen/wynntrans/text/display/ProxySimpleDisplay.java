@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ProxySimpleDisplay extends SimpleDisplay {
-    private final Templates template;
+    protected final Templates template;
 
     public static boolean typeChecker(Text text) {
         return Templates.findTemplate(text) != null;
@@ -34,15 +34,15 @@ public class ProxySimpleDisplay extends SimpleDisplay {
     }
 
     public enum Templates {
-        GUILD_LEADERBOARD(text -> text.getString().contains("Leaderboard\n§7Season ends in"),
-                text -> Pattern.compile("^§d§lSeason \\d+ Leaderboard\\n§7Season ends in .+\\n\\n.+\\n§eClick for Options$", Pattern.DOTALL)
+        GUILD_LEADERBOARD(text -> Pattern.compile("Leaderboard\n§7Season (ends in|ended at)").matcher(text.getString()).find(),
+                text -> Pattern.compile("^§d§lSeason \\d+ Leaderboard\\n§7Season (ends in|ended at) .+\\n\\n.+\\n§eClick for Options$", Pattern.DOTALL)
                         .matcher(text.getString())
-                        .replaceFirst("§d§lSeason %1\\$s Leaderboard\n§7Season ends in %2\\$s\n\n%3\\$s\n§eClick for Options"),
+                        .replaceFirst("§d§lSeason %1\\$s Leaderboard\n§7Season $1 %2\\$s\n\n%3\\$s\n§eClick for Options"),
                 text -> {
-                    Matcher m = Pattern.compile("(?s)§d§lSeason (\\d+) Leaderboard\\n§7Season ends in (§b§l(\\d+ .+?))\\n\\n(.+)\\n§eClick for Options", Pattern.DOTALL)
+                    Matcher m = Pattern.compile("(?s)§d§lSeason (\\d+) Leaderboard\\n§7Season (ends in|ended at) (§b§l(\\d+ .+?|\\d\\d/\\d\\d/\\d\\d\\d\\d))\\n\\n(.+)\\n§eClick for Options", Pattern.DOTALL)
                             .matcher(text.getString());
                     boolean ignore = m.find();
-                    return new Object[]{m.group(1), ITime.translateTime(m.group(3)).setStyle(parseStyleCode(m.group(2))), m.group(4)};
+                    return new Object[]{m.group(1), ITime.translateTime(m.group(4)).setStyle(parseStyleCode(m.group(3))), m.group(5)};
                 }),
         GUILD_NEXT_REWARD(text -> text.getString().matches("§d§lYour Next Rewards\\n§3At §b\\d+ SR\\n.+"),
                 text -> text.getString().replaceFirst("§3At §b\\d+ SR\\n.+", "§3At %1\\$s §bSR\n%2\\$s"),
@@ -50,6 +50,13 @@ public class ProxySimpleDisplay extends SimpleDisplay {
                     Matcher m = Pattern.compile("§3At (§b\\d+) SR\\n(.+)").matcher(text.getString());
                     boolean ignore = m.find();
                     return new String[]{m.group(1), m.group(2)};
+                }),
+        GUILD_SEASON_ENDED(text -> text.getString().matches("(?s)§d§lSeason \\d+ has Ended\\n.+"),
+                text -> text.getString().replaceFirst("Season \\d+ has Ended", "Season %s has Ended"),
+                text -> {
+                    Matcher m = Pattern.compile("Season (\\d+) has Ended").matcher(text.getString());
+                    boolean ignore = m.find();
+                    return new String[]{m.group(1)};
                 }),
         GUILD_SEASON_REWARD(text -> text.getString().matches("(?s)^§.Season \\d+ Banner Reward.+"),
                 text -> text.getString().replaceFirst("Season \\d+ Banner Reward", "Season %1\\$s Banner Reward")

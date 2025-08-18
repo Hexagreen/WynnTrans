@@ -10,7 +10,7 @@ public class SyndicatePromotionGlue extends TextGlue {
     private int count = 0;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("§3✮§b§l Silverbull Trading Company §3✮").matcher(text.getString()).find();
+        return Pattern.compile("✮ Silverbull Trading Company ✮").matcher(text.getString()).find();
     }
 
     public SyndicatePromotionGlue() {
@@ -39,7 +39,7 @@ public class SyndicatePromotionGlue extends TextGlue {
             count++;
             return true;
         }
-        else if(count >= 5 && (text.getString().isEmpty() || Pattern.compile("(?s).+\\[.+]").matcher(text.getString()).find())) {
+        else if(count >= 5 && (text.getString().isEmpty() || Pattern.compile("\\[.+]").matcher(text.getString()).find())) {
             resetTimer();
             gluedText.append(text);
             count++;

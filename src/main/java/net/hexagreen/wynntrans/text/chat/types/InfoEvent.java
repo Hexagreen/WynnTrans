@@ -72,7 +72,7 @@ public class InfoEvent extends WynnChatText {
             }
         }
 
-        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(GRAY));
+        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(getStyle(-2)));
     }
 
     private Text initTimer(Text text) {

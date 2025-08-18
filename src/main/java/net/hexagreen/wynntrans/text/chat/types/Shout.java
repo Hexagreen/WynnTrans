@@ -1,24 +1,19 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.WynnChatText;
-import net.minecraft.text.Style;
+import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.regex.Pattern;
 
-public class Shout extends WynnChatText {
-    private final String name;
-    private final String server;
+public class Shout extends WynnSystemText {
+    public static final Pattern REGEX = Pattern.compile(".+ .+(\uE00D\uE000|\uE004\uE014|\uE000\uE012)[\uE020-\uE029]+\uDB00\uDC02 shouts: ");
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^(.+) \\[((?:NA|EU|AS)\\d+)] shouts: ").matcher(text.getString()).find();
+        return REGEX.matcher(text.getString()).find();
     }
 
     public Shout(Text text) {
         super(text);
-        this.name = inputText.getString().replaceFirst("^(.+?) \\[(?:NA|EU|AS).+", "$1");
-        this.server = inputText.getString().replaceFirst(".+\\[((?:NA|EU|AS)\\d+)].+", "$1");
     }
 
     @Override
@@ -28,10 +23,12 @@ public class Shout extends WynnChatText {
 
     @Override
     protected void build() {
+        Text name = Text.literal(getSibling(0).getString().trim()).setStyle(getStyle(0));
+        Text server = Text.empty().append(getSibling(1)).append(getSibling(2));
+
         resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey, name, server).setStyle(Style.EMPTY.withColor(Formatting.DARK_PURPLE)));
-        for(int i = 0; i < getSiblings().size(); i++) {
-            if(getSibling(i).getString().contains("] shouts: ")) continue;
+        resultText.append(Text.translatable(translationKey, name, server).setStyle(getStyle()));
+        for(int i = 4; i < getSiblings().size(); i++) {
             resultText.append(getSibling(i));
         }
     }

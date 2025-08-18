@@ -40,19 +40,21 @@ public class SecretDiscoveryGlue extends TextGlue {
             }
         }
         else if(count == 3) {
-            if(text.getString().equals(" ")) {
+            if(text.getString().isEmpty()) {
                 resetTimer();
                 count++;
                 return true;
             }
         }
         else {
-            if(text.getString().matches("^ *§7.+$")) {
+            if(text.getString().matches("^ +§7.+$") || (text.getString().length() >= 50 && text.getString().matches("^§7.+$"))) {
                 resetTimer();
                 safeNow();
                 gluedText.append(text);
                 return true;
             }
+            pop();
+            return false;
         }
         return false;
     }

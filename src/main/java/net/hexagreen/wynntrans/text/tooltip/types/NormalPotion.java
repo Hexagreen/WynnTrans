@@ -2,7 +2,7 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.CharacterSkill;
 import net.hexagreen.wynntrans.enums.Identifications;
-import net.hexagreen.wynntrans.text.tooltip.ConsumableItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractConsumableItem;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -15,28 +15,28 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NormalPotion extends ConsumableItem {
+public class NormalPotion extends AbstractConsumableItem {
     private final List<Text> tempText;
     private final Deque<Integer> wrapTargetIdx;
-    private final List<String> descArgs;
+    private final List<Object> descArgs;
     private int longestWidth;
     private CharacterSkill potionElement;
     private String key;
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        return Pattern.compile("Potion of (Healing|Mana|Wisdom|§.[✤✦❉✹❋])").matcher(texts.getFirst().getString()).find();
+        return Pattern.compile("Potion of (Healing|Mana|Wisdom|[\uE000-\uE004])").matcher(texts.getFirst().getString()).find();
     }
 
     public static MutableText getTranslatedItemName(Text text) {
         String _iName = text.getString();
-        if(!Pattern.compile("Potion of (Healing|Mana|Wisdom|§.[✤✦❉✹❋])").matcher(_iName).find()) return null;
+        if(!Pattern.compile("Potion of (Healing|Mana|Wisdom|[\uE000-\uE004])").matcher(_iName).find()) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
         NormalPotion potion = new NormalPotion(textBowl);
         potion.translateNameSection(potion.inputText.getSiblings());
-        return potion.resultText.getSiblings().getFirst().copy();
+        return potion.tempText.getFirst().copy();
     }
 
     public NormalPotion(List<Text> texts) {
@@ -68,7 +68,7 @@ public class NormalPotion extends ConsumableItem {
     @Override
     protected void additionalStep(String _string, List<Text> seg) {
         if(_string.equals("Drinking this potion will")) {
-            Matcher timeMatcher = Pattern.compile("(\\d+) seconds").matcher(seg.getLast().getString());
+            Matcher timeMatcher = Pattern.compile("(\\d+) seconds").matcher(mergeTextStyleSide(seg).getString());
             if(timeMatcher.find()) descArgs.add(timeMatcher.group(1));
             else descArgs.add("0");
             addAndMarkWrapTarget(Text.translatable(key + ".desc", descArgs.toArray(Object[]::new))
@@ -82,8 +82,14 @@ public class NormalPotion extends ConsumableItem {
         Deque<Text> nameSiblings = new ArrayDeque<>(texts.getFirst().getSiblings());
         Text _name = nameSiblings.removeFirst();
         Text count;
-        if(!nameSiblings.isEmpty() && nameSiblings.getLast().getString().matches(" \\[\\d/\\d]À*"))
+        if(!nameSiblings.isEmpty() && nameSiblings.getLast().getString().matches(".* ?\\[\\d/\\d]À*")) {
             count = nameSiblings.removeLast();
+            if(!count.getString().matches(" ?\\[\\d/\\d]À*")) {
+                String[] split = count.getString().split(" (?=\\[)");
+                count = Text.literal(" " + split[1]).setStyle(count.getStyle());
+                nameSiblings.addLast(Text.literal(split[0]).setStyle(count.getStyle()));
+            }
+        }
         else count = Text.empty();
         Text name;
         switch(_name.getString().replaceAll("À", "")) {
@@ -104,7 +110,7 @@ public class NormalPotion extends ConsumableItem {
             }
             case "Potion of " -> {
                 key = "wytr.item.misc.statPotion";
-                potionElement = CharacterSkill.getSkill(nameSiblings.getFirst().getString().replaceFirst("[✤✦❉✹❋] ", ""));
+                potionElement = CharacterSkill.getSkill(nameSiblings.getLast().getString().trim());
                 name = Text.translatable(key, potionElement.getStatWithIcon()).setStyle(_name.getStyle()).append(count);
             }
             default -> {
@@ -114,6 +120,8 @@ public class NormalPotion extends ConsumableItem {
             }
         }
         addAndRecordWidth(name);
+        texts.removeFirst();
+        texts.forEach(this::addAndRecordWidth);
     }
 
     @Override
@@ -121,12 +129,13 @@ public class NormalPotion extends ConsumableItem {
         if(type.getString().equals("Effect: ")) {
             body.append(Text.translatable("wytr.tooltip.consumable.effect").setStyle(type.getStyle()));
             Text last = siblings.removeLast();
-            if(Pattern.compile(" [✤✦❉✹❋] .+").matcher(last.getString()).find()) {
-                String num = last.getString().split(" [✤✦❉✹❋]")[0];
-                if(!num.isBlank()) siblings.addFirst(Text.literal(num).setStyle(last.getStyle()));
-                body.append(siblings.getFirst()).append(" ").append(potionElement.getStatWithIcon());
-                descArgs.add(potionElement.getStatWithIcon().getString());
-                descArgs.add(siblings.getFirst().getString().replace("+", ""));
+            if(Pattern.compile("Strength|Dexterity|Intelligence|Defence|Agility").matcher(last.getString().trim()).find()) {
+                Text value = siblings.getFirst();
+                body.append(Text.literal(value.getString().trim()).setStyle(value.getStyle())).append(" ").append(potionElement.getStatWithIcon());
+                Text elem = potionElement.getIcon().styled(s -> s.withColor(Formatting.DARK_GRAY)).append(" ")
+                        .append(potionElement.getStat().styled(s -> s.withColor(Formatting.DARK_GRAY)));
+                descArgs.add(elem);
+                descArgs.add(siblings.getFirst().getString().trim().replace("+", ""));
             }
             else {
                 String[] split = last.getString().split(" ", 2);

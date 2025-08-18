@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 
 public class GatheringToolLevelRequirement extends WynnSystemText {
 
-    public static final Pattern REGEX = Pattern.compile(" You need a §f([ⒷⒸⒿⓀ])§c .+§4 level of (§c\\d+)§4 to use this tool!");
+    public static final Pattern REGEX = Pattern.compile("You need a §f[ⒷⒸⒿⓀ]§c (.+)§4 level of (§c\\d+)§4 to use this tool!");
 
     public static boolean typeChecker(Text text) {
-        return REGEX.matcher(text.getString()).find();
+        return REGEX.matcher(text.getString().replaceAll("\\n|\uDAFF\uDFFC\uE001\uDB00\uDC06", "")).find();
     }
 
     public GatheringToolLevelRequirement(Text text) {
@@ -28,11 +28,11 @@ public class GatheringToolLevelRequirement extends WynnSystemText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Matcher matcher = REGEX.matcher(inputText.getString());
+        Matcher matcher = REGEX.matcher(inputText.getString().replaceAll("\\n", ""));
         if(matcher.find()) {
             Profession profession = Profession.getProfession(matcher.group(1));
-            Text prof = profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE))
-                    .append(profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.RED)));
+            Text prof = profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE)).append(" ")
+                    .append(profession.getText().setStyle(Style.EMPTY.withColor(Formatting.RED)));
             String level = matcher.group(2);
             resultText = Text.translatable(translationKey, prof, level).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED));
         }

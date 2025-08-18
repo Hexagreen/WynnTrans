@@ -15,11 +15,11 @@ public class ItemGiveAndTake extends WynnChatText {
     private final String item;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^(?:§[^a])?\\[([+-])(\\d+) (.+)]$").matcher(text.getString()).find();
+        return Pattern.compile("^(?:§[^ac])?\\[([+-])(\\d+) (.+)]$").matcher(text.getString()).find();
     }
 
     public ItemGiveAndTake(Text text) {
-        super(text);
+        super(flatTextToFilled(colorCodedToStyled(text)));
         Matcher matcher = Pattern.compile("^(§.)?\\[([+-])(\\d+) (.+)]$").matcher(inputText.getString());
         boolean ignore = matcher.find();
         this.style = parseStyleCode(matcher.group(1)).withParent(getStyle());

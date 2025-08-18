@@ -37,7 +37,7 @@ public class AreaDiscoveryGlue extends TextGlue {
             return true;
         }
         else if(count == 2) {
-            if(text.getString().equals(" ")) {
+            if(text.getString().isEmpty()) {
                 resetTimer();
                 count++;
                 if(shortForm) pop();
@@ -49,6 +49,10 @@ public class AreaDiscoveryGlue extends TextGlue {
                 resetTimer();
                 safeNow();
                 gluedText.append(text);
+                return true;
+            }
+            else if(text.getString().isBlank()) {
+                resetTimer();
                 return true;
             }
             else {

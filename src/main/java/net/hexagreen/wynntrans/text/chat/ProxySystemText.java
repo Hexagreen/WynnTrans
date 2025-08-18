@@ -34,7 +34,7 @@ public class ProxySystemText extends SimpleSystemText {
 
     private enum Templates {
         ANNIHILATION(Pattern.compile("Prepare to defend the province at"),
-                text -> text.getString().replaceAll("in .+!$", "in %1\\$s!"),
+                text -> text.getString().replaceAll("\\n", "").replaceAll("in .+!$", "in %1\\$s!"),
                 text -> {
                     Matcher m = Pattern.compile("in (.+)!$").matcher(text.getString());
                     boolean ignore = m.find();

@@ -8,6 +8,8 @@ import net.minecraft.text.Text;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ProxySimpleTitle extends SimpleTitle {
     private final Templates template;
@@ -76,6 +78,20 @@ public class ProxySimpleTitle extends SimpleTitle {
                 },
                 s -> "Next wave in %s",
                 s -> new Object[]{s.replaceFirst("Next wave in ", "")}
+        ),
+        LOOTRUN_MOB_WAVE(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("§7Wave §f\\d+§7 in §c\\d+");
+                },
+                s -> "Wave %s in %s",
+                s -> {
+                    Matcher m = Pattern.compile("Wave (§f\\d+)§7 in (§c\\d+)").matcher(s);
+                    if(m.find()) {
+                        return new Object[]{m.group(1), m.group(2)};
+                    }
+                    return new Object[]{"x", "n"};
+                }
         );
 
         private final Predicate<Text> template;

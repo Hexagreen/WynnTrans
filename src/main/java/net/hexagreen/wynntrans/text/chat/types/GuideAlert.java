@@ -9,7 +9,7 @@ public class GuideAlert extends WynnChatText {
     private final String pKeyGnA;
 
     public GuideAlert(Text text) {
-        super(text);
+        super(flatTextToFilled(colorCodedToStyled(text)));
         String hash = DigestUtils.sha1Hex(text.getString());
         this.pKeyGnA = translationKey + hash;
     }

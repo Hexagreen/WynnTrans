@@ -12,7 +12,7 @@ public class Party extends WynnScoreboardText {
     private static final Style style = Style.EMPTY.withColor(Formatting.YELLOW);
 
     public static boolean typeChecker(List<Text> texts) {
-        if(texts.size() < 2) return false;
+        if(texts.isEmpty()) return false;
         return texts.getFirst().getString().matches("§e§lParty:§6 .+");
     }
 

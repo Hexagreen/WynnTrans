@@ -1,7 +1,7 @@
 {"rules": [
   {
     "selector": ". (Left|Right)\\-Click with (Spear|Dagger|Bow|Wand|Relik) to use\nMain Attack",
-    "pattern": " (Left|Right)-Click ",
+    "pattern": " (Left|Right)\\-Click ",
     "replace": " %s-Click ",
     "register": true
   },
@@ -15,6 +15,12 @@
     "selector": "§aThanks!\n§7\\d+ Upvote",
     "pattern": "(§7\\d+) Upvote",
     "replace": "%s §7Upvote",
+    "register": false
+  },
+  {
+    "selector": "You have \\d+ Crates\nClick to open them!",
+    "pattern": "(\\d+) Crates\n",
+    "replace": "%s Crates\n",
     "register": false
   }
 ]}

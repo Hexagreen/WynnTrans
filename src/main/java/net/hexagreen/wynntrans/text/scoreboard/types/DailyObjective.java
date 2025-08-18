@@ -11,10 +11,12 @@ import java.util.List;
 
 public class DailyObjective extends WynnScoreboardText {
     private static final Style style = Style.EMPTY.withColor(Formatting.RED);
+    private static final Style objectiveNameStyle = Style.EMPTY.withFormatting(Formatting.GRAY)
+            .withBold(false).withItalic(false).withUnderline(false).withStrikethrough(false).withObfuscated(false);
 
     public static boolean typeChecker(List<Text> texts) {
-        if(texts.size() <= 1) return false;
-        return texts.getFirst().getString().matches("(§d⭑ )?§c§lDaily Objective:");
+        if(texts.isEmpty()) return false;
+        return texts.getFirst().getString().matches("(§.⭑ )?§c§lDaily Objective:");
     }
 
     public DailyObjective(List<Text> texts) {
@@ -29,11 +31,18 @@ public class DailyObjective extends WynnScoreboardText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<Text> texts = new ArrayList<>(getSiblings());
-        Text star = texts.removeFirst().getString().contains("⭑ ") ? Text.literal("§d⭑ ") : Text.empty();
+        Text title = texts.removeFirst();
+        Text star;
+        if(title.getString().contains("⭑ ")) {
+            star = title.getSiblings().getFirst();
+        }
+        else star = Text.empty();
         Text head = Text.translatable(translationKey).setStyle(style.withBold(true));
         resultText.append(Text.empty().append(star).append(head));
+        if(getSiblings().size() == 1) return;
 
         List<Text> lines = extractUniqueLines(texts).stream()
+                .map(tl -> tl.stream().map(text -> (Text) text.copy().setStyle(text.getStyle().withParent(objectiveNameStyle))).toList())
                 .map(this::mergeTextStyleSide)
                 .toList();
 

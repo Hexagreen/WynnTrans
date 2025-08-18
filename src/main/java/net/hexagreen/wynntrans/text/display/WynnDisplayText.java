@@ -16,13 +16,13 @@ public abstract class WynnDisplayText extends WynnTransText {
             build();
             return resultText;
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OOB - Display");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed display message has been recorded.\n", e);
             return new SimpleDisplay(inputText).text();
+        }
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "DisplayExc");
         }
         return inputText;
     }

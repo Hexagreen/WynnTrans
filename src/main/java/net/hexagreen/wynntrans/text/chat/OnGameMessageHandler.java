@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class OnGameMessageHandler {
     private static final Logger LOGGER = WynnTrans.LOGGER;
@@ -68,7 +69,7 @@ public class OnGameMessageHandler {
         if(text.getContent() instanceof TranslatableTextContent) return false;
         try {
             if(PlainTextContent.EMPTY.equals(text.getContent())) {
-                if(!text.contains(Text.of("\n"))) {
+                if(!isMultilineText(text)) {
                     return this.analyseSinglelineText(text);
                 }
                 else {
@@ -136,6 +137,15 @@ public class OnGameMessageHandler {
         }
     }
 
+    private boolean isMultilineText(Text text) {
+        List<Text> siblings = text.getSiblings();
+        if(siblings.size() < 2) return false;
+        for(Text t : siblings) {
+            if(t.copyContentOnly().getString().equals("\n") && t.getSiblings().isEmpty()) return true;
+        }
+        return false;
+    }
+
     private boolean analyseMultilineText(Text text) {
         if(FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 2) || FunctionalRegex.DIALOG_PLACEHOLDER.match(text, 1)) {
             this.backgroundText.clear();
@@ -163,7 +173,10 @@ public class OnGameMessageHandler {
             return this.textGlue.push(text);
         }
 
-        else if(text.getSiblings().getFirst().equals(text.getSiblings().get(4)) && text.getSiblings().getFirst().equals(text.getSiblings().getLast()) && text.getSiblings().getFirst().equals(Text.empty()) && (text.getSiblings().size() == 5 || text.getSiblings().size() == 9)) {
+        else if(text.getSiblings().getFirst().equals(text.getSiblings().get(4))
+                && text.getSiblings().getFirst().equals(text.getSiblings().getLast())
+                && text.getSiblings().getFirst().equals(Text.empty())
+                && (text.getSiblings().size() == 5 || text.getSiblings().size() == 9)) {
             this.backgroundText.clear();
             if(ChatType.DIALOG_NORMAL.match(text, 2)) {
                 new NpcDialogFocused(text).print();
@@ -180,6 +193,9 @@ public class OnGameMessageHandler {
             else if(FunctionalRegex.DIALOG_ALERT.match(text, 2)) {
                 new GuideAlert(text.getSiblings().get(2)).print();
             }
+//            else if(FunctionalRegex.LITERAL_NPC_DIALOG.match(text, 2)) {
+//                new NpcDialogFocused(editMultilineText(text, 2, WynnTransText::colorCodedToStyled)).print();
+//            }
             else {
                 new NarrationFocused(text).print();
             }
@@ -240,7 +256,10 @@ public class OnGameMessageHandler {
     }
 
     private boolean isBrokenText(Text text) {
-        return text.getContent() == PlainTextContent.EMPTY && Text.empty().equals(text.getSiblings().get(0)) && text.getSiblings().get(0) == text.getSiblings().get(2) && text.getSiblings().get(1).getString().equals("\n");
+        return text.getContent() == PlainTextContent.EMPTY
+                && Text.empty().equals(text.getSiblings().get(0))
+                && text.getSiblings().get(0) == text.getSiblings().get(2)
+                && text.getSiblings().get(1).getString().equals("\n");
     }
 
     private Text reformLiteralBackgroundText(Text text) {
@@ -270,6 +289,16 @@ public class OnGameMessageHandler {
         return reformed;
     }
 
+    private Text editMultilineText(Text text, int siblingIndex, Function<Text, Text> mutator) {
+        MutableText result = Text.empty();
+        List<Text> siblings = text.getSiblings();
+        for(int i = 0, size = siblings.size(); i < size; i++) {
+            if(i == siblingIndex) result.append(mutator.apply(siblings.get(i)));
+            else result.append(siblings.get(i));
+        }
+        return result;
+    }
+
     private class BackgroundText {
         private final List<Text> storage = Lists.newArrayList();
 
@@ -285,6 +314,8 @@ public class OnGameMessageHandler {
             List<Text> storage = new ArrayList<>(this.storage);
             if(storage.isEmpty()) return;
             MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+            boolean wynntilsLoaded = WynnTrans.wynntilsLoaded;
+            WynnTrans.wynntilsLoaded = false;
             if(!registerBackText) {
                 SimpleText.setTranslationControl(false);
                 SimpleSystemText.setTranslationControl(false);
@@ -299,6 +330,7 @@ public class OnGameMessageHandler {
             }
             SimpleText.setTranslationControl(true);
             SimpleSystemText.setTranslationControl(true);
+            WynnTrans.wynntilsLoaded = wynntilsLoaded;
             clear();
         }
     }

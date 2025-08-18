@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.chat;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.text.chat.types.SimpleText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
@@ -43,6 +44,7 @@ public abstract class TextGlue {
         if(safetyLock) {
             wct.apply(gluedText).print();
         }
+        else gluedText.getSiblings().forEach(text -> new SimpleText(text).print());
     }
 
     protected void resetTimer() {

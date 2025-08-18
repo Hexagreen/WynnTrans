@@ -16,10 +16,11 @@ public class NPCNameLiteral extends WynnDisplayText {
     private final Text npcTag;
 
     public static boolean typeChecker(Text text) {
-        if(text.getSiblings().size() == 1 && text.getString().matches("(?s).+\uE00D\uE00F\uE002\uDB00\uDC02$"))
-            return true;
-        if(!text.getSiblings().isEmpty()) return false;
         if(text.getString().contains(" Post §2[")) return false;
+        if(text.getSiblings().size() == 1 && text.getString().matches("(?s).+\uE00D\uE00F\uE002\uDB00\uDC02(\\n§0À)*$")) {
+            return true;
+        }
+        if(!text.getSiblings().isEmpty()) return false;
         return text.getString().contains("\uE00D\uE00F\uE002\uDB00\uDC02");
     }
 

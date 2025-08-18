@@ -10,9 +10,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Language;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +78,7 @@ public abstract class WynnTransText {
     }
 
     public static Style parseStyleCode(String codeOrTextString) {
+        if(codeOrTextString == null) return Style.EMPTY;
         Matcher matcher = Pattern.compile("^((?:§[0123456789abcdefklnmor])+)").matcher(codeOrTextString.replaceFirst("^\\s+", ""));
         if(!matcher.find()) return Style.EMPTY;
         String styleCode = matcher.group(1);
@@ -99,100 +98,7 @@ public abstract class WynnTransText {
         return string.replaceAll("[ .,'À֎’:&%()\"-]", "");
     }
 
-    public WynnTransText(Text text) {
-        this.inputText = (MutableText) text;
-        this.translationKey = setTranslationKey();
-    }
-
-    /**
-     * Set {@code translationKey} for translation.
-     *
-     * @return Key for translation
-     */
-    protected abstract String setTranslationKey();
-
-    /**
-     * Method for creating translatable text
-     */
-    protected abstract void build() throws IndexOutOfBoundsException, TextTranslationFailException;
-
-    /**
-     * Get {@code String} of {@code inputText}'s content.
-     *
-     * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
-     */
-    protected String getContentString() {
-        return inputText.getContent().toString().equals("empty") ? "" : ((PlainTextContent) inputText.getContent()).string();
-    }
-
-    /**
-     * Get {@code String} from {@code inputText}'s sibling.
-     *
-     * @return Returns empty {@code String} if sibling's content is empty, otherwise some {@code String}
-     */
-    protected String getContentString(int siblingIndex) {
-        return getContentString(getSiblings().get(siblingIndex));
-    }
-
-    /**
-     * Get {@code String} from given {@code Text}'s content.
-     *
-     * @param text Target text
-     * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
-     */
-    private String getContentString(Text text) {
-        return text.getContent().toString().equals("empty") ? "" : ((PlainTextContent) text.getContent()).string();
-    }
-
-    /**
-     * Get {@code Style} from {@code inputText}'s content.
-     *
-     * @return {@code inputText.getStyle()}
-     */
-    protected Style getStyle() {
-        return inputText.getStyle();
-    }
-
-    /**
-     * Get {@code Style} from {@code inputText}'s sibling.
-     *
-     * @param siblingIndex Index of target sibling
-     * @return {@code inputText.getStyle()}
-     */
-    protected Style getStyle(int siblingIndex) {
-        return getSiblings().get(siblingIndex).getStyle();
-    }
-
-    /**
-     * Get {@code Text} from {@code inputText}'s sibling.
-     *
-     * @param siblingIndex Index of target, it allows negative value (ex. -1 will return the last one)
-     * @return Some sibling that index refers to.
-     */
-    protected Text getSibling(int siblingIndex) {
-        siblingIndex = siblingIndex < 0 ? getSiblings().size() + siblingIndex : siblingIndex;
-        return getSiblings().get(siblingIndex);
-    }
-
-    protected List<Text> getSiblings() {
-        return inputText.getSiblings();
-    }
-
-    protected List<Text> wrapLine(Text text, int length) {
-        List<StringVisitable> svs = TEXT_HANDLER.wrapLines(text, length, Style.EMPTY);
-        List<Text> wrapped = new ArrayList<>();
-        for(StringVisitable sv : svs) {
-            MutableText tmp = Text.empty();
-            sv.visit((style, string) -> {
-                tmp.append(Text.literal(string).setStyle(style));
-                return Optional.empty();
-            }, Style.EMPTY);
-            wrapped.add(tmp);
-        }
-        return wrapped;
-    }
-
-    protected Text styleToColorCode(List<Text> siblings, Style overrideStyle) {
+    public static Text styleToColorCode(List<Text> siblings, Style overrideStyle) {
         StringBuilder stringBuilder = new StringBuilder();
         TextColor oColor = overrideStyle.getColor();
         boolean oBold = overrideStyle.isBold();
@@ -238,6 +144,117 @@ public abstract class WynnTransText {
             stringBuilder.append(text.getString());
         }
         return Text.literal(stringBuilder.toString()).setStyle(overrideStyle);
+    }
+
+    public static Text flatTextToFilled(Text text) {
+        Deque<Text> texts = new ArrayDeque<>();
+        text.visit((s, t) -> {
+            texts.add(Text.literal(t).setStyle(s));
+            return Optional.empty();
+        }, text.getStyle());
+
+        return siblingsToFilledText(texts);
+    }
+
+    protected static Text siblingsToFilledText(Deque<Text> texts) {
+        if(texts.isEmpty()) return Text.empty();
+        Text head = texts.removeFirst();
+        MutableText linear = head.copy();
+        texts.forEach(linear::append);
+        return linear;
+    }
+
+    public WynnTransText(Text text) {
+        this.inputText = (MutableText) text;
+        this.translationKey = setTranslationKey();
+    }
+
+    /**
+     * Set {@code translationKey} for translation.
+     *
+     * @return Key for translation
+     */
+    protected abstract String setTranslationKey();
+
+    /**
+     * Method for creating translatable text
+     */
+    protected abstract void build() throws IndexOutOfBoundsException, TextTranslationFailException;
+
+    /**
+     * Get {@code String} of {@code inputText}'s content.
+     *
+     * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
+     */
+    protected String getContentString() {
+        return inputText.getContent().toString().equals("empty") ? "" : ((PlainTextContent) inputText.getContent()).string();
+    }
+
+    /**
+     * Get {@code String} from {@code inputText}'s sibling.
+     *
+     * @return Returns empty {@code String} if sibling's content is empty, otherwise some {@code String}
+     */
+    protected String getContentString(int siblingIndex) {
+        return getContentString(getSibling(siblingIndex));
+    }
+
+    /**
+     * Get {@code String} from given {@code Text}'s content.
+     *
+     * @param text Target text
+     * @return Returns empty {@code String} if content is empty, otherwise {@code content.getString()}
+     */
+    private String getContentString(Text text) {
+        return text.getContent().toString().equals("empty") ? "" : ((PlainTextContent) text.getContent()).string();
+    }
+
+    /**
+     * Get {@code Style} from {@code inputText}'s content.
+     *
+     * @return {@code inputText.getStyle()}
+     */
+    protected Style getStyle() {
+        return inputText.getStyle();
+    }
+
+    /**
+     * Get {@code Style} from {@code inputText}'s sibling.
+     *
+     * @param siblingIndex Index of target sibling
+     * @return {@code inputText.getStyle()}
+     */
+    protected Style getStyle(int siblingIndex) {
+        return getSibling(siblingIndex).getStyle();
+    }
+
+    /**
+     * Get {@code Text} from {@code inputText}'s sibling.
+     *
+     * @param siblingIndex Index of target, it allows negative value (ex. -1 will return the last one)
+     * @return Some sibling that index refers to.
+     */
+    protected Text getSibling(int siblingIndex) {
+        siblingIndex = siblingIndex < 0 ? getSiblings().size() + siblingIndex : siblingIndex;
+        return getSiblings().get(siblingIndex);
+    }
+
+    protected List<Text> getSiblings() {
+        return inputText.getSiblings();
+    }
+
+    protected List<Text> wrapLine(Text text, int length) {
+        List<StringVisitable> svs = TEXT_HANDLER.wrapLines(text, length, Style.EMPTY);
+        List<Text> wrapped = new ArrayList<>();
+        for(StringVisitable sv : svs) {
+            MutableText tmp = Text.empty();
+            sv.visit((style, string) -> {
+                tmp.append(Text.literal(string).setStyle(style));
+                return Optional.empty();
+            }, Style.EMPTY);
+            wrapped.add(tmp);
+        }
+        return wrapped;
     }
 
     protected Text rainbowDecoration(Text text) {

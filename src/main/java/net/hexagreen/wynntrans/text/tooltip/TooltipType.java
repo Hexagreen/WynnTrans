@@ -19,6 +19,8 @@ public enum TooltipType {
     COMPASS_ITEMS(CompassItems::new, CompassItems::typeChecker),
     RECRUIT_PAGE(FriendRecruit::new, FriendRecruit::typeChecker),
     MASTERY_TOME_PAGE(MasteryTomeSlot::new, MasteryTomeSlot::typeChecker),
+    BLACKSMITH(Blacksmith::new, Blacksmith::typeChecker),
+    IDENTIFIER(Identifier::new, Identifier::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
@@ -33,6 +35,12 @@ public enum TooltipType {
     ABILITY_TREE_SELECTOR(AbilityTreeSelector::new, AbilityTreeSelector::typeChecker),
     ABILITY_TREE_RESET(AbilityTreeReset::new, AbilityTreeReset::typeChecker),
     ABILITY_TREE_ASPECT(AbilityTreeAspectSocket::new, AbilityTreeAspectSocket::typeChecker),
+    BANK(Bank::new, Bank::typeChecker),
+    TRADE_MARKET_LIST(TradeMarketList::new, TradeMarketList::typeChecker),
+    TRADE_MARKET_SLOTS(TradeMarketTradeSlots::new, TradeMarketTradeSlots::typeChecker),
+    TRADE_MARKET_MAKE_DEAL(TradeMarketMakeDeal::new, TradeMarketMakeDeal::typeChecker),
+    TRADE_MARKET_ORDER_VIEW(TradeMarketOrderView::new, TradeMarketOrderView::typeChecker),
+    TRADE_MARKET_FILTER(TradeMarketFilter::new, TradeMarketFilter::typeChecker),
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     CRAFTED_EQUIPMENT(CraftedEquipment::new, CraftedEquipment::typeChecker),
@@ -44,6 +52,8 @@ public enum TooltipType {
     RUNES(Rune::new, Rune::typeChecker),
     TELEPORTATION_SCROLL(TeleportationScroll::new, TeleportationScroll::typeChecker),
     HORSE(Horse::new, Horse::typeChecker),
+    CHARM(Charm::new, Charm::typeChecker),
+    CORKIAN_AUGMENT(CorkianAugment::new, CorkianAugment::typeChecker),
 
     NO_TYPE(SimpleTooltip::new, null);
 

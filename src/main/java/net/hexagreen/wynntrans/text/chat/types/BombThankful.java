@@ -1,26 +1,21 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
-import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.regex.Pattern;
 
-public class BombThankful extends WynnChatText {
+public class BombThankful extends WynnSystemText {
     private final MutableText playerName;
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("^§7You have thanked (.+)$").matcher(text.getString()).find();
+        return Pattern.compile("You have thanked (.+)$").matcher(text.getString()).find();
     }
 
     public BombThankful(Text text) {
         super(text);
-        if(text.getSiblings().size() == 1) {
-            this.playerName = (MutableText) getPlayerNameFromSibling(0);
-        }
-        else {
-            this.playerName = (MutableText) Text.of(inputText.getString().replaceFirst(".+thanked (.+)$", "$1"));
-        }
+        this.playerName = Text.literal(inputText.getString().replaceFirst(".+thanked (.+)$", "$1"));
     }
 
     @Override
@@ -30,7 +25,7 @@ public class BombThankful extends WynnChatText {
 
     @Override
     protected void build() {
-        resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey, playerName).setStyle(GRAY));
+        resultText = Text.empty().setStyle(getStyle());
+        resultText.append(Text.translatable(translationKey, playerName));
     }
 }

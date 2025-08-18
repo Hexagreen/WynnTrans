@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class PotionEffectApplied extends WynnChatText {
 
-    public static final Pattern POTION_REGEX = Pattern.compile("§a\\[([+-]\\d+)(/[35]s|%|) (.+) for (\\d+ seconds)]");
+    public static final Pattern POTION_REGEX = Pattern.compile("§.\\[([+-]\\d+)(/[35]s|%|) (.+) for (\\d+ (?:seconds|minutes))]");
 
     public static boolean typeChecker(Text text) {
         return POTION_REGEX.matcher(text.getString()).find();
@@ -28,7 +28,13 @@ public class PotionEffectApplied extends WynnChatText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        String contentString = getContentString();
+        String contentString;
+        if(getSiblings().size() == 2) {
+            Text icon = getSibling(0);
+            contentString = inputText.getString().replaceFirst(" " + icon.getString() + " ", " ");
+        }
+        else contentString = getContentString();
+
         Matcher matcher = POTION_REGEX.matcher(contentString);
         if(matcher.find()) {
             Style style = parseStyleCode(contentString);
@@ -42,6 +48,7 @@ public class PotionEffectApplied extends WynnChatText {
                 power = Text.literal(amount).append(unit);
             }
             Text effect = Identifications.findIdentification(matcher.group(3)).getTranslatedText();
+            if(getSiblings().size() == 2) effect = Text.empty().append(getSibling(0)).append(" ").append(effect);
             Text timer = ITime.translateTime(matcher.group(4));
             resultText = Text.translatable(translationKey, power, effect, timer).setStyle(style);
         }

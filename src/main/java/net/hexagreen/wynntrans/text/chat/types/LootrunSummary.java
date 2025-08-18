@@ -6,10 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +26,7 @@ public class LootrunSummary extends WynnChatText implements ILootrun {
         Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD));
         Text desc = Text.translatable(translationKey + ".desc").setStyle(GRAY);
 
-        List<List<Text>> textChunks = getTextChunks(getSiblings());
+        Deque<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
 
         List<Text> summaries = placeTextToBiSection(textChunks.stream()
@@ -46,7 +43,7 @@ public class LootrunSummary extends WynnChatText implements ILootrun {
     }
 
     private List<Text> translateSummary(Text text) {
-        if(text.getSiblings().getFirst().getString().contains("§aRewards")) return translateReward(text);
+        if(text.getSiblings().getFirst().getString().contains("Rewards")) return translateReward(text);
         else return translateStatistic(text);
     }
 

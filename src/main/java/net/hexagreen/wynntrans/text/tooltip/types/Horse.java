@@ -61,6 +61,7 @@ public class Horse extends WynnTooltipText implements ITradableItem {
                 }
                 else resultText.append(text);
             }
+            if(i != lastIndex) resultText.append(SPLITTER);
         });
     }
 }

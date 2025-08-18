@@ -38,7 +38,7 @@ public class DungeonTitle extends WynnDisplayText {
 
     private Text getDungeonName(String string) {
         Style style = parseStyleCode(string);
-        return Dungeons.getDungeons(string).getDungeonName().setStyle(style);
+        return Dungeons.getDungeons(string.replaceAll("§.", "")).getDungeonName().setStyle(style);
     }
 
     private Text getDifficulty(String string) {

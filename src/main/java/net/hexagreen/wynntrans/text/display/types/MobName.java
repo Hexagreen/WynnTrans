@@ -14,6 +14,7 @@ public class MobName extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         try {
+            if(text.getString().contains("\uE00F\uE004\uE013\uDB00\uDC02")) return false;
             int index = 2;
             if(text.getString().substring(0, 2).matches("\uE02A |\uD83D\uDC31")) index = 4;
             Text target = text.getSiblings().get(index).getSiblings().getFirst();

@@ -15,6 +15,7 @@ public enum ScoreboardContentType {
     GUILD_OBJECTIVE(GuildObjective::new, GuildObjective::typeChecker),
     STARTER_OBJECTIVE(StarterObjective::new, StarterObjective::typeChecker),
     WORLD_EVENT(WorldEvent::new, WorldEvent::typeChecker),
+    LOOTRUN(Lootrun::new, Lootrun::typeChecker),
     PARTY(Party::new, Party::typeChecker),
     NO_TYPE(SimpleScoreboardContent::new, null);
     private final Function<List<Text>, WynnScoreboardText> wst;

@@ -62,7 +62,7 @@ public class AbilityTreeAspectSocket extends WynnTooltipText implements ITooltip
                     }
                     case "Min. Raiding Level: " -> {
                         translated.append(Text.translatable(translationKey + ".reqRaid").setStyle(GRAY));
-                        translated.append(SyndicatePromotion.getTranslatedRankName("§f" + siblings.get(2).getString()));
+                        translated.append(SyndicatePromotion.getTranslatedRankName(siblings.get(2).getString(), Style.EMPTY.withColor(Formatting.WHITE)));
                         dump.add(translated);
                     }
                     default -> dump.add(t);

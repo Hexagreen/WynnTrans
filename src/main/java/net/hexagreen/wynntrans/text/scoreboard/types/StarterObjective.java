@@ -11,9 +11,11 @@ import java.util.List;
 
 public class StarterObjective extends WynnScoreboardText {
     private static final Style style = Style.EMPTY.withColor(Formatting.GREEN);
+    private static final Style objectiveNameStyle = Style.EMPTY.withFormatting(Formatting.GRAY)
+            .withBold(false).withItalic(false).withUnderline(false).withStrikethrough(false).withObfuscated(false);
 
     public static boolean typeChecker(List<Text> texts) {
-        if(texts.size() <= 1) return false;
+        if(texts.isEmpty()) return false;
         return texts.getFirst().getString().equals("§a§lObjectives:");
     }
 
@@ -32,8 +34,10 @@ public class StarterObjective extends WynnScoreboardText {
         texts.removeFirst();
         Text head = Text.translatable(translationKey).setStyle(style.withBold(true));
         resultText.append(head);
+        if(getSiblings().size() == 1) return;
 
         List<Text> merged = extractUniqueLines(texts).stream()
+                .map(tl -> tl.stream().map(text -> (Text) text.copy().setStyle(text.getStyle().withParent(objectiveNameStyle))).toList())
                 .map(this::mergeTextStyleSide)
                 .toList();
 

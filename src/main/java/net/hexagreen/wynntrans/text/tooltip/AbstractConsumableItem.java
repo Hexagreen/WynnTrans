@@ -8,9 +8,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-public abstract class ConsumableItem extends AbstractWynnItem {
+public abstract class AbstractConsumableItem extends AbstractIdentifiableItem {
 
-    public ConsumableItem(List<Text> texts) {
+    public AbstractConsumableItem(List<Text> texts) {
         super(texts);
     }
 

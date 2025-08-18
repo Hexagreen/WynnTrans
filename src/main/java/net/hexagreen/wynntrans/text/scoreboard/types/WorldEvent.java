@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.scoreboard.types;
 
+import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.scoreboard.WynnScoreboardText;
 import net.minecraft.text.MutableText;
@@ -56,7 +57,14 @@ public class WorldEvent extends WynnScoreboardText {
             case "Targets Remaining: " ->
                     result.append(Text.translatable(translationKey + ".target", siblings.getLast())
                             .setStyle(GRAY));
-            default -> text;
+            case "Prepare to start" ->
+                    result.append(Text.translatable(translationKey + ".ready").formatted(Formatting.GRAY));
+            case "Event Failed" ->
+                    result.append(Text.translatable(translationKey + ".fail").formatted(Formatting.WHITE));
+            default -> {
+                debugClass.writeTextAsJSON(text, "WorldEventSB");
+                yield text;
+            }
         };
     }
 }

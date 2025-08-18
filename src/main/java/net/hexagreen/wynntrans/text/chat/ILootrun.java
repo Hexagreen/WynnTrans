@@ -2,14 +2,15 @@ package net.hexagreen.wynntrans.text.chat;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +32,8 @@ public interface ILootrun extends ISpaceProvider {
         return Text.literal(effect);
     }
 
-    default List<List<Text>> getTextChunks(List<Text> texts) {
-        List<List<Text>> result = new ArrayList<>();
+    default Deque<List<Text>> getTextChunks(List<Text> texts) {
+        Deque<List<Text>> result = new ArrayDeque<>();
         List<Text> chunk = new ArrayList<>();
 
         for(Text text : texts) {
@@ -57,20 +58,38 @@ public interface ILootrun extends ISpaceProvider {
         StringBuilder sb1 = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
         for(Text text : texts) {
-            AtomicInteger i = new AtomicInteger();
+            int[] i = {0};
             text.visit((s, t) -> {
                 if(t.matches("§.")) return Optional.empty();
                 if(s.getFont().equals(Identifier.of("minecraft:space"))) {
-                    i.getAndIncrement();
+                    i[0]++;
                     return Optional.empty();
                 }
-                if(i.get() == 1) {
+                if(i[0] == 1) {
                     if(text1.getSiblings().isEmpty()) text1.append(Text.literal(t).setStyle(s));
-                    else sb1.append(t);
+                    else {
+                        if(t.matches("\\d+") && !Objects.equals(s.getColor(), TextColor.fromFormatting(Formatting.GRAY))) {
+                            Text coded = WynnTransText.styleToColorCode(
+                                    Arrays.asList(new Text[]{Text.literal(t).setStyle(s)}),
+                                    Style.EMPTY.withColor(Formatting.GRAY)
+                            );
+                            sb1.append(coded.getString()).append("§7");
+                        }
+                        else sb1.append(t);
+                    }
                 }
-                else if(i.get() == 2) {
+                else if(i[0] == 2) {
                     if(text2.getSiblings().isEmpty()) text2.append(Text.literal(t).setStyle(s));
-                    else sb2.append(t);
+                    else {
+                        if(t.matches("\\d+(%|:\\d+)?") && !Objects.equals(s.getColor(), TextColor.fromFormatting(Formatting.GRAY))) {
+                            Text coded = WynnTransText.styleToColorCode(
+                                    Arrays.asList(new Text[]{Text.literal(t).setStyle(s)}),
+                                    Style.EMPTY.withColor(Formatting.GRAY)
+                            );
+                            sb2.append(coded.getString()).append("§7");
+                        }
+                        else sb2.append(t);
+                    }
                 }
                 return Optional.empty();
             }, Style.EMPTY);

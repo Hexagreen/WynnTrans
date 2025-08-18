@@ -9,11 +9,8 @@ import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 public abstract class WynnSystemText extends WynnChatText {
     protected final Text originText;
@@ -22,81 +19,71 @@ public abstract class WynnSystemText extends WynnChatText {
     private final int wrappingWidth;
 
     protected static String removeTextBox(Text text) {
-        return text.getString().replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ").replaceAll("\\n", "");
+        return text.getString()
+                .replaceAll("(?<=.) ?\\n? ?\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06 ?", " ")
+                .replaceAll("\\n", "");
     }
 
     private static Text preprocessSystemChat(Text text, boolean isGlued) {
         if(isGlued) {
             MutableText glued = Text.empty();
             for(Text line : text.getSiblings()) {
-                Text phase1 = removeHeaderSplitter(line);
-                glued.append(mergeSiblings(extractSiblings(Objects.requireNonNull(phase1))));
+                glued.append(mergeSiblingsWithVisitor(line));
             }
             return glued;
         }
         else {
-            Text phase1 = removeHeaderSplitter(text);
-            return mergeSiblings(extractSiblings(Objects.requireNonNull(phase1)));
+            return mergeSiblingsWithVisitor(text);
         }
     }
 
-    private static Text mergeSiblings(List<Text> texts) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Style style = texts.getFirst().getStyle();
-        MutableText result = Text.empty().setStyle(style);
-        for(Text element : texts) {
-            if(element.getString().isEmpty()) continue;
-            if(element.getStyle().equals(Style.EMPTY) || element.getStyle().equals(style)) {
-                stringBuilder.append(element.copyContentOnly().getLiteralString());
+    private static Text mergeSiblingsWithVisitor(Text root) {
+        StringBuilder sb = new StringBuilder();
+        MutableText result = Text.empty().setStyle(root.getStyle());
+        final Style[] currentStyle = {root.getStyle()};
+
+        root.visit((style, str) -> {
+            if(root.getContent().equals(PlainTextContent.EMPTY) && str.isEmpty()) {
+                return Optional.empty();
+            }
+
+            if(str.matches("\\uDAFF\\uDFFC.\\uDAFF\\uDFFF\\uE002\\uDAFF\\uDFFE|\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06")) {
+                return Optional.empty();
+            }
+
+            str = str.replaceFirst(" ?\\n$", "\n");
+
+            if(result.getString().isEmpty() && sb.isEmpty()) str = str.replaceFirst("^ ", "");
+            if(str.isEmpty()) return Optional.empty();
+
+            if(str.matches("§.")) {
+                return Optional.empty();
+            }
+
+            if(currentStyle[0].equals(Style.EMPTY)) {
+                currentStyle[0] = style;
+            }
+
+            if(style.equals(Style.EMPTY) || style.equals(currentStyle[0]) || str.isBlank()) {
+                sb.append(str);
             }
             else {
-                if(!stringBuilder.isEmpty()) {
-                    result.append(Text.literal(stringBuilder.toString()).setStyle(style));
+                if(!sb.isEmpty()) {
+                    result.append(Text.literal(sb.toString()).setStyle(currentStyle[0]));
                 }
-                stringBuilder = new StringBuilder(Objects.requireNonNull(element.copyContentOnly().getLiteralString()));
-                style = element.getStyle();
+                sb.setLength(0);
+                sb.append(str);
+                currentStyle[0] = style;
             }
-        }
-        return result.append(Text.literal(stringBuilder.toString()).setStyle(style));
-    }
 
-    private static List<Text> extractSiblings(Text text) {
-        List<Text> textList = new ArrayList<>();
-        textList.add(text.copyContentOnly().setStyle(text.getStyle()));
-        if(!text.getSiblings().isEmpty()) {
-            for(Text sibling : text.getSiblings()) {
-                textList.addAll(extractSiblings(sibling.copy().setStyle(sibling.getStyle().withParent(text.getStyle()))));
-            }
-        }
-        return textList;
-    }
+            return Optional.empty();
+        }, Style.EMPTY);
 
-    @Nullable
-    private static Text removeHeaderSplitter(Text text) {
-        MutableText result = reformTextContent(text);
-        if(result != null) {
-            for(Text sibling : text.getSiblings()) {
-                Text child = removeHeaderSplitter(sibling);
-                if(child != null) result.append(child);
-            }
-            if(result.getString().isEmpty() && result.getStyle().equals(Style.EMPTY)) return null;
+        if(!sb.isEmpty()) {
+            result.append(Text.literal(sb.toString()).setStyle(currentStyle[0]));
         }
+
         return result;
-    }
-
-    @Nullable
-    private static MutableText reformTextContent(Text text) {
-        if(text.getContent().equals(PlainTextContent.EMPTY)) return Text.empty().setStyle(text.getStyle());
-        String content = text.copyContentOnly().getString();
-        Style style = text.getStyle();
-
-        if(style.getFont().equals(Identifier.of("minecraft:space"))) return null;
-        if(content.matches("\\uDAFF\\uDFFC.\\uDAFF\\uDFFF\\uE002\\uDAFF\\uDFFE|\\uDAFF\\uDFFC\\uE001\\uDB00\\uDC06")) {
-            return null;
-        }
-        content = content.replaceFirst("^ ", "").replaceFirst(" ?\\n$", "\n ");
-
-        return Text.literal(content).setStyle(style);
     }
 
     public WynnSystemText(Text text) {
@@ -107,9 +94,9 @@ public abstract class WynnSystemText extends WynnChatText {
         super(preprocessSystemChat(text, isGlued));
         this.originText = text;
         Style boxColor = isGlued ? text.getSiblings().getFirst().getStyle() : text.getStyle();
-        boxColor = boxColor.withFont(Identifier.of("minecraft:chat"));
-        this.header = extractHeader(text.getSiblings().getFirst(), isGlued).setStyle(boxColor);
-        this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06 ").setStyle(boxColor);
+        boxColor = boxColor.withFont(Identifier.of("minecraft:chat/prefix"));
+        this.header = extractHeader(text.getSiblings().getFirst(), isGlued).setStyle(boxColor).append(" ");
+        this.splitter = Text.literal("\n\uDAFF\uDFFC\uE001\uDB00\uDC06  ").setStyle(boxColor);
         this.wrappingWidth = setLineWrappingWidth();
     }
 
@@ -119,14 +106,14 @@ public abstract class WynnSystemText extends WynnChatText {
             build();
             return attachBox(resultText);
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(originText, "OutOfBound");
-            debugClass.writeTextAsJSON(inputText, "    --    ");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed chat message has been recorded.\n", e);
             return new SimpleSystemText(originText).text();
+        }
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(originText, "Exception");
+            debugClass.writeTextAsJSON(inputText, "    --    ");
         }
         return originText.copy();
     }
@@ -140,7 +127,7 @@ public abstract class WynnSystemText extends WynnChatText {
     }
 
     protected int setLineWrappingWidth() {
-        return (int) ISpaceProvider.CHAT_HUD_WIDTH - 10;
+        return (int) ISpaceProvider.CHAT_HUD_WIDTH - 15;
     }
 
     /**

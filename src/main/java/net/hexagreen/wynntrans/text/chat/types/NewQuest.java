@@ -10,7 +10,7 @@ public class NewQuest extends WynnChatText {
     private final boolean miniQuestMode;
 
     public NewQuest(Text text) {
-        super(text);
+        super(flatTextToFilled(colorCodedToStyled(text)));
         this.questLineMode = getContentString().contains("Questline");
         this.miniQuestMode = getContentString().contains("Mini-Quest");
         this.valQuestName = getContentString(0);

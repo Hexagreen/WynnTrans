@@ -36,9 +36,9 @@ public class FriendList extends WynnSystemText {
 
         String[] friends = getSibling(0).getString().replaceFirst("^.+'s friends \\(\\d+\\): ", "").split("\\n ");
 
-        resultText.append(Text.literal(friends[0]).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
+        resultText.append(Text.literal(friends[0] + " ").setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
         for(int i = 1; i < friends.length; i++) {
-            resultText.append(Text.literal(friends[i]).setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
+            resultText.append(Text.literal(friends[i] + " ").setStyle(Style.EMPTY.withColor(Formatting.GOLD)));
         }
     }
 }

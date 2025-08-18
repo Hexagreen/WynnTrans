@@ -9,7 +9,7 @@ public class LootrunSummaryGlue extends TextGlue {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 2) return false;
-        return text.getSiblings().get(1).getString().matches("§6§lLootrun Completed!");
+        return text.getSiblings().get(1).getString().matches("Lootrun Completed!");
     }
 
     public LootrunSummaryGlue() {
@@ -37,7 +37,7 @@ public class LootrunSummaryGlue extends TextGlue {
                     gluedText.append(text);
                     return true;
                 }
-                else if(text.getString().contains("§7 Lootrun Experience")) {
+                else if(text.getString().contains(" Lootrun Experience")) {
                     resetTimer();
                     gluedText.append(text);
                     safeNow();

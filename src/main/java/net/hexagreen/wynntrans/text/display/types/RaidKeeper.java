@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
@@ -15,7 +16,7 @@ public class RaidKeeper extends WynnDisplayText {
     public RaidKeeper(Text text) {
         super(text);
         this.raidName = getRaidName(getSibling(2));
-        this.cost = getSibling(4).getSiblings().getFirst();
+        this.cost = new ItemName(getSibling(4).getSiblings().getFirst()).textAsMutable();
     }
 
     @Override

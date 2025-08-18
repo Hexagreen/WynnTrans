@@ -17,7 +17,7 @@ public class SpecialNPCName extends WynnDisplayText {
     public static boolean typeChecker(Text text) {
         try {
             return text.getSiblings().get(2).getSiblings().getFirst().getStyle().getFont().equals(BANNER)
-                    && text.getString().contains("\n§7NPC");
+                    && text.getString().contains("\uE00D\uE00F\uE002\uDB00\uDC02");
         }
         catch(Exception ignore) {
             return false;
@@ -36,10 +36,10 @@ public class SpecialNPCName extends WynnDisplayText {
     }
 
     public SpecialNPCName(Text text) {
-        super(reformPackedText(text));
+        super(flatText(text));
         this.icon = getSibling(0);
-        this.banner = getSibling(2).getSiblings().getFirst().copy();
-        String name = getSibling(2).getSiblings().getLast().getString().split("\\n")[1];
+        this.banner = getSibling(2).copy().append(getSibling(3));
+        String name = getSibling(4).getString().split("\\n")[1];
         this.valName = name.replaceAll("§.", "");
         this.keyName = "wytr.name." + normalizeStringForKey(valName);
         this.styleName = parseStyleCode(name);
@@ -61,6 +61,9 @@ public class SpecialNPCName extends WynnDisplayText {
         }
 
         resultText = Text.empty();
-        resultText.append(icon).append("\n").append(banner.setStyle(banner.getStyle().withParent(getStyle(2)))).append("\n").append(name).append("\n").append(Text.literal("NPC").setStyle(GRAY));
+        resultText.append(icon).append("\n")
+                .append(banner.setStyle(banner.getStyle().withParent(getStyle(2)))).append("\n")
+                .append(name).append("\n")
+                .append(getSibling(5).copy().append(getSibling(6)));
     }
 }

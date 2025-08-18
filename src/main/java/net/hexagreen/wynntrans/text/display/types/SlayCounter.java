@@ -6,6 +6,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,7 +47,17 @@ public class SlayCounter extends WynnDisplayText {
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         Text t0 = Text.literal(num).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
         Text t1;
-        String key = "wytr.mobName." + normalizeStringForKey(mobName);
+
+        String normalized = "wytr.mobName." + normalizeStringForKey(mobName);
+        List<String> singularForms = new ArrayList<>();
+        singularForms.add(normalized);
+        if(normalized.matches(".+s$")) singularForms.add(normalized.replaceFirst("s$", ""));
+        if(normalized.matches(".+es$")) singularForms.add(normalized.replaceFirst("es$", ""));
+        if(normalized.matches(".+ies$")) singularForms.add(normalized.replaceFirst("ies$", "y"));
+        String key = singularForms.stream()
+                .filter(WTS::checkTranslationDoNotRegister)
+                .findFirst().orElse(normalized);
+
         if(WTS.checkTranslationExist(key, mobName)) {
             t1 = Text.translatable(key).setStyle(Style.EMPTY.withColor(Formatting.AQUA));
         }

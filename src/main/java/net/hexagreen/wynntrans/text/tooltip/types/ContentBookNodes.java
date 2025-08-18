@@ -144,7 +144,7 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
             else if(chunk.getFirst().getString().contains("Rewards:")) {
                 collector.processRewardSection(chunk);
             }
-            else if(chunk.getFirst().getString().contains("CLICK TO")) {
+            else if(chunk.getFirst().getString().contains("Click To")) {
                 collector.processCTTSection(chunk);
             }
             else {
@@ -686,6 +686,7 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
                             Dungeons dungeon = Dungeons.getDungeons(normalizedName);
                             Text item;
                             if(val.contains("Fragments")) item = dungeon.getDungeonFragment();
+                            else if(val.equals("s")) continue;
                             else item = dungeon.getDungeonBossReward();
                             return line.append(item);
                         }
@@ -703,15 +704,35 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
         }
 
         private void processCTTSection(List<Text> chunk) {
-            Text message = chunk.getFirst().getSiblings().getLast();
-            String key;
-            if(message.getString().contains("UN")) key = "wytr.func.CLICK_TO_UNTRACK";
-            else key = "wytr.func.CLICK_TO_TRACK";
-            Text ctt = Text.translatable(key).setStyle(message.getStyle());
-
-            int totalWidth = getLongestWidth(result);
             result.add(Text.literal(" "));
-            result.add(centerAlign(ctt, totalWidth));
+            List<Text> dump = new ArrayList<>();
+            for(Text text : chunk) {
+                Text message = text.getSiblings().getLast();
+                String key;
+                Text line;
+                if(message.getString().contains("To Fast Travel")) key = "wytr.tooltip.contentWarp";
+                else if(message.getString().contains("not allowed")) {
+                    key = "wytr.tooltip.contentWarp.block";
+                    line = Text.translatable(key).setStyle(message.getStyle());
+                    dump.add(line);
+                    continue;
+                }
+                else if(message.getString().equals("\uE08A")) {
+                    key = "wytr.tooltip.contentWarp.require";
+                    line = Text.translatable(key, message).formatted(Formatting.GRAY);
+                    dump.add(line);
+                    continue;
+
+                }
+                else if(message.getString().contains("Untrack")) key = "wytr.func.clickToUntrack";
+                else key = "wytr.func.clickToTrack";
+                line = Text.empty().append(text.getSiblings().get(1)).append(" ")
+                        .append(Text.translatable(key).setStyle(message.getStyle()));
+                dump.add(line);
+            }
+
+            int totalWidth = Math.max(getLongestWidth(result), getLongestWidth(dump));
+            dump.forEach(t -> result.add(centerAlign(t, totalWidth)));
         }
 
         private void processElse(List<Text> chunk) {

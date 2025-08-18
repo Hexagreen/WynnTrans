@@ -19,7 +19,7 @@ public enum CharacterSkill {
     private final Elements relativeElement;
 
     public static CharacterSkill getSkill(String name) {
-        switch(name.toLowerCase(Locale.ENGLISH)) {
+        switch(name.trim().toLowerCase(Locale.ENGLISH)) {
             case "strength" -> {
                 return STR;
             }

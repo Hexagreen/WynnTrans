@@ -37,7 +37,7 @@ public class BombBell extends WynnChatText {
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         if(bomb == null) throw new TextTranslationFailException("BombBell.java");
-        Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+        Text bombName = bomb.getName().setStyle(Style.EMPTY.withColor(Formatting.WHITE));
 
         resultText = Text.empty();
         resultText.append(Text.translatable(translationKey, playerName, bombName, channel).setStyle(GRAY));

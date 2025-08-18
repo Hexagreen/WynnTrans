@@ -3,12 +3,14 @@ package net.hexagreen.wynntrans.text.chat.types;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.WynnSystemText;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class KeyCollector extends WynnSystemText {
@@ -79,6 +81,13 @@ public class KeyCollector extends WynnSystemText {
 
     private Text parseDungeonKey(Text text) {
         String key = text.getString().replaceAll("\\n", "");
+        Matcher itemNameMatcher = Pattern.compile("\\[(\\d+) (.+)]").matcher(key);
+        if(itemNameMatcher.find()) {
+            String quantity = itemNameMatcher.group(1);
+            String itemName = itemNameMatcher.group(2);
+            Text itemNameText = new ItemName(itemName).textAsMutable();
+            return Text.translatable("wytr.func.questingItem", quantity, itemNameText).setStyle(text.getStyle());
+        }
         return Text.literal(key).setStyle(text.getStyle());
     }
 

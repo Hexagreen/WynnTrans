@@ -6,10 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class LootrunMissionComplete extends WynnChatText implements ILootrun {
 
@@ -24,7 +21,7 @@ public class LootrunMissionComplete extends WynnChatText implements ILootrun {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.AQUA).withBold(true));
+        Text title = Text.translatable(translationKey).formatted(Formatting.AQUA, Formatting.BOLD);
         String clearedMissions = getSibling(1).getString().replaceAll("§.", "").replaceAll("\\D", "");
         Text desc = Text.translatable(translationKey + ".desc", clearedMissions).setStyle(GRAY);
 
@@ -33,7 +30,7 @@ public class LootrunMissionComplete extends WynnChatText implements ILootrun {
                 .append(centerAlign(desc)).append("\n")
                 .append("\n");
 
-        List<List<Text>> textChunks = getTextChunks(getSiblings());
+        Deque<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
         placeTextToBiSection(textChunks.stream()
                 .map(this::mergeTextFromBiSection)
