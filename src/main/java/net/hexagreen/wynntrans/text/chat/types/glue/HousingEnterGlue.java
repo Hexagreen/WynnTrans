@@ -33,7 +33,7 @@ public class HousingEnterGlue extends TextGlue {
                 return true;
             }
             case 2, 4 -> {
-                if(text.getString().equals("À")) {
+                if(text.getString().isEmpty()) {
                     resetTimer();
                     gluedText.append(text);
                     if(count++ == 4) {

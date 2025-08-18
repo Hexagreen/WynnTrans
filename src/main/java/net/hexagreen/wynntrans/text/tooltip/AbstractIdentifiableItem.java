@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-public abstract class AbstractWynnItem extends WynnTooltipText implements ITradableItem {
+public abstract class AbstractIdentifiableItem extends WynnTooltipText implements ITradableItem {
     protected Consumer<Text> textAppender;
     protected Consumer<Text> optionalTextAppender;
 
-    public AbstractWynnItem(List<Text> texts) {
+    public AbstractIdentifiableItem(List<Text> texts) {
         super(ITooltipSplitter.correctSplitter(texts));
         this.textAppender = resultText::append;
         this.optionalTextAppender = resultText::append;
@@ -26,16 +26,27 @@ public abstract class AbstractWynnItem extends WynnTooltipText implements ITrada
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        insertPriceSection(segments, textAppender, this::buildStep);
+        insertPriceSection(segments, textAppender, this::buildStep, this::postStep);
     }
 
     protected abstract void buildStep(List<Text> seg, int step, final int lastIndex);
 
+    protected void postStep(List<Text> seg, int step, final int lastIndex) {
+    }
+
     protected void translateReqSection(List<Text> texts) {
         List<Text> dump = new ArrayList<>();
         texts.forEach(t -> {
-            String[] headAndNum = t.getSiblings().getLast().getString().split(": ");
-            Text icon = t.getSiblings().getFirst();
+            List<Text> siblings = new ArrayList<>(t.getSiblings());
+            String[] headAndNum;
+            if(!siblings.getLast().getString().matches("\\d+")) headAndNum = siblings.getLast().getString().split(": ");
+            else {
+                headAndNum = new String[2];
+                headAndNum[1] = styleToColorCode(siblings.subList(2, siblings.size()), GRAY).getString();
+                siblings.removeLast();
+                headAndNum[0] = siblings.removeLast().getString().replaceFirst(": ", "");
+            }
+            Text icon = siblings.getFirst();
             Text reformedIcon = Text.literal(icon.getString().replaceFirst(" ", "")).setStyle(icon.getStyle());
             Text body;
             if(headAndNum[0].contains("Class Req")) {
@@ -59,7 +70,7 @@ public abstract class AbstractWynnItem extends WynnTooltipText implements ITrada
                 body = Text.translatable("wytr.requirement.quest", questName);
             }
             else if(headAndNum[0].contains("ing Lv. Min")) {
-                Profession _profession = Profession.getProfession(t.getSiblings().get(2).getString().charAt(0));
+                Profession _profession = Profession.getProfession(siblings.get(2).getString().charAt(0));
                 Text profession = _profession.getIcon().setStyle(Style.EMPTY.withColor(Formatting.WHITE)).append(" ")
                         .append(_profession.getText().setStyle(GRAY));
                 String level = headAndNum[1];

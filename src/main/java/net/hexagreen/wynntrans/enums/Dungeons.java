@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.enums;
 
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 
 public enum Dungeons {
     DECREPIT_SEWERS(Text.translatable("wytr.dungeon.decrepitSewers"),
@@ -61,14 +62,14 @@ public enum Dungeons {
         return switch(name) {
             case "decrepitsewers", "witherheadsrib" -> DECREPIT_SEWERS;
             case "infestedpit", "arakadicuseye" -> INFESTED_PIT;
-            case "underworldcrypt", "charonsbrain" -> UNDERWORLD_CRYPT;
+            case "underworldcrypt", "charonssoul" -> UNDERWORLD_CRYPT;
             case "lostsanctuary", "garothsbreath" -> LOST_SANCTUARY;
             case "timelostsanctum", "garothswritings" -> TIMELOST_SANCTUM;
-            case "sandswepttomb", "hashrsbone" -> SAND_SWEPT_TOMB;
-            case "icebarrows", "theoricksiceshard" -> ICE_BARROWS;
+            case "sandswepttomb", "hashrscrown" -> SAND_SWEPT_TOMB;
+            case "icebarrows", "theorickspermafrost" -> ICE_BARROWS;
             case "undergrowthruins", "slykaarsheart" -> UNDERGROWTH_RUINS;
             case "galleonsgraveyard", "redbeardshair" -> GALLEONS_GRAVEYARD;
-            case "fallenfactory", "antikytherasupercomputerschip" -> FALLEN_FACTORY;
+            case "fallenfactory", "antikytheraschip" -> FALLEN_FACTORY;
             case "eldritchoutlook", "theeyespupil" -> ELDRITCH_OUTLOOK;
             default -> UNKNOWN;
         };
@@ -96,6 +97,13 @@ public enum Dungeons {
         MutableText out = Text.empty();
         if(this.isCorrupted) return out.append(Text.translatable("wytr.dungeon.corrupted", dungeonFragment));
         return out.append(dungeonFragment);
+    }
+
+    public MutableText getDungeonBossRewardLore() {
+        if(this == UNKNOWN) return Text.empty();
+        String key = ((TranslatableTextContent) dungeonBossReward.getContent()).getKey();
+        key = this.isCorrupted ? key + ".desc_c" : key + ".desc_n";
+        return Text.translatable(key);
     }
 
     private void setCorrupted(boolean corrupted) {

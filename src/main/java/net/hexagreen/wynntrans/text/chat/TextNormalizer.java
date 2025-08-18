@@ -38,8 +38,8 @@ public abstract class TextNormalizer {
 
     protected abstract void normalize(Text text);
 
-    protected boolean argsFilter(Text sibling) {
-        return false;
+    protected Text argsFilter(Text sibling) {
+        return null;
     }
 
     public Text getText() {
@@ -91,7 +91,7 @@ public abstract class TextNormalizer {
                     String saltyVal = arg.getString();
                     String saltyKey = saltedKey + "." + j + "_" + DigestUtils.sha1Hex(saltyVal).substring(0, 4);
                     Text translatedArg;
-                    if(flag && translationRegister.apply(saltyKey, saltyVal)) {
+                    if(!flag && translationRegister.apply(saltyKey, saltyVal)) {
                         translatedArg = Text.translatable(saltyKey).setStyle(arg.getStyle());
                     }
                     else {
@@ -159,8 +159,9 @@ public abstract class TextNormalizer {
                 return;
             }
 
-            if(argsFilter(sibling)) {
-                args.add(sibling);
+            Text mutated;
+            if((mutated = argsFilter(sibling)) != null) {
+                args.add(mutated);
                 flags.add(true);
                 currentString.append("%s");
                 return;

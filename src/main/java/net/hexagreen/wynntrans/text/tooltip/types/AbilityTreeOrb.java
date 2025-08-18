@@ -46,6 +46,12 @@ public class AbilityTreeOrb extends WynnTooltipText implements ITooltipSplitter 
             else if(rep.getString().equals("✦ Available Points: ")) {
                 dump.add(Text.translatable(translationKey + ".available", firstTextSiblings.get(1), firstTextSiblings.get(2))
                         .setStyle(repStyle));
+                if(seg.getLast().getString().contains("early point")) {
+                    List<Text> siblings = seg.getLast().getSiblings();
+                    String num = siblings.getFirst().getString().replaceAll("\\D", "");
+                    Text rank = siblings.getLast();
+                    dump.add(Text.translatable(translationKey + ".earlyPoint", num, rank).setStyle(siblings.getFirst().getStyle()));
+                }
             }
             else if(rep.getString().equals("Next Ability Points:")) {
                 seg.forEach(t -> {

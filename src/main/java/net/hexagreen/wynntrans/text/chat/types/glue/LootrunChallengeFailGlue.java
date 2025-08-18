@@ -9,7 +9,7 @@ public class LootrunChallengeFailGlue extends TextGlue {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 2) return false;
-        return text.getSiblings().get(1).getString().matches("§c§lChallenge Failed!");
+        return text.getSiblings().get(1).getString().matches("Challenge Failed!");
     }
 
     public LootrunChallengeFailGlue() {
@@ -32,7 +32,7 @@ public class LootrunChallengeFailGlue extends TextGlue {
                 return true;
             }
             case 4 -> {
-                if(text.getString().matches("§7.§7\\[\\+\\d+%.+") || text.getString().isEmpty()) {
+                if(text.getString().matches("§7.\\[\\+\\d+%.+") || text.getString().isEmpty()) {
                     resetTimer();
                     gluedText.append(text);
                     safeNow();

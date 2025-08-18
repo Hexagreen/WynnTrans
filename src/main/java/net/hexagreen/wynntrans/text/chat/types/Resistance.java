@@ -34,6 +34,6 @@ public class Resistance extends WynnChatText {
 
         resultText = Text.empty();
 
-        resultText.append(Text.translatable(translationKey, getSibling(0), buffs).setStyle(getStyle(1)));
+        resultText.append(Text.translatable(translationKey, getSibling(0), buffs).setStyle(getStyle()));
     }
 }

@@ -93,7 +93,8 @@ public class FriendRecruit extends WynnTooltipText implements ITooltipSplitter {
                         .append(seg.getFirst().getSiblings().getLast()));
                 seg.subList(1, seg.size()).forEach(t -> {
                     MutableText line = Text.empty();
-                    line.append(t.getSiblings().getFirst()).append(t.getSiblings().get(1));
+                    line.append(t.getSiblings().getFirst());
+                    if(!t.getString().contains("recruited anyone")) line.append(t.getSiblings().get(1));
                     Text status = t.getSiblings().getLast();
                     if(status.getString().contains("Pending"))
                         line.append(" ").append(Text.translatable("wytr.tooltip.friendRecruit.state.pending").setStyle(status.getStyle()));
@@ -101,6 +102,8 @@ public class FriendRecruit extends WynnTooltipText implements ITooltipSplitter {
                         line.append(" ").append(Text.translatable("wytr.tooltip.friendRecruit.state.accepted").setStyle(status.getStyle()));
                     else if(status.getString().contains("Rewarded"))
                         line.append(" ").append(Text.translatable("wytr.tooltip.friendRecruit.state.rewarded").setStyle(status.getStyle()));
+                    else if(status.getString().contains("anyone"))
+                        line.append(Text.translatable("wytr.tooltip.friendRecruit.state.anyone").setStyle(status.getStyle()));
                     else line.append(status);
                     resultText.append(line);
                 });

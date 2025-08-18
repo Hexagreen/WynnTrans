@@ -19,7 +19,7 @@ public class Narration extends WynnChatText {
     private boolean addiction = true;
 
     public Narration(Text text) {
-        this(new NarrationCarrier(text));
+        this(new NarrationCarrier(flatTextToFilled(colorCodedToStyled(text))));
     }
 
     private Narration(NarrationCarrier carrier) {

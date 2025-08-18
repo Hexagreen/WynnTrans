@@ -26,7 +26,7 @@ public class NpcDialog extends WynnChatText {
     }
 
     public NpcDialog(Text text) {
-        this(new NpcDialogNormalizer(text));
+        this(new NpcDialogNormalizer(flatTextToFilled(colorCodedToStyled(text))));
     }
 
     private NpcDialog(NpcDialogNormalizer carrier) {

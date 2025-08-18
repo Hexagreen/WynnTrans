@@ -1,7 +1,9 @@
 package net.hexagreen.wynntrans.text.display.types;
 
 import net.hexagreen.wynntrans.debugClass;
+import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.TextNormalizer;
+import net.hexagreen.wynntrans.text.display.ProxySimpleDisplay;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.text.MutableText;
@@ -11,6 +13,7 @@ import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.*;
+import java.util.regex.Matcher;
 
 public class SimpleDisplay extends WynnDisplayText {
     private final DisplayCarrier carrier;
@@ -23,7 +26,7 @@ public class SimpleDisplay extends WynnDisplayText {
     }
 
     private static boolean blankChecker(String str) {
-        return str.replaceAll("(§.|\\n|À)", "").isBlank();
+        return str.replaceAll("§.|\\n|À|[\uE000-\uEAFF]|[\uDAFF\uDC00-\uDB01\uDC00]", "").isBlank();
     }
 
     public SimpleDisplay(Text text) {
@@ -61,6 +64,10 @@ public class SimpleDisplay extends WynnDisplayText {
             resultText = newTranslate(keyText, displayArgs.toArray(Object[]::new)).setStyle(styleText);
         }
         else {
+            if(this instanceof ProxySimpleDisplay) {
+                resultText = carrier.originalText.copy();
+                return;
+            }
             MutableText reassembled = Text.empty().setStyle(styleText);
             String[] strings = valText.split("%s", -1);
             for(int j = 0, l = strings.length; j < l; j++) {
@@ -68,7 +75,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 if(j != l - 1) reassembled.append(displayArgs.removeFirst());
             }
             resultText = reassembled;
-            debugClass.writeTextAsJSON(carrier.originalText, "Display");
+            if(!carrier.timerTranslated) debugClass.writeTextAsJSON(carrier.originalText, "Display");
         }
     }
 
@@ -86,14 +93,26 @@ public class SimpleDisplay extends WynnDisplayText {
     }
 
     private static class DisplayCarrier extends TextNormalizer {
+        boolean timerTranslated;
 
         protected DisplayCarrier(Text text) {
             super(text, WTS.getRulebooks().displayRuleBook);
         }
 
         @Override
-        protected boolean argsFilter(Text sibling) {
-            return !sibling.getStyle().getFont().equals(Identifier.of("minecraft:default"));
+        protected Text argsFilter(Text sibling) {
+            if(!sibling.getStyle().getFont().equals(Identifier.of("minecraft:default"))) return sibling;
+            Matcher m;
+            if((m = ITime.timePattern.matcher(sibling.getString())).find()) {
+                String sTime = m.group();
+                if(sTime.isBlank()) return null;
+                Text timer = ITime.translateTime(sTime);
+                if(!m.replaceFirst("").isBlank()) return null;
+                String replaced = m.replaceFirst(timer.getString());
+                timerTranslated = true;
+                return Text.literal(replaced).setStyle(sibling.getStyle());
+            }
+            return null;
         }
 
         @Override
@@ -117,6 +136,7 @@ public class SimpleDisplay extends WynnDisplayText {
                 if(Objects.equals(GRAY.getColor(), s.getColor())) {
                     styles[1] = s;
                 }
+
                 return Optional.empty();
             }, Style.EMPTY);
 

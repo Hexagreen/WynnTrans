@@ -13,7 +13,7 @@ public class TradeMarketOrderView extends WynnTooltipText implements ITooltipSpl
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
         if(!WynnTrans.currentScreen.contains("\uE012")) return false;
-        return texts.getFirst().getString().matches("Cancel Order|Withdraw Items");
+        return texts.getFirst().getString().matches("Cancel Order|Withdraw Items|Closing your order...");
     }
 
     public TradeMarketOrderView(List<Text> texts) {
@@ -30,6 +30,7 @@ public class TradeMarketOrderView extends WynnTooltipText implements ITooltipSpl
         switch(getSibling(0).getString()) {
             case "Cancel Order" -> buildCancelOrder();
             case "Withdraw Items" -> buildWithdraw();
+            case "Closing your order..." -> buildClosing();
         }
     }
 
@@ -51,5 +52,11 @@ public class TradeMarketOrderView extends WynnTooltipText implements ITooltipSpl
         resultText.append(SPLITTER);
         resultText.append(Text.empty().append(getSibling(-1).getSiblings().getFirst())
                 .append(" ").append(Text.translatable("wytr.tooltip.tradeMarket.view.click").formatted(Formatting.GREEN)));
+    }
+
+    private void buildClosing() {
+        resultText.append(Text.translatable("wytr.tooltip.tradeMarket.view.closing").formatted(Formatting.YELLOW, Formatting.BOLD));
+        wrapLine(Text.translatable("wytr.tooltip.tradeMarket.view.closing.desc").formatted(Formatting.GRAY), 150)
+                .forEach(resultText::append);
     }
 }

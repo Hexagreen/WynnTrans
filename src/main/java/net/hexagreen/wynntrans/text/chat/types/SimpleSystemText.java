@@ -46,12 +46,15 @@ public class SimpleSystemText extends WynnSystemText {
                 String valText = sibling.getString();
                 String keyText = this.keyText + "." + i++;
 
+                if(valText.replaceAll("§.", "").isBlank()) continue;
+
                 if(checkTranslationExistWithControl(keyText, valText)) {
                     if(resultText == null) resultText = Text.empty().setStyle(getStyle());
                     resultText.append(newTranslate(keyText).setStyle(sibling.getStyle()));
                 }
                 else {
-                    if(resultText == null) resultText = inputText.copy();
+                    if(resultText == null) resultText = Text.empty().setStyle(getStyle());
+                    resultText.append(sibling);
                     if(translationRegisterControl && !recorded) {
                         debugClass.writeTextAsJSON(originText, "SystemText");
                         debugClass.writeTextAsJSON(inputText, "    --    ");

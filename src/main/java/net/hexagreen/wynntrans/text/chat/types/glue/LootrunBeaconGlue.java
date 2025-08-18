@@ -10,7 +10,7 @@ public class LootrunBeaconGlue extends TextGlue {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 2) return false;
-        return text.getSiblings().get(1).getString().matches("§6§lChoose a Beacon!");
+        return text.getSiblings().get(1).getString().matches("Choose a Beacon!");
     }
 
     public LootrunBeaconGlue() {

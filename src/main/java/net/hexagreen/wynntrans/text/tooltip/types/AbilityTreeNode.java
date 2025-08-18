@@ -190,11 +190,12 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
             collector.append("\n");
         });
 
-        String v = collector.toString().replaceAll("  ", " ").replaceFirst("\\n$", "");
+        String v = collector.toString().replaceAll("  ", " ").replaceFirst("\\n$", "")
+                .replaceAll(" ,", ",").replaceAll(" \\.", ".").replaceAll(" ?\\n ?", "\n");
         String k = abilityNameKey + "." + DigestUtils.sha1Hex(v.replaceAll("\\n", " ").replaceAll("  ", " ").replaceAll("§.", "")).substring(0, 4);
         List<MutableText> args = processDescArgs(_args, _flags);
         WTS.checkTranslationExist(k, v);
-        tempText.add(Text.translatableWithFallback(k, v.replaceAll("\\n", " "), args.toArray(Object[]::new)).setStyle(desiredStyle));
+        tempText.add(Text.translatableWithFallback(k, v, args.toArray(Object[]::new)).setStyle(desiredStyle));
         wrapTargetIdx.add(tempText.size() - 1);
     }
 

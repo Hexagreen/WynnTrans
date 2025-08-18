@@ -2,26 +2,15 @@ package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.Bombs;
-import net.hexagreen.wynntrans.text.chat.WynnChatText;
-import net.minecraft.text.Style;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
+import net.hexagreen.wynntrans.text.chat.WynnSystemText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Pattern;
-
-public class BombStart extends WynnChatText {
-    public static final Style DARK_AQUA = Style.EMPTY.withColor(Formatting.DARK_AQUA);
-    private final Text playerName;
-    private final Bombs bomb;
-
-    public static boolean typeChecker(Text text) {
-        return Pattern.compile("^.+ has thrown an? .+ Bomb").matcher(text.getString()).find();
-    }
+public class BombStart extends WynnSystemText implements ISpaceProvider {
 
     public BombStart(Text text) {
-        super(text);
-        this.playerName = getSibling(0);
-        this.bomb = Bombs.findBomb(getSibling(2).getString());
+        super(text, true);
     }
 
     @Override
@@ -33,23 +22,40 @@ public class BombStart extends WynnChatText {
     protected void build() {
         resultText = Text.empty();
 
+        Text playerName = getSibling(1).getSiblings().get(1);
+        Text _bomb = getSibling(0).getSiblings().getLast();
+        Bombs bomb = Bombs.findBomb(_bomb.getString());
         if(bomb == null) throw new TextTranslationFailException("BombStart.class");
-        Text bombName = bomb.getBombName().setStyle(Style.EMPTY.withColor(Formatting.AQUA));
+
+        Text _thanks = getSibling(-1).getSiblings().getLast();
+        Text thanks = Text.translatable("wytr.func.bombThanks", playerName.getString()).setStyle(_thanks.getStyle());
+
+        Text head = bomb.getName().setStyle(_bomb.getStyle());
+        Text body;
+        Text tail;
 
         switch(bomb) {
-            case COMBAT_XP, PROFESSION_XP, PROFESSION_SPEED, LOOT ->
-                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(DARK_AQUA))
-                            .append(Text.translatable(translationKey + ".durational", bomb.getBombDescription(), bomb.getBombTime()).setStyle(DARK_AQUA));
-            case ITEM -> resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(DARK_AQUA))
-                    .append(Text.translatable(translationKey + ".instant", bomb.getBombDescription()).setStyle(GRAY));
-            case DUNGEON ->
-                    resultText.append(Text.translatable(translationKey, playerName, bombName).setStyle(DARK_AQUA))
-                            .append(bomb.getBombDescription());
+            case LOOT, LOOT_CHEST, COMBAT_XP -> {
+                body = Text.translatable(translationKey + ".durational", playerName, bomb.getName(), bomb.getDesc(), bomb.getTime())
+                        .formatted(Formatting.GRAY);
+                tail = Text.empty().append(getSystemTextCenterIndent(thanks)).append(thanks);
+            }
+            case INGREDIENT, ITEM -> {
+                body = Text.translatable(translationKey + ".instant", playerName, bomb.getName(), bomb.getDesc())
+                        .formatted(Formatting.GRAY);
+                tail = Text.empty().append(SYSTEM_TEXT_ADJUSTMENT).append(twoColumnAlign(bomb.getTime(), thanks));
+            }
             default -> {
                 debugClass.writeTextAsJSON(inputText, "UnknownBomb");
                 resultText = inputText;
+                return;
             }
         }
+
+        resultText.append(Text.empty().append(getSystemTextCenterIndent(head)).append(head)).append("\n");
+        wrapLine(body, (int) CHAT_HUD_WIDTH)
+                .forEach(t -> resultText.append(Text.empty().append(getSystemTextCenterIndent(t)).append(t).append("\n")));
+        resultText.append("\n").append(tail).append("\n");
     }
 
 }

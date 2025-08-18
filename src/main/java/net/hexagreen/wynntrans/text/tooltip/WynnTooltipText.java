@@ -9,6 +9,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,15 +41,13 @@ public abstract class WynnTooltipText extends WynnTransText {
             build();
             return resultText.getSiblings();
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OOB - Tooltip");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed tooltip message.\n", e);
             return new SimpleTooltip(getSiblings()).text();
         }
-        catch(NullPointerException ignore) {
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "TooltipExc");
         }
         return getSiblings();
     }
@@ -58,12 +57,12 @@ public abstract class WynnTooltipText extends WynnTransText {
             build();
             return resultText;
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OOB - Tooltip");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed tooltip message.\n", e);
+        }
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "TooltipExc");
         }
         return inputText;
     }
@@ -99,15 +98,15 @@ public abstract class WynnTooltipText extends WynnTransText {
         return result;
     }
 
-    protected int getLongestWidth(List<Text> lines) {
+    protected int getLongestWidth(Collection<Text> lines) {
         return getLongestWidth(lines, Text.literal(" "));
     }
 
-    protected int getLongestWidth(List<Text> lines, Text criteria) {
+    protected int getLongestWidth(Collection<Text> lines, Text criteria) {
         return getLongestWidth(lines, TEXT_RENDERER.getWidth(criteria));
     }
 
-    protected int getLongestWidth(List<Text> lines, int criteria) {
+    protected int getLongestWidth(Collection<Text> lines, int criteria) {
         int max = criteria;
         for(Text line : lines) {
             max = Math.max(max, TEXT_RENDERER.getWidth(line));

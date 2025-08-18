@@ -3,7 +3,7 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.enums.CharacterSkill;
 import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.ITime;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-public class Ingredient extends AbstractWynnItem {
+public class Ingredient extends AbstractIdentifiableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 6) return false;
@@ -78,11 +78,12 @@ public class Ingredient extends AbstractWynnItem {
         for(Text t : segment) {
             if(t.getString().contains("[✫✫✫]")) {
                 Deque<Text> mutableSiblings = new ArrayDeque<>(t.getSiblings());
-                String _ingredientName = mutableSiblings.removeFirst().getString();
+                String _ingredientName = mutableSiblings.removeFirst().getString().trim();
                 boolean trailingBracket = _ingredientName.contains(" [");
                 Text ingredientName = new ItemName(_ingredientName.replaceFirst(" \\[$", "")).textAsMutable().setStyle(GRAY);
                 MutableText nameLine = Text.empty().append(ingredientName);
                 if(trailingBracket) nameLine.append(Text.literal(" [").setStyle(GRAY));
+                else if(!ingredientName.getString().matches(" $")) nameLine.append(" ");
                 mutableSiblings.forEach(nameLine::append);
                 resultText.append(nameLine);
             }

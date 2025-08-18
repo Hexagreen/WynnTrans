@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.display.types;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.Locale;
 
@@ -14,14 +15,14 @@ public class Gathering extends WynnDisplayText {
     private final String profession;
 
     public static boolean typeChecker(Text text) {
-        if(!text.getSiblings().isEmpty()) return false;
+        if(text.getSiblings().isEmpty()) return false;
         return text.getString().replaceAll("§.", "").matches("\\n*\\[\\|\\|\\|.+\\|\\|\\|]");
     }
 
     public Gathering(Text text) {
-        super(text);
+        super(styleToColorCode(colorCodedToStyled(text).getSiblings(), Style.EMPTY.withColor(Formatting.WHITE)));
         this.lineFeed = inputText.getString().replaceAll("[^\\n]", "");
-        String bracket = inputText.getString().replace("\n", "");
+        String bracket = inputText.getString().replaceAll("\\n", "");
         this.bracketStyle = parseStyleCode(bracket.substring(0, 2));
         this.barStyle = bracket.substring(3, 5);
         String bar = bracket.replaceAll("§.[\\[\\]]", "");

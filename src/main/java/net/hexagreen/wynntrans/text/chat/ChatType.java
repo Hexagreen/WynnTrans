@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.chat;
 
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.chat.types.*;
 import net.minecraft.text.Text;
 
@@ -24,12 +25,8 @@ public enum ChatType {
     PLEVEL_ANNOUNCE(ProfessionLevelAnnounce::new, ProfessionLevelAnnounce::typeChecker),
     AREA_ENTER(AreaEnter::new, AreaEnter::typeChecker),
     AREA_LEAVE(AreaLeave::new, AreaLeave::typeChecker),
-    BOMB_START(BombStart::new, BombStart::typeChecker),
-    BOMB_THANK(BombThanks::new, BombThanks::typeChecker),
     THANK_YOU(BombThankful::new, BombThankful::typeChecker),
     BOMB_THANKED(BombThanked::new, BombThanked::typeChecker),
-    BOMB_EXPIRE(BombExpired::new, BombExpired::typeChecker),
-    SHOUT_LITERAL(ShoutLiteral::new, ShoutLiteral::typeChecker),
     SHOUT(Shout::new, Shout::typeChecker),
     CRATE_GET(CrateGet::new, CrateGet::typeChecker),
     RANKS_LOGIN(RankJoin::new, RankJoin::typeChecker),
@@ -40,8 +37,6 @@ public enum ChatType {
     SPEEDBOOST(SpeedBoost::new, SpeedBoost::typeChecker),
     RESISTANCE(Resistance::new, Resistance::typeChecker),
     PARTYFINDER(PartyFinder::new, PartyFinder::typeChecker),
-    DISGUISE(Disguise::new, Disguise::typeChecker),
-    DISGUISING(Disguising::new, Disguising::typeChecker),
     FRIEND_JOIN(FriendJoin::new, FriendJoin::typeChecker),
     FRIEND_LEFT(FriendLeft::new, FriendLeft::typeChecker),
     DIALOG_LITERAL(NpcDialogLiteral::new, NpcDialogLiteral::typeChecker),
@@ -60,16 +55,14 @@ public enum ChatType {
     LITTLE_INFORM(LittleInform::new, LittleInform::typeChecker),
     FRIEND_ADD(FriendAdd::new, FriendAdd::typeChecker),
     FRIEND_ADDED(FriendAdded::new, FriendAdded::typeChecker),
-    SKIN_APPLIED(SkinApplied::new, SkinApplied::typeChecker),
-    CHARACTER_CLASS_CHANGE(CharacterClassChange::new, CharacterClassChange::typeChecker),
     QUICK_TRADE(QuickTrade::new, QuickTrade::typeChecker),
     QUICK_DUEL(QuickDuel::new, QuickDuel::typeChecker),
     CAVE_COMPLETE_LITERAL(CaveCompletedLiteral::new, CaveCompletedLiteral::typeChecker),
     BOMB_BELL(BombBell::new, BombBell::typeChecker),
     NOT_YOUR_WEAPON(NotYourWeapon::new, NotYourWeapon::typeChecker),
-    MOB_TOTEM_DEPLOYED(MobTotemDeployed::new, MobTotemDeployed::typeChecker),
-    MOB_TOTEM_RUNNING(MobTotemRunning::new, MobTotemRunning::typeChecker),
-    MOB_TOTEM_RUN_OUT(MobTotemRunOut::new, MobTotemRunOut::typeChecker),
+    BOOST_TOTEM_DEPLOYED(BoostTotemDeployed::new, BoostTotemDeployed::typeChecker),
+    BOOST_TOTEM_RUNNING(BoostTotemRunning::new, BoostTotemRunning::typeChecker),
+    BOOST_TOTEM_RUN_OUT(BoostTotemRunOut::new, BoostTotemRunOut::typeChecker),
     MANA_POTION(ManaPotion::new, ManaPotion::typeChecker),
     POTION_EFFECT_APPLIED(PotionEffectApplied::new, PotionEffectApplied::typeChecker),
     CRAFTING_EXP_GAIN(CraftingEXPGain::new, CraftingEXPGain::typeChecker),
@@ -93,16 +86,18 @@ public enum ChatType {
     WORLD_EVENT_START(WorldEventStart::new, WorldEventStart::typeChecker),
     TRINKET_COOLDOWN(TrinketCooldown::new, TrinketCooldown::typeChecker),
     TRINKET_ON_ACTIVE(TrinketOnActive::new, TrinketOnActive::typeChecker),
-    PLAYER_EFFECT_APPLIED(PlayerEffectApplied::new, PlayerEffectApplied::typeChecker),
+    TRINKET_RUNOUT(TrinketRunout::new, TrinketRunout::typeChecker),
     FRIEND_LIST(FriendList::new, FriendList::typeChecker),
     LOGIN_SCENE_UNLOCK(LoginSceneUnlocked::new, LoginSceneUnlocked::typeChecker),
+    BOMB_EXPIRE(BombExpired::new, BombExpired::typeChecker),
+    PET_SAY(PetSay::new, PetSay::typeChecker),
 
     PROXY_SYSTEM_TEXT(ProxySystemText::new, ProxySystemText::typeChecker),
     EVENT_BONFIRE(EventBonfireHearthflames::new, EventBonfireHearthflames::typeChecker),
     TEXT_REMOVAL(EatThisText::new, EatThisText::typeChecker),
 
-    GO_TO_STORE(GoToStore::new, GoToStore::typeChecker),
     STANDARD_SYSTEM_MESSAGE(SimpleSystemText::new, SimpleSystemText::typeChecker),
+    TRANSLATION_BYPASS(TranslationBypass::new, TranslationBypass::typeChecker),
     NO_TYPE(SimpleText::new, null);
 
 
@@ -127,6 +122,7 @@ public enum ChatType {
     }
 
     public boolean match(Text text, int siblingIndex) {
-        return this.typeChecker.test(text.getSiblings().get(siblingIndex));
+        Text reformed = WynnTransText.flatTextToFilled(WynnTransText.colorCodedToStyled(text.getSiblings().get(siblingIndex)));
+        return this.typeChecker.test(reformed);
     }
 }

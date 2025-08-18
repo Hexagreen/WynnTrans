@@ -16,13 +16,13 @@ public abstract class WynnTitleText extends WynnTransText {
             build();
             return resultText;
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OOB - Title");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed title message has been recorded.\n", e);
             return new SimpleTitle(inputText).text();
+        }
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "TitleExc");
         }
         return inputText;
     }

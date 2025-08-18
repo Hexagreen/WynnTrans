@@ -367,7 +367,9 @@ public class TradeMarketMakeDeal extends WynnTooltipText implements ITooltipSpli
                 resultText.append(Text.translatable(key).formatted(Formatting.GREEN));
                 Deque<Text> siblings = new ArrayDeque<>(seg.getLast().getSiblings());
                 siblings.removeFirst();
-                String _amount = siblings.removeFirst().getString().replaceAll("\\D", "");
+                String[] split = siblings.removeFirst().getString().split("x ", 2);
+                String _amount = split[0];
+                siblings.addFirst(Text.literal(split[1]).formatted(Formatting.GRAY));
                 Text amount = Text.translatable("wytr.unit.quantity", _amount).formatted(Formatting.GRAY);
                 MutableText _itemName = Text.empty();
                 siblings.forEach(_itemName::append);

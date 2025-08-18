@@ -15,9 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
-    private static final Pattern REGEX_FES_COLOR = Pattern.compile("^ +§(.)");
+    private static final Pattern REGEX_FES_COLOR = Pattern.compile("^ +(§.)");
     private static final Pattern REGEX_FES = Pattern.compile("^ +(....)(Festival.+)\\n");
-    private static final Pattern REGEX_CRATE = Pattern.compile(" (§.[A-z]+) Crates");
+    private static final Pattern REGEX_CRATE = Pattern.compile(" (§.[A-z ]+) Crates");
     private static final Pattern REGEX_TIME = Pattern.compile("doors in (.+)\\.");
     private static final Pattern REGEX_TRADE = Pattern.compile("^ +§d§l(\\d+)§5 of your items sold");
     private static final Pattern REGEX_PROMOTION_TIME = Pattern.compile(".+ in (.+ (?:days|day|hours|hour|minutes|minute))\\.");
@@ -112,7 +112,7 @@ public class WelcomeMessage extends WynnChatText implements ISpaceProvider {
             Text festivalGuide2 = Text.translatable(translationKey + ".fesGuide.2", strCrate).setStyle(festDescStyle);
             resultText.append(centerAlign(festivalGuide2)).append("\n\n");
         }
-        else debugClass.writeTextAsJSON(inputText);
+        else debugClass.writeTextAsJSON(inputText, "WelcomeFesMessage");
 
         Matcher time = REGEX_TIME.matcher(getSibling(5).getString());
         if(time.find()) {

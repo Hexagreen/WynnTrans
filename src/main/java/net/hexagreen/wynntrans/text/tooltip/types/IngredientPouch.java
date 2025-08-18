@@ -95,11 +95,7 @@ public class IngredientPouch extends WynnTooltipText implements ITooltipSplitter
             Deque<Text> mutableSibling = new ArrayDeque<>(t.getSiblings());
             MutableText result = Text.empty();
             result.append(mutableSibling.removeFirst());
-            String ingredientName = mutableSibling.removeFirst().getString();
-            boolean trailingBracket = ingredientName.contains(" [");
-            result.append(new ItemName(ingredientName.replaceFirst(" \\[$", "")).textAsMutable().setStyle(GRAY));
-            if(trailingBracket) result.append(Text.literal(" [").setStyle(GRAY));
-            mutableSibling.forEach(result::append);
+            result.append(Ingredient.getTranslatedItemName(siblingsToFilledText(mutableSibling)));
             resultText.append(result);
         });
     }

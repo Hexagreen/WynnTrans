@@ -2,10 +2,13 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.EquipmentAndConsumables;
 import net.hexagreen.wynntrans.enums.ItemRarity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +18,7 @@ public class CraftedEquipment extends NormalEquipment {
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
         for(int i = texts.size() - 1; i >= 0; i--) {
-            if(texts.get(i).getString().matches("^(§7)?§3Crafted .+§8 \\[\\d+/\\d+ Durability]"))
+            if(texts.get(i).getString().matches("^(§7)?Crafted .+ \\[\\d+/\\d+ Durability]"))
                 return true;
         }
         return false;
@@ -32,9 +35,15 @@ public class CraftedEquipment extends NormalEquipment {
             Text t = texts.get(i);
             String string = t.getString();
             Text body;
-            if(string.matches("^\\[\\d+/\\d+] Powder Slots.*")) {
-                String[] powderInfo = styleToColorCode(t.getSiblings(), GRAY).getString().split(" Powder Slots ?");
-                body = Text.translatable("wytr.tooltip.equipment.powderSlot", powderInfo[0], powderInfo.length == 2 ? powderInfo[1] : "").setStyle(GRAY);
+            if(string.contains("Powder Slots")) {
+                Deque<Text> siblings = new ArrayDeque<>(t.getSiblings());
+                String[] powderInfo = siblings.removeFirst().getString().split(" Powder Slots ?");
+                MutableText applied = Text.empty();
+                if(powderInfo.length == 2) {
+                    siblings.addFirst(Text.literal(powderInfo[1]));
+                    siblings.forEach(applied::append);
+                }
+                body = Text.translatable("wytr.tooltip.equipment.powderSlot", powderInfo[0], applied).setStyle(GRAY);
                 addAndRecordWidth(body);
                 continue;
             }

@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.EquipmentAndConsumables;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Material extends AbstractWynnItem {
+public class Material extends AbstractIdentifiableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
@@ -22,7 +22,7 @@ public class Material extends AbstractWynnItem {
     }
 
     public static MutableText getTranslatedItemName(Text text) {
-        if(!text.getString().contains(" \\[✫✫✫]")) return null;
+        if(!text.getString().contains(" [✫✫✫]")) return null;
         String _iName = text.getString().replaceFirst(" \\[✫✫✫]", "");
         if(!WTS.checkTranslationDoNotRegister("wytr.item.material." + normalizeStringForKey(_iName))) return null;
         List<Text> textBowl = new ArrayList<>();

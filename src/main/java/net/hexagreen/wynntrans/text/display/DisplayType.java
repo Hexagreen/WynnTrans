@@ -32,8 +32,6 @@ public enum DisplayType {
     CAVE_LOOT_CHEST(CaveLootChest::new, CaveLootChest::typeChecker),
     BOOTH_TITLE(BoothTitle::new, BoothTitle::typeChecker),
     BOOTH_SETUP(BoothSetup::new, BoothSetup::typeChecker),
-    CRATE_REWARD(CrateReward::new, CrateReward::typeChecker),
-    CRATE_OPENING(CrateOpening::new, CrateOpening::typeChecker),
     TIMER(Timer::new, Timer::typeChecker),
     TOTEM_HEALING(ShamanTotem::new, ShamanTotem::typeChecker),
     BOSS_ALTAR(BossAltar::new, BossAltar::typeChecker),
@@ -45,13 +43,14 @@ public enum DisplayType {
     WORLD_EVENT_NAME(WorldEventName::new, WorldEventName::typeChecker),
     WORLD_EVENT_TIMER(WorldEventTimer::new, WorldEventTimer::typeChecker),
     WORLD_EVENT_BANNER(WorldEventBanner::new, WorldEventBanner::typeChecker),
-    MOB_TOTEM(MobTotem::new, MobTotem::typeChecker),
+    BOOST_TOTEM(BoostTotem::new, BoostTotem::typeChecker),
     SUMMONS_NAME(SummonsName::new, SummonsName::typeChecker),
     SUMMONS_NAME_LITERAL(SummonsNameLiteral::new, SummonsNameLiteral::typeChecker),
     ARCHER_TRAP(ArcherTrap::new, ArcherTrap::typeChecker),
     PET_NAME(PetName::new, PetName::typeChecker),
 
     PROXY_DISPLAY(ProxySimpleDisplay::new, ProxySimpleDisplay::typeChecker),
+    BYPASS(TranslationBypass::new, TranslationBypass::typeChecker),
 
     NO_TYPE(SimpleDisplay::new, null);
 

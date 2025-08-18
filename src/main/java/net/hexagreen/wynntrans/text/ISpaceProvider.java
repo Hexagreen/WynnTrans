@@ -13,6 +13,8 @@ public interface ISpaceProvider {
             / MinecraftClient.getInstance().inGameHud.getChatHud().getChatScale();
     int CENTER = (int) CHAT_HUD_WIDTH / 2;
     int SYSTEM_TEXT_BOX_WIDTH = 7;
+    Text SYSTEM_TEXT_ADJUSTMENT = Text.literal("\uDAFF\uDFF9")
+            .setStyle(Style.EMPTY.withFont(Identifier.of("minecraft:space")));
 
     default MutableText getSystemTextCenterIndent(Text alignTargetText) {
         int textWidth = TEXT_RENDERER.getWidth(alignTargetText);

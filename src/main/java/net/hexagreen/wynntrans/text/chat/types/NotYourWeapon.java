@@ -1,30 +1,22 @@
 package net.hexagreen.wynntrans.text.chat.types;
 
 import net.hexagreen.wynntrans.enums.CharacterClass;
-import net.hexagreen.wynntrans.text.chat.WynnChatText;
+import net.hexagreen.wynntrans.text.chat.WynnSystemText;
+import net.hexagreen.wynntrans.text.tooltip.types.ItemName;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NotYourWeapon extends WynnChatText {
-    private final Text item;
-    private final Text className;
-    private final Text weapon;
+public class NotYourWeapon extends WynnSystemText {
 
     public static boolean typeChecker(Text text) {
-        return Pattern.compile("§c(.+)§4 is not a §c(.+)§4 weapon\\. You must use a §c.+\\.").matcher(text.getString()).find();
+        return Pattern.compile("(.+) is not an? (.+) weapon\\. You must use an? .+").matcher(removeTextBox(text)).find();
     }
 
     public NotYourWeapon(Text text) {
         super(text);
-        Matcher matcher = Pattern.compile("§c(.+)§4 is not a §c(.+)§4 weapon\\. You must use a §c.+\\.").matcher(inputText.getString());
-        boolean ignore = matcher.find();
-        this.item = Text.literal(matcher.group(1)).setStyle(Style.EMPTY.withColor(Formatting.RED));
-        this.className = CharacterClass.getClassName(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
-        this.weapon = CharacterClass.getWeapon(matcher.group(2)).setStyle(Style.EMPTY.withColor(Formatting.RED));
     }
 
     @Override
@@ -34,6 +26,11 @@ public class NotYourWeapon extends WynnChatText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+        Text item = new ItemName(getSibling(0)).textAsMutable();
+        String _className = getContentString(2).replaceFirst("an? ", "");
+        Text className = CharacterClass.getClassName(_className).formatted(Formatting.RED);
+        Text weapon = CharacterClass.getWeapon(_className).formatted(Formatting.RED);
+
         resultText = Text.empty();
         resultText.append(Text.translatable(translationKey, item, className, weapon).setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
     }

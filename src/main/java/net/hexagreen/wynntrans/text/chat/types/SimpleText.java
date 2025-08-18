@@ -22,7 +22,7 @@ public class SimpleText extends WynnChatText {
         if(getSiblings().isEmpty()) {
             this.valText = inputText.getString().replaceFirst("^(?:§.)+", "");
             String styleCode = inputText.getString().replace(valText, "");
-            this.textStyle = parseStyleCode(styleCode);
+            this.textStyle = getStyle().withParent(parseStyleCode(styleCode));
         }
         else {
             this.valText = inputText.getString();
@@ -68,6 +68,10 @@ public class SimpleText extends WynnChatText {
                 if(resultText == null) resultText = Text.empty().setStyle(getStyle());
                 if(valText.equals("\n")) {
                     resultText.append("\n");
+                    continue;
+                }
+                if(valText.matches("§.")) {
+                    resultText.append(valText);
                     continue;
                 }
 

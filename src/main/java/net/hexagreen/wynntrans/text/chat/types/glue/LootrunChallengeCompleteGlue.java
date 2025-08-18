@@ -3,6 +3,7 @@ package net.hexagreen.wynntrans.text.chat.types.glue;
 import net.hexagreen.wynntrans.text.chat.TextGlue;
 import net.hexagreen.wynntrans.text.chat.types.LootrunChallengeComplete;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class LootrunChallengeCompleteGlue extends TextGlue {
@@ -10,7 +11,7 @@ public class LootrunChallengeCompleteGlue extends TextGlue {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 2) return false;
-        return text.getSiblings().get(1).getString().matches("§a§lChallenge Completed");
+        return text.getSiblings().get(1).getString().matches("Challenge Completed");
     }
 
     public LootrunChallengeCompleteGlue() {
@@ -34,10 +35,10 @@ public class LootrunChallengeCompleteGlue extends TextGlue {
                 return true;
             }
             case 3 -> {
-                if(text.getString().matches("§7.§7\\[\\+\\d+%.+")
-                        || text.contains(Text.literal("§5§lCurses"))
-                        || text.contains(Text.literal("§b§lMission Started"))
-                        || text.contains(Text.literal("§6§lBoon"))
+                if(text.getString().matches("§7.\\[\\+\\d+%?.+")
+                        || text.contains(Text.literal("Curses").formatted(Formatting.BOLD, Formatting.DARK_PURPLE))
+                        || text.contains(Text.literal("Mission Started").formatted(Formatting.BOLD, Formatting.AQUA))
+                        || text.contains(Text.literal("Boon").formatted(Formatting.BOLD, Formatting.GOLD))
                         || text.getString().contains("§b§l")) {
                     resetTimer();
                     gluedText.append(text);

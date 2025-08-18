@@ -11,8 +11,9 @@ import java.util.function.Predicate;
 public enum TitleType {
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker, false),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker, false),
-    CRATE_REWARD_TIER(CrateRewardTier::new, CrateRewardTier::typeChecker, false),
+    POTION_BUNDLE(PotionBundle::new, PotionBundle::typeChecker, false),
     AREA_UNLOCKED(AreaUnlocked::new, AreaUnlocked::typeChecker, false),
+    DISCOVERY_FOUND(DiscoveryFound::new, DiscoveryFound::typeChecker, false),
 
     PROXY_TITLE(ProxySimpleTitle::new, ProxySimpleTitle::typeChecker, true),
     PROXY_SUBTITLE(ProxySimpleTitle::new, ProxySimpleTitle::typeChecker, false),

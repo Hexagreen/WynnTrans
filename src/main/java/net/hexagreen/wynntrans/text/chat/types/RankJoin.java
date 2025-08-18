@@ -10,7 +10,7 @@ public class RankJoin extends WynnChatText {
     public static boolean typeChecker(Text text) {
         return Pattern.compile("^. .+ has just logged in!$").matcher(text.getString()).find();
     }
-    
+
     public RankJoin(Text text) {
         super(text);
     }
@@ -22,7 +22,7 @@ public class RankJoin extends WynnChatText {
 
     @Override
     protected void build() {
-        resultText = Text.empty();
+        resultText = inputText.copyContentOnly().setStyle(getStyle());
         resultText.append(getSibling(0)).append(getSibling(1)).append(Text.translatable(translationKey).setStyle(getStyle(2)));
     }
 }

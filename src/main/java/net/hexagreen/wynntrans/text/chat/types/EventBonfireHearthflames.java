@@ -26,7 +26,7 @@ public class EventBonfireHearthflames extends SimpleSystemText {
     private static MutableText numToReplacer(Text text) {
         String content = text.copyContentOnly().getString();
         if(content.matches(".*\\d+.*")) {
-            return Text.literal(content.replaceAll("\\d+", "%2\\$s")).setStyle(text.getStyle());
+            return Text.literal(content.replaceAll("\\d+", "%1\\$s")).setStyle(text.getStyle());
         }
         else return text.copyContentOnly().setStyle(text.getStyle());
     }

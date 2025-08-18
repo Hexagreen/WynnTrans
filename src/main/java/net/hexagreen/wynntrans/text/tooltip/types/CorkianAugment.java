@@ -77,21 +77,23 @@ public class CorkianAugment extends WynnTooltipText implements ITradableItem {
     }
 
     private void translateName(List<Text> seg, String[] key) {
-        String _string = seg.getFirst().getString();
-        Style textStyle = seg.getFirst().getSiblings().getFirst().getStyle();
-        if(_string.contains("Amplifier")) {
-            String tier = _string.replaceAll("À", "").replaceFirst("Corkian Amplifier ?", "");
-            key[0] = "wytr.item.misc.corkianAugment.amplifier";
-            resultText.append(Text.translatable(key[0], tier).setStyle(textStyle));
+        for(Text line : seg) {
+            String _string = line.getString();
+            Style textStyle = line.getSiblings().getFirst().getStyle();
+            if(_string.contains("Amplifier")) {
+                String tier = _string.replaceAll("À", "").replaceFirst("Corkian Amplifier ?", "");
+                key[0] = "wytr.item.misc.corkianAugment.amplifier";
+                resultText.append(Text.translatable(key[0], tier).setStyle(textStyle));
+            }
+            else if(_string.contains("Simulator")) {
+                key[0] = "wytr.item.misc.corkianAugment.simulator";
+                resultText.append(Text.translatable(key[0]).setStyle(textStyle));
+            }
+            else if(_string.contains("Insulator")) {
+                key[0] = "wytr.item.misc.corkianAugment.insulator";
+                resultText.append(Text.translatable(key[0]).setStyle(textStyle));
+            }
+            else resultText.append(line);
         }
-        else if(_string.contains("Simulator")) {
-            key[0] = "wytr.item.misc.corkianAugment.simulator";
-            resultText.append(Text.translatable(key[0]).setStyle(textStyle));
-        }
-        else if(_string.contains("Insulator")) {
-            key[0] = "wytr.item.misc.corkianAugment.insulator";
-            resultText.append(Text.translatable(key[0]).setStyle(textStyle));
-        }
-        else seg.forEach(resultText::append);
     }
 }

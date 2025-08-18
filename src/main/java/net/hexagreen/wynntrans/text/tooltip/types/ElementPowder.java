@@ -18,12 +18,12 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        return texts.getFirst().getString().matches("§.([✤✦❉✹❋] )?(Earth|Thunder|Water|Fire|Air|Blank) Powder [IV]+À*");
+        return texts.getFirst().getString().matches("([\uE000-\uE004] )?(Earth|Thunder|Water|Fire|Air|Blank) Powder [IV]+À*");
     }
 
     public static MutableText getTranslatedItemName(Text text) {
         String _iName = text.getString();
-        if(!_iName.matches("([✤✦❉✹❋] )?(Earth|Thunder|Water|Fire|Air|Blank) Powder [IV]+")) return null;
+        if(!_iName.matches("([\uE000-\uE004] )?(Earth|Thunder|Water|Fire|Air|Blank) Powder [IV]+À*")) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
@@ -93,9 +93,10 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                         .forEach(resultText::append);
             }
             else if(_string.matches("^. (Earth|Thunder|Water|Fire|Air) Powder [IV]+À*")) {
-                String[] split = _string.split(" ");
+                Text elemIcon = t.getSiblings().getFirst();
+                String[] split = t.getSiblings().getLast().getString().split(" ");
                 Text _element = Elements.findElement(split[1]).getElement();
-                Text element = Text.empty().append(split[0] + " ").append(_element);
+                Text element = Text.empty().append(elemIcon).append(" ").append(_element);
                 String tier = split[3];
                 resultText.append(Text.translatable("wytr.item.misc.elementPowder", element, tier)
                         .setStyle(_element.getStyle()));
@@ -123,9 +124,11 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                     siblings.addFirst(Text.literal(split[1]).setStyle(siblings.removeFirst().getStyle()));
                 else siblings.removeFirst();
                 Text value = Text.literal(siblings.removeFirst().getString().replaceAll(" ", ""));
+                Text elemIcon = siblings.removeFirst();
+                if(elemIcon.getString().isBlank()) elemIcon = siblings.removeFirst();
                 Text _element = siblings.removeFirst();
                 Text element = Text.empty().setStyle(_element.getStyle())
-                        .append(_element.getString().replaceFirst("^ ", "").substring(0, 2))
+                        .append(elemIcon).append(" ")
                         .append(Elements.findElement(_element.getString().replaceAll("\\W", "")).getElement());
                 String attribute = siblings.removeFirst().getString().replaceAll(" ", "");
                 switch(attribute) {
@@ -136,9 +139,10 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                             .append(bar).append(value).append(" ")
                             .append(Text.translatable("wytr.tooltip.baseStat.defence", element)));
                     case "to" -> {
+                        Text elemIcon2 = siblings.removeFirst();
                         Text _element2 = siblings.removeFirst();
                         Text element2 = Text.empty().setStyle(_element2.getStyle())
-                                .append(_element2.getString().replaceFirst("^ ", "").substring(0, 2))
+                                .append(elemIcon2).append(" ")
                                 .append(Elements.findElement(_element2.getString().replaceAll("\\W", "")).getElement());
                         value = Text.literal(value.getString().replace("+", "")).setStyle(value.getStyle());
                         wrapLine(Text.empty().setStyle(GRAY).append(bar)

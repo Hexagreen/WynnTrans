@@ -49,17 +49,26 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
     }
 
     private void buildAbilityTree() {
-        Text unusedPoint = getSibling(4).getSiblings().getLast();
-
-        resultText.append(Text.translatable("wytr.tooltip.compassItems.abilityTree")
-                .setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
-        wrapLine(Text.translatable("wytr.tooltip.compassItems.abilityTree.desc").setStyle(GRAY), 300)
-                .forEach(resultText::append);
-        resultText.append(SPLITTER);
-        resultText.append(Text.translatable("wytr.tooltip.compassItems.abilityTree.unusedPoint", unusedPoint)
-                .setStyle(getSibling(4).getSiblings().getFirst().getStyle()));
-        resultText.append(SPLITTER);
-        resultText.append(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        List<List<Text>> segments = new ArrayList<>();
+        splitTooltipToSegments(getSiblings(), segments);
+        for(int i = 0, segmentsSize = segments.size(); i < segmentsSize; i++) {
+            List<Text> seg = segments.get(i);
+            String _string = seg.getFirst().getString();
+            if(_string.equals("Ability Tree")) {
+                resultText.append(Text.translatable("wytr.tooltip.compassItems.abilityTree")
+                        .setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
+                wrapLine(Text.translatable("wytr.tooltip.compassItems.abilityTree.desc").setStyle(GRAY), 300)
+                        .forEach(resultText::append);
+            }
+            else if(_string.contains("Click to Open")) {
+                resultText.append(Text.empty().append(seg.getFirst().getSiblings().getFirst()).append(" ")
+                        .append(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN))));
+            }
+            else {
+                new AbilityTreeOrb(seg).text().forEach(resultText::append);
+            }
+            if(i != segmentsSize - 1) resultText.append(SPLITTER);
+        }
     }
 
     private void buildSkillCrystal() {
@@ -80,7 +89,9 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                 .forEach(resultText::append);
         resultText.append(SPLITTER);
         if(getSiblings().size() == 6) {
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.skillCrystal.reset").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)));
+            Text line = Text.empty().append(getSibling(-1).getSiblings().getFirst()).append(" ")
+                    .append(Text.translatable("wytr.tooltip.compassItems.skillCrystal.reset").setStyle(Style.EMPTY.withColor(Formatting.YELLOW)));
+            resultText.append(line);
         }
         else {
             wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.resetLocked").setStyle(Style.EMPTY.withColor(Formatting.RED)), 300)
@@ -89,14 +100,15 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
     }
 
     private void buildUpgradeSkill() {
-        Text _skill = getSibling(0).getSiblings().get(1);
+        Text _skill = getSibling(0).getSiblings().get(3);
         CharacterSkill skill = CharacterSkill.getSkill(_skill.getString().replaceFirst("^. ", ""));
         Text stat = skill.getStatWithIcon().setStyle(_skill.getStyle());
-        Text element = skill.getIcon().copy().setStyle(_skill.getStyle()).append(skill.getRelativeElement().getElement());
+        Text element = Text.empty().setStyle(_skill.getStyle()).append(skill.getIcon().copy()).append(" ")
+                .append(skill.getRelativeElement().getElement());
 
         if(getSibling(1).getString().equals("Removing Skill Points may")) {
             resultText.append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill", stat)
-                    .setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
+                    .setStyle(getSibling(0).getSiblings().getLast().getStyle()));
             wrapLine(Text.translatable("wytr.tooltip.compassItems.skillCrystal.warn").setStyle(GRAY), 300)
                     .forEach(resultText::append);
             resultText.append(SPLITTER);
@@ -110,9 +122,9 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
         int tooltipWidth = ISpaceProvider.TEXT_RENDERER.getWidth(tooltipWidthFixer);
 
         segments.removeFirst().forEach(s -> {
-            if(s.getString().matches("^Upgrade your .+")) {
+            if(s.getString().matches("^.Upgrade your .+")) {
                 resultText.append(centerAlign(Text.translatable("wytr.tooltip.compassItems.upgradeSkill", stat)
-                        .setStyle(s.getSiblings().getFirst().getStyle()), tooltipWidth));
+                        .setStyle(s.getSiblings().getLast().getStyle()), tooltipWidth));
             }
             else if(s.getString().isBlank()) resultText.append(tooltipWidthFixer);
             else if(s.getString().contains("Now")) {
@@ -128,7 +140,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                 Text v1 = s.getSiblings().get(1);
                 Text v2 = s.getSiblings().getLast();
                 if(s.getString().contains(">>>>>>")) {
-                    resultText.append(twoColumnAlignWithSplitter(v1, v2, Text.literal("§a>§2>§a>§2>§a>§2>"), tooltipWidth));
+                    resultText.append(twoColumnAlignWithSplitter(v1, v2, s.getSiblings().get(3), tooltipWidth));
                 }
                 else {
                     resultText.append(twoColumnAlign(v1, v2, tooltipWidth));
@@ -146,9 +158,9 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                 ));
             }
             else if(s.getString().contains("Modified")) {
-                resultText.append(centerAlign(
-                        Text.translatable("wytr.tooltip.compassItems.upgradeSkill.modified")
-                                .setStyle(s.getSiblings().get(1).getStyle()),
+                resultText.append(centerAlign(Text.empty().append(s.getSiblings().get(1))
+                                .append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.modified")
+                                        .setStyle(s.getSiblings().get(2).getStyle())),
                         tooltipWidth
                 ));
             }
@@ -164,14 +176,24 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
             resultText.append(SPLITTER);
         }
         segments.removeFirst().forEach(s -> {
+            Text icon = s.getSiblings().getFirst();
             if(s.getString().contains("Left-Click")) {
-                resultText.append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.up").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+                Text line = Text.empty().append(icon).append(" ")
+                        .append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.up")
+                                .setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+                resultText.append(line);
             }
             else if(s.getString().contains("Right-Click")) {
-                resultText.append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.down").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                Text line = Text.empty().append(icon).append(" ")
+                        .append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.down")
+                                .setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                resultText.append(line);
             }
             else if(s.getString().contains("Hold Shift")) {
-                resultText.append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.bulk").setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                Text line = Text.empty().append(icon).append(" ")
+                        .append(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.bulk")
+                                .setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)));
+                resultText.append(line);
             }
             else if(s.getString().contains("You need")) {
                 wrapLine(Text.translatable("wytr.tooltip.compassItems.upgradeSkill.warn").setStyle(Style.EMPTY.withColor(Formatting.RED)), tooltipWidth)
@@ -196,7 +218,10 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
             temp.append(Text.translatable("wytr.tooltip.compassItems.dailyReward.refresh", time).setStyle(Style.EMPTY.withColor(Formatting.RED)));
         }
         else {
-            temp.append(Text.translatable("wytr.tooltip.compassItems.dailyReward.claim").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+            MutableText line = Text.empty()
+                    .append(getSibling(-1).getSiblings().getFirst()).append(" ")
+                    .append(Text.translatable("wytr.tooltip.compassItems.dailyReward.claim").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+            temp.append(line);
         }
         temp.getSiblings().forEach(t -> wrapLine(t, 150).forEach(resultText::append));
     }
@@ -210,69 +235,61 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
         temp.add(Text.literal(" "));
         temp.add(Text.translatable("wytr.tooltip.compassItems.recruit.count", friends).setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)));
         temp.add(Text.literal(" "));
-        temp.add(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        temp.add(Text.empty().append(getSibling(-1).getSiblings().getFirst()).append(" ")
+                .append(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN))));
         temp.forEach(t -> wrapLine(t, 150).forEach(resultText::append));
     }
 
     private void buildPlayerInfo() {
         Deque<Text> lines = new ArrayDeque<>(getSiblings());
+        Deque<Text> results = new ArrayDeque<>();
 
-        Text _head = lines.removeFirst().getSiblings().getFirst();
-        String playerName = _head.getString().replaceFirst("'s? Info$", "");
-        resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo", playerName)
-                .setStyle(_head.getStyle()));
-
-        if(lines.getFirst().getString().contains("Rank: ")) {
-            Text _rank = lines.removeFirst();
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.rank", _rank.getSiblings().getLast())
-                    .setStyle(_rank.getSiblings().getFirst().getStyle()));
-        }
-
-        resultText.append(lines.removeFirst());
+        results.add(lines.removeFirst());
+        results.add(lines.removeFirst());
 
         if(lines.getFirst().getString().contains("Total Lv: ")) {
             Text _totalLevel = lines.removeFirst().getSiblings().getLast();
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.totalLevel", _totalLevel)
+            results.add(Text.translatable("wytr.tooltip.compassItems.playerInfo.totalLevel", _totalLevel)
                     .setStyle(GRAY));
         }
 
         if(lines.getFirst().getString().contains("Combat Lv: ")) {
             Text _combatLevel = lines.removeFirst().getSiblings().getLast();
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.combatLevel", _combatLevel)
+            results.add(Text.translatable("wytr.tooltip.compassItems.playerInfo.combatLevel", _combatLevel)
                     .setStyle(GRAY));
         }
 
         if(lines.getFirst().getString().contains("Class: ")) {
             Text _class = CharacterClass.getClassName(lines.removeFirst().getSiblings().getLast().getString())
                     .setStyle(Style.EMPTY.withColor(Formatting.WHITE));
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.class", _class)
+            results.add(Text.translatable("wytr.tooltip.compassItems.playerInfo.class", _class)
                     .setStyle(GRAY));
         }
 
         if(lines.getFirst().getString().contains("Quests: ")) {
             Text _quest = lines.removeFirst().getSiblings().getLast();
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.quest", _quest)
+            results.add(Text.translatable("wytr.tooltip.compassItems.playerInfo.quest", _quest)
                     .setStyle(GRAY));
         }
 
         if(lines.getFirst().getString().contains("XP: ")) {
             Text _exp = lines.removeFirst().getSiblings().getLast();
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.exp", _exp)
+            results.add(Text.translatable("wytr.tooltip.compassItems.playerInfo.exp", _exp)
                     .setStyle(GRAY));
         }
 
         if(lines.isEmpty()) return;
-        resultText.append(lines.removeFirst());
+        results.add(lines.removeFirst());
 
         if(lines.getFirst().getString().equals("Identifications: ")) {
             lines.removeFirst();
-            resultText.append(Text.translatable("wytr.tooltip.compassItems.playerInfo.ids")
+            results.add(Text.translatable("wytr.tooltip.compassItems.playerInfo.ids")
                     .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
 
         while(!lines.isEmpty() && lines.getFirst().getString().matches("^- .+?: .+")) {
             Text _idLine = lines.removeFirst();
-            resultText.append(Text.empty().setStyle(GRAY)
+            results.add(Text.empty().setStyle(GRAY)
                     .append(_idLine.getSiblings().getFirst().copy())
                     .append(Identifications.findIdentification(
                             _idLine.getSiblings().get(1).getString().replaceFirst(": ", "")).getTranslatedText())
@@ -281,19 +298,28 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
         }
 
         if(lines.isEmpty()) return;
-        resultText.append(lines.removeFirst());
+        results.add(lines.removeFirst());
 
         if(lines.getFirst().getString().contains("Page ")) {
             String page = lines.removeFirst().getString().replaceFirst(".+Page ", "");
-            MutableText alignedPage =
-                    centerAlign(Text.translatable("wytr.tooltip.compassItems.playerInfo.page", page)
-                            .setStyle(Style.EMPTY.withColor(Formatting.WHITE)), 150);
-            resultText.append(alignedPage.append(alignedPage.getSiblings().getFirst()));
+            MutableText alignedPage = Text.translatable("wytr.tooltip.compassItems.playerInfo.page", page)
+                    .setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+            results.add(alignedPage);
             List<Text> _page = lines.removeFirst().getSiblings();
             Text pageIcon = siblingsToText(_page.subList(1, _page.size()));
-            MutableText alignedPageIcon = centerAlign(pageIcon, 150);
-            resultText.append(alignedPageIcon.append(alignedPageIcon.getSiblings().getFirst()));
+            results.add(pageIcon);
         }
+
+        int longestWidth = getLongestWidth(results, results.getFirst().copy().append("    "));
+
+        Deque<Text> tail = new ArrayDeque<>();
+        tail.addFirst(results.removeLast());
+        tail.addFirst(results.removeLast());
+
+        MutableText alignedHead = centerAlign(results.removeFirst(), longestWidth);
+        resultText.append(alignedHead.append(alignedHead.getSiblings().getFirst()));
+        results.forEach(resultText::append);
+        tail.forEach(t -> resultText.append(centerAlign(t, longestWidth)));
 
         if(!lines.isEmpty()) lines.forEach(resultText::append);
     }
@@ -354,8 +380,9 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                 segments.get(i).forEach(t -> {
                     Text value = t.getSiblings().getLast();
                     String[] split = t.getString().replaceFirst("^- ", "").split(" ");
-                    Text _elem = Elements.findElement(split[1]).getElement();
-                    Text elem = Text.literal(split[0] + " ").setStyle(_elem.getStyle()).append(_elem);
+                    Elements _elem = Elements.findElement(split[1]);
+                    Text elem = Text.empty().setStyle(_elem.getElement().getStyle())
+                            .append(_elem.getIcon()).append(" ").append(_elem.getElement());
                     Text line = Text.empty().setStyle(GRAY)
                             .append(Text.literal("- ").setStyle(t.getSiblings().getFirst().getStyle()))
                             .append(Text.translatable("wytr.tooltip.baseStat.defence", elem).setStyle(GRAY))
@@ -392,8 +419,9 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     }
                     else {
                         String[] split = t.getString().replaceFirst("^- ", "").split(" ");
-                        Text _elem = Elements.findElement(split[1]).getElement();
-                        Text elem = Text.literal(split[0] + " ").setStyle(_elem.getStyle()).append(_elem);
+                        Elements _elem = Elements.findElement(split[1]);
+                        Text elem = Text.empty().setStyle(_elem.getElement().getStyle())
+                                .append(_elem.getIcon()).append(" ").append(_elem.getElement());
                         Text line = Text.empty().setStyle(GRAY)
                                 .append(Text.literal("- ").setStyle(t.getSiblings().getFirst().getStyle()))
                                 .append(Text.translatable("wytr.tooltip.baseStat.damage", elem))
@@ -464,7 +492,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     String k = "wytr.syndicate.division." + division.toLowerCase(Locale.ENGLISH);
                     WTS.checkTranslationExist(k, division);
                     Text divisionName = Text.translatableWithFallback(k, division).setStyle(GRAY);
-                    Text level = SyndicatePromotion.getTranslatedRankName(_level[1]).setStyle(GRAY);
+                    Text level = SyndicatePromotion.getTranslatedRankName(_level[1], Style.EMPTY).setStyle(GRAY);
                     resultText.append(Text.empty().append(bar).append(divisionName).append(" ").append(level).append(percent));
                 });
             }
@@ -504,10 +532,13 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
 
     private void buildShop() {
         List<Text> temp = new ArrayList<>();
-        temp.add(Text.translatable("wytr.tooltip.compassItems.shop").setStyle(getSibling(0).getSiblings().getFirst().getStyle()));
+        temp.add(Text.translatable("wytr.tooltip.compassItems.shop")
+                .setStyle(getSibling(0).getSiblings().getFirst().getStyle().withBold(false)));
         temp.add(Text.translatable("wytr.tooltip.compassItems.shop.desc").setStyle(GRAY));
         temp.add(Text.literal(" "));
-        temp.add(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        Text click = Text.empty().append(getSibling(-1).getSiblings().getFirst()).append(" ")
+                .append(Text.translatable("wytr.func.clickToOpen").setStyle(Style.EMPTY.withColor(Formatting.GREEN)));
+        temp.add(click);
         temp.forEach(t -> wrapLine(t, 150).forEach(resultText::append));
     }
 
@@ -518,20 +549,21 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
     private enum Items {
         ABILITY_TREE("§b§lAbility Tree", "Ability Tree"),
         SKILL_CRYSTAL("§2§lSkill Crystal", "Skill Crystal"),
-        UPGRADE_SKILL("§dUpgrade your §[2ebcf]. .+§d skill", "Upgrade your . .+ skill"),
+        UPGRADE_SKILL(".§dUpgrade your §[2ebcf]. .+§d skill", ".Upgrade your . .+ skill"),
         DAILY_REWARD("§6§lDaily Reward", "Daily Reward"),
         RECRUIT("§a§lRecruit a Friend", "Recruit a Friend"),
         PLAYER_INFO("§f§l.+'s? Info", ".+'s? Info"),
         MASTERY_TOME("§5§lMastery Tomes", "Mastery Tomes"),
         COMBAT("§c§lCombat Information", "Combat Information"),
         PROFESSION("§a§lProfession Info", "Profession Info"),
-        SHOP("§e§lCrates, Bombs & Cosmetics", "Crates, Bombs & Cosmetics"),
+        SHOP("Store & Wardrobe", "Store & Wardrobe"),
         GUILD("§b§lView Your Guild", "View Your Guild");
 
         private final String original;
         private final String styled;
 
         static Items match(String string) {
+            if(string.contains(WynnTrans.wynnPlayerName)) return PLAYER_INFO;
             return Arrays.stream(values()).parallel()
                     .filter(i -> string.matches(i.original) || string.matches(i.styled))
                     .findAny().orElse(null);

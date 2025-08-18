@@ -26,13 +26,13 @@ public abstract class WynnChatText extends WynnTransText {
             build();
             return resultText;
         }
-        catch(IndexOutOfBoundsException e) {
-            WynnTrans.LOGGER.warn("IndexOutOfBound occurred.\n", e);
-            debugClass.writeTextAsJSON(inputText, "OutOfBound");
-        }
         catch(TextTranslationFailException e) {
             WynnTrans.LOGGER.warn("Unprocessed chat message has been recorded.\n", e);
             return new SimpleText(inputText).text();
+        }
+        catch(Exception e) {
+            WynnTrans.LOGGER.warn("Exception occurred.\n", e);
+            debugClass.writeTextAsJSON(inputText, "Exception");
         }
         return inputText;
     }

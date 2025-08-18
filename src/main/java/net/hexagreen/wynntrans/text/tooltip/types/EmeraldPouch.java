@@ -18,11 +18,11 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
-        return texts.getFirst().getString().matches("§aEmerald Pouch§2 \\[Tier [IVX]+].*");
+        return texts.getFirst().getString().matches("Emerald Pouch \\[Tier \\d+].*");
     }
 
     public static MutableText getTranslatedItemName(Text text) {
-        if(!text.getString().matches("Emerald Pouch \\[Tier [IVX]+].*")) return null;
+        if(!text.getString().matches("Emerald Pouch \\[Tier \\d+].*")) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);
         textBowl.add(Text.empty());
@@ -55,7 +55,7 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
             else if(firstLine.matches("^- .+")) {
                 translateSpecSection(seg);
             }
-            else if(firstLine.equals("Right-Click to view contents")) {
+            else if(firstLine.contains("Right-Click to view contents")) {
                 translateActionSection(seg);
             }
             else {
@@ -69,7 +69,7 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
         Text tier = Text.empty().setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN))
                 .append(" [")
                 .append(Text.translatable("wytr.unit.tier",
-                        segment.getFirst().getString().replaceFirst(".+ \\[Tier ([IVX]+)].*", "$1")))
+                        segment.getFirst().getString().replaceFirst(".+ \\[Tier (\\d+)].*", "$1")))
                 .append("]");
         Text name = Text.translatable(translationKey, tier).setStyle(Style.EMPTY.withColor(Formatting.GREEN));
         resultText.append(name);
@@ -104,7 +104,10 @@ public class EmeraldPouch extends WynnTooltipText implements ITradableItem {
         }
     }
 
-    private void translateActionSection(List<Text> ignoredSegment) {
-        resultText.append(Text.translatable(translationKey + ".view"));
+    private void translateActionSection(List<Text> segment) {
+        List<Text> siblings = segment.getFirst().getSiblings();
+        Text line = Text.empty().append(siblings.getFirst()).append(siblings.get(1)).append(" ")
+                .append(Text.translatable(translationKey + ".view"));
+        resultText.append(line);
     }
 }

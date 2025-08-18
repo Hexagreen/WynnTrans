@@ -34,6 +34,8 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
         switch(Items.match(getSibling(0).getString())) {
             case QUICK_ACTION -> buildQuickAction();
             case STORAGE_TYPE -> buildStorageType();
+            case BLOCK_BANK_RESTOCK -> buildRestock();
+            case BLOCK_BANK_LIQUID -> buildLiquid();
             case PAGE -> buildPage();
             default -> resultText = inputText;
         }
@@ -100,7 +102,15 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
                 wrapLine(Text.translatable("wytr.tooltip.bank.type.account.desc").formatted(Formatting.GRAY), 200)
                         .forEach(resultText::append);
             }
-            else if(_string.equals("- Character Storage")) {
+            else if(_string.equals("The personal bank is a private")) {
+                wrapLine(Text.translatable("wytr.tooltip.bank.type.personal.desc").formatted(Formatting.GRAY), 200)
+                        .forEach(resultText::append);
+            }
+            else if(_string.equals("The island block bank allows")) {
+                wrapLine(Text.translatable("wytr.tooltip.bank.type.island.desc").formatted(Formatting.GRAY), 200)
+                        .forEach(resultText::append);
+            }
+            else if(_string.matches("- Character Storage|- Personal Storage")) {
                 for(Text t : seg) {
                     String _s = t.getString();
                     Style style = t.getSiblings().getFirst().getStyle();
@@ -112,6 +122,14 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
                         resultText.append(Text.empty().setStyle(style).append("- ")
                                 .append(Text.translatable("wytr.tooltip.bank.type.account")));
                     }
+                    else if(_s.contains("Personal Storage")) {
+                        resultText.append(Text.empty().setStyle(style).append("- ")
+                                .append(Text.translatable("wytr.tooltip.bank.type.personal")));
+                    }
+                    else if(_s.contains("Island Storage")) {
+                        resultText.append(Text.empty().setStyle(style).append("- ")
+                                .append(Text.translatable("wytr.tooltip.bank.type.island")));
+                    }
                     else resultText.append(t);
                 }
             }
@@ -119,6 +137,87 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
                 resultText.append(Text.empty().append(seg.getFirst().getSiblings().getFirst())
                         .append(" ")
                         .append(Text.translatable("wytr.func.clickToSwitch").formatted(Formatting.GREEN)));
+            }
+            else seg.forEach(resultText::append);
+            if(i != segmentsSize - 1) resultText.append(SPLITTER);
+        }
+    }
+
+    private void buildRestock() {
+        List<List<Text>> segments = new ArrayList<>();
+        splitTooltipToSegments(getSiblings(), segments);
+        for(int i = 0, segmentsSize = segments.size(); i < segmentsSize; i++) {
+            List<Text> seg = segments.get(i);
+            String _string = seg.getFirst().getString();
+            if(_string.equals("Automatic Restock")) {
+                resultText.append(Text.translatable("wytr.tooltip.bank.restock")
+                        .setStyle(seg.getFirst().getSiblings().getFirst().getStyle()));
+            }
+            else if(_string.equals("While enabled, running out of the")) {
+                wrapLine(Text.translatable("wytr.tooltip.bank.restock.desc").formatted(Formatting.GRAY), 200)
+                        .forEach(resultText::append);
+            }
+            else if(_string.equals("- Enabled")) {
+                for(Text t : seg) {
+                    String _s = t.getString();
+                    Style style = t.getSiblings().getFirst().getStyle();
+                    if(_s.contains("Enabled")) {
+                        resultText.append(Text.empty().setStyle(style).append("- ")
+                                .append(Text.translatable("wytr.toggle.enabled")));
+                    }
+                    else if(_s.contains("Disabled")) {
+                        resultText.append(Text.empty().setStyle(style).append("- ")
+                                .append(Text.translatable("wytr.toggle.disabled")));
+                    }
+                    else resultText.append(t);
+                }
+            }
+            else if(_string.contains("Click to toggle")) {
+                resultText.append(Text.empty().append(seg.getFirst().getSiblings().getFirst())
+                        .append(" ")
+                        .append(Text.translatable("wytr.func.clickToToggle").formatted(Formatting.GREEN)));
+            }
+            else seg.forEach(resultText::append);
+            if(i != segmentsSize - 1) resultText.append(SPLITTER);
+        }
+    }
+
+    private void buildLiquid() {
+        List<List<Text>> segments = new ArrayList<>();
+        splitTooltipToSegments(getSiblings(), segments);
+        for(int i = 0, segmentsSize = segments.size(); i < segmentsSize; i++) {
+            List<Text> seg = segments.get(i);
+            String _string = seg.getFirst().getString();
+            if(_string.equals("Liquid Storage")) {
+                resultText.append(Text.translatable("wytr.tooltip.bank.liquid")
+                        .setStyle(seg.getFirst().getSiblings().getFirst().getStyle()));
+            }
+            else if(_string.equals("Liquids are bought from")) {
+                wrapLine(Text.translatable("wytr.tooltip.bank.liquid.desc").formatted(Formatting.GRAY), 200)
+                        .forEach(resultText::append);
+            }
+            else if(_string.contains("Water: ")) {
+                for(Text t : seg) {
+                    String _s = t.getString();
+                    Style style = t.getSiblings().getFirst().getStyle();
+                    Text _buckets = t.getSiblings().getLast();
+                    Text buckets = Text.translatable("wytr.tooltip.bank.liquid.bucket", _buckets.getString().replaceAll("\\D", ""))
+                            .setStyle(_buckets.getStyle());
+                    if(_s.contains("Water: ")) {
+                        resultText.append(Text.empty().setStyle(style)
+                                .append(Text.translatable("block.minecraft.water").append(": ")).append(buckets));
+                    }
+                    else if(_s.contains("Lava: ")) {
+                        resultText.append(Text.empty().setStyle(style)
+                                .append(Text.translatable("block.minecraft.lava").append(": ")).append(buckets));
+                    }
+                    else resultText.append(t);
+                }
+            }
+            else if(_string.contains("Click to toggle")) {
+                resultText.append(Text.empty().append(seg.getFirst().getSiblings().getFirst())
+                        .append(" ")
+                        .append(Text.translatable("wytr.func.clickToToggle").formatted(Formatting.GREEN)));
             }
             else seg.forEach(resultText::append);
             if(i != segmentsSize - 1) resultText.append(SPLITTER);
@@ -169,7 +268,7 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
                 for(Text t : seg) {
                     String _s = t.getString();
                     if(_s.equals("Price:")) {
-                        resultText.append(Text.translatable("wytr.func.price").formatted(Formatting.GOLD));
+                        resultText.append(Text.translatable("wytr.func.price").formatted(Formatting.GOLD).append(":"));
                     }
                     else if(_s.contains("Combat Lv")) {
                         Text check = t.getSiblings().getFirst();
@@ -183,7 +282,7 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
                         Text num = t.getSiblings().getLast();
                         MutableText line = Text.empty().append(check)
                                 .append(Text.translatable("wytr.func.price").formatted(Formatting.GRAY))
-                                .append(" ").append(num);
+                                .append(": ").append(num);
                         resultText.append(line);
                     }
                     else resultText.append(t);
@@ -202,6 +301,8 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
     private enum Items {
         QUICK_ACTION("§dQuick Actions", "Quick Actions"),
         STORAGE_TYPE("§.Storage Type", "Storage Type"),
+        BLOCK_BANK_RESTOCK("§.Automatic Restock", "Automatic Restock"),
+        BLOCK_BANK_LIQUID("§.Liquid Storage", "Liquid Storage"),
         PAGE("§f§lPage \\d+.+", "Page \\d+.+");
 
         private final String original;

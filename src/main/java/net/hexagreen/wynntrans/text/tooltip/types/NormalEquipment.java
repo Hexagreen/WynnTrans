@@ -3,9 +3,11 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.ItemRarity;
+import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.chat.types.SimpleText;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -21,15 +23,16 @@ import java.util.regex.Pattern;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringDefectiveItem;
 import static net.hexagreen.wynntrans.text.WynntilsCompatible.coloringPerfectItem;
 
-public class NormalEquipment extends AbstractWynnItem {
+public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceProvider {
     private static final Pattern NAME_ATTACHMENT_REGEX =
             Pattern.compile("(Slow|Normal|Fast) Attack Speed|This item's powers have");
     private static final Pattern BASE_STAT_REGEX =
-            Pattern.compile("❤ Health: |[✤✦❉✹❋] .+ Defence: |[✣✤✦❉✹❋] .+ Damage: ");
+            Pattern.compile("❤ Health: |[\uE000-\uE004] .+ Defence: |[\uE000-\uE005] .+ Damage: ");
     private static final Pattern POWDER_SPECIAL_REGEX =
             Pattern.compile(" (Quake|Chain Lightning|Curse|Courage|Wind Prison|Rage|Kill Streak|Concentration|Endurance|Dodge) [IV]+(?: \\[(.+)])?$");
     private final List<Text> tempText;
     private final Deque<Integer> wrapTargetIdx;
+    private final Deque<Integer> alignTargetIdx;
     protected Pattern itemTailRegex;
     private int longestWidth;
     private String itemNameKey = "";
@@ -41,9 +44,16 @@ public class NormalEquipment extends AbstractWynnItem {
         if(texts.get(1).getString().contains("Sold")) return false;
         String itemName = texts.getFirst().getString().replaceAll("^Unidentified |^Perfect |^Defective |§f⬡ Shiny |\\[.+%]$", "");
         String normalized = normalizeStringForKey(itemName);
-        return WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
+        boolean rarityFind = false;
+        for(int i = texts.size() - 1; i >= 0; i--) {
+            if(Pattern.compile("^(§7)?(§7)?(Normal|Unique|Rare|Legendary|Fabled|Mythic|Set) .+").matcher(texts.get(i).getString()).find()) {
+                rarityFind = true;
+                break;
+            }
+        }
+        return rarityFind && (WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
-                WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized);
+                WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized));
     }
 
     public static MutableText getTranslatedItemName(Text text) {
@@ -70,7 +80,8 @@ public class NormalEquipment extends AbstractWynnItem {
         super(texts);
         this.tempText = new ArrayList<>();
         this.wrapTargetIdx = new ArrayDeque<>();
-        this.longestWidth = 150;
+        this.alignTargetIdx = new ArrayDeque<>();
+        this.longestWidth = 0;
         this.itemTailRegex = Pattern.compile(".+ Item( \\[\\d+])?$|Powder Slots");
         this.textAppender = this::addAndRecordWidth;
         this.optionalTextAppender = this::addAndMarkWrapTarget;
@@ -96,6 +107,9 @@ public class NormalEquipment extends AbstractWynnItem {
         }
         else if(POWDER_SPECIAL_REGEX.matcher(firstLine).find()) {
             translatePowderSpecialSection(seg);
+        }
+        else if(firstLine.contains("Lending Price")) {
+            translateLendingPriceSection(seg);
         }
         else if(firstSibling.matches("[✔✖] ?")) {
             translateReqSection(seg);
@@ -124,11 +138,38 @@ public class NormalEquipment extends AbstractWynnItem {
         if(step != lastIndex) tempText.add(SPLITTER);
         else {
             wrapTargetIdx.add(-1);
+            alignTargetIdx.add(-1);
 
             for(int j = 0, size = tempText.size(); j < size; j++) {
                 if(j == wrapTargetIdx.getFirst()) {
-                    wrapLine(tempText.get(j), longestWidth).forEach(resultText::append);
+                    wrapLine(tempText.get(j), Math.max(longestWidth, 150)).forEach(resultText::append);
                     wrapTargetIdx.removeFirst();
+                }
+                else if(j == alignTargetIdx.getFirst()) {
+                    resultText.append(centerAlign(tempText.get(j), longestWidth));
+                    alignTargetIdx.removeFirst();
+                }
+                else {
+                    resultText.append(tempText.get(j));
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void postStep(List<Text> seg, int i, int lastIndex) {
+        if(i == lastIndex) {
+            wrapTargetIdx.add(-1);
+            alignTargetIdx.add(-1);
+
+            for(int j = 0, size = tempText.size(); j < size; j++) {
+                if(j == wrapTargetIdx.getFirst()) {
+                    wrapLine(tempText.get(j), Math.max(longestWidth, 150)).forEach(resultText::append);
+                    wrapTargetIdx.removeFirst();
+                }
+                else if(j == alignTargetIdx.getFirst()) {
+                    resultText.append(centerAlign(tempText.get(j), longestWidth));
+                    alignTargetIdx.removeFirst();
                 }
                 else {
                     resultText.append(tempText.get(j));
@@ -215,25 +256,26 @@ public class NormalEquipment extends AbstractWynnItem {
     private void translateBaseStatSection(List<Text> texts) {
         List<Text> dump = new ArrayList<>();
         texts.forEach(t -> {
-            Style headStyle = t.getSiblings().getFirst().getStyle();
             String[] split = t.getString().split(": ");
             String[] icon = split[0].split(" ");
+            Text formattedIcon = Text.literal(icon[0]).setStyle(t.getSiblings().getFirst().getStyle());
+            Style headStyle = t.getSiblings().getFirst().getStyle().withFont(Identifier.of("minecraft:default"));
             Text line;
             if(split[0].contains("Health")) {
-                line = Text.literal("À" + icon[0] + " ").setStyle(headStyle)
+                line = Text.empty().setStyle(headStyle)
+                        .append("À").append(formattedIcon).append(" ")
                         .append(Text.translatable("wytr.tooltip.baseStat.health"))
                         .append(": " + split[1]);
             }
             else if(split[0].contains("Neutral")) {
-                Text neutral = Text.literal(icon[0] + " ")
-                        .append(Text.translatable("wytr.element.neutral"));
+                Text neutral = Text.empty().append(formattedIcon).append(" ").append(Text.translatable("wytr.element.neutral"));
                 line = Text.translatable("wytr.tooltip.baseStat.damage", neutral).setStyle(headStyle)
                         .append(": " + split[1]);
             }
             else if(split[0].contains("DPS")) {
-                line = Text.empty().append(t.getSiblings().getFirst()).setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY))
+                line = Text.empty().append(t.getSiblings().getFirst()).formatted(Formatting.DARK_GRAY)
                         .append(Text.translatable("wytr.tooltip.baseStat.dps"))
-                        .append(": " + split[1]);
+                        .append(": ").append(Text.literal(split[1]).formatted(Formatting.GRAY));
             }
             else {
                 String typeKey;
@@ -248,7 +290,8 @@ public class NormalEquipment extends AbstractWynnItem {
                     return;
                 }
 
-                Text element = Text.literal(icon[0] + " ").setStyle(headStyle)
+                Text element = Text.empty().setStyle(headStyle)
+                        .append(formattedIcon).append(" ")
                         .append(Text.translatable("wytr.element." + icon[1].toLowerCase(Locale.ENGLISH)));
                 line = Text.translatable(typeKey, element).setStyle(GRAY)
                         .append(": " + split[1]);
@@ -324,6 +367,23 @@ public class NormalEquipment extends AbstractWynnItem {
         dump.forEach(this::addAndRecordWidth);
     }
 
+    private void translateLendingPriceSection(List<Text> texts) {
+        for(Text t : texts) {
+            String _s = t.getString();
+            if(_s.contains("Lending Price")) {
+                tempText.add(Text.translatable("wytr.tooltip.lending").formatted(Formatting.GOLD));
+            }
+            else if(_s.contains("Credits")) {
+                Text cost = t.getSiblings().get(1);
+                tempText.add(Text.translatable("wytr.tooltip.lending.cost", cost).formatted(Formatting.GRAY));
+            }
+            else {
+                tempText.add(t);
+            }
+            alignTargetIdx.add(tempText.size() - 1);
+        }
+    }
+
     private void translateShinySection(List<Text> texts) {
         List<Text> dump = new ArrayList<>();
         texts.forEach(t -> {
@@ -368,8 +428,14 @@ public class NormalEquipment extends AbstractWynnItem {
             String string = t.getString();
             Text body;
             if(string.contains("Powder Slots")) {
-                String[] powderInfo = styleToColorCode(t.getSiblings(), GRAY).getString().split(" Powder Slots ?");
-                body = Text.translatable("wytr.tooltip.equipment.powderSlot", powderInfo[0], powderInfo.length == 2 ? powderInfo[1] : "").setStyle(GRAY);
+                Deque<Text> siblings = new ArrayDeque<>(t.getSiblings());
+                String[] powderInfo = siblings.removeFirst().getString().split(" Powder Slots ?");
+                MutableText applied = Text.empty();
+                if(powderInfo.length == 2) {
+                    siblings.addFirst(Text.literal(powderInfo[1]));
+                    siblings.forEach(applied::append);
+                }
+                body = Text.translatable("wytr.tooltip.equipment.powderSlot", powderInfo[0], applied).setStyle(GRAY);
                 addAndRecordWidth(body);
             }
             else if(string.matches("Untradable Item")) {
@@ -422,7 +488,7 @@ public class NormalEquipment extends AbstractWynnItem {
     }
 
     protected void addAndRecordWidth(Text text) {
-        updateLongestWidth(TEXT_RENDERER.getWidth(text));
+        updateLongestWidth(WynnTransText.TEXT_RENDERER.getWidth(text));
         tempText.add(text);
     }
 

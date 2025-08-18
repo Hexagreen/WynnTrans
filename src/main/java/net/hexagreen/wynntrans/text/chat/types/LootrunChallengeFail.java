@@ -6,6 +6,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.Deque;
 import java.util.List;
 
 public class LootrunChallengeFail extends WynnChatText implements ILootrun {
@@ -29,9 +30,9 @@ public class LootrunChallengeFail extends WynnChatText implements ILootrun {
         desc.forEach(t -> resultText.append(centerAlign(t)).append("\n"));
         resultText.append("\n");
 
-        List<List<Text>> textChunks = getTextChunks(getSiblings());
+        Deque<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
-        if(textChunks.getFirst().getFirst().getString().matches("§7.§7\\[\\+\\d+%.+")) {
+        if(textChunks.getFirst().getFirst().getString().matches("§7.\\[\\+\\d+%.+")) {
             List<Text> effectsBody = textChunks.removeFirst();
             Style effectStyle = GRAY;
             Text damageInc = translateEffect(effectsBody.getFirst().getSiblings().getLast().getString()).setStyle(effectStyle);

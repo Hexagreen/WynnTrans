@@ -42,12 +42,12 @@ public class LootrunBeacon extends WynnChatText implements ILootrun {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
-        Text title = Text.translatable(translationKey).setStyle(Style.EMPTY.withColor(Formatting.GOLD).withBold(true));
-        Text desc = Text.translatable(translationKey + ".desc").setStyle(GRAY);
+        Text title = Text.translatable(translationKey).setStyle(getSibling(0).getSiblings().getLast().getStyle());
+        Text desc = Text.translatable(translationKey + ".desc").setStyle(getSibling(1).getSiblings().getLast().getStyle());
         Text reroll = null;
         Text rerollCount = null;
 
-        List<List<Text>> textChunks = getTextChunks(getSiblings());
+        Deque<List<Text>> textChunks = getTextChunks(getSiblings());
         textChunks.removeFirst();
         if(textChunks.getLast().getFirst().getString().contains("reroll")) {
             reroll = Text.translatable(translationKey + ".reroll").setStyle(textChunks.getLast().getFirst().getSiblings().getLast().getStyle());
@@ -82,7 +82,7 @@ public class LootrunBeacon extends WynnChatText implements ILootrun {
         List<Text> siblings = text.getSiblings();
 
         String beaconNameString = siblings.getFirst().getString();
-        Style beaconNameStyle = parseStyleCode(beaconNameString);
+        Style beaconNameStyle = siblings.getFirst().getStyle();
 
         Text beaconName = getBeaconNameText(beaconNameString).setStyle(beaconNameStyle);
         if(beaconNameString.contains("Rainbow")) beaconName = rainbowDecoration(beaconName);

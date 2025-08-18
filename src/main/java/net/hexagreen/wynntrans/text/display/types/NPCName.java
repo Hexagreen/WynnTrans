@@ -16,6 +16,7 @@ public class NPCName extends WynnDisplayText {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().isEmpty()) return false;
+        if(text.getString().contains(" Post §2[")) return false;
         if(text.getString().matches(".+\\nNPC")) return true;
         return text.copyContentOnly().getString().matches("^.+\\n$")
                 && text.getSiblings().size() == 1

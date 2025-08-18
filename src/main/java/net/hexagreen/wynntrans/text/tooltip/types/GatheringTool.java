@@ -1,7 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.Profession;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -11,7 +11,7 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatheringTool extends AbstractWynnItem {
+public class GatheringTool extends AbstractIdentifiableItem {
     private final Profession profession;
 
     public static boolean typeChecker(List<Text> texts) {

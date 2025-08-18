@@ -24,7 +24,7 @@ public class AbilityTreeSelector extends WynnTooltipText implements ITooltipSpli
     public static boolean typeChecker(List<Text> texts) {
         if(texts.isEmpty()) return false;
         if(!Pattern.compile("[\uE000\uE001\uE002]").matcher(WynnTrans.currentScreen).find()) return false;
-        return texts.getLast().getString().matches("§7Currently Selected|§7\uE000 Click to Open");
+        return texts.getLast().getString().matches("§7Currently Selected|§7\uE000 Click to Open|§cNot in a safe zone");
     }
 
     public AbilityTreeSelector(List<Text> texts) {
@@ -49,9 +49,10 @@ public class AbilityTreeSelector extends WynnTooltipText implements ITooltipSpli
             dump.addAll(wrapLine(Text.translatable(translationKey + ".aspects.desc").setStyle(GRAY), 150));
         }
         else if(head.equals("Reset your Tree")) {
+            Style descStyle = siblings.get(2).getSiblings().getFirst().getStyle();
             dump.add(Text.translatable(translationKey + ".resetTree").setStyle(headStyle));
             dump.add(SPLITTER);
-            dump.addAll(wrapLine(Text.translatable(translationKey + ".resetTree.desc").setStyle(GRAY), 150));
+            dump.addAll(wrapLine(Text.translatable(translationKey + ".resetTree.desc").setStyle(descStyle), 150));
         }
         else if(head.matches(".+ Abilities")) {
             Text className = CharacterClass.getClassName(head.replaceFirst(" Abilities", ""));
@@ -65,13 +66,16 @@ public class AbilityTreeSelector extends WynnTooltipText implements ITooltipSpli
         }
 
         dump.add(SPLITTER);
-        if(siblings.getLast().getString().equals("Currently Selected")) {
+        if(siblings.getLast().getString().equals("Not in a safe zone")) {
+            dump.add(Text.translatable(translationKey + ".resetTree.notAvailable").formatted(Formatting.RED));
+        }
+        else if(siblings.getLast().getString().equals("Currently Selected")) {
             dump.add(SELECTED);
         }
         else {
             dump.add(SELECTABLE);
         }
-        
+
         dump.forEach(resultText::append);
     }
 }

@@ -1,14 +1,14 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.enums.ItemRarity;
-import net.hexagreen.wynntrans.text.tooltip.AbstractWynnItem;
+import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
 
-public class Charm extends AbstractWynnItem {
+public class Charm extends AbstractIdentifiableItem {
 
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 2) return false;
@@ -57,7 +57,7 @@ public class Charm extends AbstractWynnItem {
             String normalized = normalizeStringForKey(_s.replaceFirst(" \\[.+%]", ""));
             if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalized)) {
                 Style nameStyle = t.getSiblings().getFirst().getStyle();
-                Text percent = t.getSiblings().getLast();
+                Text percent = _s.matches(".+ \\[.+%]") ? t.getSiblings().getLast() : Text.empty();
                 resultText.append(Text.translatable("wytr.item.charm." + normalized).setStyle(nameStyle).append(percent));
             }
             else if(_s.equals("Active while on inventory")) {

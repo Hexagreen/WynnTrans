@@ -10,7 +10,7 @@ public class LootrunMissionCompleteGlue extends TextGlue {
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().size() != 2) return false;
-        return text.getSiblings().get(1).getString().matches("§b§lMission Completed");
+        return text.getSiblings().get(1).getString().matches("Mission Completed");
     }
 
     public LootrunMissionCompleteGlue() {
