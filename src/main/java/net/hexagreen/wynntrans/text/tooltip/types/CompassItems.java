@@ -294,7 +294,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     .append(Identifications.findIdentification(
                             _idLine.getSiblings().get(1).getString().replaceFirst(": ", "")).getTranslatedText())
                     .append(": ")
-                    .append(_idLine.getSiblings().getLast()));
+                    .append(IdentificationTooltip.extractIDValue(_idLine.getSiblings().getLast())));
         }
 
         if(lines.isEmpty()) return;
