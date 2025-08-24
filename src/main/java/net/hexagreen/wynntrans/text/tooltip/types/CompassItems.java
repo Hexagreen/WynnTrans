@@ -381,8 +381,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     Text value = t.getSiblings().getLast();
                     String[] split = t.getString().replaceFirst("^- ", "").split(" ");
                     Elements _elem = Elements.findElement(split[1]);
-                    Text elem = Text.empty().setStyle(_elem.getElement().getStyle())
-                            .append(_elem.getIcon()).append(" ").append(_elem.getElement());
+                    Text elem = _elem.getElementWithIcon();
                     Text line = Text.empty().setStyle(GRAY)
                             .append(Text.literal("- ").setStyle(t.getSiblings().getFirst().getStyle()))
                             .append(Text.translatable("wytr.tooltip.baseStat.defence", elem).setStyle(GRAY))
@@ -420,8 +419,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     else {
                         String[] split = t.getString().replaceFirst("^- ", "").split(" ");
                         Elements _elem = Elements.findElement(split[1]);
-                        Text elem = Text.empty().setStyle(_elem.getElement().getStyle())
-                                .append(_elem.getIcon()).append(" ").append(_elem.getElement());
+                        Text elem = _elem.getElementWithIcon();
                         Text line = Text.empty().setStyle(GRAY)
                                 .append(Text.literal("- ").setStyle(t.getSiblings().getFirst().getStyle()))
                                 .append(Text.translatable("wytr.tooltip.baseStat.damage", elem))

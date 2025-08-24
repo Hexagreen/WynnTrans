@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.enums.Elements;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.WynnTransText;
@@ -136,10 +137,12 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
     }
 
     private void translateDescSection(List<Text> segment, boolean blocked) {
+        List<Text> malformedAttributes = detachMalformedAttributes(segment);
         Style desiredStyle = blocked ? Style.EMPTY.withColor(Formatting.DARK_GRAY) : GRAY;
         StringBuilder collector = new StringBuilder();
         List<MutableText> _args = new ArrayList<>();
         List<Character> _flags = new ArrayList<>();
+        boolean[] colorCodeAppended = {false};
         segment.forEach(t -> {
             t.getSiblings().forEach(sib -> {
                 Style siblingStyle = sib.getStyle();
@@ -149,11 +152,13 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
                     _args.add(sib.copy());
                     _flags.add('A');
                     collector.append("%s");
+                    colorCodeAppended[0] = false;
                 }
                 else if(!siblingStyle.getFont().equals(Identifier.of("minecraft:default")) || siblingString.matches(" ?[^\u0001-\u007F] ?")) {
-                    if(_args.isEmpty()) collector.append("%s");
+                    if(_args.isEmpty() || _flags.getLast().equals('T')) collector.append("%s");
                     _args.add(Text.literal(siblingString.replaceAll("^ | $", "")).setStyle(siblingStyle));
                     _flags.add('I');
+                    colorCodeAppended[0] = false;
                 }
                 else if(siblingString.matches("[±+-]?\\d+(\\.\\d+)?(%|s|x|/[35]s| Raw|\\+| Blocks?)? ?")) {
                     _args.add(sib.copy());
@@ -161,6 +166,7 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
                     if(siblingString.matches(".+ $"))
                         collector.append("%s ");
                     else collector.append("%s");
+                    colorCodeAppended[0] = false;
                 }
                 else if(siblingString.matches("[±+-]?\\d+(\\.\\d+)?(%|s|x|/[35]s| Raw|\\+| Blocks?)? [A-z ]+ ?")) {
                     String[] split = siblingString.split(" ", 2);
@@ -171,32 +177,74 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
                     if(siblingString.matches(".+ $"))
                         collector.append("%s %s ");
                     else collector.append("%s %s");
-                }
-                else if((!blocked && Objects.equals(siblingColor, TextColor.fromFormatting(Formatting.AQUA))
-                        || (blocked && Objects.equals(siblingColor, GRAY.getColor())))) {
-                    _args.add(sib.copy());
-                    _flags.add('O');
-                    if(siblingString.matches(".+ $"))
-                        collector.append("%s ");
-                    else collector.append("%s");
+                    colorCodeAppended[0] = false;
                 }
                 else if(!blocked && Objects.equals(siblingColor, TextColor.fromFormatting(Formatting.DARK_GRAY))) {
-                    collector.append("§8").append(siblingString.replaceAll("%", "%%"));
+                    if(!colorCodeAppended[0]) collector.append("§8");
+                    collector.append(siblingString.replaceAll("%", "%%"));
+                    _args.add(Text.empty());
+                    _flags.add('T');
+                    colorCodeAppended[0] = true;
+                }
+                else if(!siblingString.isBlank() &&
+                        (!blocked && !Objects.equals(siblingColor, GRAY.getColor())) ||
+                        (blocked && Objects.equals(siblingColor, GRAY.getColor()))) {
+                    if(siblingString.matches(" ?(Earth|Thunder|Water|Fire|Air) ?")) {
+                        if(_args.isEmpty() || _flags.getLast().equals('T')) collector.append("%s");
+                        _args.add(sib.copy());
+                        _flags.add('E');
+                        if(siblingString.matches(".+ $")) collector.append(" ");
+                    }
+                    else {
+                        _args.add(sib.copy());
+                        _flags.add('O');
+                        if(siblingString.matches("^ .+")) collector.append(" ");
+                        collector.append("%s");
+                        if(siblingString.matches(".+ $")) collector.append(" ");
+                    }
+                    colorCodeAppended[0] = false;
                 }
                 else {
+                    if(colorCodeAppended[0] && !blocked) collector.append("§7");
                     collector.append(siblingString.replaceAll("%", "%%"));
+                    _args.add(Text.empty());
+                    _flags.add('T');
+                    colorCodeAppended[0] = false;
                 }
             });
             collector.append("\n");
         });
 
         String v = collector.toString().replaceAll("  ", " ").replaceFirst("\\n$", "")
-                .replaceAll(" ,", ",").replaceAll(" \\.", ".").replaceAll(" ?\\n ?", "\n");
+                .replaceAll(" ([,.)])", "$1").replaceAll(" ?\\n ?", "\n");
         String k = abilityNameKey + "." + DigestUtils.sha1Hex(v.replaceAll("\\n", " ").replaceAll("  ", " ").replaceAll("§.", "")).substring(0, 4);
         List<MutableText> args = processDescArgs(_args, _flags);
-        WTS.checkTranslationExist(k, v);
-        tempText.add(Text.translatableWithFallback(k, v, args.toArray(Object[]::new)).setStyle(desiredStyle));
+        if(v.replaceAll("\\n", " ").matches("Reduce the [Mm]ana cost of %s\\.")) {
+            tempText.add(Text.translatable("wytr.ability.node.CheaperSpell.cf73", args.toArray(Object[]::new)).setStyle(desiredStyle));
+        }
+        else if(v.replaceAll("\\n", " ").matches("Increase your maximum %s by %s\\.")) {
+            tempText.add(Text.translatable("wytr.ability.node.LargerStack.b795", args.toArray(Object[]::new)).setStyle(desiredStyle));
+        }
+        else {
+            WTS.checkTranslationExist(k, v);
+            tempText.add(Text.translatableWithFallback(k, v, args.toArray(Object[]::new)).setStyle(desiredStyle));
+        }
         wrapTargetIdx.add(tempText.size() - 1);
+        if(!malformedAttributes.isEmpty()) translateAttributeSection(malformedAttributes);
+    }
+
+    private List<Text> detachMalformedAttributes(List<Text> segment) {
+        List<Text> detached = new ArrayList<>();
+        for(int i = 0, size = segment.size(); i < size; i++) {
+            List<Text> siblings = segment.get(i).getSiblings();
+            if(siblings.getFirst().getStyle().getFont().equals(Identifier.of("minecraft:common"))
+                    && segment.get(i).getString().matches(". .+: .+")) {
+                detached = new ArrayList<>(segment.subList(i, size));
+                segment.subList(i, size).clear();
+                break;
+            }
+        }
+        return detached;
     }
 
     private List<MutableText> processDescArgs(List<MutableText> _args, List<Character> _flags) {
@@ -217,14 +265,25 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
                         args.add(Text.translatableWithFallback(k1, abilityName).setStyle(currentStyle));
                     }
                 }
+                case 'E' -> {
+                    Elements elements = Elements.findElement(current.getString().trim());
+                    MutableText styledElemText = elements.getElementWithIcon().styled(s -> s.withColor(currentStyle.getColor()));
+                    if(args.isEmpty() || _flags.get(i - 1).equals('T')) args.add(styledElemText);
+                    else if(_flags.get(i - 1).equals('I')) {
+                        args.removeLast();
+                        args.add(styledElemText);
+                    }
+                    else args.add(styledElemText);
+                }
                 case 'O' -> {
-                    String objectName = current.getString().replaceFirst(" $", "");
+                    String objectName = current.getString().trim();
                     String k = "wytr.ability.object." + normalizeStringForKey(objectName);
                     WTS.checkTranslationExist(k, objectName);
                     args.add(Text.translatableWithFallback(k, objectName).setStyle(currentStyle));
                 }
                 case 'I' -> {
-                    if(args.isEmpty()) args.add(current);
+                    if(args.isEmpty() || _flags.get(i - 1).equals('T')) args.add(current);
+                    else if(_flags.get(i - 1).equals('I')) args.getLast().append(current);
                     else args.getLast().append(" ").append(current);
                 }
                 case 'U' -> {
