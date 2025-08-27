@@ -132,6 +132,14 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
     private Text processAbilityName(Text abilityName) {
         String abilityNameStr = abilityName.getString();
         this.abilityNameKey = "wytr.ability.node." + normalizeStringForKey(abilityNameStr);
+        if(abilityNameStr.matches("Cheaper .+( I+)?")) {
+            String targetSpell = abilityNameStr.replaceAll("^Cheaper | I+$", "");
+            String number = abilityNameStr.replaceAll(".+?( I+)?$", "$1");
+            String targetSpellKey = "wytr.ability.node." + normalizeStringForKey(targetSpell);
+            Text targetSpellText = Text.translatableWithFallback(targetSpellKey, targetSpell);
+            return Text.translatable("wytr.ability.node.CheaperSpell", targetSpellText, number)
+                    .setStyle(abilityName.getStyle());
+        }
         return Text.translatableWithFallback(abilityNameKey, abilityNameStr)
                 .setStyle(abilityName.getStyle());
     }
@@ -193,22 +201,23 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
                         if(_args.isEmpty() || _flags.getLast().equals('T')) collector.append("%s");
                         _args.add(sib.copy());
                         _flags.add('E');
-                        if(siblingString.matches(".+ $")) collector.append(" ");
                     }
                     else {
                         _args.add(sib.copy());
                         _flags.add('O');
                         if(siblingString.matches("^ .+")) collector.append(" ");
                         collector.append("%s");
-                        if(siblingString.matches(".+ $")) collector.append(" ");
                     }
+                    if(siblingString.matches(".+ $")) collector.append(" ");
                     colorCodeAppended[0] = false;
                 }
                 else {
                     if(colorCodeAppended[0] && !blocked) collector.append("§7");
                     collector.append(siblingString.replaceAll("%", "%%"));
-                    _args.add(Text.empty());
-                    _flags.add('T');
+                    if(!siblingString.isBlank()) {
+                        _args.add(Text.empty());
+                        _flags.add('T');
+                    }
                     colorCodeAppended[0] = false;
                 }
             });

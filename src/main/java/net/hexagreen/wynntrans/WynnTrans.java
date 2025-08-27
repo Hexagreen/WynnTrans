@@ -28,7 +28,7 @@ public class WynnTrans implements ModInitializer {
     public static DrawTooltipHandler drawTooltipHandler;
     public static TitleHandler titleHandler;
     public static ScoreboardSidebarHandler scoreboardSidebarHandler;
-    public static WynnTransFileManager.UnusedLangList unusedLangList;
+    public static WynnTransFileManager.UnusedLangList unusedLangList = new WynnTransFileManager.UnusedLangList();
     public static boolean translationTargetSignMarker;
     public static boolean playerNameCacheExpired;
     public static boolean wynntilsLoaded;
@@ -52,7 +52,6 @@ public class WynnTrans implements ModInitializer {
         drawTooltipHandler = new DrawTooltipHandler();
         titleHandler = new TitleHandler();
         scoreboardSidebarHandler = new ScoreboardSidebarHandler();
-        unusedLangList = new WynnTransFileManager.UnusedLangList();
         translationTargetSignMarker = false;
         playerNameCacheExpired = true;
         wynnPlayerName = "DummyEmptyPlayerName";
