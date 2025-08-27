@@ -130,7 +130,7 @@ def task_R(added_items_json, removed_items):
         
         # 수정된 파일 저장
         with open(json_path, 'w', encoding="UTF-8") as f:
-            json.dump(file_data, f, indent=4)
+            json.dump(file_data, f, indent=4, ensure_ascii=False)
             
     # 삭제된 항목을 './removed.json' 파일에 저장
     with open('./removed.json', 'w', encoding='UTF-8') as f:

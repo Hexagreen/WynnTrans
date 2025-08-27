@@ -5,6 +5,8 @@ import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.Text;
 
+import static net.hexagreen.wynntrans.client.WynnTransClient.showOriginal;
+
 public class TitleHandler {
     private boolean recordMode;
 
@@ -23,6 +25,7 @@ public class TitleHandler {
     public Text translateTitleText(Text text) {
         if(recordMode) debugClass.writeTextAsJSON(text, "TitleRecord");
         try {
+            if(showOriginal) return text;
             return TitleType.findAndRun(text, true);
         }
         catch(Exception e) {
@@ -35,6 +38,7 @@ public class TitleHandler {
     public Text translateSubtitleText(Text text) {
         if(recordMode) debugClass.writeTextAsJSON(text, "SubtitleRecord");
         try {
+            if(showOriginal) return text;
             return TitleType.findAndRun(text, false);
         }
         catch(Exception e) {

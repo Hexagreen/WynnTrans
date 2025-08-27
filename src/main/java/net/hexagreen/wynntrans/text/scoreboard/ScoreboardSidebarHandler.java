@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.scoreboard;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.client.WynnTransClient;
 import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.scoreboard.ScoreboardEntry;
 import net.minecraft.scoreboard.number.NumberFormat;
@@ -51,6 +52,7 @@ public class ScoreboardSidebarHandler {
 
     public List<ScoreboardEntry> translateScoreboardSidebar(List<ScoreboardEntry> entries) {
         try {
+            if(WynnTransClient.showOriginal) return entries;
             return getCacheOrTranslate(entries);
         }
         catch(Exception e) {

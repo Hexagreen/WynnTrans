@@ -1,6 +1,6 @@
 {
 	"wytr.wynnTrans": "WynnTrans",
-	"wytr.key.showOriginalTooltip": "Show Original Tooltip",
+	"wytr.key.showOriginalText": "Show Original Text",
 	"wytr.command.registerBackgroundTextMode.enable": "Background text registration §aEnabled",
 	"wytr.command.registerBackgroundTextMode.disable": "Background text registration §4Disabled",
 	"wytr.command.chatForceRecordMode.enable": "Incoming chat text recording §aEnabled",
@@ -11,5 +11,6 @@
 	"wytr.command.tooltipForceRecordMode.disable": "Tooltip force recording §4Disabled",
 	"wytr.command.titleForceRecordMode.enable": "Title and Subtitle force recording §aEnabled",
 	"wytr.command.titleForceRecordMode.disable": "Title and Subtitle force recording §4Disabled",
+	"wytr.command.unusedLangKeyRefreshed": "Translation keys start with \"%s\" had tagged as need to check unused.",
 	"wytr.command.signTranslationRegistered": "Translation key registered."
 }

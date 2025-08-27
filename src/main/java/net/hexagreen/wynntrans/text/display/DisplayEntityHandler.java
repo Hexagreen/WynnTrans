@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.display;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.client.WynnTransClient;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.minecraft.text.Text;
@@ -23,6 +24,7 @@ public class DisplayEntityHandler {
     public Text translateDisplayText(Text text) {
         if(recordMode) debugClass.writeTextAsJSON(text, "DisplayRecord");
         try {
+            if(WynnTransClient.showOriginal) return text;
             return DisplayType.findAndRun(text);
         }
         catch(Exception e) {

@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -15,6 +16,7 @@ import net.hexagreen.wynntrans.text.scoreboard.ScoreboardSidebarHandler;
 import net.hexagreen.wynntrans.text.sign.UseBlockHandler;
 import net.hexagreen.wynntrans.text.title.TitleHandler;
 import net.hexagreen.wynntrans.text.tooltip.DrawTooltipHandler;
+import net.minecraft.client.gui.screen.GameMenuScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ public class WynnTrans implements ModInitializer {
     public static DrawTooltipHandler drawTooltipHandler;
     public static TitleHandler titleHandler;
     public static ScoreboardSidebarHandler scoreboardSidebarHandler;
+    public static WynnTransFileManager.UnusedLangList unusedLangList;
     public static boolean translationTargetSignMarker;
     public static boolean playerNameCacheExpired;
     public static boolean wynntilsLoaded;
@@ -49,6 +52,7 @@ public class WynnTrans implements ModInitializer {
         drawTooltipHandler = new DrawTooltipHandler();
         titleHandler = new TitleHandler();
         scoreboardSidebarHandler = new ScoreboardSidebarHandler();
+        unusedLangList = new WynnTransFileManager.UnusedLangList();
         translationTargetSignMarker = false;
         playerNameCacheExpired = true;
         wynnPlayerName = "DummyEmptyPlayerName";
@@ -61,11 +65,13 @@ public class WynnTrans implements ModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleDisplayTextRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTooltipTextRecordMode.register(dispatcher));
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandToggleTitleTextRecordMode.register(dispatcher));
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> CommandRefreshUnusedLangKey.register(dispatcher));
 
         ClientTickEvents.START_WORLD_TICK.register((StartTick) -> onGameMessageHandler.onStartWorldTick());
 
         UseBlockCallback.EVENT.register(new UseBlockHandler());
         ScreenEvents.AFTER_INIT.register((c, s, w, h) -> {
+            if(s instanceof GameMenuScreen) unusedLangList.save();
             currentScreen = s != null ? s.getTitle().getString() : "";
             if("\uDAFF\uDFD5\uE01F".equals(currentScreen)) expireWynnPlayerName();
         });
@@ -139,6 +145,23 @@ public class WynnTrans implements ModInitializer {
 
         private static int run() {
             titleHandler.toggleRecordMode();
+            return 1;
+        }
+    }
+
+    private static class CommandRefreshUnusedLangKey {
+        private static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
+            dispatcher.register(
+                    ClientCommandManager.literal("wytr")
+                            .then(ClientCommandManager.literal("refreshUnusedLangKey")
+                                    .then(ClientCommandManager.literal("ALL")
+                                            .executes(context -> run("")))
+                                    .then(ClientCommandManager.argument("langCodePrefix", StringArgumentType.string())
+                                            .executes(context -> run(StringArgumentType.getString(context, "langCodePrefix"))))));
+        }
+
+        private static int run(String prefix) {
+            wynnTranslationStorage.refreshUnusedLangKey(unusedLangList, prefix.isBlank() ? "wytr." : prefix);
             return 1;
         }
     }

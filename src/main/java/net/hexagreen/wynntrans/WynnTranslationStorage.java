@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans;
 
+import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.chat.Rulebooks;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class WynnTranslationStorage {
         unregisteredTextSet.clear();
         unregisteredTooltipSet.clear();
         unregisteredTextJsonSet.clear();
+        WynnTrans.unusedLangList.save();
 
         wynnTransDict.putAll(translationMap);
         unregisteredTextSet.addAll(WynnTransFileManager.readUnregistered());
@@ -26,6 +28,7 @@ public class WynnTranslationStorage {
 
         WynnTrans.drawTooltipHandler.clearCache();
         WynnTrans.scoreboardSidebarHandler.clearCache();
+        WynnTrans.unusedLangList.load();
 
         LOGGER.info("Reloaded Wynncraft Text Language Map.");
     }
@@ -46,6 +49,11 @@ public class WynnTranslationStorage {
         }
         this.unregisteredTextJsonSet.add(text);
         debugClass.writeTextAsJSON(text, tag);
+    }
+
+    public void refreshUnusedLangKey(WynnTransFileManager.UnusedLangList instance, String prefixFilter) {
+        instance.filterFromMap(wynnTransDict, prefixFilter);
+        WynnTransText.transportMessage(Text.translatable("wytr.command.unusedLangKeyRefreshed", prefixFilter));
     }
 
     public boolean checkTranslationExist(String key, String value) {

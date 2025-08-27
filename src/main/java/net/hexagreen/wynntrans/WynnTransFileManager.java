@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class WynnTransFileManager {
     private static final Logger LOGGER = WynnTrans.LOGGER;
@@ -133,5 +134,41 @@ public class WynnTransFileManager {
                     }
                     else WynnTrans.wynnPlayerName = playerName;
                 });
+    }
+
+    public static class UnusedLangList {
+        private Set<String> keys = new HashSet<>();
+
+        public void save() {
+            try(FileWriter writer = new FileWriter("WynnTrans/unusedLangKeys.json", false)) {
+                gson.toJson(this, writer);
+            }
+            catch(IOException e) {
+                LOGGER.warn("Failed to save unused language key collection file.");
+            }
+        }
+
+        public void load() {
+            try(FileReader reader = new FileReader("WynnTrans/unusedLangKeys.json")) {
+                UnusedLangList loaded = gson.fromJson(reader, UnusedLangList.class);
+                if(loaded != null && loaded.keys != null) {
+                    this.keys = loaded.keys;
+                }
+            }
+            catch(IOException e) {
+                LOGGER.warn("Failed to load unused language key collection file.");
+            }
+        }
+
+        public void filterFromMap(Map<String, String> source, String prefix) {
+            this.keys = source.keySet().stream()
+                    .filter(k -> k.startsWith(prefix))
+                    .collect(Collectors.toSet());
+            save();
+        }
+
+        public void removeKey(String key) {
+            keys.remove(key);
+        }
     }
 }
