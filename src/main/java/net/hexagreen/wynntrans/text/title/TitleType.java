@@ -4,7 +4,7 @@ import net.hexagreen.wynntrans.text.title.types.*;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -19,16 +19,33 @@ public enum TitleType {
     PROXY_SUBTITLE(ProxySimpleTitle::new, ProxySimpleTitle::typeChecker, false),
     NO_TYPE(SimpleTitle::new, null, true);
 
+
+    private static final List<TitleType> CACHED_CHECKER_TITLE =
+            Arrays.stream(TitleType.values())
+                    .filter(e -> e.typeChecker != null)
+                    .filter(e -> e.isTitle)
+                    .toList();
+    private static final List<TitleType> CACHED_CHECKER_SUBTITLE =
+            Arrays.stream(TitleType.values())
+                    .filter(e -> e.typeChecker != null)
+                    .filter(e -> !e.isTitle)
+                    .toList();
     private final Function<Text, WynnTitleText> wtt;
     private final Predicate<Text> typeChecker;
     private final boolean isTitle;
 
     private static TitleType findType(Text text, boolean isTitle) {
-        return Arrays.stream(values())
-                .filter(titleType -> Objects.nonNull(titleType.typeChecker))
-                .filter(titleType -> titleType.isTitle == isTitle)
-                .filter(titleType -> titleType.typeChecker.test(text))
-                .findFirst().orElse(NO_TYPE);
+        if(isTitle) {
+            for(TitleType c : CACHED_CHECKER_TITLE) {
+                if(c.typeChecker.test(text)) return c;
+            }
+        }
+        else {
+            for(TitleType c : CACHED_CHECKER_SUBTITLE) {
+                if(c.typeChecker.test(text)) return c;
+            }
+        }
+        return NO_TYPE;
     }
 
     public static Text findAndRun(Text text, boolean isTitle) {

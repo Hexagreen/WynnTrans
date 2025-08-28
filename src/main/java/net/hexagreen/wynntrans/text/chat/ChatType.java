@@ -5,7 +5,7 @@ import net.hexagreen.wynntrans.text.chat.types.*;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -101,14 +101,18 @@ public enum ChatType {
     NO_TYPE(SimpleText::new, null);
 
 
+    private static final List<ChatType> CACHED_CHECKER =
+            Arrays.stream(ChatType.values())
+                    .filter(chatType -> chatType.typeChecker != null)
+                    .toList();
     private final Function<Text, WynnChatText> wct;
     private final Predicate<Text> typeChecker;
 
     private static ChatType findType(Text text) {
-        return Arrays.stream(ChatType.values())
-                .filter(chatType -> Objects.nonNull(chatType.typeChecker))
-                .filter(chatType -> chatType.typeChecker.test(text))
-                .findFirst().orElse(NO_TYPE);
+        for(ChatType c : CACHED_CHECKER) {
+            if(c.typeChecker.test(text)) return c;
+        }
+        return NO_TYPE;
     }
 
     public static boolean findAndRun(Text text) {

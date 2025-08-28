@@ -4,7 +4,7 @@ import net.hexagreen.wynntrans.text.display.types.*;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -54,14 +54,18 @@ public enum DisplayType {
 
     NO_TYPE(SimpleDisplay::new, null);
 
+    private static final List<DisplayType> CACHED_CHECKER =
+            Arrays.stream(DisplayType.values())
+                    .filter(e -> e.typeChecker != null)
+                    .toList();
     private final Function<Text, WynnDisplayText> wdt;
     private final Predicate<Text> typeChecker;
 
     private static DisplayType findType(Text text) {
-        return Arrays.stream(values())
-                .filter(displayType -> Objects.nonNull(displayType.typeChecker))
-                .filter(displayType -> displayType.typeChecker.test(text))
-                .findFirst().orElse(NO_TYPE);
+        for(DisplayType c : CACHED_CHECKER) {
+            if(c.typeChecker.test(text)) return c;
+        }
+        return NO_TYPE;
     }
 
     public static Text findAndRun(Text text) {

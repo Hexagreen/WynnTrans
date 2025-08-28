@@ -5,7 +5,6 @@ import net.minecraft.text.Text;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -18,14 +17,20 @@ public enum ScoreboardContentType {
     LOOTRUN(Lootrun::new, Lootrun::typeChecker),
     PARTY(Party::new, Party::typeChecker),
     NO_TYPE(SimpleScoreboardContent::new, null);
+
+
+    private static final List<ScoreboardContentType> CACHED_CHECKER =
+            Arrays.stream(ScoreboardContentType.values())
+                    .filter(e -> e.typeChecker != null)
+                    .toList();
     private final Function<List<Text>, WynnScoreboardText> wst;
     private final Predicate<List<Text>> typeChecker;
 
     private static ScoreboardContentType findType(List<Text> text) {
-        return Arrays.stream(values())
-                .filter(tooltipType -> Objects.nonNull(tooltipType.typeChecker))
-                .filter(tooltipType -> tooltipType.typeChecker.test(text))
-                .findFirst().orElse(NO_TYPE);
+        for(ScoreboardContentType c : CACHED_CHECKER) {
+            if(c.typeChecker.test(text)) return c;
+        }
+        return NO_TYPE;
     }
 
     public static List<Text> findAndRun(List<Text> text) {
