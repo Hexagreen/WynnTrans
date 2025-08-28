@@ -7,9 +7,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class SpeedBoost extends WynnChatText {
-    private final boolean selfMode;
-    private final Text playerName;
-    private final Text duration;
 
     public static boolean typeChecker(Text text) {
         if(text.getSiblings().isEmpty()) return false;
@@ -20,9 +17,6 @@ public class SpeedBoost extends WynnChatText {
 
     public SpeedBoost(Text text) {
         super(text);
-        this.selfMode = getSiblings().size() == 2;
-        this.playerName = getSibling(0);
-        this.duration = ITime.translateTime(getContentString(2).replace("+", ""));
     }
 
     @Override
@@ -32,6 +26,8 @@ public class SpeedBoost extends WynnChatText {
 
     @Override
     protected void build() {
+        boolean selfMode = getSiblings().size() == 2;
+
         if(selfMode) {
             Text time = Text.literal("+").append(ITime.translateTime(getContentString(0).replace("+", "")))
                     .setStyle(Style.EMPTY.withColor(Formatting.AQUA));
@@ -39,6 +35,8 @@ public class SpeedBoost extends WynnChatText {
             return;
         }
 
+        Text playerName = getSibling(0);
+        Text duration = ITime.translateTime(getContentString(2).replace("+", ""));
         Text buffTime = Text.literal("+").setStyle(Style.EMPTY.withColor(Formatting.AQUA)).append(duration);
 
         resultText = Text.empty();
