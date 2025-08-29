@@ -431,7 +431,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
             }
             else if(segments.get(i).getLast().getString().contains("« ")) {
                 Text weapon = new ItemName(_header.getSiblings().get(1))
-                        .noAddictionMode().returnNullMode().textAsMutable()
+                        .noAdditionMode().returnNullMode().textAsMutable()
                         .setStyle(_header.getSiblings().get(1).getStyle());
                 if(weapon == null) weapon = _header.getSiblings().get(1);
                 dump.add(weapon);
@@ -562,7 +562,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
 
         static Items match(String string) {
             if(string.contains(WynnTrans.wynnPlayerName)) return PLAYER_INFO;
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.original) || string.matches(i.styled))
                     .findAny().orElse(null);
         }

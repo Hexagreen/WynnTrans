@@ -115,7 +115,7 @@ public class Blacksmith extends WynnTooltipText implements ITooltipSplitter {
                     line.append(siblings.removeFirst());
                     MutableText _itemName = Text.empty();
                     siblings.forEach(_itemName::append);
-                    Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
+                    Text itemName = new ItemName(_itemName).noAdditionMode().textAsMutable();
                     line.append(itemName);
                     if(lSplit.length == 2) {
                         line.append(" ").append(Text.literal(lSplit[1]).setStyle(_lastText.getStyle()));
@@ -149,7 +149,7 @@ public class Blacksmith extends WynnTooltipText implements ITooltipSplitter {
             String _string = seg.getFirst().getString();
             if(i == 0) {
                 Text _itemName = seg.getFirst();
-                Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
+                Text itemName = new ItemName(_itemName).noAdditionMode().textAsMutable();
                 String[] nums = seg.getLast().getString().replaceAll("[\\[\\]A-z ]", "").split("/");
                 Text durability = Text.translatable("wytr.tooltip.equipment.durability", nums[0], nums[1]).formatted(Formatting.DARK_GRAY);
                 resultText.append(itemName);
@@ -191,7 +191,7 @@ public class Blacksmith extends WynnTooltipText implements ITooltipSplitter {
         private final String styled;
 
         static Items match(String string) {
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.original) || string.matches(i.styled))
                     .findAny().orElse(null);
         }

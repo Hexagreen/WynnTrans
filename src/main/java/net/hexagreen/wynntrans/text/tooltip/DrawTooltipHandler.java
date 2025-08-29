@@ -79,7 +79,7 @@ public class DrawTooltipHandler {
     private MutableText getHeldItemCacheOrTranslate(MutableText text) {
         if(!text.equals(heldItemCacheKey)) {
             heldItemCacheKey = text;
-            heldItemCacheVal = new ItemName(text).noAddictionMode().returnNullMode().textAsMutable();
+            heldItemCacheVal = new ItemName(text).noAdditionMode().returnNullMode().textAsMutable();
         }
         if(heldItemCacheVal == null) {
             if(recordMode) WynnTrans.wynnTranslationStorage.recordTextAsJSON(text, "HeldItem");

@@ -245,7 +245,7 @@ public class TradeMarketFilter extends WynnTooltipText implements ITooltipSplitt
         private final String styled;
 
         static Items match(String string) {
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.styled))
                     .findAny().orElse(null);
         }

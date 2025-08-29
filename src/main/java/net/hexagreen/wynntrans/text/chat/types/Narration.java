@@ -16,7 +16,7 @@ import java.util.Objects;
 public class Narration extends WynnChatText {
     protected final String keyNarration;
     private final NarrationCarrier carrier;
-    private boolean addiction = true;
+    private boolean addition = true;
 
     public Narration(Text text) {
         this(new NarrationCarrier(flatTextToFilled(colorCodedToStyled(text))));
@@ -28,8 +28,8 @@ public class Narration extends WynnChatText {
         this.keyNarration = translationKey + DigestUtils.sha1Hex(inputText.getString());
     }
 
-    public Narration setNoTranslationAddiction() {
-        this.addiction = false;
+    public Narration disableAddingTranslation() {
+        this.addition = false;
         return this;
     }
 
@@ -56,7 +56,7 @@ public class Narration extends WynnChatText {
     }
 
     private boolean checkTranslationExist(String key, String val) {
-        if(addiction) return WTS.checkTranslationExist(key, val);
+        if(addition) return WTS.checkTranslationExist(key, val);
         else return WTS.checkTranslationDoNotRegister(key);
     }
 

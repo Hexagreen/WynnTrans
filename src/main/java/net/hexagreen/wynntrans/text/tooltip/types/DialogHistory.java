@@ -102,7 +102,7 @@ public class DialogHistory extends WynnTooltipText {
             else if(!dBuffer.isEmpty()) dBuffer.add(text);
             else return false;
             Text tmpText = mergeTextStyleSide(dBuffer);
-            Text translated = new NpcDialog(tmpText).setNoTranslationAddiction().text();
+            Text translated = new NpcDialog(tmpText).disableAddingTranslation().text();
             if(translated.getSiblings().get(1).getContent() instanceof TranslatableTextContent) {
                 storage.add(translated);
                 dBuffer.clear();
@@ -115,7 +115,7 @@ public class DialogHistory extends WynnTooltipText {
         private void addToNBuffer(Text text) {
             nBuffer.add(text);
             Text tmpText = mergeTextStyleSide(nBuffer);
-            Text translated = new Narration(tmpText).setNoTranslationAddiction().text();
+            Text translated = new Narration(tmpText).disableAddingTranslation().text();
             if(translated.getContent() instanceof TranslatableTextContent) {
                 storage.add(translated);
                 nBuffer.clear();

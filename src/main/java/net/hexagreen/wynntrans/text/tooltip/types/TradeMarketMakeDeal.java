@@ -373,7 +373,7 @@ public class TradeMarketMakeDeal extends WynnTooltipText implements ITooltipSpli
                 Text amount = Text.translatable("wytr.unit.quantity", _amount).formatted(Formatting.GRAY);
                 MutableText _itemName = Text.empty();
                 siblings.forEach(_itemName::append);
-                Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
+                Text itemName = new ItemName(_itemName).noAdditionMode().textAsMutable();
                 Text line = Text.translatable("wytr.tooltip.tradeMarket.order.summary.tradingItem", amount, itemName)
                         .formatted(Formatting.GREEN);
                 resultText.append(line);
@@ -417,7 +417,7 @@ public class TradeMarketMakeDeal extends WynnTooltipText implements ITooltipSpli
         private final String styled;
 
         static Items match(String string) {
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.styled))
                     .findAny().orElse(null);
         }

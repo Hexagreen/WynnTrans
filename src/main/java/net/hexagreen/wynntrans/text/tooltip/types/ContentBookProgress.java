@@ -58,7 +58,7 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
         Matcher matcher = Pattern.compile("Lv\\. (\\d+) to (\\d+)").matcher(siblings.get(1).getString());
         boolean ignore = matcher.find();
         text1.append(siblings.getFirst())
-                .append(Text.translatable(translationKey + ".lvRange", matcher.group(1), matcher.group(2)).setStyle(siblings.get(1).getStyle()));
+                .append(Text.translatable("wytr.unit.levelRange", matcher.group(1), matcher.group(2)).setStyle(siblings.get(1).getStyle()));
         for(int i = 2; i < siblings.size(); i++) {
             text2.append(siblings.get(i));
         }

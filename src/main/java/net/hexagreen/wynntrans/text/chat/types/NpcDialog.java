@@ -19,7 +19,7 @@ public class NpcDialog extends WynnChatText {
     private final String keyName;
     private final String valName;
     private final NpcDialogNormalizer carrier;
-    private boolean addiction = true;
+    private boolean addition = true;
 
     public static boolean typeChecker(Text text) {
         return Pattern.compile("^\\n?\\[(\\d+)/(\\d+)] .+:").matcher(text.getString()).find();
@@ -41,8 +41,8 @@ public class NpcDialog extends WynnChatText {
         this.keyDialog = translationKey + "dialog." + npcName + "." + dialogCounter[1] + "." + dialogCounter[0] + "." + hash;
     }
 
-    public NpcDialog setNoTranslationAddiction() {
-        this.addiction = false;
+    public NpcDialog disableAddingTranslation() {
+        this.addition = false;
         return this;
     }
 
@@ -83,7 +83,7 @@ public class NpcDialog extends WynnChatText {
     }
 
     private boolean checkTranslationExist(String key, String val) {
-        if(addiction) return WTS.checkTranslationExist(key, val);
+        if(addition) return WTS.checkTranslationExist(key, val);
         else return WTS.checkTranslationDoNotRegister(key);
     }
 

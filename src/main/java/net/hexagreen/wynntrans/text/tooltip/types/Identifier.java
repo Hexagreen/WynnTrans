@@ -91,7 +91,7 @@ public class Identifier extends WynnTooltipText implements ITooltipSplitter {
                         line.append(siblings.removeFirst());
                         MutableText _itemName = Text.empty();
                         siblings.forEach(_itemName::append);
-                        Text itemName = new ItemName(_itemName).noAddictionMode().textAsMutable();
+                        Text itemName = new ItemName(_itemName).noAdditionMode().textAsMutable();
                         line.append(itemName);
                         if(split.length == 2) {
                             line.append(" ").append(Text.literal(split[1]).setStyle(_lastText.getStyle()));
@@ -109,7 +109,7 @@ public class Identifier extends WynnTooltipText implements ITooltipSplitter {
                         Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
                         MutableText line = Text.empty();
                         line.append(siblings.removeFirst());
-                        Text itemName = new ItemName(siblings.getFirst()).noAddictionMode().textAsMutable();
+                        Text itemName = new ItemName(siblings.getFirst()).noAdditionMode().textAsMutable();
                         line.append(itemName);
                         resultText.append(line);
                     }
@@ -209,7 +209,7 @@ public class Identifier extends WynnTooltipText implements ITooltipSplitter {
         private final String styled;
 
         static Items match(String string) {
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.original) || string.matches(i.styled))
                     .findAny().orElse(null);
         }

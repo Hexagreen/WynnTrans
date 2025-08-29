@@ -412,7 +412,7 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
         texts.subList(1, texts.size()).forEach(t -> {
             Text itemName = t.getSiblings().getLast();
             MutableText line = t.getSiblings().getFirst().copy()
-                    .append(new ItemName(itemName).noAddictionMode().textAsMutable().setStyle(itemName.getStyle()));
+                    .append(new ItemName(itemName).noAdditionMode().textAsMutable().setStyle(itemName.getStyle()));
             addAndRecordWidth(line);
         });
     }
