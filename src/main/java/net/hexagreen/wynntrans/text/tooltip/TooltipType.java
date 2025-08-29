@@ -40,6 +40,7 @@ public enum TooltipType {
     TRADE_MARKET_MAKE_DEAL(TradeMarketMakeDeal::new, TradeMarketMakeDeal::typeChecker),
     TRADE_MARKET_ORDER_VIEW(TradeMarketOrderView::new, TradeMarketOrderView::typeChecker),
     TRADE_MARKET_FILTER(TradeMarketFilter::new, TradeMarketFilter::typeChecker),
+    CRAFTING_STATION(CraftingStation::new, CraftingStation::typeChecker),
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     CRAFTED_EQUIPMENT(CraftedEquipment::new, CraftedEquipment::typeChecker),

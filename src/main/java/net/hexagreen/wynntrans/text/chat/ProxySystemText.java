@@ -1,9 +1,11 @@
 package net.hexagreen.wynntrans.text.chat;
 
+import net.hexagreen.wynntrans.enums.Profession;
 import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.chat.types.SimpleSystemText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -42,7 +44,13 @@ public class ProxySystemText extends SimpleSystemText {
                 }),
         BANK_PAGE_ADDED(Pattern.compile("You have unlocked page"),
                 text -> text.getString().replaceAll("\\d+", "%1\\$s"),
-                text -> text.getString().replaceAll("\\D", ""));
+                text -> text.getString().replaceAll("\\D", "")),
+        INVALID_CRAFTING_MATERIAL(Pattern.compile("This material cannot be used for "),
+                text -> text.getString().replaceAll("used for .+", "used for %s"),
+                text -> {
+                    String icon = text.getString().replaceAll("[^Ⓐ-Ⓛ]", "");
+                    return Profession.getProfession(icon.charAt(0)).getTextWithIcon().formatted(Formatting.RED);
+                });
 
         private final Pattern template;
         private final Function<Text, String> mutator;
