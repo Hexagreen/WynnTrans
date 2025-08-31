@@ -34,6 +34,7 @@ public class AbilityTreeNode extends WynnTooltipText implements ITooltipSplitter
         if(texts.isEmpty()) return false;
         if(!Pattern.compile("\uE000").matcher(WynnTrans.currentScreen).find()) return false;
         String abilityName = texts.getFirst().getString().replaceAll("§.", "").replaceAll("^Unlock | ability$", "");
+        if(abilityName.matches("Cheaper .+( I+)?")) return true;
         return WTS.checkTranslationDoNotRegister("wytr.ability.node." + normalizeStringForKey(abilityName));
     }
 
