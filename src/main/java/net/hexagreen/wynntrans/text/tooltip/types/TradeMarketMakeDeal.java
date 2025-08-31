@@ -2,7 +2,6 @@ package net.hexagreen.wynntrans.text.tooltip.types;
 
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
-import net.hexagreen.wynntrans.text.tooltip.ITradableItem;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -353,8 +352,8 @@ public class TradeMarketMakeDeal extends WynnTooltipText implements ITooltipSpli
     private void buildOrderSummary() {
         List<List<Text>> segments = new ArrayList<>();
         splitTooltipToSegments(getSiblings(), segments);
-        new ITradableItem() {
-        }.insertPriceSection(segments, resultText::append, (seg, i, lastIndex) -> {
+        for(int i = 0, segmentsSize = segments.size(); i < segmentsSize; i++) {
+            List<Text> seg = segments.get(i);
             String _string = seg.getFirst().getString();
             if(_string.matches("(Buy|Sell) Order Summary")) {
                 String key = isBuyingOrder ? "wytr.tooltip.tradeMarket.order.summary.buyOrder" : "wytr.tooltip.tradeMarket.order.summary.sellOrder";
@@ -392,8 +391,8 @@ public class TradeMarketMakeDeal extends WynnTooltipText implements ITooltipSpli
                 resultText.append(line);
             }
             else seg.forEach(resultText::append);
-            if(i != lastIndex) resultText.append(SPLITTER);
-        });
+            if(i != segmentsSize - 1) resultText.append(SPLITTER);
+        }
 
     }
 

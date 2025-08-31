@@ -20,6 +20,7 @@ public enum TooltipType {
     MASTERY_TOME_PAGE(MasteryTomeSlot::new, MasteryTomeSlot::typeChecker),
     BLACKSMITH(Blacksmith::new, Blacksmith::typeChecker),
     IDENTIFIER(Identifier::new, Identifier::typeChecker),
+    POWDER_MASTER(PowderMaster::new, PowderMaster::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
