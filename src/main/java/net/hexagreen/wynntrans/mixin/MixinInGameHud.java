@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.mixin;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.client.WynnTransClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
@@ -36,7 +37,7 @@ abstract public class MixinInGameHud {
 
     @ModifyVariable(method = "renderHeldItemTooltip", at = @At("STORE"), ordinal = 0)
     private MutableText mixinRenderHeldItemTooltip(MutableText mutableText) {
-        if(!WynnTrans.drawTooltipHandler.getShowOriginal()) {
+        if(!WynnTransClient.showOriginal) {
             return WynnTrans.drawTooltipHandler.translateHeldItemTooltipText(mutableText);
         }
         return mutableText;

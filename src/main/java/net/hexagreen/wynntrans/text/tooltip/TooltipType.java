@@ -5,7 +5,6 @@ import net.minecraft.text.Text;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -21,6 +20,7 @@ public enum TooltipType {
     MASTERY_TOME_PAGE(MasteryTomeSlot::new, MasteryTomeSlot::typeChecker),
     BLACKSMITH(Blacksmith::new, Blacksmith::typeChecker),
     IDENTIFIER(Identifier::new, Identifier::typeChecker),
+    POWDER_MASTER(PowderMaster::new, PowderMaster::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
@@ -41,6 +41,7 @@ public enum TooltipType {
     TRADE_MARKET_MAKE_DEAL(TradeMarketMakeDeal::new, TradeMarketMakeDeal::typeChecker),
     TRADE_MARKET_ORDER_VIEW(TradeMarketOrderView::new, TradeMarketOrderView::typeChecker),
     TRADE_MARKET_FILTER(TradeMarketFilter::new, TradeMarketFilter::typeChecker),
+    CRAFTING_STATION(CraftingStation::new, CraftingStation::typeChecker),
     NORMAL_EQUIPMENT(NormalEquipment::new, NormalEquipment::typeChecker),
     UNIDENTIFIED_EQUIPMENT(UnidentifiedEquipment::new, UnidentifiedEquipment::typeChecker),
     CRAFTED_EQUIPMENT(CraftedEquipment::new, CraftedEquipment::typeChecker),
@@ -57,14 +58,19 @@ public enum TooltipType {
 
     NO_TYPE(SimpleTooltip::new, null);
 
+
+    private static final List<TooltipType> CACHED_CHECKER =
+            Arrays.stream(TooltipType.values())
+                    .filter(e -> e.typeChecker != null)
+                    .toList();
     private final Function<List<Text>, WynnTooltipText> wtt;
     private final Predicate<List<Text>> typeChecker;
 
     private static TooltipType findType(List<Text> text) {
-        return Arrays.stream(values())
-                .filter(tooltipType -> Objects.nonNull(tooltipType.typeChecker))
-                .filter(tooltipType -> tooltipType.typeChecker.test(text))
-                .findFirst().orElse(NO_TYPE);
+        for(TooltipType c : CACHED_CHECKER) {
+            if(c.typeChecker.test(text)) return c;
+        }
+        return NO_TYPE;
     }
 
     public static List<Text> findAndRun(List<Text> text) {

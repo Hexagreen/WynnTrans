@@ -4,10 +4,14 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
@@ -18,6 +22,7 @@ import java.nio.file.Path;
 
 public class WynnTransClient implements ClientModInitializer {
     private static final Logger LOGGER = WynnTrans.LOGGER;
+    public static boolean showOriginal;
     private static KeyBinding showOriginalTooltipKey;
 
     /**
@@ -27,8 +32,15 @@ public class WynnTransClient implements ClientModInitializer {
     public void onInitializeClient() {
         readyForWynnTransStorage();
 
+        FabricLoader.getInstance().getModContainer("wynntrans").ifPresent(c ->
+                ResourceManagerHelper.registerBuiltinResourcePack(
+                        Identifier.of("wynntrans:wynntrans-pack"),
+                        c, Text.literal("WynnTrans Language Pack"),
+                        ResourcePackActivationType.ALWAYS_ENABLED
+                ));
+
         showOriginalTooltipKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "wytr.key.showOriginalTooltip",
+                "wytr.key.showOriginalText",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_KP_SUBTRACT,
                 "wytr.wynnTrans"
@@ -36,9 +48,16 @@ public class WynnTransClient implements ClientModInitializer {
 
         KeyPressEvent.EVENT.register((keyCode, scanCode, modifiers) -> {
             if(keyCode == KeyBindingHelper.getBoundKeyOf(showOriginalTooltipKey).getCode()) {
-                WynnTrans.drawTooltipHandler.toggleShowOriginal();
+                toggleShowOriginal();
             }
         });
+
+        showOriginal = false;
+        WynnTrans.unusedLangList.load();
+    }
+
+    public void toggleShowOriginal() {
+        showOriginal = !showOriginal;
     }
 
     private void readyForWynnTransStorage() {
@@ -57,6 +76,10 @@ public class WynnTransClient implements ClientModInitializer {
             File json = new File(dir, "json.txt");
             if(json.createNewFile()) {
                 LOGGER.info("Text capturing file initialized.");
+            }
+            File unused = new File(dir, "unusedLangKeys.json");
+            if(unused.createNewFile()) {
+                LOGGER.info("Unused lang key file initialized.");
             }
         }
         catch(IOException e) {

@@ -1,6 +1,7 @@
 package net.hexagreen.wynntrans.text.chat;
 
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.client.WynnTransClient;
 import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.text.WynnTransText;
@@ -67,6 +68,7 @@ public class OnGameMessageHandler {
         if(MinecraftClient.getInstance().world == null) return false;
         if(recordAll) debugClass.writeTextAsJSON(text, "Record");
         if(text.getContent() instanceof TranslatableTextContent) return false;
+        if(WynnTransClient.showOriginal) return false;
         try {
             if(PlainTextContent.EMPTY.equals(text.getContent())) {
                 if(!isMultilineText(text)) {

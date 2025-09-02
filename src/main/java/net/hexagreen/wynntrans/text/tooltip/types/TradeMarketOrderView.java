@@ -41,7 +41,7 @@ public class TradeMarketOrderView extends WynnTooltipText implements ITooltipSpl
                 .forEach(resultText::append);
         resultText.append(SPLITTER);
         resultText.append(Text.empty().append(getSibling(-1).getSiblings().getFirst())
-                .append(" ").append(Text.translatable("wytr.tooltip.tradeMarket.view.click").formatted(Formatting.RED)));
+                .append(" ").append(Text.translatable("wytr.func.clickToWithdraw").formatted(Formatting.RED)));
     }
 
     private void buildWithdraw() {
@@ -51,7 +51,7 @@ public class TradeMarketOrderView extends WynnTooltipText implements ITooltipSpl
                 .forEach(resultText::append);
         resultText.append(SPLITTER);
         resultText.append(Text.empty().append(getSibling(-1).getSiblings().getFirst())
-                .append(" ").append(Text.translatable("wytr.tooltip.tradeMarket.view.click").formatted(Formatting.GREEN)));
+                .append(" ").append(Text.translatable("wytr.func.clickToWithdraw").formatted(Formatting.GREEN)));
     }
 
     private void buildClosing() {

@@ -63,6 +63,6 @@ public class TradePartial extends WynnSystemText {
             style = getStyle(0);
         }
         item.append(Text.literal(content).setStyle(style));
-        return new ItemName(item).noAddictionMode().textAsMutable();
+        return new ItemName(item).noAdditionMode().textAsMutable();
     }
 }

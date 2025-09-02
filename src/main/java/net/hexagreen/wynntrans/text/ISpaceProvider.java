@@ -81,6 +81,10 @@ public interface ISpaceProvider {
         return getBlanks(maxFrontWidth - frontWidth).append(" ");
     }
 
+    default MutableText getBlanks(Text text) {
+        return getBlanks(TEXT_RENDERER.getWidth(text));
+    }
+
     default MutableText getBlanks(int spaceWidth) {
         if(spaceWidth < 0 || spaceWidth >= 1024) {
             return Text.empty();

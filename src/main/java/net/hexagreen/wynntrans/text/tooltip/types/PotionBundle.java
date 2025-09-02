@@ -1,5 +1,7 @@
 package net.hexagreen.wynntrans.text.tooltip.types;
 
+import net.hexagreen.wynntrans.enums.EquipmentAndConsumables;
+import net.hexagreen.wynntrans.enums.ItemRarity;
 import net.hexagreen.wynntrans.text.tooltip.ITooltipSplitter;
 import net.hexagreen.wynntrans.text.tooltip.WynnTooltipText;
 import net.minecraft.text.MutableText;
@@ -77,8 +79,16 @@ public class PotionBundle extends WynnTooltipText implements ITooltipSplitter {
         segment.forEach(t -> {
             Deque<Text> siblings = new ArrayDeque<>(t.getSiblings());
             Text _tier = siblings.removeLast();
-            String tierNumber = _tier.getString().replaceAll(" \\(Tier |\\)", "");
-            Text tier = Text.translatable("wytr.unit.tier", tierNumber);
+            Text tier;
+            if(_tier.getString().contains("Crafted ")) {
+                Text rarity = ItemRarity.CRAFTED.getRarity().copyContentOnly();
+                String crafted = _tier.getString().replaceAll(" \\(Crafted |\\)", "");
+                tier = Text.empty().append(rarity).append(" ").append(EquipmentAndConsumables.getText(crafted));
+            }
+            else {
+                String tierNumber = _tier.getString().replaceAll(" \\(Tier |\\)", "");
+                tier = Text.translatable("wytr.unit.tier", tierNumber);
+            }
             siblings.addLast(Text.empty().setStyle(GRAY).append(" (").append(tier).append(")"));
             MutableText line = Text.empty();
             siblings.forEach(line::append);

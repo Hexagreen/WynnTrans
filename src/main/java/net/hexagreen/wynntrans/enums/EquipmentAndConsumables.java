@@ -9,7 +9,7 @@ public enum EquipmentAndConsumables {
     HELMET(Text.translatable("wytr.equipment.helmet")),
     CHESTPLATE(Text.translatable("wytr.equipment.chestplate")),
     LEGGINGS(Text.translatable("wytr.equipment.leggings")),
-    PANTS(Text.translatable("wytr.equipment.leggings")),
+    PANTS(Text.translatable("wytr.equipment.pants")),
     BOOTS(Text.translatable("wytr.equipment.boots")),
     RING(Text.translatable("wytr.equipment.ring")),
     NECKLACE(Text.translatable("wytr.equipment.necklace")),
@@ -29,7 +29,7 @@ public enum EquipmentAndConsumables {
     private final Text text;
 
     public static MutableText getText(String equip) {
-        return valueOf(equip.replaceAll(" ", "_").toUpperCase(Locale.ENGLISH)).text.copy();
+        return valueOf(equip.trim().replaceAll(" ", "_").toUpperCase(Locale.ENGLISH)).text.copy();
     }
 
     EquipmentAndConsumables(Text text) {

@@ -10,18 +10,18 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.hexagreen.wynntrans.client.WynnTransClient.showOriginal;
+
 public class DrawTooltipHandler {
     private List<Text> cacheKey;
     private List<Text> cacheVal;
     private MutableText heldItemCacheKey;
     private MutableText heldItemCacheVal;
     private boolean recordMode;
-    private boolean showOriginal;
 
     public DrawTooltipHandler() {
         this.cacheKey = new ArrayList<>();
         this.cacheVal = new ArrayList<>();
-        this.showOriginal = false;
     }
 
     public void clearCache() {
@@ -35,14 +35,6 @@ public class DrawTooltipHandler {
             WynnTransText.transportMessage(Text.translatable("wytr.command.tooltipForceRecordMode.enable"));
         else
             WynnTransText.transportMessage(Text.translatable("wytr.command.tooltipForceRecordMode.disable"));
-    }
-
-    public void toggleShowOriginal() {
-        this.showOriginal = !showOriginal;
-    }
-
-    public boolean getShowOriginal() {
-        return showOriginal;
     }
 
     public List<Text> translateTooltipText(List<Text> texts) {
@@ -87,7 +79,7 @@ public class DrawTooltipHandler {
     private MutableText getHeldItemCacheOrTranslate(MutableText text) {
         if(!text.equals(heldItemCacheKey)) {
             heldItemCacheKey = text;
-            heldItemCacheVal = new ItemName(text).noAddictionMode().returnNullMode().textAsMutable();
+            heldItemCacheVal = new ItemName(text).noAdditionMode().returnNullMode().textAsMutable();
         }
         if(heldItemCacheVal == null) {
             if(recordMode) WynnTrans.wynnTranslationStorage.recordTextAsJSON(text, "HeldItem");

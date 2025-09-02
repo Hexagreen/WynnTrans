@@ -309,7 +309,7 @@ public class Bank extends WynnTooltipText implements ITooltipSplitter {
         private final String styled;
 
         static Items match(String string) {
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.original) || string.matches(i.styled))
                     .findAny().orElse(null);
         }

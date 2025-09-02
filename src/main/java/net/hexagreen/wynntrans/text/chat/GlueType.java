@@ -4,7 +4,7 @@ import net.hexagreen.wynntrans.text.chat.types.glue.*;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -34,14 +34,18 @@ public enum GlueType {
 
     NO_TYPE(null, null);
 
+    private static final List<GlueType> CACHED_CHECKER =
+            Arrays.stream(GlueType.values())
+                    .filter(e -> e.typeChecker != null)
+                    .toList();
     private final Supplier<TextGlue> glue;
     private final Predicate<Text> typeChecker;
 
     public static GlueType findType(Text text) {
-        return Arrays.stream(GlueType.values())
-                .filter(glueType -> Objects.nonNull(glueType.typeChecker))
-                .filter(glueType -> glueType.typeChecker.test(text))
-                .findFirst().orElse(NO_TYPE);
+        for(GlueType c : CACHED_CHECKER) {
+            if(c.typeChecker.test(text)) return c;
+        }
+        return NO_TYPE;
     }
 
     public static TextGlue findAndGet(Text text) {

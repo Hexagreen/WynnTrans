@@ -56,10 +56,14 @@ public enum Elements {
     }
 
     public MutableText getElement() {
-        return element.copy().setStyle(color);
+        return element.copy().setStyle(color.withFont(Identifier.of("minecraft:default")));
     }
 
     public MutableText getIcon() {
         return Text.empty().setStyle(color).append(icon.copy());
+    }
+
+    public MutableText getElementWithIcon() {
+        return getIcon().append(" ").append(getElement());
     }
 }

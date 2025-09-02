@@ -63,6 +63,18 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                         .setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)), 150)
                         .forEach(resultText::append);
             }
+            else if(firstLine.contains("Click to ")) {
+                List<Text> siblings = seg.getFirst().getSiblings();
+                Text icon = siblings.getFirst();
+                Text instruction = switch(siblings.getLast().getString()) {
+                    case " Click to Withdraw" -> Text.empty().append(" ")
+                            .append(Text.translatable("wytr.func.clickToWithdraw").formatted(Formatting.GREEN));
+                    case " Click to Remove" -> Text.empty().append(" ")
+                            .append(Text.translatable("wytr.func.clickToRemove").formatted(Formatting.RED));
+                    default -> siblings.getLast();
+                };
+                resultText.append(Text.empty().append(icon).append(instruction));
+            }
             else {
                 seg.forEach(resultText::append);
             }

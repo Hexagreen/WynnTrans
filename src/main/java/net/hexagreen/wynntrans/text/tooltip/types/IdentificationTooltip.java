@@ -12,6 +12,24 @@ import java.util.*;
 
 public class IdentificationTooltip extends WynnTooltipText {
 
+    public static Text extractIDValue(Text _idValue) {
+        Text idValue;
+        String _str = _idValue.getString();
+        if(_str.matches(".+/[35]s")) {
+            String[] str = _str.split("/");
+            idValue = Text.literal(str[0] + "/" + ITime.translateTime(str[1]).getString()).setStyle(_idValue.getStyle());
+        }
+        else if(_str.contains("tier")) {
+            String num = _str.replaceFirst(" tier", "");
+            idValue = Text.translatable("wytr.tooltip.equipment.attackSpeedID", num).setStyle(_idValue.getStyle());
+        }
+        else {
+            idValue = _idValue;
+        }
+
+        return idValue;
+    }
+
     public IdentificationTooltip(List<Text> texts) {
         super(texts);
     }
@@ -159,24 +177,6 @@ public class IdentificationTooltip extends WynnTooltipText {
         result.append(id);
 
         return result;
-    }
-
-    private Text extractIDValue(Text _idValue) {
-        Text idValue;
-        String _str = _idValue.getString();
-        if(_str.matches(".+/[35]s")) {
-            String[] str = _str.split("/");
-            idValue = Text.literal(str[0] + "/" + ITime.translateTime(str[1]).getString()).setStyle(_idValue.getStyle());
-        }
-        else if(_str.contains("tier")) {
-            String num = _str.replaceFirst(" tier", "");
-            idValue = Text.translatable("wytr.tooltip.equipment.attackSpeedID", num).setStyle(_idValue.getStyle());
-        }
-        else {
-            idValue = _idValue;
-        }
-
-        return idValue;
     }
 
     private List<Text> normalizeMajorIDFont(List<Text> texts) {

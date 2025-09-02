@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class ItemName extends WynnTooltipText {
-    private boolean addiction = true;
+    private boolean addition = true;
     private boolean returnNull = false;
 
     public ItemName(List<Text> texts) {
@@ -25,14 +25,14 @@ public class ItemName extends WynnTooltipText {
         this(Text.literal(itemName));
     }
 
-    public ItemName noAddictionMode() {
-        this.addiction = false;
+    public ItemName noAdditionMode() {
+        this.addition = false;
         return this;
     }
 
     public ItemName returnNullMode() {
         this.returnNull = true;
-        this.addiction = false;
+        this.addition = false;
         return this;
     }
 
@@ -85,7 +85,7 @@ public class ItemName extends WynnTooltipText {
         return null;
     }
 
-    private MutableText findItemName(String itemName, boolean addiction) {
+    private MutableText findItemName(String itemName, boolean addition) {
         String normalizedName = normalizeStringForKey(itemName);
 
         if(WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizedName)) {
@@ -109,17 +109,17 @@ public class ItemName extends WynnTooltipText {
         else if(WTS.checkTranslationDoNotRegister("wytr.item.charm." + normalizedName)) {
             return Text.translatable("wytr.item.charm." + normalizedName);
         }
-        else if(!addiction && WTS.checkTranslationDoNotRegister("wytr.item.misc." + normalizedName)) {
+        else if(!addition && WTS.checkTranslationDoNotRegister("wytr.item.misc." + normalizedName)) {
             return Text.translatable("wytr.item.misc." + normalizedName);
         }
-        else if(addiction && checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
+        else if(addition && checkTranslation("wytr.item.misc." + normalizedName, itemName)) {
             return Text.translatable("wytr.item.misc." + normalizedName);
         }
         return null;
     }
 
     private boolean checkTranslation(String key, String val) {
-        if(addiction) return WTS.checkTranslationExist(key, val);
+        if(addition) return WTS.checkTranslationExist(key, val);
         return WTS.checkTranslationDoNotRegister(key);
     }
 

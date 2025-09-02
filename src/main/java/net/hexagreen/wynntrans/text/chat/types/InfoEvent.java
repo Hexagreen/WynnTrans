@@ -6,6 +6,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class InfoEvent extends WynnChatText {
@@ -21,10 +22,16 @@ public class InfoEvent extends WynnChatText {
 
     private static Text cutoffTail(Text text) {
         MutableText result = Text.empty();
-        int size = text.getSiblings().size();
-        result.append(text.getSiblings().getFirst());
-        for(int i = 2; size - 2 > i; i++) {
-            result.append(text.getSiblings().get(i));
+        List<Text> siblings = text.getSiblings();
+        result.append(siblings.getFirst());
+        for(int i = 2, size = siblings.size(); i < size; i++) {
+            String string = siblings.get(i).getString();
+            if(string.contains("The festival closes its doors in")) {
+                String cut = string.replaceFirst("The festival closes its doors in ", "");
+                if(!cut.isBlank()) result.append(Text.literal(cut).setStyle(siblings.get(i).getStyle()));
+                break;
+            }
+            else result.append(siblings.get(i));
         }
         return result;
     }
@@ -46,14 +53,16 @@ public class InfoEvent extends WynnChatText {
 
     @Override
     protected void build() {
+        List<Text> originalSiblings = original.getSiblings();
+
         resultText = Text.empty();
         resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
 
         if(WTS.checkTranslationExist(keyEName, valEName)) {
-            resultText.append(Text.translatable(keyEName).setStyle(original.getSiblings().get(1).getStyle()).append(": "));
+            resultText.append(Text.translatable(keyEName).setStyle(originalSiblings.get(1).getStyle()).append(": "));
         }
         else {
-            resultText.append(original.getSiblings().get(1));
+            resultText.append(originalSiblings.get(1));
         }
 
         for(int index = 1; getSiblings().size() > index; index++) {
@@ -72,7 +81,7 @@ public class InfoEvent extends WynnChatText {
             }
         }
 
-        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(getStyle(-2)));
+        resultText.append(Text.translatable(translationKey + ".end", timer).setStyle(originalSiblings.get(originalSiblings.size() - 2).getStyle()));
     }
 
     private Text initTimer(Text text) {

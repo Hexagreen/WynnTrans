@@ -8,10 +8,7 @@ import net.hexagreen.wynntrans.text.ITime;
 import net.hexagreen.wynntrans.text.WynnTransText;
 import net.hexagreen.wynntrans.text.chat.types.SimpleText;
 import net.hexagreen.wynntrans.text.tooltip.AbstractIdentifiableItem;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -41,7 +38,7 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 2) return false;
         if(Pattern.compile("[\uE000\uE001\uE002\uE004]").matcher(WynnTrans.currentScreen).find()) return false;
-        if(texts.get(1).getString().contains("Sold")) return false;
+//        if(texts.get(1).getString().contains("Sold")) return false;
         String itemName = texts.getFirst().getString().replaceAll("^Unidentified |^Perfect |^Defective |§f⬡ Shiny |\\[.+%]$", "");
         String normalized = normalizeStringForKey(itemName);
         boolean rarityFind = false;
@@ -51,6 +48,7 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
                 break;
             }
         }
+        if(texts.get(1).getString().matches("^§.(Pending|Fulfilled).+")) rarityFind = true;
         return rarityFind && (WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized));
@@ -196,6 +194,10 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
                 }
                 else if(normalized.matches("Fromchat")) {
                     addAndRecordWidth(Text.translatable("wytr.func.wynntilsCompat.sharedGearStat.fromChat").formatted(Formatting.ITALIC, Formatting.DARK_GRAY));
+                    continue;
+                }
+                else if(!t.getSiblings().isEmpty() && t.getSiblings().getFirst().getContent() instanceof TranslatableTextContent) {
+                    addAndRecordWidth(t);
                     continue;
                 }
                 else addAndRecordWidth(t);
@@ -410,7 +412,7 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
         texts.subList(1, texts.size()).forEach(t -> {
             Text itemName = t.getSiblings().getLast();
             MutableText line = t.getSiblings().getFirst().copy()
-                    .append(new ItemName(itemName).noAddictionMode().textAsMutable().setStyle(itemName.getStyle()));
+                    .append(new ItemName(itemName).noAdditionMode().textAsMutable().setStyle(itemName.getStyle()));
             addAndRecordWidth(line);
         });
     }

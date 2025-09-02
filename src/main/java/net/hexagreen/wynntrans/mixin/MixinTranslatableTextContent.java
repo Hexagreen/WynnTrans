@@ -1,16 +1,24 @@
 package net.hexagreen.wynntrans.mixin;
 
+import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.text.TranslatableTextContent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Mixin(TranslatableTextContent.class)
 abstract public class MixinTranslatableTextContent {
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void injectInitializer(String key, String fallback, Object[] args, CallbackInfo ci) {
+        WynnTrans.unusedLangList.removeKey(key);
+    }
+
     @ModifyVariable(method = "forEachPart", at = @At(value = "HEAD"), argsOnly = true)
     private String modifyForEachPart(String translation) {
         return translation.replaceAll("%%", "%");

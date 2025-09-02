@@ -46,11 +46,11 @@ public class TradeFinish extends WynnSystemText {
     private Text parseItem() {
         if(getSiblings().size() == 2) {
             String content = getContentString(1).replaceAll("\\n|À\\.", "");
-            return new ItemName(Text.literal(content).setStyle(getStyle(1))).noAddictionMode().textAsMutable();
+            return new ItemName(Text.literal(content).setStyle(getStyle(1))).noAdditionMode().textAsMutable();
         }
         else {
             String content = getContentString(0).replaceAll("^.+ §5|\\n|À\\.", "");
-            return new ItemName(Text.literal(content)).noAddictionMode().textAsMutable();
+            return new ItemName(Text.literal(content)).noAdditionMode().textAsMutable();
         }
     }
 }

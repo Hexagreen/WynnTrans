@@ -294,7 +294,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     .append(Identifications.findIdentification(
                             _idLine.getSiblings().get(1).getString().replaceFirst(": ", "")).getTranslatedText())
                     .append(": ")
-                    .append(_idLine.getSiblings().getLast()));
+                    .append(IdentificationTooltip.extractIDValue(_idLine.getSiblings().getLast())));
         }
 
         if(lines.isEmpty()) return;
@@ -381,8 +381,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     Text value = t.getSiblings().getLast();
                     String[] split = t.getString().replaceFirst("^- ", "").split(" ");
                     Elements _elem = Elements.findElement(split[1]);
-                    Text elem = Text.empty().setStyle(_elem.getElement().getStyle())
-                            .append(_elem.getIcon()).append(" ").append(_elem.getElement());
+                    Text elem = _elem.getElementWithIcon();
                     Text line = Text.empty().setStyle(GRAY)
                             .append(Text.literal("- ").setStyle(t.getSiblings().getFirst().getStyle()))
                             .append(Text.translatable("wytr.tooltip.baseStat.defence", elem).setStyle(GRAY))
@@ -420,8 +419,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
                     else {
                         String[] split = t.getString().replaceFirst("^- ", "").split(" ");
                         Elements _elem = Elements.findElement(split[1]);
-                        Text elem = Text.empty().setStyle(_elem.getElement().getStyle())
-                                .append(_elem.getIcon()).append(" ").append(_elem.getElement());
+                        Text elem = _elem.getElementWithIcon();
                         Text line = Text.empty().setStyle(GRAY)
                                 .append(Text.literal("- ").setStyle(t.getSiblings().getFirst().getStyle()))
                                 .append(Text.translatable("wytr.tooltip.baseStat.damage", elem))
@@ -433,7 +431,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
             }
             else if(segments.get(i).getLast().getString().contains("« ")) {
                 Text weapon = new ItemName(_header.getSiblings().get(1))
-                        .noAddictionMode().returnNullMode().textAsMutable()
+                        .noAdditionMode().returnNullMode().textAsMutable()
                         .setStyle(_header.getSiblings().get(1).getStyle());
                 if(weapon == null) weapon = _header.getSiblings().get(1);
                 dump.add(weapon);
@@ -564,7 +562,7 @@ public class CompassItems extends WynnTooltipText implements ITooltipSplitter, I
 
         static Items match(String string) {
             if(string.contains(WynnTrans.wynnPlayerName)) return PLAYER_INFO;
-            return Arrays.stream(values()).parallel()
+            return Arrays.stream(values())
                     .filter(i -> string.matches(i.original) || string.matches(i.styled))
                     .findAny().orElse(null);
         }
