@@ -41,6 +41,10 @@ processResources {
                 "minecraft_version": project.minecraft_version,
                 "loader_version": project.loader_version
     }
+
+    from("WynnTransLanguagePack/WynnTrans Language Pack") {
+        into "resourcepacks/wynntrans-pack"
+    }
 }
 
 def targetJavaVersion = 21

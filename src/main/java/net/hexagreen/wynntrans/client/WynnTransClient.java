@@ -4,10 +4,14 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
@@ -27,6 +31,13 @@ public class WynnTransClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         readyForWynnTransStorage();
+
+        FabricLoader.getInstance().getModContainer("wynntrans").ifPresent(c ->
+                ResourceManagerHelper.registerBuiltinResourcePack(
+                        Identifier.of("wynntrans:wynntrans-pack"),
+                        c, Text.literal("WynnTrans Language Pack"),
+                        ResourcePackActivationType.ALWAYS_ENABLED
+                ));
 
         showOriginalTooltipKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "wytr.key.showOriginalText",

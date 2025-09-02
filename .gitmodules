@@ -1,0 +1,3 @@
+[submodule "WynnTransLanguagePack"]
+	path = WynnTransLanguagePack
+	url = https://github.com/Hexagreen/WynnTrans-Language-Pack.git
