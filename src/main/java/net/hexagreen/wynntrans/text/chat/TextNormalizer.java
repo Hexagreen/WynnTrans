@@ -174,7 +174,7 @@ public abstract class TextNormalizer {
                 string = string.replaceAll(playerName, "%p");
             }
 
-            Rulebooks.NormalizerRule rule = rulebook.findRule(wholeText, ruleNumber[0]);
+            Rulebooks.NormalizerRulebook.NormalizerRule rule = rulebook.findRule(wholeText, ruleNumber[0]);
             if(rule != null) {
                 if(string.contains("%p")) {
                     string = string.replaceAll("%p", playerName);
@@ -187,7 +187,7 @@ public abstract class TextNormalizer {
                     int groups = matcher.groupCount();
                     for(int i = 1; i <= groups; i++) {
                         args.add(Text.literal(matcher.group(i)).setStyle(sibling.getStyle()));
-                        flags.add(!rule.registration());
+                        flags.add(!rule.register());
                     }
                     string = string.replaceFirst(rule.pattern(), rule.replace());
                 }

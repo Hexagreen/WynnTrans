@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class WynnTransFileManager {
+    public static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     private static final Logger LOGGER = WynnTrans.LOGGER;
-    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     private static final String fileName = "WynnTrans/scannedTexts.json";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -63,14 +63,8 @@ public class WynnTransFileManager {
         return new HashSet<>();
     }
 
-    public static JsonObject readJsonInResources(String filePath) {
-        try(BufferedReader reader = MinecraftClient.getInstance().getResourceManager().openAsReader(Identifier.of("wynntrans", filePath))) {
-            return gson.fromJson(reader, JsonObject.class);
-        }
-        catch(IOException e) {
-            LOGGER.warn("Failed to read resource {}.", filePath);
-        }
-        return null;
+    public static Reader getReaderInResources(String filePath) throws IOException {
+        return MinecraftClient.getInstance().getResourceManager().openAsReader(Identifier.of("wynntrans", filePath));
     }
 
     private static boolean writeToFile(String line) {

@@ -56,6 +56,7 @@ public enum TooltipType {
     CHARM(Charm::new, Charm::typeChecker),
     CORKIAN_AUGMENT(CorkianAugment::new, CorkianAugment::typeChecker),
 
+    SIMPLE_ITEM_TOOLTIP(SimpleItemTooltip::new, SimpleItemTooltip::typeChecker),
     NO_TYPE(SimpleTooltip::new, null);
 
 
