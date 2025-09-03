@@ -63,6 +63,14 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                         .setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)), 150)
                         .forEach(resultText::append);
             }
+            else if(firstLine.equals("Can be transformed into any")) {
+                translateBlankPowderDesc(seg);
+            }
+            else if(firstLine.equals("Mechanically drained of its magic,")) {
+                wrapLine(Text.translatable("wytr.item.misc.blankPowder.lore")
+                        .setStyle(Style.EMPTY.withColor(Formatting.DARK_GRAY)), 150)
+                        .forEach(resultText::append);
+            }
             else if(firstLine.contains("Click to ")) {
                 List<Text> siblings = seg.getFirst().getSiblings();
                 Text icon = siblings.getFirst();
@@ -99,11 +107,6 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                 resultText.append(Text.translatable("wytr.item.misc.blankPowder", tier)
                         .setStyle(t.getSiblings().getFirst().getStyle()));
             }
-            else if(_string.matches("^free T\\d Powder of your choice")) {
-                String numericTier = "§6" + _string.replaceFirst(".+ T(\\d) Powder .+", "$1");
-                wrapLine(Text.translatable("wytr.item.misc.blankPowder.desc", numericTier).setStyle(GRAY), 120)
-                        .forEach(resultText::append);
-            }
             else if(_string.matches("^. (Earth|Thunder|Water|Fire|Air) Powder [IV]+À*")) {
                 Text elemIcon = t.getSiblings().getFirst();
                 String[] split = t.getSiblings().getLast().getString().split(" ");
@@ -113,7 +116,7 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                 resultText.append(Text.translatable("wytr.item.misc.elementPowder", element, tier)
                         .setStyle(_element.getStyle()));
             }
-            else if(!(_string.contains("Use this item at the") || _string.contains("Powder Exchange"))) {
+            else {
                 resultText.append(t);
             }
         });
@@ -170,9 +173,13 @@ public class ElementPowder extends WynnTooltipText implements ITradableItem {
                 resultText.append(Text.translatable("wytr.item.misc.elementPowder.ingredientEffectiveness", value)
                         .setStyle(style));
             }
-            else {
-                resultText.append(t);
-            }
+            else resultText.append(t);
         });
+    }
+
+    private void translateBlankPowderDesc(List<Text> texts) {
+        String numericTier = "§f" + texts.get(1).getSiblings().getFirst().getString().replaceFirst("Tier ([IV]+) Powder ", "$1");
+        wrapLine(Text.translatable("wytr.item.misc.blankPowder.desc", numericTier).setStyle(GRAY), 150)
+                .forEach(resultText::append);
     }
 }
