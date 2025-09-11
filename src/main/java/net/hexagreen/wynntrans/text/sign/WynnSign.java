@@ -28,13 +28,13 @@ public class WynnSign {
     public static MutableText translateRecommendLevel(Text text) {
         MutableText result = Text.empty();
         text.visit((_style, _string) -> {
-            if(!_string.matches("(§.)?\\[?Lv\\. \\d+\\+?]?")) {
+            if(!_string.matches("(§.)?\\[?Lv\\. [\\d/]+\\+?]?")) {
                 result.append(Text.literal(_string).setStyle(_style));
                 return Optional.empty();
             }
             String colorCodeStripped = _string.replaceAll("^ | $", "").replaceFirst("^ ?(§.)+ ?", "");
             boolean bracketed = colorCodeStripped.matches("^\\[.+]$");
-            String num = colorCodeStripped.replaceAll(".+?(\\d+\\+?).+", "$1");
+            String num = colorCodeStripped.replaceAll(".+?([\\d/]+\\+?).+", "$1");
             Style style = WynnTransText.parseStyleCode(_string).withParent(_style);
             Text level = Text.translatable("wytr.unit.level", num);
             if(bracketed) {

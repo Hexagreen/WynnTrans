@@ -79,6 +79,25 @@ public class ProxySimpleTitle extends SimpleTitle {
                 s -> "Next wave in %s",
                 s -> new Object[]{s.replaceFirst("Next wave in ", "")}
         ),
+        UNDERWORLD_CRYPT_BRIDGE(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("Bridge deploys in \\d+ seconds?");
+                },
+                s -> "Bridge deploys in %s seconds",
+                s -> new Object[]{s.replaceAll("\\D", "")}
+        ),
+        FORGERY_KILL_COUNTER(
+                text -> {
+                    if(!text.getSiblings().isEmpty()) return false;
+                    return text.getString().matches("§7\\[\\d+/\\d+] §8Mobs Killed");
+                },
+                s -> "§7[%s/%s] §8Mobs Killed",
+                s -> {
+                    String[] num = s.replaceAll("§7\\[|] §8Mobs Killed", "").split("/");
+                    return new Object[]{"§7" + num[0], "§7" + num[1]};
+                }
+        ),
         LOOTRUN_MOB_WAVE(
                 text -> {
                     if(!text.getSiblings().isEmpty()) return false;

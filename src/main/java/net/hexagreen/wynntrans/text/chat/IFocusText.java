@@ -5,7 +5,6 @@ import com.wynntils.features.overlays.NpcDialogueFeature;
 import net.hexagreen.wynntrans.WynnTrans;
 import net.hexagreen.wynntrans.enums.FunctionalRegex;
 import net.hexagreen.wynntrans.text.ISpaceProvider;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -70,7 +69,7 @@ public interface IFocusText extends ISpaceProvider {
     }
 
     default void clearChat() {
-        MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+//        MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
     }
 
     private Text pressShiftToContinue(Text fullText) {

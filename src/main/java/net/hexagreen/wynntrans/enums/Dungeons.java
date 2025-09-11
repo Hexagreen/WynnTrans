@@ -87,13 +87,13 @@ public enum Dungeons {
         return out.append(dungeonName);
     }
 
-    public Text getDungeonBossReward() {
+    public MutableText getDungeonBossReward() {
         MutableText out = Text.empty();
         if(this.isCorrupted) return out.append(Text.translatable("wytr.dungeon.corrupted", dungeonBossReward));
         return out.append(dungeonBossReward);
     }
 
-    public Text getDungeonFragment() {
+    public MutableText getDungeonFragment() {
         MutableText out = Text.empty();
         if(this.isCorrupted) return out.append(Text.translatable("wytr.dungeon.corrupted", dungeonFragment));
         return out.append(dungeonFragment);

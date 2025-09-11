@@ -47,7 +47,7 @@ public class ContentBookProgress extends WynnTooltipText implements ISpaceProvid
     }
 
     private void translateAndAlignText(List<Text> list) {
-        appendAlignment(list.parallelStream().map(isSecretDiscovery ? this::translateDiscoveryAreaCategory : this::translateLevelRangeCategory).toList());
+        appendAlignment(list.stream().map(isSecretDiscovery ? this::translateDiscoveryAreaCategory : this::translateLevelRangeCategory).toList());
     }
 
     private List<Text> translateLevelRangeCategory(Text text) {

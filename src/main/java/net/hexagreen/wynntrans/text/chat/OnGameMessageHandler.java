@@ -306,6 +306,7 @@ public class OnGameMessageHandler {
 
         private void push(Text text) {
             this.storage.add(text);
+            WynnTransText.transportMessage(text);
         }
 
         private void clear() {

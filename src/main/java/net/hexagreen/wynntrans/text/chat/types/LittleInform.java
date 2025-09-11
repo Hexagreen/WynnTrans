@@ -14,7 +14,7 @@ public class LittleInform extends WynnChatText {
     }
 
     public LittleInform(Text text) {
-        super(text);
+        super(colorCodedToStyled(text));
         this.keyInform = DigestUtils.sha1Hex(inputText.getString()).substring(0, 12);
     }
 
@@ -25,35 +25,21 @@ public class LittleInform extends WynnChatText {
 
     @Override
     protected void build() {
-        if(getSiblings().isEmpty()) {
-            resultText = Text.empty();
-            resultText.append(getHeader());
-            String valInform = getContentString().replaceAll("^§.\\[§.!§.] ", "");
-            if(WTS.checkTranslationExist(translationKey + keyInform, valInform)) {
-                resultText.append(Text.translatable(translationKey + keyInform));
+        resultText = Text.empty().setStyle(getStyle())
+                .append(getSibling(0)).append(getSibling(1)).append(getSibling(2));
+        for(int i = 3; i < getSiblings().size(); i++) {
+            String valInform = getSibling(i).getString();
+            if(i == 3 && valInform.matches("^ .+")) {
+                resultText.append(" ");
+                valInform = valInform.replaceFirst("^ ", "");
+            }
+
+            if(WTS.checkTranslationExist(translationKey + keyInform + "." + (i - 2), valInform)) {
+                resultText.append(Text.translatable(translationKey + keyInform + "." + (i - 2)).setStyle(getStyle(i)));
             }
             else {
-                resultText.append(valInform);
+                resultText.append(getSibling(i));
             }
         }
-        else {
-            resultText = inputText.copyContentOnly().setStyle(getStyle())
-                    .append(getSibling(0)).append(getSibling(1));
-            for(int i = 2; i < getSiblings().size(); i++) {
-                String valInform = getSibling(i).getString();
-
-                if(WTS.checkTranslationExist(translationKey + keyInform + "." + (i - 1), valInform)) {
-                    resultText.append(Text.translatable(translationKey + keyInform + "." + (i - 1)).setStyle(getStyle(i)));
-                }
-                else {
-                    resultText.append(getSibling(i));
-                }
-            }
-        }
-    }
-
-    private Text getHeader() {
-        String head = getContentString().substring(0, 10).split(" ")[0];
-        return Text.literal(head).append(" ");
     }
 }

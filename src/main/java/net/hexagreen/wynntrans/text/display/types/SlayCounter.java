@@ -1,5 +1,6 @@
 package net.hexagreen.wynntrans.text.display.types;
 
+import net.hexagreen.wynntrans.debugClass;
 import net.hexagreen.wynntrans.text.display.WynnDisplayText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -67,5 +68,6 @@ public class SlayCounter extends WynnDisplayText {
 
         resultText = Text.empty().setStyle(getStyle());
         resultText.append(getSibling(0)).append("\n\n").append(Text.translatable(translationKey, t0, t1).setStyle(GRAY)).append("\n\n").append(counter);
+        debugClass.writeTextAsJSON(inputText, "SlayCounter");
     }
 }
