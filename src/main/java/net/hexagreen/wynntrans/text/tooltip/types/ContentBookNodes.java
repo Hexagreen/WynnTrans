@@ -13,10 +13,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -634,70 +631,63 @@ public class ContentBookNodes extends WynnTooltipText implements ITooltipSplitte
                 return line.append(Text.translatable("wytr.tooltip.contentReward.various"));
             }
             else {
-                String val = text.getString().replaceFirst("^- ", "");
-                String hash = DigestUtils.sha1Hex(val).substring(0, 4);
-                String key;
-                for(int i = 1, size = text.getSiblings().size(); i < size; i++) {
-                    String subKey;
-                    if(size == 2) {
-                        subKey = "";
-                        String _itemName;
-                        if(val.matches("^\\+\\d+ .+")) {
-                            String[] split = val.split(" ", 2);
-                            String num = split[0];
-                            _itemName = split[1];
-                            line.append(num + " ");
-                            val = val.replaceFirst("^\\+\\d+ ", "");
-                            hash = DigestUtils.sha1Hex(val).substring(0, 4);
-                        }
-                        else {
-                            _itemName = val.replaceFirst("^\\+", "");
-                            val = _itemName;
-                            hash = DigestUtils.sha1Hex(val).substring(0, 4);
-                            line.append("+");
-                        }
-                        Text itemName = new ItemName(_itemName).returnNullMode().textAsMutable();
-                        if(itemName != null) {
-                            line.append(itemName);
-                            continue;
-                        }
-                    }
-                    else {
-                        subKey = "." + i;
-                        val = text.getSiblings().get(i).getString();
-                        Text _val = text.getSiblings().get(i);
+                Deque<Text> siblings = new ArrayDeque<>(text.getSiblings());
+                siblings.removeFirst();
+                List<Text> mergeTarget = new ArrayList<>();
+                String v = text.getString().replaceFirst("^- ", "");
 
-                        if(val.matches("\\+\\d+ ")) {
-                            line.append(_val);
-                            continue;
-                        }
-                        MutableText itemName = new ItemName(_val).returnNullMode().textAsMutable();
-                        if(itemName != null) {
-                            line.append(itemName);
-                            continue;
-                        }
-                    }
+                Text elem = siblings.removeFirst();
+                String elemStr = elem.getString();
 
+                if(elemStr.matches("\\+\\d+ ")) {
+                    line.append(elem);
+                    v = v.replaceFirst("^\\+\\d+ ", "");
+                }
+                else if(elemStr.matches("^\\+\\d+ .+")) {
+                    String[] split = elemStr.split(" ", 2);
+                    String num = split[0];
+                    String rewardName = split[1];
+                    line.append(num + " ");
+                    mergeTarget.add(Text.literal(rewardName).setStyle(elem.getStyle()));
+                    v = v.replaceFirst("^\\+\\d+ ", "");
+                }
+                else if(elemStr.matches("^\\+.+")) {
+                    String rewardName = elemStr.replaceFirst("^\\+", "");
+                    line.append("+");
+                    mergeTarget.add(Text.literal(rewardName).setStyle(elem.getStyle()));
+                    v = v.replaceFirst("^\\+", "");
+                }
+                else {
+                    mergeTarget.add(elem);
+                }
+
+                mergeTarget.addAll(siblings);
+                Text itemName = new ItemName(siblingsToText(mergeTarget)).returnNullMode().textAsMutable();
+                if(itemName != null) {
+                    return line.append(itemName);
+                }
+
+                String hash = DigestUtils.sha1Hex(v).substring(0, 4);
+                for(int i = 0, size = mergeTarget.size(); i < size; i++) {
+                    String key;
+                    String subKey = size == 1 ? "" : "." + i + 1;
+                    Style style = mergeTarget.get(i).getStyle();
                     switch(category) {
                         case "Quest", "Mini-Quest", "Cave" ->
                                 key = baseKey + normalizedName + ".reward." + hash + subKey;
                         case "World Event", "Raid" -> key = baseKey + "reward." + hash + subKey;
                         case "Dungeon" -> {
                             Dungeons dungeon = Dungeons.getDungeons(normalizedName);
-                            Text item;
-                            if(val.contains("Fragments")) item = dungeon.getDungeonFragment();
-                            else if(val.equals("s")) continue;
+                            MutableText item;
+                            if(v.contains("Fragments")) item = dungeon.getDungeonFragment();
+                            else if(v.equals("s")) continue;
                             else item = dungeon.getDungeonBossReward();
-                            return line.append(item);
+                            return line.append(item.setStyle(style));
                         }
                         default -> key = "wytr.tooltip.contentReward." + hash + subKey;
                     }
-                    if(WTS.checkTranslationExist(key, val)) {
-                        line.append(Text.translatable(key));
-                    }
-                    else {
-                        line.append(val);
-                    }
+                    WTS.checkTranslationExist(key, v);
+                    line.append(Text.translatableWithFallback(key, v).setStyle(style));
                 }
                 return line;
             }

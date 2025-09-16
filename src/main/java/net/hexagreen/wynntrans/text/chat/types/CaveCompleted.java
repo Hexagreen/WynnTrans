@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,36 +62,71 @@ public class CaveCompleted extends WynnChatText implements ISpaceProvider {
                         .setStyle(Style.EMPTY.withColor(Formatting.GREEN))).append("\n");
                 continue;
             }
-            String valExclusiveReward = getSibling(i).getString();
-            String num;
-            if(valExclusiveReward.matches("^\\+\\d+ .+")) {
-                String[] split = valExclusiveReward.split(" ", 2);
-                num = split[0] + " ";
-                valExclusiveReward = split[1];
+
+            Deque<Text> siblings = new ArrayDeque<>(getSibling(i).getSiblings());
+            MutableText line = Text.empty().setStyle(GRAY);
+            List<Text> mergeTarget = new ArrayList<>();
+            String valExclusiveReward = getSibling(i).getString().replaceFirst(".+\\+", "+");
+            Iterator<Text> it = siblings.iterator();
+
+            line.append(siblings.removeFirst());
+
+            while(it.hasNext()) {
+                Text elem = it.next();
+                String elemStr = elem.getString();
+
+                if(elemStr.matches("\\+\\d+ ")) {
+                    line.append(elem);
+                    valExclusiveReward = valExclusiveReward.replaceFirst("^\\+\\d+ ", "");
+                    it.remove();
+                    break;
+                }
+                else if(valExclusiveReward.matches("^\\+\\d+ .+")) {
+                    String[] split = valExclusiveReward.split(" ", 2);
+                    String num = split[0];
+                    String rewardName = split[1];
+                    line.append(num + " ");
+                    mergeTarget.add(Text.literal(rewardName).setStyle(elem.getStyle()));
+                    valExclusiveReward = valExclusiveReward.replaceFirst("^\\+\\d+ ", "");
+                    it.remove();
+                    break;
+                }
+                else if(elemStr.matches("^\\+.+")) {
+                    String rewardName = elemStr.replaceFirst("^\\+", "");
+                    line.append("+");
+                    mergeTarget.add(Text.literal(rewardName).setStyle(elem.getStyle()));
+                    valExclusiveReward = valExclusiveReward.replaceFirst("^\\+", "");
+                    it.remove();
+                    break;
+                }
+                else {
+                    mergeTarget.add(elem);
+                }
             }
-            else {
-                num = "+";
-                valExclusiveReward = valExclusiveReward.replaceFirst("^\\+", "");
-            }
-            Text _val = Text.literal(valExclusiveReward).setStyle(GRAY);
-            Text itemName = new ItemName(_val).returnNullMode().textAsMutable();
+
+            mergeTarget.addAll(siblings);
+            Text itemName = new ItemName(siblingsToText(mergeTarget)).returnNullMode().textAsMutable();
             if(itemName != null) {
-                resultText.append(getSibling(i).getSiblings().getFirst());
-                resultText.append(Text.literal(num).setStyle(GRAY));
-                resultText.append(itemName).append("\n");
+                line.append(itemName).append("\n");
+                resultText.append(line);
                 continue;
             }
 
             String hash = DigestUtils.sha1Hex(valExclusiveReward).substring(0, 4);
-            String keyExclusiveReward = keyCaveName + ".reward." + hash;
-            if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
-                resultText.append(getSibling(i).getSiblings().getFirst());
-                resultText.append(Text.translatable(keyExclusiveReward).setStyle(getSibling(i).getSiblings().get(1).getStyle()));
+            for(int k = 0, size = mergeTarget.size(); k < size; k++) {
+                String subKey = size == 1 ? "" : "." + i + 1;
+                String keyExclusiveReward = keyCaveName + ".reward." + hash + subKey;
+                Style style = mergeTarget.get(i).getStyle();
+
+                if(WTS.checkTranslationExist(keyExclusiveReward, valExclusiveReward)) {
+                    line.append(Text.translatable(keyExclusiveReward).setStyle(style)).append("\n");
+                }
+                else {
+                    resultText.append(getSibling(i)).append("\n");
+                    return;
+                }
             }
-            else {
-                resultText.append(getSibling(i));
-            }
-            resultText.append("\n");
+            resultText.append(line);
         }
     }
 }
