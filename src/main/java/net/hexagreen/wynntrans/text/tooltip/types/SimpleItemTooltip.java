@@ -41,7 +41,7 @@ public class SimpleItemTooltip extends WynnTooltipText {
             Style style = getSibling(i).getSiblings().isEmpty() ? getStyle(i) : getSibling(i).getSiblings().getFirst().getStyle();
             if(i == 0) {
                 String key;
-                if(template != null) key = template.key();
+                if(template != null && template.key() != null) key = template.key();
                 else key = "wytr.item.misc." + normalizeStringForKey(text);
                 if(WTS.checkTranslationDoNotRegister(key)) resultText.append(Text.translatable(key).setStyle(style));
                 else resultText.append(getSibling(i));
@@ -57,9 +57,16 @@ public class SimpleItemTooltip extends WynnTooltipText {
             }
             else {
                 if(template != null) {
-                    if(i == lines.getFirst().lineNumber()) {
-                        wrapLine(Text.translatable(lines.removeFirst().key()).setStyle(style), 150).forEach(resultText::append);
-                        break;
+                    if(!lines.isEmpty() && i == lines.getFirst().lineNumber()) {
+                        List<Text> args = new ArrayList<>();
+                        for(int argIdx : lines.getFirst().preservedSiblings()) {
+                            Text elem = getSibling(i).getSiblings().get(argIdx);
+                            args.add(Text.literal(elem.getString().trim()).setStyle(elem.getStyle()));
+                        }
+                        wrapLine(Text.translatable(lines.removeFirst().key(), args.toArray(Object[]::new)).setStyle(style), 150).forEach(resultText::append);
+                    }
+                    else if(!template.cleanMode()) {
+                        resultText.append(getSibling(i));
                     }
                 }
                 else resultText.append(getSibling(i));

@@ -3,10 +3,21 @@
     {
       "itemName": "^Boat$",
       "key": "wytr.item.misc.boat",
+      "cleanMode": true,
       "lines": [
         {
           "lineNumber": 1,
           "key": "wytr.item.misc.boat.desc"
+        }
+      ]
+    },
+    {
+      "itemName": "Hearthkeeper's Staff",
+      "lines": [
+        {
+          "lineNumber": 1,
+          "key": "wytr.item.misc.HearthkeepersStaff.seek",
+          "preservedSiblings": [1]
         }
       ]
     }

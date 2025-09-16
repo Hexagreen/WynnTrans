@@ -75,13 +75,17 @@ public final class Rulebooks {
             return ItemTooltipKeyBook.class;
         }
 
-        public record ItemTooltipTranslationKey(String itemName, String key, List<ItemTooltipLine> lines) {
+        public record ItemTooltipTranslationKey(String itemName, String key, boolean cleanMode,
+                                                List<ItemTooltipLine> lines) {
             private boolean match(String target) {
                 return Pattern.compile(itemName).matcher(target).matches();
             }
         }
 
-        public record ItemTooltipLine(int lineNumber, String key) {
+        public record ItemTooltipLine(int lineNumber, String key, List<Integer> preservedSiblings) {
+            public ItemTooltipLine {
+                if(preservedSiblings == null) preservedSiblings = List.of();
+            }
         }
     }
 }
