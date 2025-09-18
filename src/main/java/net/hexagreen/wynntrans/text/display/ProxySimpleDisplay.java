@@ -66,6 +66,13 @@ public class ProxySimpleDisplay extends SimpleDisplay {
                     boolean ignore = m.find();
                     return new String[]{m.group(1), m.group(2)};
                 }),
+        INFESTED_PIT_BOSS_STATUE(text -> text.getString().matches("(?s)^§b\\d+ Seconds?\\n§euntil the statue respawns!\\n§0À"),
+                text -> text.getString().replaceFirst("§b\\d+ Seconds?\\n", "%1\\$s Seconds\n"),
+                text -> {
+                    Matcher m = Pattern.compile("^(§b\\d+) Second").matcher(text.getString());
+                    boolean ignore = m.find();
+                    return new String[]{m.group(1)};
+                }),
         DRAWING_OF_THE_SPIRITS_TIMER(text -> text.getString().contains("§7Return to the Seer in "),
                 text -> text.getString().replaceFirst("in §.§.\\d+:\\d+:\\d+:\\d+\\n", "in %1\\$s\n"),
                 text -> {

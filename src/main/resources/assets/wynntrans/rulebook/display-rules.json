@@ -22,5 +22,47 @@
     "pattern": "(\\d+) Crates\n",
     "replace": "%s Crates\n",
     "register": false
+  },
+  {
+    "selector": "§7Dungeons Completed: §f\\d§7/8\n§0À",
+    "pattern": "(§f\\d)§7/8\n",
+    "replace": "%s§7/8\n",
+    "register": false
+  },
+  {
+    "selector": "§7Runs without a Mythic: §f\\d+\n§0À",
+    "pattern": "(§f\\d+)\n§0À",
+    "replace": "%s\n§0À",
+    "register": false
+  },
+  {
+    "selector": "§6Combat XP: §e[\\d,]+\n§0À",
+    "pattern": "(§e[\\d,]+)\n§0À",
+    "replace": "%s\n§0À",
+    "register": false
+  },
+  {
+    "selector": "§2Emeralds: §a~?[\\d,]+\n§0À",
+    "pattern": "(§a~?[\\d,]+)\n§0À",
+    "replace": "%s\n§0À",
+    "register": false
+  },
+  {
+    "selector": "§3Runes: §b~?\\d+\n§0À",
+    "pattern": "(§b~?\\d+)\n§0À",
+    "replace": "%s\n§0À",
+    "register": false
+  },
+  {
+    "selector": "§4Tokens: §c\\d+\n§0À",
+    "pattern": "(§c\\d+)\n§0À",
+    "replace": "%s\n§0À",
+    "register": false
+  },
+  {
+    "selector": "§5Mythic Chance: §d[\\d\\.]+%\n§0À",
+    "pattern": "(§d[\\d\\.]+%)\n§0À",
+    "replace": "%s\n§0À",
+    "register": false
   }
 ]}

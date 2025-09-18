@@ -14,6 +14,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SimpleDisplay extends WynnDisplayText {
     private final DisplayCarrier carrier;
@@ -100,17 +101,21 @@ public class SimpleDisplay extends WynnDisplayText {
         }
 
         @Override
-        protected Text argsFilter(Text sibling) {
-            if(!sibling.getStyle().getFont().equals(Identifier.of("minecraft:default"))) return sibling;
+        protected ArgFilterResult argsFilter(Text sibling) {
+            if(!sibling.getStyle().getFont().equals(Identifier.of("minecraft:default")))
+                return argFilterResultOf(sibling, true);
             Matcher m;
-            if((m = ITime.timePattern.matcher(sibling.getString())).find()) {
-                String sTime = m.group();
-                if(sTime.isBlank()) return null;
-                Text timer = ITime.translateTime(sTime);
+            if((m = ITime.timePattern.matcher(sibling.getString())).find() && !m.group().isBlank()) {
+                Text timer = ITime.translateTime(m.group());
                 if(!m.replaceFirst("").isBlank()) return null;
                 String replaced = m.replaceFirst(timer.getString());
                 timerTranslated = true;
-                return Text.literal(replaced).setStyle(sibling.getStyle());
+                return argFilterResultOf(Text.literal(replaced).setStyle(sibling.getStyle()), true);
+            }
+            Matcher discount;
+            if((discount = Pattern.compile("(\\d+%) OFF").matcher(sibling.getString())).find()) {
+                String rate = discount.group(1);
+                return argFilterResultOf(Text.translatable("wytr.display.discountRate", rate).setStyle(sibling.getStyle()), true);
             }
             return null;
         }

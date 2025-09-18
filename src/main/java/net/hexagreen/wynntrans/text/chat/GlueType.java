@@ -23,6 +23,7 @@ public enum GlueType {
     PARTY_INVITED(PartyInvitedGlue::new, PartyInvitedGlue::typeChecker),
     BOMB_START(BombStartGlue::new, BombStartGlue::typeChecker),
     STORE_PURCHASED(StorePurchasedGlue::new, StorePurchasedGlue::typeChecker),
+    FORGERY_MESSAGE(ForgeryMessageGlue::new, ForgeryMessageGlue::typeChecker),
     SYNDICATE_PROMOTION(SyndicatePromotionGlue::new, SyndicatePromotionGlue::typeChecker),
     LOOTRUN_BEACON(LootrunBeaconGlue::new, LootrunBeaconGlue::typeChecker),
     LOOTRUN_CHALLENGE_COMPLETE(LootrunChallengeCompleteGlue::new, LootrunChallengeCompleteGlue::typeChecker),

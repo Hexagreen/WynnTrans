@@ -2,6 +2,7 @@ package net.hexagreen.wynntrans.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.hexagreen.wynntrans.WynnTrans;
+import net.hexagreen.wynntrans.debugClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -31,7 +32,11 @@ abstract public class MixinDrawContext {
             at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public List<Text> mixinDrawTooltip(List<Text> text) {
         if(MinecraftClient.getInstance().options.advancedItemTooltips) return text;
-        return WynnTrans.drawTooltipHandler.translateTooltipText(text);
+        List<Text> translated = WynnTrans.drawTooltipHandler.translateTooltipText(text);
+        if(translated.contains(null)) {
+            for(Text t : translated) debugClass.writeTextAsJSON(t, "TooltipNullException");
+        }
+        return translated;
     }
 
     @ModifyVariable(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;II)V",

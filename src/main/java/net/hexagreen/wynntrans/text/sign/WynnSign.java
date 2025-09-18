@@ -10,6 +10,8 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.Optional;
+
 public class WynnSign {
     protected static final WynnTranslationStorage WTS = WynnTrans.wynnTranslationStorage;
     private static final String rootKey = "wytr.sign.";
@@ -24,17 +26,26 @@ public class WynnSign {
     }
 
     public static MutableText translateRecommendLevel(Text text) {
-        String colorCodeStripped = text.getString().replaceAll("^ | $", "").replaceFirst("^ ?(§.)+ ?", "");
-        boolean bracketed = colorCodeStripped.matches("^\\[.+]$");
-        String num = colorCodeStripped.replaceAll("\\D", "");
-        Style style = WynnTransText.parseStyleCode(text.getString());
-        if(bracketed) {
-            return Text.empty().setStyle(style).append("[")
-                    .append(Text.translatable("wytr.unit.level", num)).append("]");
-        }
-        else {
-            return Text.translatable("wytr.unit.level", num).setStyle(style);
-        }
+        MutableText result = Text.empty();
+        text.visit((_style, _string) -> {
+            if(!_string.matches("(§.)?\\[?Lv\\. [\\d/]+\\+?]?")) {
+                result.append(Text.literal(_string).setStyle(_style));
+                return Optional.empty();
+            }
+            String colorCodeStripped = _string.replaceAll("^ | $", "").replaceFirst("^ ?(§.)+ ?", "");
+            boolean bracketed = colorCodeStripped.matches("^\\[.+]$");
+            String num = colorCodeStripped.replaceAll(".+?([\\d/]+\\+?).+", "$1");
+            Style style = WynnTransText.parseStyleCode(_string).withParent(_style);
+            Text level = Text.translatable("wytr.unit.level", num);
+            if(bracketed) {
+                result.append(Text.empty().setStyle(style).append("[").append(level).append("]"));
+            }
+            else {
+                result.append(Text.empty().setStyle(style).append(level));
+            }
+            return Optional.empty();
+        }, Style.EMPTY);
+        return result;
     }
 
     private WynnSign(Text[] text) {
@@ -78,7 +89,7 @@ public class WynnSign {
     }
 
     private Text tryForceTranslation(Text text) {
-        if(text.getString().matches("(§.)?\\[?Lv\\. \\d+]?")) {
+        if(text.getString().matches("(§.)?\\[?Lv\\. \\d+\\+?]?")) {
             return translateRecommendLevel(text);
         }
         else return null;

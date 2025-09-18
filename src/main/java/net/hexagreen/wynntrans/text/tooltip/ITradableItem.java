@@ -16,6 +16,7 @@ public interface ITradableItem extends ITooltipSplitter {
             .append(" ").append(Text.translatable("wytr.func.price"));
     MutableText PENDING = Text.translatable("wytr.tooltip.tradeMarket.status.pending").formatted(Formatting.BOLD, Formatting.GRAY);
     MutableText FULFILL = Text.translatable("wytr.tooltip.tradeMarket.status.fulfill").formatted(Formatting.BOLD, Formatting.GREEN);
+    MutableText EXPIRE = Text.translatable("wytr.tooltip.tradeMarket.status.expire").formatted(Formatting.BOLD, Formatting.YELLOW);
     MutableText VIEW = Text.empty()
             .append(Text.literal("\uE000").setStyle(Style.EMPTY.withFont(Identifier.of("minecraft:keybind")).withColor(Formatting.WHITE)))
             .append(" ")
@@ -32,10 +33,10 @@ public interface ITradableItem extends ITooltipSplitter {
             List<Text> seg = segments.get(i);
             if(i == 0) {
                 List<Text> sib = seg.getLast().getSiblings();
-                if(!sib.isEmpty() && sib.getFirst().getString().matches("Pending|Fulfilled")) {
+                if(!sib.isEmpty() && sib.getFirst().getString().matches("Pending|Fulfilled|Expired")) {
                     Text _status = sib.getFirst(), _direction = sib.get(1), currentAmount = sib.get(2);
                     Text totalAmount = Text.literal(sib.getLast().getString().replaceAll("\\D", "")).formatted(Formatting.DARK_GRAY);
-                    Text status = _status.getString().equals("Pending") ? PENDING : FULFILL;
+                    Text status = _status.getString().equals("Pending") ? PENDING : _status.getString().equals("Fulfilled") ? FULFILL : EXPIRE;
                     MutableText line = Text.empty().append(status);
                     if(_direction.getString().contains("Sold"))
                         line.append(Text.translatable("wytr.tooltip.tradeMarket.status.sold", currentAmount, totalAmount)

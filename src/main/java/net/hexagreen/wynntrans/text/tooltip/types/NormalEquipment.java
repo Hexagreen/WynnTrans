@@ -38,7 +38,6 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
     public static boolean typeChecker(List<Text> texts) {
         if(texts.size() < 2) return false;
         if(Pattern.compile("[\uE000\uE001\uE002\uE004]").matcher(WynnTrans.currentScreen).find()) return false;
-//        if(texts.get(1).getString().contains("Sold")) return false;
         String itemName = texts.getFirst().getString().replaceAll("^Unidentified |^Perfect |^Defective |§f⬡ Shiny |\\[.+%]$", "");
         String normalized = normalizeStringForKey(itemName);
         boolean rarityFind = false;
@@ -48,7 +47,7 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
                 break;
             }
         }
-        if(texts.get(1).getString().matches("^§.(Pending|Fulfilled).+")) rarityFind = true;
+        if(texts.get(1).getString().matches("^§.(Pending|Fulfilled|Expired).+")) rarityFind = true;
         return rarityFind && (WTS.checkTranslationDoNotRegister("wytr.item.weapon." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.armour." + normalized) ||
                 WTS.checkTranslationDoNotRegister("wytr.item.accessory." + normalized));

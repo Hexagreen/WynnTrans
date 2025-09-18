@@ -10,8 +10,11 @@ import net.minecraft.text.Text;
 import java.util.Locale;
 
 public abstract class WynnChatText extends WynnTransText {
+    protected Object[] glueContext;
+
     public WynnChatText(Text text) {
         super(text);
+        this.glueContext = null;
     }
 
     public boolean print() {
@@ -35,6 +38,11 @@ public abstract class WynnChatText extends WynnTransText {
             debugClass.writeTextAsJSON(inputText, "Exception");
         }
         return inputText;
+    }
+
+    public WynnChatText attachGlueContext(Object... o) {
+        this.glueContext = o;
+        return this;
     }
 
     /**

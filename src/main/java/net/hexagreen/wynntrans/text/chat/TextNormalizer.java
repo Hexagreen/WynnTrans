@@ -38,8 +38,12 @@ public abstract class TextNormalizer {
 
     protected abstract void normalize(Text text);
 
-    protected Text argsFilter(Text sibling) {
+    protected ArgFilterResult argsFilter(Text sibling) {
         return null;
+    }
+
+    protected final ArgFilterResult argFilterResultOf(Text text, boolean skipFlag) {
+        return new ArgFilterResult(text, skipFlag);
     }
 
     public Text getText() {
@@ -159,10 +163,10 @@ public abstract class TextNormalizer {
                 return;
             }
 
-            Text mutated;
+            ArgFilterResult mutated;
             if((mutated = argsFilter(sibling)) != null) {
-                args.add(mutated);
-                flags.add(true);
+                args.add(mutated.text);
+                flags.add(mutated.skipFlag);
                 currentString.append("%s");
                 return;
             }
@@ -174,7 +178,7 @@ public abstract class TextNormalizer {
                 string = string.replaceAll(playerName, "%p");
             }
 
-            Rulebooks.NormalizerRule rule = rulebook.findRule(wholeText, ruleNumber[0]);
+            Rulebooks.NormalizerRulebook.NormalizerRule rule = rulebook.findRule(wholeText, ruleNumber[0]);
             if(rule != null) {
                 if(string.contains("%p")) {
                     string = string.replaceAll("%p", playerName);
@@ -187,7 +191,7 @@ public abstract class TextNormalizer {
                     int groups = matcher.groupCount();
                     for(int i = 1; i <= groups; i++) {
                         args.add(Text.literal(matcher.group(i)).setStyle(sibling.getStyle()));
-                        flags.add(!rule.registration());
+                        flags.add(!rule.register());
                     }
                     string = string.replaceFirst(rule.pattern(), rule.replace());
                 }
@@ -207,5 +211,8 @@ public abstract class TextNormalizer {
     }
 
     protected record ArgsRecord(String textContent, List<Text> args, List<Boolean> flags) {
+    }
+
+    protected record ArgFilterResult(Text text, boolean skipFlag) {
     }
 }

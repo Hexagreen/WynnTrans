@@ -22,12 +22,11 @@ abstract public class MixinEntityRenderer {
                 String owner = text.getString().replaceFirst("§7's.+", "");
                 return Text.translatable("wytr.label.horse", owner).formatted(Formatting.GRAY);
             }
-            if(text.getString().matches("(§.)?\\[?Lv\\. \\d+]?")) {
+            if(text.getString().matches("(§.)?\\[?Lv\\. [\\d/]+]?")) {
                 return WynnSign.translateRecommendLevel(text);
             }
-            if(text.getString().matches(".+§7 \\[Disguised]")) {
-                String player = text.getString().replaceFirst("§7 \\[Disguised]", "");
-                return Text.translatable("wytr.label.disguised", player).formatted(Formatting.GRAY);
+            if(text.getString().replaceAll("§.", "").matches("\\W+")) {
+                return text;
             }
 
             String valContent = text.getString();

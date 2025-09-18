@@ -21,6 +21,7 @@ public enum TooltipType {
     BLACKSMITH(Blacksmith::new, Blacksmith::typeChecker),
     IDENTIFIER(Identifier::new, Identifier::typeChecker),
     POWDER_MASTER(PowderMaster::new, PowderMaster::typeChecker),
+    SEASKIPPER(SeaskipperPass::new, SeaskipperPass::typeChecker),
     POWDER(ElementPowder::new, ElementPowder::typeChecker),
     INGREDIENT_POUCH(IngredientPouch::new, IngredientPouch::typeChecker),
     EMERALD_POUCH(EmeraldPouch::new, EmeraldPouch::typeChecker),
@@ -56,6 +57,7 @@ public enum TooltipType {
     CHARM(Charm::new, Charm::typeChecker),
     CORKIAN_AUGMENT(CorkianAugment::new, CorkianAugment::typeChecker),
 
+    SIMPLE_ITEM_TOOLTIP(SimpleItemTooltip::new, SimpleItemTooltip::typeChecker),
     NO_TYPE(SimpleTooltip::new, null);
 
 
