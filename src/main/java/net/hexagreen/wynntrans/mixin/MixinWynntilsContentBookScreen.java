@@ -79,7 +79,8 @@ public abstract class MixinWynntilsContentBookScreen {
         ActivityInfo modifiedActivityInfo = new ActivityInfo(activityInfo.type(), node.name(), activityInfo.status(),
                 activityInfo.specialInfo(), Optional.ofNullable(WynntilsCompatible.getWynntilsTextFromText(node.description())),
                 activityInfo.length(), activityInfo.lengthInfo(), activityInfo.distance(), activityInfo.distanceInfo(),
-                activityInfo.difficulty(), activityInfo.requirements(), modifiedRewards, activityInfo.trackingState());
+                activityInfo.difficulty(), activityInfo.worldEventFastTravelStatus(), activityInfo.requirements(),
+                modifiedRewards, activityInfo.trackingState());
 
         if(activityInfo.trackingState().equals(ActivityTrackingState.TRACKED))
             trackedActivityInfoCache = modifiedActivityInfo;

@@ -8,11 +8,6 @@ import net.minecraft.util.Identifier;
 
 public class SpecialNPCName extends WynnDisplayText {
     private static final Identifier BANNER = Identifier.of("minecraft:banner/pill");
-    private final Text icon;
-    private final MutableText banner;
-    private final String keyName;
-    private final String valName;
-    private final Style styleName;
 
     public static boolean typeChecker(Text text) {
         try {
@@ -24,25 +19,8 @@ public class SpecialNPCName extends WynnDisplayText {
         }
     }
 
-    private static Text reformPackedText(Text text) {
-        if(text.getSiblings().size() == 1) {
-            MutableText result = text.copyContentOnly().setStyle(text.getStyle());
-            for(Text t : text.getSiblings().getFirst().getSiblings()) {
-                result.append(t);
-            }
-            return result;
-        }
-        return text;
-    }
-
     public SpecialNPCName(Text text) {
         super(flatText(text));
-        this.icon = getSibling(0);
-        this.banner = getSibling(2).copy().append(getSibling(3));
-        String name = getSibling(4).getString().split("\\n")[1];
-        this.valName = name.replaceAll("§.", "");
-        this.keyName = "wytr.name." + normalizeStringForKey(valName);
-        this.styleName = parseStyleCode(name);
     }
 
     @Override
@@ -52,6 +30,14 @@ public class SpecialNPCName extends WynnDisplayText {
 
     @Override
     protected void build() throws IndexOutOfBoundsException, TextTranslationFailException {
+        int adjust = getSibling(0).getString().isBlank() ? -1 : 0;
+        Text icon = adjust == -1 ? Text.empty() : getSibling(0);
+        MutableText banner = getSibling(2 + adjust).copy().append(getSibling(3 + adjust));
+        String _name = getSibling(4 + adjust).getString().split("\\n")[1];
+        String valName = _name.replaceAll("§.", "");
+        String keyName = "wytr.name." + normalizeStringForKey(valName);
+        Style styleName = parseStyleCode(_name);
+
         Text name;
         if(WTS.checkTranslationDoNotRegister(keyName)) {
             name = Text.translatable(keyName).setStyle(styleName);
@@ -62,8 +48,8 @@ public class SpecialNPCName extends WynnDisplayText {
 
         resultText = Text.empty();
         resultText.append(icon).append("\n")
-                .append(banner.setStyle(banner.getStyle().withParent(getStyle(2)))).append("\n")
+                .append(banner).append("\n")
                 .append(name).append("\n")
-                .append(getSibling(5).copy().append(getSibling(6)));
+                .append(getSibling(5 + adjust).copy().append(getSibling(6 + adjust)));
     }
 }

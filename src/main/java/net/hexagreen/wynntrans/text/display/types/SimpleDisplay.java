@@ -117,6 +117,17 @@ public class SimpleDisplay extends WynnDisplayText {
                 String rate = discount.group(1);
                 return argFilterResultOf(Text.translatable("wytr.display.discountRate", rate).setStyle(sibling.getStyle()), true);
             }
+            Matcher emeralds;
+            if((emeralds = Pattern.compile("((\\d+stx )|(\\d+¼² )|(\\d+²½ )|(\\d+²))+").matcher(sibling.getString())).find()) {
+                String price = emeralds.group(0);
+                return argFilterResultOf(Text.literal(price).setStyle(sibling.getStyle()), true);
+            }
+            Matcher festivalName;
+            if((festivalName = Pattern.compile("Festival of the .+\n").matcher(sibling.getString())).find()) {
+                String festName = festivalName.group(0).replaceFirst("\n", "");
+                String hash = DigestUtils.sha1Hex(festName).substring(0, 4);
+                return argFilterResultOf(Text.translatable("wytr.eventInfo.eventName." + hash).setStyle(sibling.getStyle()), true);
+            }
             return null;
         }
 

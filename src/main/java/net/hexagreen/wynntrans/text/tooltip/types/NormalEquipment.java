@@ -133,24 +133,7 @@ public class NormalEquipment extends AbstractIdentifiableItem implements ISpaceP
             appendUnknowns(seg);
         }
         if(step != lastIndex) tempText.add(SPLITTER);
-        else {
-            wrapTargetIdx.add(-1);
-            alignTargetIdx.add(-1);
-
-            for(int j = 0, size = tempText.size(); j < size; j++) {
-                if(j == wrapTargetIdx.getFirst()) {
-                    wrapLine(tempText.get(j), Math.max(longestWidth, 150)).forEach(resultText::append);
-                    wrapTargetIdx.removeFirst();
-                }
-                else if(j == alignTargetIdx.getFirst()) {
-                    resultText.append(centerAlign(tempText.get(j), longestWidth));
-                    alignTargetIdx.removeFirst();
-                }
-                else {
-                    resultText.append(tempText.get(j));
-                }
-            }
-        }
+        else postStep(seg, step, lastIndex);
     }
 
     @Override

@@ -55,6 +55,7 @@ public class SyndicatePromotion extends WynnChatText implements ISpaceProvider {
 
         if(getSiblings().size() >= 6) {
             for(int i = 5, size = getSiblings().size(); i < size; i++) {
+                if(getSibling(i).getString().isEmpty()) continue;
                 String promotionString = getSibling(i).getSiblings().getLast().getString();
                 if(promotionString.matches("\\[.+]")) {
                     String valPro = promotionString.replaceAll("[\\[\\]]", "");

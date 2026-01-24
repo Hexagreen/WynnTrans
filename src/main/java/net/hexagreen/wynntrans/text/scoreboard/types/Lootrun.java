@@ -107,9 +107,9 @@ public class Lootrun extends WynnScoreboardText implements ITooltipSplitter {
 
     private Text translateLine(Text text) {
         if(!text.getString().matches("^- .+")) throw new TextTranslationFailException("LootrunScoreboard");
-        MutableText result = Text.literal("- ").setStyle(style);
 
         List<Text> siblings = text.getSiblings();
+        MutableText result = Text.literal("- ").setStyle(siblings.getFirst().getStyle());
         String string = text.getString();
         if(string.contains("Time Left: ")) {
             Text timer = siblings.get(2);
@@ -131,14 +131,18 @@ public class Lootrun extends WynnScoreboardText implements ITooltipSplitter {
             Text counter = Text.empty().append(success).append(slash).append(left);
             result.append(Text.translatable(translationKey + ".leftChallenge", counter).formatted(Formatting.GRAY));
         }
-        else if(string.matches(".+ \\d+/\\d+ .+")) {
-            Text counter = siblings.size() == 2 ?
-                    Text.literal(string.replaceFirst(".+ (\\d+/\\d+) .+", "$1")) :
-                    siblings.get(2);
+        else if(string.matches(".+ \\d+/\\d+m? .+")) {
+            Text counter;
+            if(siblings.size() <= 2) {
+                counter = Text.literal(string.replaceFirst(".+ (\\d+/\\d+)m? .+", "$1"));
+            }
+            else {
+                counter = Text.literal(siblings.get(2).getString().replaceFirst("m", "")).setStyle(siblings.get(2).getStyle());
+            }
             String mission = text.getString().replaceFirst("^- ", "").replaceFirst("\\d+/\\d+", "%s");
-            String missionKey = translationKey + ".missionObjective." + normalizeStringForKey(mission);
+            String missionKey = translationKey + ".missionObjective." + normalizeStringForKey(mission.replaceAll("%s", ""));
             if(WTS.checkTranslationExist(missionKey, mission)) {
-                result.append(Text.translatable(missionKey, counter).formatted(Formatting.GRAY));
+                result.append(Text.translatable(missionKey, counter).setStyle(siblings.getLast().getStyle()));
             }
             else {
                 return text;

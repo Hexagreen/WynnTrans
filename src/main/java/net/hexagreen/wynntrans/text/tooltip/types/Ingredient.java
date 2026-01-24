@@ -29,8 +29,8 @@ public class Ingredient extends AbstractIdentifiableItem {
     }
 
     public static MutableText getTranslatedItemName(Text text) {
-        if(!text.getString().contains(" [✫✫✫]")) return null;
-        String _iName = text.getString().replaceFirst(" \\[✫✫✫]", "");
+        if(!text.getString().contains("[✫✫✫]")) return null;
+        String _iName = text.getString().replaceFirst(" ?\\[✫✫✫]", "");
         if(!WTS.checkTranslationDoNotRegister("wytr.item.ingredient." + normalizeStringForKey(_iName))) return null;
         List<Text> textBowl = new ArrayList<>();
         textBowl.add(text);

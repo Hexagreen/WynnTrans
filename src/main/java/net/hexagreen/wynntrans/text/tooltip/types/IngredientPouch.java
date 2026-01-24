@@ -91,12 +91,22 @@ public class IngredientPouch extends WynnTooltipText implements ITooltipSplitter
     }
 
     private void translateContentSection(List<Text> segment) {
-        colorCodedToStyledBatch(segment).forEach(t -> {
+        List<MutableText> styledSeg = segment.stream().map(t -> colorCodedToStyled(t).copy()).toList();
+        Deque<Text> temp = new ArrayDeque<>();
+        for(int i = styledSeg.size() - 1; i >= 0; i--) {
+            Text t = styledSeg.get(i);
             Deque<Text> mutableSibling = new ArrayDeque<>(t.getSiblings());
+            if(!t.getString().matches("^\\d+ x .+")) {
+                mutableSibling.forEach(styledSeg.get(i - 1)::append);
+                continue;
+            }
             MutableText result = Text.empty();
             result.append(mutableSibling.removeFirst());
-            result.append(Ingredient.getTranslatedItemName(siblingsToFilledText(mutableSibling)));
-            resultText.append(result);
-        });
+            MutableText translatedItemName = Ingredient.getTranslatedItemName(siblingsToFilledText(new ArrayDeque<>(mutableSibling)));
+            if(translatedItemName != null) result.append(translatedItemName);
+            else mutableSibling.forEach(result::append);
+            temp.addFirst(result);
+        }
+        temp.forEach(resultText::append);
     }
 }

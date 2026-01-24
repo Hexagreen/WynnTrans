@@ -37,6 +37,10 @@ public class SimpleTitle extends WynnTitleText {
         if(!emptyChecker(inputText.copyContentOnly().setStyle(getStyle()))) {
             String contentString = getContentString().replaceFirst("^(§.)+", "");
             Style contentStyle = parseStyleCode(getContentString()).withParent(getStyle());
+            if(contentString.matches("Quake|Chain Lightning|Curse|Courage|Wind Prison")) {
+                resultText = Text.translatable("wytr.powderSpecial." + normalizeStringForKey(contentString)).setStyle(contentStyle);
+                return;
+            }
             MutableText tmp;
             if(!(this instanceof ProxySimpleTitle) && (tmp = translateColorShifted(strippedKey, getContentString(), contentStyle)) != null) {
                 resultText = tmp;

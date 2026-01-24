@@ -15,6 +15,7 @@ public class InfoEvent extends WynnChatText {
     private final String hash;
     private final Text original;
     private final Text timer;
+    private final boolean isLegacy;
 
     public static boolean typeChecker(Text text) {
         return Pattern.compile("^\\[Event] ").matcher(text.getString()).find();
@@ -23,15 +24,15 @@ public class InfoEvent extends WynnChatText {
     private static Text cutoffTail(Text text) {
         MutableText result = Text.empty();
         List<Text> siblings = text.getSiblings();
-        result.append(siblings.getFirst());
-        for(int i = 2, size = siblings.size(); i < size; i++) {
-            String string = siblings.get(i).getString();
+        for(Text sibling : siblings) {
+            String string = sibling.getString();
+            if(string.contains("[Event]")) continue;
             if(string.contains("The festival closes its doors in")) {
                 String cut = string.replaceFirst("The festival closes its doors in ", "");
-                if(!cut.isBlank()) result.append(Text.literal(cut).setStyle(siblings.get(i).getStyle()));
+                if(!cut.isBlank()) result.append(Text.literal(cut).setStyle(sibling.getStyle()));
                 break;
             }
-            else result.append(siblings.get(i));
+            else result.append(sibling);
         }
         return result;
     }
@@ -40,7 +41,8 @@ public class InfoEvent extends WynnChatText {
         super(cutoffTail(text));
         this.original = text;
         this.hash = DigestUtils.sha1Hex(inputText.getString()).substring(0, 8);
-        this.valEName = text.getSiblings().get(1).getString().replace(": ", "");
+        this.isLegacy = text.getString().contains("[Event]");
+        this.valEName = text.getSiblings().get(isLegacy ? 1 : 0).getString().replace(": ", "");
         String hash2 = DigestUtils.sha1Hex(valEName).substring(0, 4);
         this.keyEName = translationKey + ".eventName." + hash2;
         this.timer = initTimer(text.getSiblings().getLast());
@@ -56,10 +58,13 @@ public class InfoEvent extends WynnChatText {
         List<Text> originalSiblings = original.getSiblings();
 
         resultText = Text.empty();
-        resultText.append(Text.translatable(translationKey).setStyle(getStyle(0)));
+        if(isLegacy)
+            resultText.append(Text.translatable(translationKey).setStyle(originalSiblings.getFirst().getStyle()));
+
+        int startIdx = isLegacy ? 1 : 0;
 
         if(WTS.checkTranslationExist(keyEName, valEName)) {
-            resultText.append(Text.translatable(keyEName).setStyle(originalSiblings.get(1).getStyle()).append(": "));
+            resultText.append(Text.translatable(keyEName).setStyle(originalSiblings.get(startIdx).getStyle()).append(": "));
         }
         else {
             resultText.append(originalSiblings.get(1));

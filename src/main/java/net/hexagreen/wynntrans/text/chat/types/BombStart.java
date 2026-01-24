@@ -45,6 +45,11 @@ public class BombStart extends WynnSystemText implements ISpaceProvider {
                         .formatted(Formatting.GRAY);
                 tail = Text.empty().append(SYSTEM_TEXT_ADJUSTMENT).append(twoColumnAlign(bomb.getTime(), thanks));
             }
+            case DUNGEON -> {
+                body = Text.translatable(translationKey, playerName, bomb.getName(), bomb.getDesc(), bomb.getTime())
+                        .formatted(Formatting.GRAY);
+                tail = Text.empty().append(getSystemTextCenterIndent(thanks)).append(thanks);
+            }
             default -> {
                 debugClass.writeTextAsJSON(inputText, "UnknownBomb");
                 resultText = inputText;

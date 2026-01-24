@@ -95,6 +95,6 @@ public enum Bombs {
     }
 
     public Text getTime() {
-        return bombTime.copy().withColor(0xFEDF71);
+        return bombTime.copy().withColor(0xFFD750);
     }
 }

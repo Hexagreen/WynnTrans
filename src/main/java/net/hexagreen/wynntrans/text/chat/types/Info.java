@@ -46,6 +46,10 @@ public class Info extends WynnSystemText {
                 resultText.append(new InfoEvent(colorCodedToStyled(Text.literal(valSibling))).text());
                 return;
             }
+            if(valSibling.matches("^§.§l.+:.+")) {
+                resultText.append(new InfoEvent(colorCodedToStyled(Text.literal(valSibling))).text());
+                return;
+            }
             if(valSibling.contains("wynn.gg") || valSibling.contains("wynncraft.com")) {
                 resultText.append(Text.literal(valSibling).setStyle(getStyle(index)));
                 continue;

@@ -24,7 +24,7 @@ public class WynntilsCompatible {
         if(cacheDone) return true;
         Class<?> chatPacketReceivedEvent = cachedClasses.computeIfAbsent("eventClass", k -> {
             try {
-                return Class.forName("com.wynntils.mc.event.ChatPacketReceivedEvent$System");
+                return Class.forName("com.wynntils.mc.event.SystemMessageEvent");
             }
             catch(ClassNotFoundException e) {
                 return null;
